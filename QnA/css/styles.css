@@ -1,7 +1,4 @@
-.sharp{
-	border-radius: 0;
-}
-.form-control ,.navbar, .btn{
+.form-control ,.navbar, .btn, .alert{
 	border-radius: 0;
 }
 header{
@@ -10,4 +7,16 @@ header{
 .navbar-brand{
 	font-size: 30px;
 	font-weight: bold;
+}
+a:hover{
+	cursor: pointer;
+}
+.jumbotron{
+	background-color: white;
+}
+.right{
+	float: right;
+}
+.left{
+	float: left;
 }

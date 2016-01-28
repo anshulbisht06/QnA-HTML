@@ -19,7 +19,7 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                 },
 
             })
-            .state('app.create', {
+            .state('app.create-quiz', {
                 url:'create/quiz/',
                 views :{
                 	'content@': {
@@ -27,6 +27,25 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                         templateUrl : 'views/createquiz.html'
                     }
                 }
+                })
+            .state('app.create-category', {
+                url:'create/category/',
+                views :{
+                    'content@': {
+                        controller  : 'CreateCategoryController',
+                        templateUrl : 'views/createcategory.html'
+                    }
+                }
+                })
+            .state('app.questions', {
+                url:'questions/',
+                views :{
+                    'content@': {
+                        controller  : 'QuestionsController',
+                        templateUrl : 'views/questions.html'
+                    }
+                }
                 });
+
         $urlRouterProvider.otherwise('/');
     });

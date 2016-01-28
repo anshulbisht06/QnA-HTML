@@ -1,55 +1,55 @@
-<div class="jumbotron sharp">
+<div class="container-fluid">
+<div ng-include src="'views/alertmsg.html'"></div>
+<div class="jumbotron">
     <div class="row">
     </div>
     <div class="row">
-		<h2 class="text-center hidden-xs">{{ createquizmsg }}</h2>
-		<h3 class="text-center visible-xs">{{ createquizmsg }}</h3>
+		<h2 class="text-center hidden-xs">Please fill the following fields</h2>
+		<h3 class="text-center visible-xs">Please fill the following fields</h3>
 	</div>
 	<div class="row">
 		<div class="col-lg-2 col-md-2 col-sm-2"></div>
-		<div class="col-lg-8 col-md-8 col-sm-8">
+		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 			<form role="form" name="quizCreateForm" ng-submit="postQuiz()" novalidate>
-			  <!-- <div class="form-group" ng-class="{ 'has-error' : quizCreateForm.title.$error.required && !quizCreateForm.title.$pristine }"> -->
-			  <div class="form-group">
+			  <div class="form-group" ng-class="{'has-error': isFormInvalid }">
 			    <label for="title">Title</label>
-			    <input type="text" maxlength="60" class="form-control" id="title" name="title" required>
-			    <!-- <input type="text" maxlength="60" class="form-control" id="title" name="title" ng-model="quizCreateForm.title" required> -->
-			    <!-- <span ng-show="quizCreateForm.title.$error.required && !quizCreateForm.title.$pristine" class="help-block">Quiz title is required.
-			    </span> -->
+			    <input type="text" maxlength="60" class="form-control" id="title" name="title" ng-model="createQuizForm.title" required>
+			    <span ng-show="isFormInvalid" class="help-block">{{ errors.title[0] }}</span>
 			  </div>
 			  <div class="form-group">
 			    <label for="description">Description</label>
-			    <textarea name="description" id="description" rows="4" class="form-control"></textarea>
+			    <textarea name="description" id="description" rows="4" class="form-control" ng-model="createQuizForm.description"></textarea>
 			  </div>
-			  <div class="form-group">
+			  <div class="form-group" ng-class="{'has-error': isFormInvalid }">
 			  	<label for="url">URL</label>
-			    <input type="url" maxlength="60" class="form-control" id="url" name="url" required>
+			    <input type="text" maxlength="60" class="form-control" id="url" name="url" ng-model="createQuizForm.url" required>
+			    <span ng-show="isFormInvalid" class="help-block">{{ errors.url[0] }}</span>
 			  </div>
 			  <div class="form-group">
 			    <label for="category">Category</label>
-			    <input type="text" maxlength="60" class="form-control" id="category" name="category">
+			    <input type="text" maxlength="60" class="form-control" id="category" name="category" ng-model="createQuizForm.category">
 			  </div>
 			  <div class="row">
 				<div class="col-lg-6 col-md-6 col-sm-6">
 				  <div class="checkbox">
-				    <label><input type="checkbox" name="random_order">&nbsp;Check if you want to display the questions in a random order?</label>
+				    <label><input type="checkbox" name="random_order" ng-model="createQuizForm.random_order">&nbsp;Check if you want to display the questions in a random order?</label>
 				  </div>
 				</div>
 				<div class="col-lg-6 col-md-6 col-sm-6">
 				  <div class="checkbox">
-				    <label><input type="checkbox" name="answers_at_end">&nbsp;Check if you want to display answers at the end of quiz?</label>
+				    <label><input type="checkbox" name="answers_at_end" ng-model="createQuizForm.answers_at_end">&nbsp;Check if you want to display answers at the end of quiz?</label>
 				  </div>
 				</div>
 			  </div>
 			   <div class="row">
 				<div class="col-lg-6 col-md-6 col-sm-6">
 				  <div class="checkbox">
-				    <label><input type="checkbox" name="single_attempt">&nbsp;Single Attempt?</label>
+				    <label><input type="checkbox" name="single_attempt" ng-model="createQuizForm.single_attempt">&nbsp;Single Attempt?</label>
 				  </div>
 				</div>
 				<div class="col-lg-6 col-md-6 col-sm-6">
 				  <div class="checkbox">
-				    <label><input type="checkbox" name="exam_paper">&nbsp;Check if you want to store result of each attempt by a user. &nbsp;Necessary for marking.
+				    <label><input type="checkbox" name="exam_paper" ng-model="createQuizForm.exam_paper">&nbsp;Check if you want to store result of each attempt by a user. &nbsp;Necessary for marking.
 				    </label>
 				  </div>
 				</div>
@@ -58,13 +58,13 @@
 				<div class="col-lg-6 col-md-6 col-sm-6">
 				  <div class="form-group">
 				    <label for="max_questions">Number of questions to be answered on each attempt</label>
-				    <input type="number" name="max_questions" id="max_questions" class="form-control">
+				    <input type="number" name="max_questions" id="max_questions" class="form-control" ng-model="createQuizForm.max_questions">
 				  </div>
 				</div>
 				<div class="col-lg-6 col-md-6 col-sm-6">
 				  <div class="form-group">
 				    <label for="pass_mark">Passing marks</label><br>
-				    <input type="number" name="pass_mark" id="pass_mark" class="form-control">
+				    <input type="number" name="pass_mark" id="pass_mark" class="form-control" ng-model="createQuizForm.pass_mark">
 				  </div>
 				</div>
 			  </div>
@@ -72,19 +72,20 @@
 				<div class="col-lg-6 col-md-6 col-sm-6">
 				  <div class="form-group">
 				  	<label for="success_text">Message if user passes</label>
-				    <textarea name="success_text" id="success_text" rows="2" class="form-control"></textarea>
+				    <textarea name="success_text" id="success_text" rows="2" class="form-control" ng-model="createQuizForm.success_text"></textarea>
 				  </div>
 				</div>
 				<div class="col-lg-6 col-md-6 col-sm-6">
 				  <div class="form-group">
 				  	<label for="fail_text">Message if user fails</label>
-				    <textarea name="fail_text" id="fail_text" rows="2" class="form-control"></textarea>
+				    <textarea name="fail_text" id="fail_text" rows="2" class="form-control" ng-model="createQuizForm.fail_text"></textarea>
 				  </div>
 				</div>
 			  </div>
-			  <button type="submit" class="btn btn-primary btn-block">Submit</button>
+			  <button type="submit" class="btn btn-primary btn-block" ng-disabled="quizCreateForm.$invalid">Create Quiz</button>
 			</form>
 		</div>
 		<div class="col-lg-2 col-md-2 col-sm-2"></div>
 	</div>
+</div>
 </div>

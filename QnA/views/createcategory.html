@@ -1,0 +1,48 @@
+<div class="container-fluid">
+<div ng-include src="'views/alertmsg.html'"></div>
+<div class="jumbotron">
+    <div class="row">
+    </div>
+    <div class="row" ng-hide="isCategoryCreated">
+	    <div class="row">
+			<h2 class="text-center hidden-xs">Please provide the name of the category.</h2>
+			<h4 class="text-center visible-xs">Please provide the name of the category.</h4>
+		</div>
+		<div class="row">
+			<div class="col-lg-2 col-md-2 col-sm-2"></div>
+			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+				<form role="form" name="categoryCreateForm" ng-submit="postCategory()" novalidate>
+				  <div class="form-group" ng-class="{'has-error': isFormInvalid }">
+				    <input type="text" maxlength="250" class="form-control" id="category" name="category" ng-model="createCategoryform.category" required>
+				    <span ng-show="isFormInvalid" class="help-block">{{ errors.category[0] }}</span>
+				  </div>
+				  <button type="submit" class="btn btn-primary btn-md">Create Category</button>
+				</form>
+			</div>
+			<div class="col-lg-2 col-md-2 col-sm-2"></div>
+		</div>
+	</div>
+	<div class="row" ng-show="isCategoryCreated">
+		<div class="row">
+			<h2 class="text-center hidden-xs">Now create a sub-category of above created Category - <strong>{{ createdCategory }}</strong>.</h2>
+			<h4 class="text-center visible-xs">Now create a sub-category of above created Category - <strong>{{ createdCategory }}</strong></h4>
+		</div>
+		<div class="row">
+			<div class="col-lg-2 col-md-2 col-sm-2"></div>
+			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+				<form role="form" name="subcategoryCreateForm" ng-submit="postSubCategory()" novalidate>
+					<div class="form-group">
+					  	<input type="hidden" name="createdCategory" value="{{ createdCategory }}" ng-model="subcreateCategoryform.createdCategory">
+					</div>
+					  <div class="form-group" ng-class="{'has-error': isFormInvalid1 }">
+					    <input type="text" maxlength="250" class="form-control" id="sub_category" name="sub_category" ng-model="subcreateCategoryform.sub_category" required>
+					    <span ng-show="isFormInvalid1" class="help-block">{{ errors.sub_category[0] }}</span>
+					  </div>
+					  <button type="submit" class="btn btn-primary btn-md" ng-disabled="subcategoryCreateForm.$invalid">Create Sub-Category</button>
+				</form>
+			</div>
+			<div class="col-lg-2 col-md-2 col-sm-2"></div>
+		</div>
+	</div>
+</div>
+</div>
