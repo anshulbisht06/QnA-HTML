@@ -56,7 +56,6 @@ angular.module('QnA')
             questions['Clinical Audit - 1'].push(q);
             questions['Clinical Audit - 2'].push(q);
         }
-        this.selectedd = "true";
         this.questions = questions;
         this.totalQuestions = totalHardQuestions+totalEasyQuestions+totalMediumQuestions;
         this.totalHardQuestions = totalHardQuestions;

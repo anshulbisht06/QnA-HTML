@@ -9,7 +9,6 @@ angular.module('QnA')
         $scope.totalEasyQuestions = allQuestionsFactory.totalEasyQuestions;
         $scope.totalMediumQuestions = allQuestionsFactory.totalMediumQuestions;
         $scope.tab = 1;
-        $scope.selectedd = allQuestionsFactory.selectedd;
         $scope.filterLevel = false;
         $scope.selectTab = function(setTab) {
                 $scope.tab = setTab;
