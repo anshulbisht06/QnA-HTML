@@ -2,8 +2,35 @@
 angular.module('QnA')
     .controller('IndexController', ['$scope', 'indexFactory', function($scope, indexFactory) {
     }])
-    .controller('QuestionsController', ['$scope', 'questionsFactory', function($scope, questionsFactory) {
-        
+    .controller('QuestionsController', ['$scope', 'allQuestionsFactory', function($scope, allQuestionsFactory) {
+        $scope.allQuestions = allQuestionsFactory.questions;
+        $scope.totalQuestions = allQuestionsFactory.totalQuestions;
+        $scope.totalHardQuestions = totalHardQuestions;
+        $scope.totalEasyQuestions = totalEasyQuestions;
+        $scope.totalMediumQuestions = totalMediumQuestions;
+        $scope.tab = 1;
+        $scope.filterLevel = false;
+        $scope.selectTab = function(setTab) {
+                $scope.tab = setTab;
+                if (setTab === 1) {
+                    $scope.filterLevel = false;
+                }              
+                else if (setTab === 2) {
+                    $scope.filterLevel = "E";
+                }
+                else if (setTab === 3) {
+                    $scope.filterLevel = "M";
+                }
+                else if (setTab === 4) {
+                    $scope.filterLevel = "H";
+                }
+                else {
+                    $scope.filterLevel = "U";
+                }
+            };
+        $scope.isTabSelected = function(checkTab) {
+                return ($scope.tab === checkTab);
+            };       
     }])
     .controller('CreateQuizController', ['$scope', 'createQuizFactory', function($scope, createQuizFactory) {
         $scope.createQuizForm = {title:"",description:"",url:"",category:"",random_order:false,answers_at_end:false,single_attempt:false,exam_paper:false,max_questions:"",pass_mark:"",success_text:"",fail_text:""};

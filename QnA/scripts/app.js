@@ -1,5 +1,6 @@
 /* global $ */
 var appmodule = angular.module('QnA', ['ui.router', 'ngResource']);
+
 appmodule.config(function($stateProvider, $urlRouterProvider) {
         $stateProvider	        
             // route for the home page
@@ -42,10 +43,10 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                 views :{
                     'content@': {
                         controller  : 'QuestionsController',
-                        templateUrl : 'views/questions.html'
+                        templateUrl : 'views/allquestions.html'
                     }
                 }
                 });
 
-        $urlRouterProvider.otherwise('/');
+        // $urlRouterProvider.otherwise('/');
     });
