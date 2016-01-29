@@ -5,10 +5,11 @@ angular.module('QnA')
     .controller('QuestionsController', ['$scope', 'allQuestionsFactory', function($scope, allQuestionsFactory) {
         $scope.allQuestions = allQuestionsFactory.questions;
         $scope.totalQuestions = allQuestionsFactory.totalQuestions;
-        $scope.totalHardQuestions = totalHardQuestions;
-        $scope.totalEasyQuestions = totalEasyQuestions;
-        $scope.totalMediumQuestions = totalMediumQuestions;
+        $scope.totalHardQuestions = allQuestionsFactory.totalHardQuestions;
+        $scope.totalEasyQuestions = allQuestionsFactory.totalEasyQuestions;
+        $scope.totalMediumQuestions = allQuestionsFactory.totalMediumQuestions;
         $scope.tab = 1;
+        $scope.selectedd = allQuestionsFactory.selectedd;
         $scope.filterLevel = false;
         $scope.selectTab = function(setTab) {
                 $scope.tab = setTab;

@@ -14,13 +14,13 @@ angular.module('QnA')
     }])
     .service('createCategoryFactory', ['$resource', 'baseURL', function($resource, baseURL) { 
         this.createCategory = function(){
-                return $resource(baseURL+"quiz/create/category/", null,
+                return $resource(baseURL+"quiz/category/create/", null,
                     {'save':   {method:'POST'} },
                     { stripTrailingSlashes: false }
                     );
         };
         this.createSubCategory = function(){
-                return $resource(baseURL+"quiz/create/subcategory/", null,
+                return $resource(baseURL+"quiz/subcategory/create/", null,
                     {'save':   {method:'POST'} },
                     { stripTrailingSlashes: false }
                     );
@@ -56,6 +56,7 @@ angular.module('QnA')
             questions['Clinical Audit - 1'].push(q);
             questions['Clinical Audit - 2'].push(q);
         }
+        this.selectedd = "true";
         this.questions = questions;
         this.totalQuestions = totalHardQuestions+totalEasyQuestions+totalMediumQuestions;
         this.totalHardQuestions = totalHardQuestions;

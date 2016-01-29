@@ -75,8 +75,8 @@
 			</div><hr>
 
 			<div class="row" ng-repeat="(subCategory, questionsList) in allQuestions">
-				<ul class="list-group" ng-repeat="question in questionsList |  filter:filterLevel:true">
-				  <li class="list-group-item">
+				<ul class="list-group">
+				  <li class="list-group-item" ng-repeat="question in questionsList |  filter:filterLevel:true">
 				  	<p>
 				  	<div class="row">
 					  	<div class="col-lg-1 col-md-1 col-sm-1">
@@ -85,10 +85,15 @@
 						  	<div class="row">
 					  			<p class="left">Q<small>{{$index + 1}}</small>.&nbsp;&nbsp;{{ question.question }}</p>
 						  	</div><br>
-						  	<div class="row" ng-repeat="option in question.options">
-				                <label class="radio-inline">
-				                  <input type="radio" name="{{question.id}}" value="{{option.correct}}">{{ option.content }}
-				                </label>
+						  	<div class="row">
+						  	    <div class="btn-group" data-toggle="buttons">
+						  	    	<div ng-repeat="option in question.options">
+						                <label class="btn btn-default" ng-class="{'active':option.correct}">
+							                {{$index + 1}}
+						                </label>
+						                {{ option.content }}
+					                </div>
+				                </div>
 						  	</div>
 						  	<div class="row text-right">
 						  		<div class="col-lg-3 col-md-3 col-sm-3">
