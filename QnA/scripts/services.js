@@ -4,7 +4,7 @@ angular.module('QnA')
     .service('indexFactory', function() { 
         // this.introductionCarousel = ['images/bg.png', 'images/wedding.png', 'images/corporate-party.png'];
     })
-    .service('createQuizFactory', ['$resource', 'baseURL', function($resource, baseURL) { 
+    .service('createQuizFactory', ['$resource', 'baseURL', function($resource, baseURL) {
         this.createQuiz = function(){
                 return $resource(baseURL+"quiz/create/", null,
                     {'save':   {method:'POST'} },

@@ -30,7 +30,7 @@ angular.module('QnA')
             };
         $scope.isTabSelected = function(checkTab) {
                 return ($scope.tab === checkTab);
-            };       
+            };     
     }])
     .controller('CreateQuizController', ['$scope', 'createQuizFactory', function($scope, createQuizFactory) {
         $scope.createQuizForm = {title:"",description:"",url:"",category:"",random_order:false,answers_at_end:false,single_attempt:false,exam_paper:false,max_questions:"",pass_mark:"",success_text:"",fail_text:""};
