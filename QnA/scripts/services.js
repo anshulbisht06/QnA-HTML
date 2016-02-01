@@ -61,4 +61,12 @@ angular.module('QnA')
         this.totalHardQuestions = totalHardQuestions;
         this.totalEasyQuestions = totalEasyQuestions;
         this.totalMediumQuestions = totalMediumQuestions;
-    }]);
+    }])
+    .service('createQuizFactory', ['$resource', 'baseURL', function($resource, baseURL) { 
+        this.getAllSubcategories = function(){
+                return $resource(baseURL+"subcategory/get/all/", null,
+                    {'get':   {method:'get'} },
+                    { stripTrailingSlashes: false }
+                    );
+        };
+    }])

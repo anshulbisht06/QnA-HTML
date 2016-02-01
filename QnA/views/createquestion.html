@@ -1,0 +1,26 @@
+<div class="container-fluid">
+<div ng-include src="'views/alertmsg.html'"></div>
+<div class="jumbotron">
+    <div class="row">
+    </div>
+    <div class="row" ng-hide="isCategoryCreated">
+	    <div class="row">
+			<h2 class="text-center hidden-xs">Add a question here.</h2>
+			<h4 class="text-center visible-xs">Add a question here.</h4>
+		</div>
+		<div class="row">
+			<div class="col-lg-2 col-md-2 col-sm-2"></div>
+			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+				<form role="form" name="categoryCreateForm" ng-submit="postCategory()" novalidate>
+				  <div class="form-group" ng-class="{'has-error': isFormInvalid }">
+				    <input type="text" maxlength="250" class="form-control" id="category" name="category" ng-model="createCategoryform.category" required>
+				    <span ng-show="isFormInvalid" class="help-block">{{ errors.category[0] }}</span>
+				  </div>
+				  <button type="submit" class="btn btn-primary btn-md">Create Category</button>
+				</form>
+			</div>
+			<div class="col-lg-2 col-md-2 col-sm-2"></div>
+		</div>
+	</div>
+</div>
+</div>

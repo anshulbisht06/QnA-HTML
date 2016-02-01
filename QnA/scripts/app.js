@@ -46,6 +46,15 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                         templateUrl : 'views/allquestions.html'
                     }
                 }
+                })
+            .state('app.create-question', {
+                url:'create/question/',
+                views :{
+                    'content@': {
+                        controller  : 'CreateQuestionController',
+                        templateUrl : 'views/createquestion.html'
+                    }
+                }
                 });
 
         // $urlRouterProvider.otherwise('/');
