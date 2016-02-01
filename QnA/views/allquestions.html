@@ -1,6 +1,9 @@
 <div class="container-fluid">
 	<div class="row" style="margin-right: 0">
 	<div class="row">
+		<a ui-sref="app.create-question" class="btn btn-primary btn-md right" style="margin-right: 10px;">Create Question</a>
+	</div>
+	<div class="row">
 		<h2 class="text-center hidden-xs">Your questions</h2>
 		<h4 class="text-center visible-xs">Your questions</h4>
 	</div>
@@ -73,7 +76,7 @@
 				  <li ng-class="{active : isTabSelected(4)}"><a ng-click="selectTab(4)">Hard <span class="badge">{{ totalHardQuestions }}</span></a></li>
 				</ul>
 			</div><hr>
-
+{{allQuestions}}
 			<div class="row" ng-repeat="(subCategory, questionsList) in allQuestions">
 				<ul class="list-group">
 				  <li class="list-group-item" ng-repeat="question in questionsList |  filter:filterLevel:true">

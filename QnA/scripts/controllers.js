@@ -2,38 +2,6 @@
 angular.module('QnA')
     .controller('IndexController', ['$scope', 'indexFactory', function($scope, indexFactory) {
     }])
-    .controller('QuestionsController', ['$scope', 'allQuestionsFactory', function($scope, allQuestionsFactory) {
-        $scope.allQuestions = allQuestionsFactory.questions;
-        $scope.totalQuestions = allQuestionsFactory.totalQuestions;
-        $scope.totalHardQuestions = allQuestionsFactory.totalHardQuestions;
-        $scope.totalEasyQuestions = allQuestionsFactory.totalEasyQuestions;
-        $scope.totalMediumQuestions = allQuestionsFactory.totalMediumQuestions;
-        $scope.tab = 1;
-        $scope.filterLevel = false;
-        $scope.selectTab = function(setTab) {
-                $scope.tab = setTab;
-                if (setTab === 1) {
-                    $scope.filterLevel = false;
-                }              
-                else if (setTab === 2) {
-                    $scope.filterLevel = "E";
-                }
-                else if (setTab === 3) {
-                    $scope.filterLevel = "M";
-                }
-                else if (setTab === 4) {
-                    $scope.filterLevel = "H";
-                }
-                else {
-                    $scope.filterLevel = "U";
-                }
-            };
-        $scope.isTabSelected = function(checkTab) {
-                return ($scope.tab === checkTab);
-            };       
-    }])
-    .controller('CreateQuestionController', ['$scope', 'createQuestionFactory', function($scope, createQuestionFactory) {
-    }])
     .controller('CreateQuizController', ['$scope', 'createQuizFactory', function($scope, createQuizFactory) {
         $scope.createQuizForm = {title:"",description:"",url:"",category:"",random_order:false,answers_at_end:false,single_attempt:false,exam_paper:false,max_questions:"",pass_mark:"",success_text:"",fail_text:""};
         $scope.postQuiz = function() { 
@@ -91,5 +59,93 @@ angular.module('QnA')
                     $scope.alertMsg = "Unable to create the sub-category for " + $scope.createdCategory + ". See below error.";
                     $scope.errors = response.data;
                 });
+        }
+    }])
+    .controller('QuestionsController', ['$scope', 'allQuestionsFactory', function($scope, allQuestionsFactory) {
+        $scope.allQuestions = allQuestionsFactory.questions;
+        $scope.totalQuestions = allQuestionsFactory.totalQuestions;
+        $scope.totalHardQuestions = allQuestionsFactory.totalHardQuestions;
+        $scope.totalEasyQuestions = allQuestionsFactory.totalEasyQuestions;
+        $scope.totalMediumQuestions = allQuestionsFactory.totalMediumQuestions;
+        $scope.tab = 1;
+        $scope.filterLevel = false;
+        $scope.selectTab = function(setTab) {
+                $scope.tab = setTab;
+                if (setTab === 1) {
+                    $scope.filterLevel = false;
+                }              
+                else if (setTab === 2) {
+                    $scope.filterLevel = "E";
+                }
+                else if (setTab === 3) {
+                    $scope.filterLevel = "M";
+                }
+                else if (setTab === 4) {
+                    $scope.filterLevel = "H";
+                }
+                else {
+                    $scope.filterLevel = "U";
+                }
+            };
+        $scope.isTabSelected = function(checkTab) {
+                return ($scope.tab === checkTab);
+            }; 
+        $scope.getAllQuestions = allQuestionsFactory.getAllQuestions().query(
+            function(response) {
+                $scope.allQuestions = response;
+            },
+            function(response) {
+                $scope.errors = response.data;
+                console.log($scope.errors);
+            });
+        console.log($scope.getAllQuestions); 
+    }])
+    .controller('CreateQuestionController', ['$scope', 'createQuestionFactory', function($scope, createQuestionFactory) {
+        $scope.allSubCategories = createQuestionFactory.getAllSubcategories().query(
+            function(response) {
+                $scope.isSubCategoryEmpty = false;
+            },
+            function(response) {
+                $scope.errors = response.data;
+                console.log($scope.errors);
+                $scope.isSubCategoryEmpty = true;
+            });
+        $scope.postQuestion = function() {
+            var response = createQuestionFactory.createQuestion().save($scope.createQuestionForm).$promise.then(
+                function(response){
+                    $scope.alertType = "success";
+                    $scope.alertMsg = "Your question has been created.";
+                    $scope.createQuestionForm = {content:"",explanation:""};
+                    $scope.questionCreateForm.$setPristine();
+                    // $state.go('app.questions');                     
+                },
+                function(response) {
+                    $scope.alertType = "danger";
+                    $scope.alertMsg = "Unable to create the question. See below errors.";
+                    $scope.errors = response.data;
+                    console.log($scope.errors);
+                    $scope.isFormInvalid = true;
+                });
+        }
+        $scope.optionss = [
+            {
+                optionid : 1,
+                content : '',
+                correct : true
+            },
+            {
+                optionid : 2,
+                content : '',
+                correct : false
+            },
+            ];
+        $scope.optionCount = 3;
+        $scope.addOptions = function(){
+            $scope.optionss.push({                 
+                                optionid : $scope.optionCount,
+                                content : '',
+                                correct :  false
+                                });
+            $scope.optionCount = $scope.optionCount + 1;
         }
     }]);

@@ -11,12 +11,64 @@
 		<div class="row">
 			<div class="col-lg-2 col-md-2 col-sm-2"></div>
 			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-				<form role="form" name="categoryCreateForm" ng-submit="postCategory()" novalidate>
-				  <div class="form-group" ng-class="{'has-error': isFormInvalid }">
-				    <input type="text" maxlength="250" class="form-control" id="category" name="category" ng-model="createCategoryform.category" required>
-				    <span ng-show="isFormInvalid" class="help-block">{{ errors.category[0] }}</span>
-				  </div>
-				  <button type="submit" class="btn btn-primary btn-md">Create Category</button>
+			<hr>
+				<form role="form" name="questionCreateForm" ng-submit="postQuestion()" enctype="multipart/form-data" novalidate>
+				  <div class="form-group" ng-class="{'has-error': isSubCategoryEmpty || errors.sub_category[0] }" >
+				  <label for="subcategory">Select a sub-category into which the question will be added</label>
+					<select class="form-control" id="sub_category" name="sub_category" ng-model="createQuestionForm.sub_category" required>
+						<option value="" disabled>Select here...</option>
+					    <option ng-repeat="subcategory in allSubCategories" value="{{ subcategory.id }}">{{ subcategory.sub_category }}</option>
+					</select>
+				    <span ng-show="noSubCategory" class="help-block">{{ errors }}</span>
+			   		<span ng-show="isFormInvalid" class="help-block">{{ errors.sub_category[0] }}</span>
+				  </div><br>
+				  <div class="form-group">
+				  	<input type="file" name="figure" id="figure" ng-model="createQuestionForm.figure">
+				  </div><br>
+				  <div class="form-group" ng-class="{'has-error': errors.content[0] }">
+				  	<label for="content">Enter the question content</label>
+			    	<textarea name="content" id="content" rows="4" class="form-control" ng-model="createQuestionForm.content" required></textarea>
+			   		<span ng-show="isFormInvalid" class="help-block">{{ errors.content[0] }}</span>
+				  </div><br>
+				  <div class="form-group">
+				  	<label for="content">Enter the explanation of question</label>
+			    	<textarea name="explanation" id="explanation" rows="4" class="form-control" ng-model="createQuestionForm.explanation"></textarea>
+				  </div><br>
+				  <div class="form-group">
+				  	<label for="level">Level of Question</label>
+					<select class="form-control" id="level" name="level" ng-model="createQuestionForm.level" ng-init="createQuestionForm.level = 'E'">
+						<option value="E">Easy</option>
+						<option value="M">Medium</option>
+						<option value="H">Hard</option>
+					</select>
+				  </div><br>
+				  <div class="form-group">
+				  	<label for="answer_order">Display order of MCQs</label>
+					<select class="form-control" id="answer_order" name="answer_order" ng-model="createQuestionForm.answer_order" ng-init="createQuestionForm.answer_order = 'random'">
+						<option value="random">Random</option>
+						<option value="content">Content</option>
+					</select>
+				  </div><br>
+
+				  	<div class="form-group">
+					  	<div class="row">
+				   		<span ng-show="isFormInvalid" class="help-block">{{ errors.sub_category[0] }}</span>
+				   		</div>
+				  		<div ng-repeat="option in optionss">
+				  			<div class="row">
+				  				<div class="col-md-2">
+				  					<input type="radio" name="correctoption" size="100" ng-model="createQuestionForm.correctoption" value="{{option.optionid}}">
+				  				</div>
+				  				<div class="col-md-10">
+					    			<textarea cols="80" rows="3" name="optioncontent-{{option.optionid}}" id="optioncontent-{{option.optionid}}" class="form-control" ng-model="createQuestionForm.optioncontent[option.optionid]" placeholder="Content for option - {{$index}}">{{ option.content }}</textarea><hr>
+				  				</div>
+				  			</div>
+					  </div>
+				  	</div>
+				  	<div class="form-group">
+				  		<button type="button" class="btn btn-primary btn-md" ng-click="addOptions()"><span class="glyphicon glyphicon-plus"></span>&nbsp;Add more options</button>
+				  	</div>
+				  <button type="submit" class="btn btn-primary btn-block">Create Question</button>
 				</form>
 			</div>
 			<div class="col-lg-2 col-md-2 col-sm-2"></div>
