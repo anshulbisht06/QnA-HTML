@@ -117,13 +117,13 @@ angular.module('QnA')
                     $scope.alertMsg = "Your question has been created.";
                     $scope.createQuestionForm = {content:"",explanation:""};
                     $scope.questionCreateForm.$setPristine();
+                    $scope.isFormInvalid = false;
                     // $state.go('app.questions');                     
                 },
                 function(response) {
                     $scope.alertType = "danger";
                     $scope.alertMsg = "Unable to create the question. See below errors.";
                     $scope.errors = response.data;
-                    console.log($scope.errors);
                     $scope.isFormInvalid = true;
                 });
         }

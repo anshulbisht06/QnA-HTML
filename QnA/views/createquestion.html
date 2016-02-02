@@ -50,9 +50,9 @@
 					</select>
 				  </div><br>
 
-				  	<div class="form-group">
+				  	<div class="form-group"  ng-class="{'has-error': errors.optionerrors && isFormInvalid }">
 					  	<div class="row">
-				   		<span ng-show="isFormInvalid" class="help-block">{{ errors.sub_category[0] }}</span>
+				   		<span ng-show="isFormInvalid" class="help-block">{{ errors.optionerrors }}</span>
 				   		</div>
 				  		<div ng-repeat="option in optionss">
 				  			<div class="row">

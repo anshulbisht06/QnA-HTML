@@ -1,6 +1,6 @@
 <div class="row">
 	<div class="alert alert-{{alertType}} text-center" ng-show="alertType">
-		<span class="glyphicon glyphicon-remove right" aria-label="close" onclick="$('.close').alert();"></span>
+		<span class="glyphicon glyphicon-remove right close" aria-label="close" onclick="$(this).alert('close');"></span>
 	  	<strong>{{ alertMsg }}</strong>
 	</div>
 </div>
