@@ -3,10 +3,43 @@ angular.module('QnA')
     .controller('IndexController', ['$scope', 'indexFactory', function($scope, indexFactory) {
     }])
     
-    .controller('LoginController', ['$scope', function($scope) {
-        $scope.message = 'Login'
-    }])
+    .controller("LoginController",function ($scope, $http, $window) {
+        // $cookies.myFavorite = 'oatmeal';
+        // console.log($cookies.myFavorite)
+        $scope.postLogin = function () {
+           // use $.param jQuery function to serialize data from JSON 
+            var data = $.param({
+                username: $scope.username,
+                password: $scope.password
+            });
+            // $window.localStorage.token
+            var config = {
+                headers : {
+                    'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
+                }
+            }
 
+            $http.post('http://localhost:8000/login/', data, config)
+            .success(function (data, status, headers, config) {
+                $scope.postDataResponse = data;
+                $window.localStorage.token = data.token;
+                $window.localStorage.token = data.username;
+                // $window.localStorage.token = data.token;
+                $scope.isFormInvalid = false;
+                $scope.alertType = "success";
+                $scope.alertMsg = "Successfully login.";
+                // alert(data.token);
+                // $state.go('app');
+                $window.location.href = '/#/index.html'
+            })
+            .error(function (data, status, header, config) {
+                $scope.isFormInvalid = true;
+                $scope.alertType = "danger";
+                $scope.alertMsg = "Unable to login.";
+                $scope.errors = response.data;
+            });
+        };
+    })
 
     .controller('QuestionsController', ['$scope', 'allQuestionsFactory', function($scope, allQuestionsFactory) {
         $scope.allQuestions = allQuestionsFactory.questions;

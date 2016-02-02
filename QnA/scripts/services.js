@@ -4,6 +4,14 @@ angular.module('QnA')
     .service('indexFactory', function() { 
         // this.introductionCarousel = ['images/bg.png', 'images/wedding.png', 'images/corporate-party.png'];
     })
+    // .service('loginFactory', ['$resource', 'baseURL', function($resource, baseURL) {
+    //     this.loginUser = function(){
+    //             return $resource(baseURL+"login/", null,
+    //                 {'save':   {method:'POST'} },
+    //                 { stripTrailingSlashes: false }
+    //                 );
+    //     };
+    // }])
     .service('createQuizFactory', ['$resource', 'baseURL', function($resource, baseURL) {
         this.createQuiz = function(){
                 return $resource(baseURL+"quiz/create/", null,

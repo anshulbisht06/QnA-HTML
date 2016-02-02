@@ -10,20 +10,13 @@
 	<div class="row">
 		<div class="col-lg-2 col-md-2 col-sm-2"></div>
 		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-			<form class="col-md-12" ng-app="QnA" ng-controller="LoginController" name="myForm" novalidate>
+			<form class="col-md-12" ng-app="QnA" ng-controller="LoginController" ng-submit="postLogin()" name="myForm" novalidate >
 			    <div class="form-group">
 			      <input type="text" class="form-control input-lg" name="username" ng-model="username" placeholder="User Name" required>
 				  <span style="color:red" ng-show="myForm.$submitted || myForm.username.$touched">
 				  	  <span ng-show="myForm.username.$error.required">Username is required.</span>
 				  </span>
 				</div>
-			    <!-- <div class="form-group">
-			        <input type="email" name ='email' ng-model="email" class="form-control input-lg" placeholder="Email" required>
-			      	<span style="color:red" ng-show="myForm.email.$dirty || myForm.email.$touched">
-				  	   <span ng-show="myForm.email.$error.required">Email is required.</span>
-				  	   <span ng-show="myForm.email.$error.email">Please enter a valid Email.</span>
-				    </span>
-			    </div> -->
 			    <div class="form-group">
 			        <input type="password" name='password' ng-model="password" ng-minlength="8" class="form-control input-lg" placeholder="Password" required>
 				    <span style="color:red" ng-show="myForm.$submitted || myForm.password.$touched">
@@ -32,7 +25,7 @@
 					</span>
 			    </div>
 			    <div class="form-group">
-			        <button class="btn btn-primary btn-lg btn-block" ng-disabled ='myForm.username.$invalid || myForm.password.$invalid'>Sign In</button>
+			        <button class="btn btn-primary btn-lg btn-block" ng-disabled ='myForm.username.$invalid || myForm.password.$invalid' >Sign In</button>
 			        <span><a href="#">Need help?</a></span>
 			        <span class="pull-right"><a href="#">New Registration</a></span>
 			    </div>
