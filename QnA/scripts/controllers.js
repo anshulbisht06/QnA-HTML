@@ -25,7 +25,6 @@ angular.module('QnA')
                 setCookie('token',data.token);
                 setCookie('username',data.username);
                 setCookie('email',data.email);
- 
                 $scope.isFormInvalid = false;
                 $scope.alertType = "success";
                 $scope.alertMsg = "Successfully login.";

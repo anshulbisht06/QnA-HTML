@@ -6,10 +6,13 @@ angular.module('QnA')
     .service('indexFactory', function() { 
         // this.introductionCarousel = ['images/bg.png', 'images/wedding.png', 'images/corporate-party.png'];
     })
-    .service('QuizFactory', ['$resource','baseURL', 'oAuthToken', function($resource, baseURL, oAuthToken) { 
+    .service('QuizFactory', ['$resource','baseURL', 'oAuthToken', function($resource, baseURL, oAuthToken) {
         this.createQuiz = function(){
                 return $resource(baseURL+"quiz/create/", null,
-                    {'save':   {method:'POST'} },
+                    {'save':   {
+                        method:'POST',
+                        headers: {'Authorization': 'JWT ' + oAuthToken}
+                    } },
                     { stripTrailingSlashes: false }
                     );
         };
@@ -17,7 +20,7 @@ angular.module('QnA')
             return $resource(baseURL+"quiz/get/all/", null,
                     {
                         query: {
-                        headers: {'Authorization': 'JWT ' + 'eyJhbGciOiJIUzI1NiIsInR5cCI'},
+                        headers: {'Authorization': 'JWT ' + oAuthToken},
                         method : 'GET',
                         isArray : true,
                         }
@@ -30,13 +33,19 @@ angular.module('QnA')
     .service('CategoryFactory', ['$resource', 'baseURL', 'oAuthToken', function($resource, baseURL, oAuthToken) {
         this.createCategory = function(){
                 return $resource(baseURL+"quiz/category/create/", null,
-                    {'save':   {method:'POST'} },
+                    {'save':   {
+                        method:'POST',
+                        headers: {'Authorization': 'JWT ' + oAuthToken}
+                    } },
                     { stripTrailingSlashes: false }
                     );
         };
         this.createSubCategory = function(){
                 return $resource(baseURL+"quiz/subcategory/create/", null,
-                    {'save':   {method:'POST'} },
+                    {'save':   {
+                        method:'POST',
+                        headers: {'Authorization': 'JWT ' + oAuthToken}
+                    } },
                     { stripTrailingSlashes: false }
                     );
         };
@@ -53,7 +62,7 @@ angular.module('QnA')
                 return $resource(baseURL+"quiz/questions/all/", null,
                 {
                     query: {
-                    headers: {'Authorization': 'JWT ' + 'eyJhbGciOiJIUzI1NiIsInR5cCI'},
+                    headers: {'Authorization': 'JWT ' + oAuthToken},
                     method : 'GET',
                     isArray : true,
                     }
@@ -107,7 +116,10 @@ angular.module('QnA')
         this.createQuestion = function(){
             return $resource(baseURL+"question/mcq/create/", null,
                     {'save':   
-                    { method:'POST', headers: {'Authorization': 'JWT ' + oAuthToken}} 
+                    { 
+                        method:'POST',
+                        headers: {'Authorization': 'JWT ' + oAuthToken}
+                    } 
                     },
                     { stripTrailingSlashes: false }
                     );
