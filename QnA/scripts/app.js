@@ -20,6 +20,17 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                 },
 
             })
+            
+            .state('app.login-user', {
+                url:'login/',
+                views :{
+                    'content@': {
+                        controller  : 'LoginController',
+                        templateUrl : 'views/login.html'
+                    }
+                }
+                })
+
             .state('app.create-quiz', {
                 url:'create/quiz/',
                 views :{
@@ -57,5 +68,6 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                 }
                 });
 
+        // $locationProvider.html5Mode(true);   
         // $urlRouterProvider.otherwise('/');
     });

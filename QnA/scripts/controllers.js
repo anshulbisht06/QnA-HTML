@@ -2,6 +2,12 @@
 angular.module('QnA')
     .controller('IndexController', ['$scope', 'indexFactory', function($scope, indexFactory) {
     }])
+    
+    .controller('LoginController', ['$scope', function($scope) {
+        $scope.message = 'Login'
+    }])
+
+
     .controller('QuestionsController', ['$scope', 'allQuestionsFactory', function($scope, allQuestionsFactory) {
         $scope.allQuestions = allQuestionsFactory.questions;
         $scope.totalQuestions = allQuestionsFactory.totalQuestions;
