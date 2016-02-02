@@ -30,6 +30,15 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                     }
                 }
                 })
+            .state('app.register-user', {
+                url:'register/',
+                views :{
+                    'content@': {
+                        controller  : 'UserRegisterController',
+                        templateUrl : 'views/register.html'
+                    }
+                }
+                })
 
             .state('app.create-quiz', {
                 url:'create/quiz/',

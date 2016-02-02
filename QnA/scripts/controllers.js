@@ -1,7 +1,21 @@
 /* global $ */
 angular.module('QnA')
     .controller('IndexController', ['$scope', 'indexFactory', function($scope, indexFactory) {
-    }])   
+    }]) 
+    .controller('UserRegisterController', ['$scope', 'UserRegisterFactory', function($scope, UserRegisterFactory) {
+        $scope.registerUserForm = {username:"",email:"",password:"",first_name:""};
+        $scope.postRegister = function() { 
+            var response = UserRegisterFactory.createUser().save($scope.registerUserForm).$promise.then(
+                function(response){
+                    $scope.isFormInvalid = false;
+                    $scope.userRegisterForm.$setPristine();
+                },
+                function(response) {
+                    $scope.isFormInvalid = true;
+                    $scope.errors = response.data;
+                });
+        }
+    }])     
     .controller("LoginController",function ($scope, $http, $window) {
         // $cookies.myFavorite = 'oatmeal';
         // console.log($cookies.myFavorite)
@@ -29,13 +43,13 @@ angular.module('QnA')
                 $scope.alertMsg = "Successfully login.";
                 // alert(data.token);
                 // $state.go('app');
-                $window.location.href = '/#/index.html'
+                $window.location.href = '/#/'
             })
             .error(function (data, status, header, config) {
                 $scope.isFormInvalid = true;
                 $scope.alertType = "danger";
                 $scope.alertMsg = "Unable to login.";
-                $scope.errors = response.data;
+                $scope.errors = data;
             });
         };
     })
@@ -70,9 +84,8 @@ angular.module('QnA')
                 return ($scope.tab === checkTab);
             };     
     }])
-    .controller('CreateQuestionController', ['$scope', 'createQuestionFactory', function($scope, createQuestionFactory) {
-    }])
-    .controller('CreateQuizController', ['$scope', 'createQuizFactory', function($scope, createQuizFactory) {
+
+    .controller('CreateQuizController', ['$scope', 'QuizFactory', function($scope, QuizFactory) {
         $scope.createQuizForm = {title:"",description:"",url:"",category:"",random_order:false,answers_at_end:false,single_attempt:false,exam_paper:false,max_questions:"",pass_mark:"",success_text:"",fail_text:""};
         $scope.postQuiz = function() { 
             var response = QuizFactory.createQuiz().save($scope.createQuizForm).$promise.then(

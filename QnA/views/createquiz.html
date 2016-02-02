@@ -15,19 +15,16 @@
 			    <label for="title">Title</label>
 			    <input type="text" maxlength="60" class="form-control" id="title" name="title" ng-model="createQuizForm.title" required>
 			    <br/>
-			    <div class='ng-error' ng-show="quizCreateForm.$submitted || quizCreateForm.title.$touched">
-			      <span  ng-show="quizCreateForm.title.$error.required">Please enter a title.</span>
-			    </div>
 			    <span ng-show="isFormInvalid" class="help-block">{{ errors.title[0] }}</span>
 			    <span ng-show="quizCreateForm.title.$touched && quizCreateForm.title.$error.required" class="help-block">Quiz title is required.</span>
 			  </div>
 			  <div class="form-group">
 			    <label for="description">Description</label>
-			    <textarea name="description" id="description" rows="4" class="form-control" ng-model="createQuizForm.description" required ng-minlength="15"></textarea>
-			    <div class='ng-error' ng-show="quizCreateForm.$submitted || quizCreateForm.description.$touched">
+			    <textarea name="description" id="description" rows="4" class="form-control" ng-model="createQuizForm.description" required></textarea>
+			    <!-- <div class='ng-error' ng-show="quizCreateForm.$submitted || quizCreateForm.description.$touched">
 			      <span ng-show="quizCreateForm.description.$error.required">Please enter discription.</span>
 			      <span ng-show="quizCreateForm.description.$error.minlength">Description is too short.</span>	
-			    </div>
+			    </div> -->
 			  </div>
 			  <div class="form-group" ng-class="{'has-error': isFormInvalid || quizCreateForm.url.$touched && quizCreateForm.url.$error.required }">
 			  	<label for="url">URL</label>

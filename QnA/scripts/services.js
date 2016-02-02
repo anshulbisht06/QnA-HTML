@@ -5,6 +5,16 @@ angular.module('QnA')
     .service('indexFactory', function() { 
         // this.introductionCarousel = ['images/bg.png', 'images/wedding.png', 'images/corporate-party.png'];
     })
+    .service('UserRegisterFactory',['$resource', 'baseURL', function($resource, baseURL) { 
+        this.createUser = function(){
+            return $resource(baseURL+"register/", null,
+                    {'save':   
+                    { method:'POST'} 
+                    },
+                    { stripTrailingSlashes: false }
+                    );
+        }
+    }])
     .service('QuizFactory', ['$resource', 'baseURL', 'oAuthToken', function($resource, baseURL, oAuthToken) { 
         this.createQuiz = function(){
                 return $resource(baseURL+"quiz/create/", null,

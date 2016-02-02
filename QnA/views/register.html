@@ -1,0 +1,48 @@
+<div class="container-fluid">
+<div class="jumbotron">
+    <div class="row">
+    </div>
+    <div class="row">
+		<h2 class="text-center hidden-xs">Register Here</h2>
+		<h3 class="text-center visible-xs">Register Here</h3>
+	</div>
+	<div class="row">
+		<div class="col-lg-2 col-md-2 col-sm-2"></div>
+		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+			<form class="col-md-12" ng-submit="postRegister()" name="userRegisterForm" novalidate>
+				<div class="form-group" ng-class="{'has-error': errors.first_name[0] || userRegisterForm.first_name.$touched && userRegisterForm.first_name.$error.required || userRegisterForm.first_name.$touched && userRegisterForm.first_name.$error.minlength }">
+			      <input type="text" class="form-control input-lg" name="first_name" id="first_name" ng-minlength="4"  ng-model="registerUserForm.first_name" placeholder="Name" required>
+			      <span ng-show="isFormInvalid" class="help-block">{{ errors.first_name[0] }}</span>
+			      <span ng-show="userRegisterForm.first_name.$touched && userRegisterForm.first_name.$error.required" class="help-block">Name is required.</span>
+			      <span ng-show="userRegisterForm.first_name.$touched && userRegisterForm.first_name.$error.minlength" class="help-block">Name must be least 8 characters long.</span>
+				</div><hr>
+			    <div class="form-group" ng-class="{'has-error': errors.username[0] || userRegisterForm.username.$touched && userRegisterForm.username.$error.required || userRegisterForm.username.$touched && userRegisterForm.username.$error.minlength }">
+			      	<input type="text" class="form-control input-lg" name="username" id="username" ng-model="registerUserForm.username" placeholder="Username" ng-minlength="4" required>
+			     	<span ng-show="isFormInvalid" class="help-block">{{ errors.username[0] }}</span>
+			    	<span ng-show="userRegisterForm.username.$touched && userRegisterForm.username.$error.required" class="help-block">Username is required.</span>
+			    	<span ng-show="userRegisterForm.username.$touched && userRegisterForm.username.$error.minlength" class="help-block">Username must be least 4 characters long.</span>
+				</div><hr>
+			    <div class="form-group" ng-class="{'has-error': errors.password[0] || userRegisterForm.password.$touched && userRegisterForm.password.$error.required || userRegisterForm.password.$touched && userRegisterForm.password.$error.minlength }">
+			        <input type="password" name="password" id="password" ng-model="registerUserForm.password" ng-minlength="8" class="form-control input-lg" placeholder="Password" required>
+			        <span ng-show="isFormInvalid" class="help-block">{{ errors.password[0] }}</span>
+			   		<span ng-show="userRegisterForm.password.$touched && userRegisterForm.password.$error.required" class="help-block">Password is required.</span>
+			   		<span ng-show="userRegisterForm.password.$touched && userRegisterForm.password.$error.minlength" class="help-block">Password must be least 8 characters long.</span>
+			    </div><hr>
+			    <div class="form-group" ng-class="{'has-error': errors.email[0] || userRegisterForm.email.$touched && userRegisterForm.email.$error.required }">
+			        <input type="email" name="email" id="email" ng-model="registerUserForm.email" class="form-control input-lg" placeholder="Email" required>
+			        <span ng-show="isFormInvalid" class="help-block">{{ errors.email[0] }}</span>
+			    	<span ng-show="userRegisterForm.email.$touched && userRegisterForm.email.$error.required" class="help-block">Email is required.</span>
+			    </div><hr>
+			    <div class="form-group">
+			        <button type="submit" class="btn btn-primary btn-lg btn-block" ng-disabled ='userRegisterForm.$invalid'>Register</button>
+			    </div>
+			    <div class="form-group text-center">
+			        <h3 class="hidden-xs"><a ui-sref="app.login-user">Have an already existing account then login here</a></h3>
+			        <h4 class="visible-xs"><a ui-sref="app.login-user">Have an already existing account then login here</a></h4>
+			    </div>
+			</form>
+        </div>
+    <div class="col-lg-2 col-md-2 col-sm-2"></div>
+</div>
+</div>
+</div>
