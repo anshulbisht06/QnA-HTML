@@ -1,5 +1,5 @@
 /* global $ */
-var appmodule = angular.module('QnA', ['ui.router', 'ngResource']);
+var appmodule = angular.module('QnA', ['ui.router', 'ngResource', 'ngCookies']);
 
 appmodule.config(function($stateProvider, $urlRouterProvider) {
         $stateProvider	        
@@ -27,6 +27,16 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                     'content@': {
                         controller  : 'LoginController',
                         templateUrl : 'views/login.html'
+                    }
+                }
+                })
+            
+            .state('app.register-user', {
+                url:'register/',
+                views :{
+                    'content@': {
+                        controller  : 'UserRegisterController',
+                        templateUrl : 'views/register.html'
                     }
                 }
                 })

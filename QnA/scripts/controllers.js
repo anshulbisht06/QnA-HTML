@@ -1,8 +1,26 @@
 /* global $ */
 angular.module('QnA')
+
     .controller('IndexController', ['$scope', 'indexFactory', function($scope, indexFactory) {
-    }])   
-    .controller("LoginController",function ($scope, $http, $window) {
+    }])
+
+    .controller('LogoutController', ['$scope', '$http', '$state','$cookies', function($scope, $http, $state, $cookies) {
+        $scope.postLogout = function logout() {
+          // return $http.post('http://localhost:8000/#/')
+            // .success(function(data, status, headers, config) {
+            $cookies.remove('token');
+            $cookies.remove('email');
+            $cookies.remove('username');
+            console.log('Logout user now ...')
+            $state.go('app.login-user');
+          // })
+            // .error(function logoutErrorFn(data, status, headers, config) {
+            // console.error('Epic failure!');
+          // })
+        }
+    }])
+
+    .controller("LoginController",[ '$scope', '$http', '$state', function ($scope, $http, $state) {
         // $cookies.myFavorite = 'oatmeal';
         // console.log($cookies.myFavorite)
         $scope.postLogin = function () {
@@ -21,23 +39,39 @@ angular.module('QnA')
             $http.post('http://localhost:8000/login/', data, config)
             .success(function (data, status, headers, config) {
                 $scope.postDataResponse = data;
-
                 setCookie('token',data.token);
                 setCookie('username',data.username);
                 setCookie('email',data.email);
                 $scope.isFormInvalid = false;
                 $scope.alertType = "success";
                 $scope.alertMsg = "Successfully login.";
-                $window.location.href = '/index.html'
+                $state.go('app');
             })
             .error(function (data, status, header, config) {
                 $scope.isFormInvalid = true;
                 $scope.alertType = "danger";
-                $scope.alertMsg = "Unable to login.";
-                $scope.errors = response.data;
+                $scope.alertMsg = "Unable to login. See the errors below.";
+                $scope.errors = data.errors;
             });
         };
-    })
+    }])
+
+    .controller('UserRegisterController', ['$scope', 'UserRegisterFactory', function($scope, UserRegisterFactory) {
+        $scope.registerUserForm = {username:"",email:"",password:"",first_name:""};
+        $scope.postRegister = function() { 
+            var response = UserRegisterFactory.createUser().save($scope.registerUserForm).$promise.then(
+                function(response){
+                    $scope.isFormInvalid = false;
+                    $scope.userRegisterForm.$setPristine();
+                },
+                function(response) {
+                    $scope.isFormInvalid = true;
+                    $scope.errors = response.data;
+                });
+        }
+    }])     
+
+    
 
     .controller('QuestionsController', ['$scope', 'allQuestionsFactory', function($scope, allQuestionsFactory) {
         $scope.allQuestions = allQuestionsFactory.questions;
@@ -69,6 +103,7 @@ angular.module('QnA')
                 return ($scope.tab === checkTab);
             };     
     }])
+
 
     .controller('CreateQuizController', ['$scope', '$state', 'QuestionsFactory','QuizFactory', function($scope, $state, QuestionsFactory, QuizFactory) {
         $scope.createQuizForm = {title:"",description:"",url:"",category:"",random_order:false,answers_at_end:false,single_attempt:false,exam_paper:false,max_questions:"",pass_mark:"",success_text:"",fail_text:""};

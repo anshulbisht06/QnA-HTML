@@ -7,7 +7,9 @@ angular.module('QnA')
         // this.introductionCarousel = ['images/bg.png', 'images/wedding.png', 'images/corporate-party.png'];
     })
     .service('QuizFactory', ['$resource','baseURL', 'oAuthToken', function($resource, baseURL, oAuthToken) {
+
         this.createQuiz = function(){
+                console.log(oAuthToken);
                 return $resource(baseURL+"quiz/create/", null,
                     {'save':   {
                         method:'POST',
