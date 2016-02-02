@@ -16,7 +16,7 @@ angular.module('QnA')
                 });
         }
     }])     
-    .controller("LoginController",function ($scope, $http, $window) {
+    .controller("LoginController",[ '$scope', '$state', '$http', function ($scope, $http, $state) {
         // $cookies.myFavorite = 'oatmeal';
         // console.log($cookies.myFavorite)
         $scope.postLogin = function () {
@@ -35,15 +35,15 @@ angular.module('QnA')
             $http.post('http://localhost:8000/login/', data, config)
             .success(function (data, status, headers, config) {
                 $scope.postDataResponse = data;
-                $window.localStorage.token = data.token;
-                $window.localStorage.token = data.username;
-                // $window.localStorage.token = data.token;
+
+                setCookie('token',data.token);
+                setCookie('username',data.username);
+                setCookie('email',data.email);
+ 
                 $scope.isFormInvalid = false;
                 $scope.alertType = "success";
                 $scope.alertMsg = "Successfully login.";
-                // alert(data.token);
-                // $state.go('app');
-                $window.location.href = '/#/'
+                $state.go('app');
             })
             .error(function (data, status, header, config) {
                 $scope.isFormInvalid = true;
@@ -85,9 +85,10 @@ angular.module('QnA')
             };     
     }])
 
-    .controller('CreateQuizController', ['$scope', 'QuizFactory', function($scope, QuizFactory) {
+
+    .controller('CreateQuizController', ['$scope', '$state', 'QuestionsFactory','QuizFactory', function($scope, $state, QuestionsFactory, QuizFactory) {
         $scope.createQuizForm = {title:"",description:"",url:"",category:"",random_order:false,answers_at_end:false,single_attempt:false,exam_paper:false,max_questions:"",pass_mark:"",success_text:"",fail_text:""};
-        $scope.postQuiz = function() { 
+        $scope.postQuiz = function() {
             var response = QuizFactory.createQuiz().save($scope.createQuizForm).$promise.then(
                 function(response){
                     $scope.isFormInvalid = false;
@@ -95,7 +96,7 @@ angular.module('QnA')
                     $scope.alertMsg = "Your quiz named " + $scope.createQuizForm.title + " has been created.";
                     $scope.createQuizForm = {title:"",description:"",url:"",category:"",random_order:false,answers_at_end:false,single_attempt:false,exam_paper:false,max_questions:"",pass_mark:"",success_text:"",fail_text:""};
                     $scope.quizCreateForm.$setPristine();
-                    // $state.go('app.create-category');                     
+                    $state.go('app.create-category');                     
                 },
                 function(response) {
                     $scope.isFormInvalid = true;
@@ -105,6 +106,7 @@ angular.module('QnA')
                 });
         }
     }])
+
     .controller('CreateCategoryController', ['$scope', 'CategoryFactory', 'QuizFactory', function($scope, CategoryFactory, QuizFactory) {
         $scope.createCategoryform = {category:""};
         $scope.postCategory = function() { 
@@ -147,10 +149,11 @@ angular.module('QnA')
                 function(response){
                     console.log(response);                    
                 },
-                function(response) {
+                function(response){
                     console.log('error');
                 });
     }])
+
     .controller('QuestionsController', ['$scope', 'QuestionsFactory', function($scope, QuestionsFactory) {
         $scope.allQuestions = QuestionsFactory.questions;
         $scope.totalQuestions = QuestionsFactory.totalQuestions;
