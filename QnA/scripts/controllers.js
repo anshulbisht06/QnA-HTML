@@ -23,14 +23,13 @@ angular.module('QnA')
             .success(function (data, status, headers, config) {
                 $scope.postDataResponse = data;
                 $window.localStorage.token = data.token;
-                $window.localStorage.token = data.username;
-                // $window.localStorage.token = data.token;
+                $window.localStorage.username = data.username;
+                $window.localStorage.email = data.email;
                 $scope.isFormInvalid = false;
                 $scope.alertType = "success";
                 $scope.alertMsg = "Successfully login.";
-                // alert(data.token);
-                // $state.go('app');
-                $window.location.href = '/#/index.html'
+                alert($window.localStorage.token);
+                $window.location.href = '/index.html'
             })
             .error(function (data, status, header, config) {
                 $scope.isFormInvalid = true;
