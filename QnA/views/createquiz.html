@@ -11,7 +11,7 @@
 		<div class="col-lg-2 col-md-2 col-sm-2"></div>
 		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 			<form role="form" name="quizCreateForm" ng-submit="postQuiz()" novalidate>
-			  <div class="form-group" ng-class="{'has-error': isFormInvalid }">
+			  <div class="form-group" ng-class="{'has-error': isFormInvalid || quizCreateForm.title.$touched && quizCreateForm.title.$error.required }">
 			    <label for="title">Title</label>
 			    <input type="text" maxlength="60" class="form-control" id="title" name="title" ng-model="createQuizForm.title" required>
 			    <br/>
@@ -19,6 +19,7 @@
 			      <span  ng-show="quizCreateForm.title.$error.required">Please enter a title.</span>
 			    </div>
 			    <span ng-show="isFormInvalid" class="help-block">{{ errors.title[0] }}</span>
+			    <span ng-show="quizCreateForm.title.$touched && quizCreateForm.title.$error.required" class="help-block">Quiz title is required.</span>
 			  </div>
 			  <div class="form-group">
 			    <label for="description">Description</label>
@@ -28,10 +29,11 @@
 			      <span ng-show="quizCreateForm.description.$error.minlength">Description is too short.</span>	
 			    </div>
 			  </div>
-			  <div class="form-group" ng-class="{'has-error': isFormInvalid }">
+			  <div class="form-group" ng-class="{'has-error': isFormInvalid || quizCreateForm.url.$touched && quizCreateForm.url.$error.required }">
 			  	<label for="url">URL</label>
 			    <input type="text" maxlength="60" class="form-control" id="url" name="url" ng-model="createQuizForm.url" required>
 			    <span ng-show="isFormInvalid" class="help-block">{{ errors.url[0] }}</span>
+			    <span ng-show="quizCreateForm.url.$touched && quizCreateForm.url.$error.required" class="help-block">Quiz URL is required.</span>
 			  </div>
 			  <div class="form-group">
 			    <label for="category">Category</label>

@@ -1,8 +1,7 @@
 /* global $ */
 angular.module('QnA')
     .controller('IndexController', ['$scope', 'indexFactory', function($scope, indexFactory) {
-    }])
-    
+    }])   
     .controller("LoginController",function ($scope, $http, $window) {
         // $cookies.myFavorite = 'oatmeal';
         // console.log($cookies.myFavorite)
@@ -75,7 +74,7 @@ angular.module('QnA')
     .controller('CreateQuizController', ['$scope', 'createQuizFactory', function($scope, createQuizFactory) {
         $scope.createQuizForm = {title:"",description:"",url:"",category:"",random_order:false,answers_at_end:false,single_attempt:false,exam_paper:false,max_questions:"",pass_mark:"",success_text:"",fail_text:""};
         $scope.postQuiz = function() { 
-            var response = createQuizFactory.createQuiz().save($scope.createQuizForm).$promise.then(
+            var response = QuizFactory.createQuiz().save($scope.createQuizForm).$promise.then(
                 function(response){
                     $scope.isFormInvalid = false;
                     $scope.alertType = "success";
@@ -92,11 +91,11 @@ angular.module('QnA')
                 });
         }
     }])
-    .controller('CreateCategoryController', ['$scope', 'createCategoryFactory', function($scope, createCategoryFactory) {
+    .controller('CreateCategoryController', ['$scope', 'CategoryFactory', 'QuizFactory', function($scope, CategoryFactory, QuizFactory) {
         $scope.createCategoryform = {category:""};
         $scope.postCategory = function() { 
             $scope.createdCategory = $scope.createCategoryform.category;
-            var response = createCategoryFactory.createCategory().save($scope.createCategoryform).$promise.then(
+            var response = CategoryFactory.createCategory().save($scope.createCategoryform).$promise.then(
                 function(response){
                     $scope.isFormInvalid = false;
                     $scope.alertType = "success";
@@ -115,7 +114,7 @@ angular.module('QnA')
                 });
         }
         $scope.postSubCategory = function() {
-            var response = createCategoryFactory.createSubCategory().save($scope.subcreateCategoryform).$promise.then(
+            var response = CategoryFactory.createSubCategory().save($scope.subcreateCategoryform).$promise.then(
                 function(response){
                     $scope.isFormInvalid1 = false;
                     $scope.alertType = "success";
@@ -129,5 +128,100 @@ angular.module('QnA')
                     $scope.alertMsg = "Unable to create the sub-category for " + $scope.createdCategory + ". See below error.";
                     $scope.errors = response.data;
                 });
+        }
+        $scope.getAllQuiz = QuizFactory.getAllQuiz().query(
+                function(response){
+                    console.log(response);                    
+                },
+                function(response) {
+                    console.log('error');
+                });
+    }])
+    .controller('QuestionsController', ['$scope', 'QuestionsFactory', function($scope, QuestionsFactory) {
+        $scope.allQuestions = QuestionsFactory.questions;
+        $scope.totalQuestions = QuestionsFactory.totalQuestions;
+        $scope.totalHardQuestions = QuestionsFactory.totalHardQuestions;
+        $scope.totalEasyQuestions = QuestionsFactory.totalEasyQuestions;
+        $scope.totalMediumQuestions = QuestionsFactory.totalMediumQuestions;
+        $scope.tab = 1;
+        $scope.filterLevel = false;
+        $scope.selectTab = function(setTab) {
+                $scope.tab = setTab;
+                if (setTab === 1) {
+                    $scope.filterLevel = false;
+                }              
+                else if (setTab === 2) {
+                    $scope.filterLevel = "E";
+                }
+                else if (setTab === 3) {
+                    $scope.filterLevel = "M";
+                }
+                else if (setTab === 4) {
+                    $scope.filterLevel = "H";
+                }
+                else {
+                    $scope.filterLevel = "U";
+                }
+            };
+        $scope.isTabSelected = function(checkTab) {
+                return ($scope.tab === checkTab);
+            }; 
+        $scope.getAllQuestions = QuestionsFactory.getAllQuestions().query(
+            function(response) {
+                $scope.allQuestions = response;
+            },
+            function(response) {
+                $scope.errors = response.data;
+                console.log($scope.errors);
+            });
+        console.log($scope.getAllQuestions); 
+    }])
+    .controller('CreateQuestionController', ['$scope', 'QuestionsFactory', function($scope, QuestionsFactory) {
+        $scope.allSubCategories = QuestionsFactory.getAllSubcategories().query(
+            function(response) {
+                $scope.isSubCategoryEmpty = false;
+            },
+            function(response) {
+                $scope.errors = response.data;
+                console.log($scope.errors);
+                $scope.isSubCategoryEmpty = true;
+            });
+        $scope.postQuestion = function() {
+            var response = QuestionsFactory.createQuestion().save($scope.createQuestionForm).$promise.then(
+                function(response){
+                    $scope.alertType = "success";
+                    $scope.alertMsg = "Your question has been created.";
+                    $scope.createQuestionForm = {content:"",explanation:""};
+                    $scope.questionCreateForm.$setPristine();
+                    $scope.isFormInvalid = false;
+                    // $state.go('app.questions');                     
+                },
+                function(response) {
+                    $scope.alertType = "danger";
+                    $scope.alertMsg = "Unable to create the question. See below errors.";
+                    $scope.errors = response.data;
+                    $scope.isFormInvalid = true;
+                });
+        }
+        $scope.optionss = [
+            {
+                optionid : 1,
+                content : '',
+                correct : true
+            },
+            {
+                optionid : 2,
+                content : '',
+                correct : false
+            },
+            ];
+        $scope.optionCount = 3;
+        $scope.addOptions = function(){
+            $scope.optionss.push({                 
+                                optionid : $scope.optionCount,
+                                content : '',
+                                correct :  false
+                                });
+            $scope.optionCount = $scope.optionCount + 1;
         }
     }]);
