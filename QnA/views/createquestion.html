@@ -68,7 +68,7 @@
 				  	<div class="form-group">
 				  		<button type="button" class="btn btn-primary btn-md" ng-click="addOptions()"><span class="glyphicon glyphicon-plus"></span>&nbsp;Add more options</button>
 				  	</div>
-				  <button type="submit" class="btn btn-primary btn-block">Create Question</button>
+				  <button type="submit" class="btn btn-primary btn-block" ng-disabled="createQuestionForm.$invalid">Create Question</button>
 				</form>
 			</div>
 			<div class="col-lg-2 col-md-2 col-sm-2"></div>

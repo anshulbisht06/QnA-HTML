@@ -39,7 +39,7 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                 }
                 })
             .state('app.questions', {
-                url:'questions/',
+                url:'questions/all/',
                 views :{
                     'content@': {
                         controller  : 'QuestionsController',

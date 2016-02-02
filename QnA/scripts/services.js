@@ -5,15 +5,27 @@ angular.module('QnA')
     .service('indexFactory', function() { 
         // this.introductionCarousel = ['images/bg.png', 'images/wedding.png', 'images/corporate-party.png'];
     })
-    .service('createQuizFactory', ['$resource', 'baseURL', function($resource, baseURL) { 
+    .service('QuizFactory', ['$resource', 'baseURL', 'oAuthToken', function($resource, baseURL, oAuthToken) { 
         this.createQuiz = function(){
                 return $resource(baseURL+"quiz/create/", null,
                     {'save':   {method:'POST'} },
                     { stripTrailingSlashes: false }
                     );
         };
+        this.getAllQuiz = function(){
+            return $resource(baseURL+"quiz/get/all/", null,
+                    {
+                        query: {
+                        headers: {'Authorization': 'JWT ' + oAuthToken},
+                        method : 'GET',
+                        isArray : true,
+                        }
+                    },
+                    { stripTrailingSlashes: false }
+                    );
+        }
     }])
-    .service('createCategoryFactory', ['$resource', 'baseURL', function($resource, baseURL) { 
+    .service('CategoryFactory', ['$resource', 'baseURL', 'oAuthToken', function($resource, baseURL, oAuthToken) {
         this.createCategory = function(){
                 return $resource(baseURL+"quiz/category/create/", null,
                     {'save':   {method:'POST'} },
@@ -28,14 +40,14 @@ angular.module('QnA')
         };
 
     }])
-    .service('allQuestionsFactory', ['$resource', 'baseURL', 'oAuthToken', function($resource, baseURL, oAuthToken) {
+    .service('QuestionsFactory', ['$resource', 'baseURL', 'oAuthToken', function($resource, baseURL, oAuthToken) {
         questions = {'Clinical Audit - 1' : [], 'Clinical Audit - 2' : []};
         levels = ['E','H','M'];
         totalEasyQuestions = 0;
         totalMediumQuestions = 0;
         totalHardQuestions = 0;
         this.getAllQuestions = function(){
-                return $resource(baseURL+"question/mcq/list/", null,
+                return $resource(baseURL+"quiz/questions/all/", null,
                 {
                     query: {
                     headers: {'Authorization': 'JWT ' + oAuthToken},
@@ -74,8 +86,8 @@ angular.module('QnA')
         this.totalHardQuestions = totalHardQuestions;
         this.totalEasyQuestions = totalEasyQuestions;
         this.totalMediumQuestions = totalMediumQuestions;
-    }])
-    .service('createQuestionFactory', ['$resource', 'baseURL', 'oAuthToken', function($resource, baseURL, oAuthToken) { 
+
+
         this.getAllSubcategories = function(){
                 return $resource(baseURL+"quiz/subcategory/get/all/", null,
                 {
