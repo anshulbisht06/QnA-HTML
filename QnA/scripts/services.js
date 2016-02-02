@@ -1,11 +1,12 @@
 /* global $ */
+
 angular.module('QnA')
     .constant("baseURL","http://localhost:8000/")
-    .constant("oAuthToken","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJ1c2VyX2lkIjoxLCJlbWFpbCI6ImRAZ21haWwuY29tIiwiZXhwIjoxNDU0NjE1NjkwfQ.FyBa1MUnnwgBE-Rlo9FAUTvxzwz3HKb26CWlPafE8GY")
+    .constant("oAuthToken",getCookie('token'))
     .service('indexFactory', function() { 
         // this.introductionCarousel = ['images/bg.png', 'images/wedding.png', 'images/corporate-party.png'];
     })
-    .service('QuizFactory', ['$resource', 'baseURL', 'oAuthToken', function($resource, baseURL, oAuthToken) { 
+    .service('QuizFactory', ['$resource','baseURL', 'oAuthToken', function($resource, baseURL, oAuthToken) { 
         this.createQuiz = function(){
                 return $resource(baseURL+"quiz/create/", null,
                     {'save':   {method:'POST'} },
@@ -16,7 +17,7 @@ angular.module('QnA')
             return $resource(baseURL+"quiz/get/all/", null,
                     {
                         query: {
-                        headers: {'Authorization': 'JWT ' + oAuthToken},
+                        headers: {'Authorization': 'JWT ' + 'eyJhbGciOiJIUzI1NiIsInR5cCI'},
                         method : 'GET',
                         isArray : true,
                         }
@@ -25,6 +26,7 @@ angular.module('QnA')
                     );
         }
     }])
+
     .service('CategoryFactory', ['$resource', 'baseURL', 'oAuthToken', function($resource, baseURL, oAuthToken) {
         this.createCategory = function(){
                 return $resource(baseURL+"quiz/category/create/", null,
@@ -40,6 +42,7 @@ angular.module('QnA')
         };
 
     }])
+
     .service('QuestionsFactory', ['$resource', 'baseURL', 'oAuthToken', function($resource, baseURL, oAuthToken) {
         questions = {'Clinical Audit - 1' : [], 'Clinical Audit - 2' : []};
         levels = ['E','H','M'];
@@ -50,7 +53,7 @@ angular.module('QnA')
                 return $resource(baseURL+"quiz/questions/all/", null,
                 {
                     query: {
-                    headers: {'Authorization': 'JWT ' + oAuthToken},
+                    headers: {'Authorization': 'JWT ' + 'eyJhbGciOiJIUzI1NiIsInR5cCI'},
                     method : 'GET',
                     isArray : true,
                     }
