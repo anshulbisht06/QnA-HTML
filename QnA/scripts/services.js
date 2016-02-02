@@ -6,7 +6,6 @@ angular.module('QnA')
     .service('indexFactory', function() { 
         // this.introductionCarousel = ['images/bg.png', 'images/wedding.png', 'images/corporate-party.png'];
     })
-<<<<<<< HEAD
     .service('UserRegisterFactory',['$resource', 'baseURL', function($resource, baseURL) { 
         this.createUser = function(){
             return $resource(baseURL+"register/", null,
@@ -18,9 +17,6 @@ angular.module('QnA')
         }
     }])
     .service('QuizFactory', ['$resource', 'baseURL', 'oAuthToken', function($resource, baseURL, oAuthToken) { 
-=======
-    .service('QuizFactory', ['$resource','baseURL', 'oAuthToken', function($resource, baseURL, oAuthToken) { 
->>>>>>> 78c9efa67eadd7d44e484f5a9a0f3b71646e6cfb
         this.createQuiz = function(){
                 return $resource(baseURL+"quiz/create/", null,
                     {'save':   {method:'POST'} },

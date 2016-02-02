@@ -1,7 +1,21 @@
 /* global $ */
 angular.module('QnA')
     .controller('IndexController', ['$scope', 'indexFactory', function($scope, indexFactory) {
-    }]) 
+    }])
+    .controller('LogoutController', ['$scope', '$http', '$state','$cookies', function($scope, $http, $state, $cookies) {
+        $scope.postLogout = function logout() {
+          return $http.post('http://localhost:8000/logout/')
+            .success(function(data, status, headers, config) {
+            $cookies.remove('token');
+            $cookies.remove('email');
+            $cookies.remove('username');
+            $state.go('app.login-user');
+          })
+            .error(function logoutErrorFn(data, status, headers, config) {
+            console.error('Epic failure!');
+          })
+        }
+    }])
     .controller('UserRegisterController', ['$scope', 'UserRegisterFactory', function($scope, UserRegisterFactory) {
         $scope.registerUserForm = {username:"",email:"",password:"",first_name:""};
         $scope.postRegister = function() { 
@@ -16,7 +30,7 @@ angular.module('QnA')
                 });
         }
     }])     
-    .controller("LoginController",[ '$scope', '$state', '$http', function ($scope, $http, $state) {
+    .controller("LoginController",[ '$scope', '$http', '$state', function ($scope, $http, $state) {
         // $cookies.myFavorite = 'oatmeal';
         // console.log($cookies.myFavorite)
         $scope.postLogin = function () {
@@ -35,11 +49,10 @@ angular.module('QnA')
             $http.post('http://localhost:8000/login/', data, config)
             .success(function (data, status, headers, config) {
                 $scope.postDataResponse = data;
-
                 setCookie('token',data.token);
                 setCookie('username',data.username);
                 setCookie('email',data.email);
- 
+                console.log(data.email); 
                 $scope.isFormInvalid = false;
                 $scope.alertType = "success";
                 $scope.alertMsg = "Successfully login.";
@@ -48,11 +61,11 @@ angular.module('QnA')
             .error(function (data, status, header, config) {
                 $scope.isFormInvalid = true;
                 $scope.alertType = "danger";
-                $scope.alertMsg = "Unable to login.";
-                $scope.errors = data;
+                $scope.alertMsg = "Unable to login. See the errors below.";
+                $scope.errors = data.errors;
             });
         };
-    })
+    }])
 
     .controller('QuestionsController', ['$scope', 'allQuestionsFactory', function($scope, allQuestionsFactory) {
         $scope.allQuestions = allQuestionsFactory.questions;

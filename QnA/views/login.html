@@ -11,21 +11,19 @@
 		<div class="col-lg-2 col-md-2 col-sm-2"></div>
 		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 			<form class="col-md-12" ng-app="QnA" ng-submit="postLogin()" name="loginForm" novalidate >
-			    <div class="form-group">
-			      <input type="text" class="form-control input-lg" name="username" ng-model="username" placeholder="User Name" required>
-				  <span style="color:red" ng-show="loginForm.$submitted || loginForm.username.$touched">
-				  	  <span ng-show="loginForm.username.$error.required">Username is required.</span>
-				  </span>
+				<div class="form-group">
+					<span ng-show="isFormInvalid">{{ errors }}</span>				  	  
 				</div>
-			    <div class="form-group">
-			        <input type="password" name='password' ng-model="password" ng-minlength="8" class="form-control input-lg" placeholder="Password" required>
-				    <span style="color:red" ng-show="loginForm.$submitted || loginForm.password.$touched">
-					  	<span ng-show="loginForm.password.$error.required">Password is required.</span>
-					  	<span ng-show="loginForm.password.$error.minlength">Length must be more then 8.</span>
-					</span>
+			    <div class="form-group" ng-class="{ 'has-error' : loginForm.username.$touched && loginForm.username.$error.required || isFormInvalid }">
+			      <input type="text" class="form-control input-lg" name="username" ng-model="username" placeholder="User Name" required>
+				  	<span ng-show="loginForm.username.$touched && loginForm.username.$error.required">Username is required.</span>
+				</div>
+			    <div class="form-group" ng-class="{ 'has-error' : loginForm.password.$touched && loginForm.password.$error.required || isFormInvalid }">
+			        <input type="password" name='password' ng-model="password" class="form-control input-lg" placeholder="Password" required>
+					<span ng-show="loginForm.password.$touched && loginForm.password.$error.required">Password is required.</span>
 			    </div>
 			    <div class="form-group">
-			        <button class="btn btn-primary btn-lg btn-block" ng-disabled ='loginForm.username.$invalid || loginForm.password.$invalid' >Sign In</button>
+			        <button class="btn btn-primary btn-lg btn-block" ng-disabled='loginForm.$invalid'>Sign In</button>
 			        <span><a href="#">Need help?</a></span>
 			        <span class="pull-right"><a href="#">New Registration</a></span>
 			    </div>

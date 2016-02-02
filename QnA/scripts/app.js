@@ -1,5 +1,5 @@
 /* global $ */
-var appmodule = angular.module('QnA', ['ui.router', 'ngResource']);
+var appmodule = angular.module('QnA', ['ui.router', 'ngResource', 'ngCookies']);
 
 appmodule.config(function($stateProvider, $urlRouterProvider) {
         $stateProvider	        
