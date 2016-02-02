@@ -1,7 +1,7 @@
 /* global $ */
 angular.module('QnA').filter('levelFull', function() {
   return function(levelShort) {
-  	var result = 'Unknown';
+  	var result = 'Unknown';	
   	try {
 	    if(levelShort == 'E')
 	    	result = 'Easy';
