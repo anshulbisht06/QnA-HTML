@@ -11,20 +11,20 @@
         </button>
       </div>
     </div>
-    <div id="navbar"  class="navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
+    <div id="navbar" ng-controller='LoginController' class="navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
       
-      <ul class="nav navbar-nav navbar-right" ng-controller='userController' ng-if='isUserLogin()'>
+      <ul class="nav navbar-nav navbar-right" ng-if='isUserLogin()'>
         <li><a ui-sref="app.login-user"><span class="glyphicon glyphicon-sign-in"></span>{{username}}</a></li>
         <li><a ng-controller="LogoutController" ng-click="postLogout()">Logout</a></li>
 	      <li><a ui-sref="app.create-quiz"><span class="glyphicon glyphicon-plus"></span> My Quizzes</a></li>
         <li><a ui-sref="app.questions"><span class="glyphicon glyphicon-pencil"></span> My Questions</a></li>
 	    </ul>
       
-      <ul class="nav navbar-nav navbar-right" ng-controller='userController' ng-else='isUserLogin()'>
+      <ul class="nav navbar-nav navbar-right" ng-else='isUserLogin()'>
         <li><a ui-sref="app.login-user"><span class="glyphicon glyphicon-sign-in"></span>Sign In</a></li>
         <li><a ui-sref="app.register-user"><span class="glyphicon glyphicon-sign-up"></span>Sign Up</a></li>
       </ul>
-
+      
 	 </div>
   </div>
 </nav>

@@ -4,25 +4,6 @@ angular.module('QnA')
     .controller('IndexController', ['$scope', 'indexFactory', function($scope, indexFactory) {
     }])
 
-    .controller('userController',['$rootScope', '$scope', function($rootScope, $scope){
-        $rootScope.token = getCookie('token');
-        $rootScope.username = getCookie('username');
-        $rootScope.email = getCookie('email');
-        console.log('>>>>>>>>>>>>>>>>>'+$scope.token);
-        // $scope.option = ['login', 'register'];
-
-        $rootScope.isUserLogin = function(){
-            if($rootScope.token && $rootScope.username && $rootScope.email){
-                // $scope.option = []
-                return true;
-            }
-            else{
-                // $scope.option 
-                return false
-            }
-        }
-        }])
-
     .controller('LogoutController', ['$rootScope','$scope', '$http', '$state','$cookies', function($rootScope, $scope, $http, $state, $cookies) {
         $scope.postLogout = function logout() {
           // return $http.post('http://localhost:8000/#/')
@@ -68,16 +49,11 @@ angular.module('QnA')
                 setCookie('username',data.username);
                 setCookie('email',data.email);
 
-                $rootScope.username = data.username;
-                $rootScope.email = data.email;
-                $rootScope.token = data.token;
-
                 $scope.isFormInvalid = false;
                 $scope.alertType = "success";
                 $scope.alertMsg = "Successfully login.";
                 // $route.reload();
-                window.location.reload();
-                // $state.go('app');
+                $state.go('app');
             })
             .error(function (data, status, header, config) {
                 $scope.isFormInvalid = true;
