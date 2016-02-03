@@ -76,7 +76,8 @@ angular.module('QnA')
                 $scope.alertType = "success";
                 $scope.alertMsg = "Successfully login.";
                 // $route.reload();
-                $state.go('app');
+                window.location.reload();
+                // $state.go('app');
             })
             .error(function (data, status, header, config) {
                 $scope.isFormInvalid = true;
