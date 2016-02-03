@@ -2,27 +2,36 @@
 
 angular.module('QnA')
     .constant("baseURL","http://localhost:8000/")
-    .constant("oAuthToken",getCookie('token'))
     .service('indexFactory', function() { 
         // this.introductionCarousel = ['images/bg.png', 'images/wedding.png', 'images/corporate-party.png'];
     })
-    .service('QuizFactory', ['$resource','baseURL', 'oAuthToken', function($resource, baseURL, oAuthToken) {
 
-        this.createQuiz = function(){
-                console.log(oAuthToken);
+
+    .service('UserRegisterFactory',['$resource', 'baseURL', function($resource, baseURL) { 
+        this.createUser = function(token){
+            return $resource(baseURL+"register/", null,
+                    {'save':   
+                    { method:'POST', headers: {'Authorization': 'JWT ' + token} } 
+                    },
+                    { stripTrailingSlashes: false }
+                    );
+        }
+    }])
+
+
+    .service('QuizFactory', ['$resource', 'baseURL', function($resource, baseURL) { 
+        this.createQuiz = function(token){
                 return $resource(baseURL+"quiz/create/", null,
-                    {'save':   {
-                        method:'POST',
-                        headers: {'Authorization': 'JWT ' + oAuthToken}
-                    } },
+                    {'save':   {method:'POST', headers: {'Authorization': 'JWT ' + token} }
+                    },
                     { stripTrailingSlashes: false }
                     );
         };
-        this.getAllQuiz = function(){
+        this.getAllQuiz = function(token){
             return $resource(baseURL+"quiz/get/all/", null,
                     {
                         query: {
-                        headers: {'Authorization': 'JWT ' + oAuthToken},
+                        headers: {'Authorization': 'JWT ' + token},
                         method : 'GET',
                         isArray : true,
                         }
@@ -32,39 +41,40 @@ angular.module('QnA')
         }
     }])
 
-    .service('CategoryFactory', ['$resource', 'baseURL', 'oAuthToken', function($resource, baseURL, oAuthToken) {
-        this.createCategory = function(){
+
+    .service('CategoryFactory', ['$resource', 'baseURL', function($resource, baseURL) {
+        this.createCategory = function(token){
                 return $resource(baseURL+"quiz/category/create/", null,
                     {'save':   {
                         method:'POST',
-                        headers: {'Authorization': 'JWT ' + oAuthToken}
-                    } },
+                        headers: {'Authorization': 'JWT ' + token}
+                    }
+                },
                     { stripTrailingSlashes: false }
                     );
         };
-        this.createSubCategory = function(){
+        this.createSubCategory = function(token){
                 return $resource(baseURL+"quiz/subcategory/create/", null,
-                    {'save':   {
-                        method:'POST',
-                        headers: {'Authorization': 'JWT ' + oAuthToken}
-                    } },
+                    {'save':   {method:'POST', headers: {'Authorization': 'JWT ' + token} }
+                    },
                     { stripTrailingSlashes: false }
                     );
         };
 
     }])
 
-    .service('QuestionsFactory', ['$resource', 'baseURL', 'oAuthToken', function($resource, baseURL, oAuthToken) {
+
+    .service('QuestionsFactory', ['$resource', 'baseURL', function($resource, baseURL) {
         questions = {'Clinical Audit - 1' : [], 'Clinical Audit - 2' : []};
         levels = ['E','H','M'];
         totalEasyQuestions = 0;
         totalMediumQuestions = 0;
         totalHardQuestions = 0;
-        this.getAllQuestions = function(){
+        this.getAllQuestions = function(token){
                 return $resource(baseURL+"quiz/questions/all/", null,
                 {
                     query: {
-                    headers: {'Authorization': 'JWT ' + oAuthToken},
+                    headers: {'Authorization': 'JWT ' + token},
                     method : 'GET',
                     isArray : true,
                     }
@@ -102,11 +112,11 @@ angular.module('QnA')
         this.totalMediumQuestions = totalMediumQuestions;
 
 
-        this.getAllSubcategories = function(){
+        this.getAllSubcategories = function(token){
                 return $resource(baseURL+"quiz/subcategory/get/all/", null,
                 {
                     query: {
-                    headers: {'Authorization': 'JWT ' + oAuthToken},
+                    headers: {'Authorization': 'JWT ' + token},
                     method : 'GET',
                     isArray : true,
                     }
@@ -115,13 +125,10 @@ angular.module('QnA')
                 );
         };
 
-        this.createQuestion = function(){
+        this.createQuestion = function(token){
             return $resource(baseURL+"question/mcq/create/", null,
                     {'save':   
-                    { 
-                        method:'POST',
-                        headers: {'Authorization': 'JWT ' + oAuthToken}
-                    } 
+                    { method:'POST', headers: {'Authorization': 'JWT ' + token}} 
                     },
                     { stripTrailingSlashes: false }
                     );

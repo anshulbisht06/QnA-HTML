@@ -1,5 +1,5 @@
 /* global $ */
-var appmodule = angular.module('QnA', ['ui.router', 'ngResource', 'ngCookies','elif']);
+var appmodule = angular.module('QnA', ['ui.router', 'ngResource', 'ngCookies']);
 
 appmodule.config(function($stateProvider, $urlRouterProvider) {
         $stateProvider	        
@@ -57,7 +57,10 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                         controller  : 'CreateCategoryController',
                         templateUrl : 'views/createcategory.html'
                     }
-                }
+                },
+                params: {
+                        obj: null
+                    }
                 })
             .state('app.questions', {
                 url:'questions/all/',
@@ -79,5 +82,5 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                 });
 
         // $locationProvider.html5Mode(true);   
-        // $urlRouterProvider.otherwise('/');
+        $urlRouterProvider.otherwise('/');
     });

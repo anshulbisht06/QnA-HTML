@@ -12,16 +12,25 @@
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
-      
-      <ul class="nav navbar-nav navbar-right">
-        <li><a ui-sref="app.login-user" ng-if='token'><span class="glyphicon glyphicon glyphicon-user"></span>&nbsp;{{username}}</a></li>
-        <li><a ng-if='token' ng-controller="LogoutController" ng-click="postLogout()">Logout</a></li>
-	      <li><a ng-if='token' ui-sref="app.create-quiz"><span class="glyphicon glyphicon-plus"></span> My Quizzes</a></li>
-        <li><a ng-if='token' ui-sref="app.questions"><span class="glyphicon glyphicon-pencil"></span> My Questions</a></li>
-        <li><a ng-if='!token' ui-sref="app.login-user"><span class="glyphicon glyphicon-sign-in"></span>Sign In</a></li>
-        <li><a ng-if='!token' ui-sref="app.register-user"><span class="glyphicon glyphicon-sign-up"></span>Sign Up</a></li>
+      <ul class="nav navbar-nav navbar-center" ng-if="token">
+         <li><a ui-sref="app.create-quiz"><span class="glyphicon glyphicon-plus"></span> My Quizzes</a></li>
+         <li><a ui-sref="app.questions"><span class="glyphicon glyphicon-pencil"></span> My Questions</a></li>
+      </ul> 
+	    <ul class="nav navbar-nav navbar-right" ng-if="token">
+        <li class="dropdown">
+        <a class="glyphicon glyphicon-user" data-toggle="dropdown" href="javascript:void(0);">&nbsp;{{username | capitalize}}
+        <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="#"><span class='glyphicon glyphicon-cog'>&nbsp;</span>Settings</a></li>
+          <li><a ng-controller="LogoutController" ng-click="postLogout()"><span class='glyphicon glyphicon-off'>&nbsp;</span>Logout</a></li>
+        </ul>
+      </li>
 	    </ul>
 
-	 </div>
+      <ul class="nav navbar-nav navbar-right" ng-if="token == undefined">
+        <li><a ui-sref="app.login-user"><span class="glyphicon glyphicon-sign-in"></span>Sign In</a></li>
+        <li><a ui-sref="app.register-user"><span class="glyphicon glyphicon-sign-up"></span>Sign Up</a></li>
+      </ul>   
+
   </div>
 </nav>

@@ -4,48 +4,54 @@
     <div class="row">
     </div>
     <div class="row">
-		<h2 class="text-center hidden-xs">Please fill the following fields</h2>
-		<h3 class="text-center visible-xs">Please fill the following fields</h3>
+		<h2 class="text-center hidden-xs">Create Your Quiz</h2>
+		<h3 class="text-center visible-xs">Create Your Quiz</h3>
 	</div>
 	<div class="row">
 		<div class="col-lg-2 col-md-2 col-sm-2"></div>
 		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 			<form role="form" name="quizCreateForm" ng-submit="postQuiz()" novalidate>
+			  
 			  <div class="form-group" ng-class="{'has-error': isFormInvalid }">
-			    <label for="title">Title</label>
+			    <label for="title">Title <span style='color:red'>*</span></label>
 			    <input type="text" maxlength="60" class="form-control" id="title" name="title" ng-model="createQuizForm.title" required>
 			    <br/>
 			    <span ng-show="isFormInvalid" class="help-block">{{ errors.title[0] }}</span>
 			  </div>
+			  
 			  <div class="form-group">
-			    <label for="description">Description</label>
-			    <textarea name="description" id="description" rows="4" class="form-control" ng-model="createQuizForm.description" required></textarea>
-			    <!-- <div class='ng-error' ng-show="quizCreateForm.$submitted || quizCreateForm.description.$touched">
-			      <span ng-show="quizCreateForm.description.$error.required">Please enter discription.</span>
-			      <span ng-show="quizCreateForm.description.$error.minlength">Description is too short.</span>	
-			    </div> -->
+			    <label for="description">Description <span style='color:red'>*</span></label>
+			    <textarea name="description" ng-minlength="20" id="description" rows="4" class="form-control" ng-model="createQuizForm.description" required>		    
+			    </textarea>
+			    <span style='color:red' ng-show="quizCreateForm.description.$error.minlength">Description atleast 20 char.</span>
 			  </div>
+
 			  <div class="form-group" ng-class="{'has-error': isFormInvalid }">
-			  	<label for="url">URL</label>
+			  	<label for="url">URL <span style='color:red'>*</span></label>
 			    <input type="text" maxlength="60" class="form-control" id="url" name="url" ng-model="createQuizForm.url" required>
 			    <span ng-show="isFormInvalid" class="help-block">{{ errors.url[0] }}</span>
 			  </div>
+
 			  <div class="form-group">
-			    <label for="category">Category</label>
+			    <label for="category">Category </label>
 			    <input type="text" maxlength="60" class="form-control" id="category" name="category" ng-model="createQuizForm.category">
 			  </div>
+
 			  <div class="row">
 				<div class="col-lg-6 col-md-6 col-sm-6">
 				  <div class="checkbox">
 				    <label><input type="checkbox" name="random_order" ng-model="createQuizForm.random_order">&nbsp;Check if you want to display the questions in a random order?</label>
 				  </div>
 				</div>
+
 				<div class="col-lg-6 col-md-6 col-sm-6">
 				  <div class="checkbox">
 				    <label><input type="checkbox" name="answers_at_end" ng-model="createQuizForm.answers_at_end">&nbsp;Check if you want to display answers at the end of quiz?</label>
 				  </div>
 				</div>
+
 			  </div>
+
 			   <div class="row">
 				<div class="col-lg-6 col-md-6 col-sm-6">
 				  <div class="checkbox">
@@ -59,17 +65,18 @@
 				  </div>
 				</div>
 			  </div>
+
 			  <div class="row">
 				<div class="col-lg-6 col-md-6 col-sm-6">
 				  <div class="form-group">
 				    <label for="max_questions">Number of questions to be answered on each attempt</label>
-				    <input type="number" name="max_questions" id="max_questions" class="form-control" ng-model="createQuizForm.max_questions">
+				    <input type="number" name="max_questions" min='0' id="max_questions" class="form-control" ng-model="createQuizForm.max_questions" >
 				  </div>
 				</div>
 				<div class="col-lg-6 col-md-6 col-sm-6">
 				  <div class="form-group">
-				    <label for="pass_mark">Passing marks</label><br>
-				    <input type="number" name="pass_mark" id="pass_mark" class="form-control" ng-model="createQuizForm.pass_mark">
+				    <label for="pass_mark">Passing marks <span style='color:red'>*</span></label><br>
+				    <input type="number" name="pass_mark" max='90' id="pass_mark" class="form-control" ng-model="createQuizForm.pass_mark" required>
 				  </div>
 				</div>
 			  </div>
