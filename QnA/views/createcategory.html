@@ -5,22 +5,35 @@
     </div>
     <div class="row" ng-hide="isCategoryCreated">
 	    <div class="row">
-			<h2 class="text-center hidden-xs">Please provide the name of the category.</h2>
-			<h4 class="text-center visible-xs">Please provide the name of the category.</h4>
+			<h2 class="text-center hidden-xs">Create category.</h2>
+			<h4 class="text-center visible-xs">Create category.</h4>
 		</div>
 		<div class="row">
-			<div class="col-lg-2 col-md-2 col-sm-2"></div>
-			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-				<form role="form" name="categoryCreateForm" ng-submit="postCategory()" novalidate>
-				  <div class="form-group" ng-class="{'has-error': isFormInvalid || categoryCreateForm.category.$touched && categoryCreateForm.category.$error.required}">
-				    <input type="text" maxlength="250" class="form-control" id="category" name="category" ng-model="createCategoryform.category" required>
-				    <span ng-show="isFormInvalid" class="help-block">{{ errors.category[0] }}</span>
-		    		<span ng-show="categoryCreateForm.category.$touched && categoryCreateForm.category.$error.required" class="help-block">Category name is required.</span>
-				  </div>
-				  <button type="submit" class="btn btn-primary btn-md" ng-disabled="categoryCreateForm.$invalid">Create Category</button>
-				</form>
-			</div>
-			<div class="col-lg-2 col-md-2 col-sm-2"></div>
+			<form role="form" name="categoryCreateForm" ng-submit="postCategory()" novalidate>
+				<div class="col-lg-2 col-md-2 col-sm-2">
+					<div class="list-group" ng-if="!unableToGetAllQuiz">
+					  <!-- <a href="" class="list-group-item" ng-repeat="quiz in quizzes track by $index" ng-click="selectQuiz(quiz.id)">{{ quiz.title }}</a> -->
+					  <label for="quizzes">Your quizzes (you can select multiple)</label>
+				      <select multiple class="form-control" id="quiz" name="quiz" required>
+				        <option ng-repeat="q in allQuiz track by $index" value="{{ q.id }}" ng-click="selectQuiz(q.id)">{{ q.title }}</option>
+				      </select>
+				      <span ng-show="isFormInvalid" class="help-block">{{ errors.quiz[0] }}</span>
+				      <span ng-show="categoryCreateForm.quizzes.$touched && categoryCreateForm.quizzes.$error.required" class="help-block">Category name is required.</span>
+					</div>
+					<div class="list-group" ng-if="unableToGetAllQuiz">
+						<p>{{ errors }}</p>
+					</div>
+				</div>
+				<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+					  <div class="form-group" ng-class="{'has-error': isFormInvalid || categoryCreateForm.category.$touched && categoryCreateForm.category.$error.required}">
+					    <input type="text" maxlength="250" class="form-control" id="category" name="category" ng-model="createCategoryform.category" required>
+					    <span ng-show="isFormInvalid" class="help-block">{{ errors.category[0] }}</span>
+			    		<span ng-show="categoryCreateForm.category.$touched && categoryCreateForm.category.$error.required" class="help-block">Category name is required.</span>
+					  </div>
+					  <button type="submit" class="btn btn-primary btn-md" ng-disabled="categoryCreateForm.$invalid">Create Category</button>
+				</div>
+				<div class="col-lg-2 col-md-2 col-sm-2"></div>
+			</form>
 		</div>
 	</div>
 <!-- 	<div class="row" ng-show="isCategoryCreated">

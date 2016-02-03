@@ -20,3 +20,6 @@ a:hover{
 .left{
 	float: left;
 }
+a.list-group-item:selection{
+	background-color: red;
+}

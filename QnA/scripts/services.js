@@ -27,8 +27,8 @@ angular.module('QnA')
                     { stripTrailingSlashes: false }
                     );
         };
-        this.getAllQuiz = function(token){
-            return $resource(baseURL+"quiz/get/all/", null,
+        this.getAllQuiz = function(token, userid, quizid){
+            return $resource(baseURL+"quiz/get/"+userid+"/quiz/"+quizid+"/", null,
                     {
                         query: {
                         headers: {'Authorization': 'JWT ' + token},
@@ -45,7 +45,7 @@ angular.module('QnA')
     .service('CategoryFactory', ['$resource', 'baseURL', function($resource, baseURL) {
         this.createCategory = function(token){
                 return $resource(baseURL+"quiz/category/create/", null,
-                    {'save':   {method:'POST'}, headers: {'Authorization': 'JWT ' + token}
+                    {'save':   {method:'POST', headers: {'Authorization': 'JWT ' + token} }
                     },
                     { stripTrailingSlashes: false }
                     );
