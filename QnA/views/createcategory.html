@@ -27,7 +27,8 @@
 				<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 					  <div class="form-group" ng-class="{'has-error': isFormInvalid || categoryCreateForm.category.$touched && categoryCreateForm.category.$error.required}">
 					    <input type="text" maxlength="250" class="form-control" id="category" name="category" ng-model="createCategoryform.category" required>
-					    <span ng-show="isFormInvalid" class="help-block">{{ errors.category[0] }}</span>
+					    <span ng-if="errors.category" class="help-block">{{ errors.category[0] }}</span>
+					    <span ng-if="errors.quiz" class="help-block">Quiz: {{ errors.quiz[0] }}</span>
 			    		<span ng-show="categoryCreateForm.category.$touched && categoryCreateForm.category.$error.required" class="help-block">Category name is required.</span>
 					  </div>
 					  <button type="submit" class="btn btn-primary btn-md" ng-disabled="categoryCreateForm.$invalid">Create Category</button>

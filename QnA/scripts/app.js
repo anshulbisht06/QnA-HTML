@@ -57,7 +57,10 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                         controller  : 'CreateCategoryController',
                         templateUrl : 'views/createcategory.html'
                     }
-                }
+                },
+                params: {
+                        obj: null
+                    }
                 })
             .state('app.questions', {
                 url:'questions/all/',

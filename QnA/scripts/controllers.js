@@ -1,6 +1,24 @@
 /* global $ */
 angular.module('QnA')
     
+    .directive('onlyNum', function() {
+      return function(scope, element, attrs) {
+
+         var keyCode = [8,9,37,39,48,49,50,51,52,53,54,55,56,57,96,97,98,99,100,101,102,103,104,105,110];
+          element.bind("keydown", function(event) {
+            console.log($.inArray(event.which,keyCode));
+            if($.inArray(event.which,keyCode) == -1) {
+                scope.$apply(function(){
+                    scope.$eval(attrs.onlyNum);
+                    event.preventDefault();
+                });
+                event.preventDefault();
+            }
+
+        });
+     };
+  })
+
     .controller('CookiesController', ['$scope', '$rootScope', '$cookies', '$state', function($scope, $rootScope, $cookies, $state) {
         $rootScope.user = $cookies.get('user');
         $rootScope.username = $cookies.get('username');
@@ -110,33 +128,48 @@ angular.module('QnA')
                     $scope.alertMsg = "Your quiz named " + $scope.createQuizForm.title + " has been created.";
                     $scope.createQuizForm = {title:"",description:"",url:"",category:"",random_order:false,answers_at_end:false,single_attempt:false,exam_paper:false,max_questions:"",pass_mark:"",success_text:"",fail_text:""};
                     $scope.quizCreateForm.$setPristine();
-                    $state.go('app.create-category');                     
+                    $state.go('app.create-category',{obj:{'id':response.id, 'name':response.title}});                     
                 },
                 function(response) {
                     $scope.isFormInvalid = true;
                     $scope.alertType = "danger";
                     $scope.alertMsg = "Unable to create the quiz. See below errors.";
                     $scope.errors = response.data;
-                });
+                }); 
         }
     }])
 
 
-    .controller('CreateCategoryController', ['$scope', '$controller', '$cookies', 'CategoryFactory', 'QuizFactory', function($scope, $controller, $cookies, CategoryFactory, QuizFactory) {
-        $controller('CookiesController', {$scope : $scope});
-        $scope.createCategoryform = { category:"", quiz:[]};
-        $scope.selectQuiz = function(quizId) {
-            $scope.createCategoryform.quiz.push(quizId);
-            console.log($scope.createCategoryform);
+
+    .controller('CreateCategoryController', ['$scope','$state', '$controller', '$cookies', 'CategoryFactory', 'QuizFactory','$stateParams', function($scope, $state, $controller, $cookies, CategoryFactory, QuizFactory, $stateParams) {
+        $scope._id = $stateParams.obj ? [$stateParams.obj.id] : [];
+        if($scope._id.length===0){
+            $scope.isFormInvalid = true;
+            $scope.alertType = "info";
+            $scope.isCategoryCreated = false;
+            $scope.alertMsg = "Please select or create a category first";
         }
-        $scope.getAllQuiz = QuizFactory.getAllQuiz($cookies.get('token'), $scope.user, "all").query(
-        function(response){
-            $scope.allQuiz = response;                    
-        },
-        function(response){
-            $scope.unableToGetAllQuiz = true;
-            $scope.errors = "Unable to get your quizzes.";
-        });
+
+        $controller('CookiesController', {$scope : $scope});
+        $scope.createCategoryform = {category : "", quiz : $scope._id};
+        $scope.selectQuiz = function(quizId) {
+            var index = $scope.createCategoryform.quiz.indexOf(quizId);
+            if(index < 0)
+                $scope.createCategoryform.quiz.push(quizId);
+            else
+                $scope.createCategoryform.quiz.splice(index, 1);
+        console.log($scope.createCategoryform.quiz);
+        }
+        if($scope.user){
+            $scope.getAllQuiz = QuizFactory.getAllQuiz($cookies.get('token'), $scope.user, "all").query(
+            function(response){
+                $scope.allQuiz = response;                    
+            },
+            function(response){
+                $scope.unableToGetAllQuiz = true;
+                $scope.errors = "Unable to get your quizzes.";
+            });
+        }
 
         $scope.postCategory = function() { 
             console.log($scope.createCategoryform);
@@ -156,7 +189,9 @@ angular.module('QnA')
                     $scope.alertType = "danger";
                     $scope.isCategoryCreated = false;
                     $scope.alertMsg = "Unable to create the category - " + $scope.createdCategory + ". See below error.";
+                    // console.log(response.data);
                     $scope.errors = response.data;
+                    $scope.createCategoryform = {category : "", quiz : [$scope._id]};
                 });
         }
         // $scope.postSubCategory = function() {
@@ -181,6 +216,7 @@ angular.module('QnA')
 
     .controller('QuestionsController', ['$scope', '$controller', '$cookies', '$state' ,'QuestionsFactory', function($scope, $controller, $cookies, $state, QuestionsFactory) {
         $controller('CookiesController', {$scope : $scope});
+
         $scope.allQuestions = QuestionsFactory.questions;
         $scope.totalQuestions = QuestionsFactory.totalQuestions;
         $scope.totalHardQuestions = QuestionsFactory.totalHardQuestions;
@@ -221,6 +257,7 @@ angular.module('QnA')
 
     .controller('CreateQuestionController', ['$scope', '$controller', '$cookies', 'QuestionsFactory', function($scope, $controller, $cookies, QuestionsFactory) {
         $controller('CookiesController', {$scope : $scope});
+
         $scope.allSubCategories = QuestionsFactory.getAllSubcategories($cookies.get('token')).query(
             function(response) {
                 $scope.isSubCategoryEmpty = false;

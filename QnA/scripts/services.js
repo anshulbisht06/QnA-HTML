@@ -45,8 +45,11 @@ angular.module('QnA')
     .service('CategoryFactory', ['$resource', 'baseURL', function($resource, baseURL) {
         this.createCategory = function(token){
                 return $resource(baseURL+"quiz/category/create/", null,
-                    {'save':   {method:'POST', headers: {'Authorization': 'JWT ' + token} }
-                    },
+                    {'save':   {
+                        method:'POST',
+                        headers: {'Authorization': 'JWT ' + token}
+                    }
+                },
                     { stripTrailingSlashes: false }
                     );
         };
