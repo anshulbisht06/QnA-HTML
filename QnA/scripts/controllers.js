@@ -166,10 +166,15 @@ angular.module('QnA')
     }])
 
 
-    .controller('QuestionsController', ['$scope', '$rootScope', '$cookies', 'QuestionsFactory', function($scope, $rootScope, $cookies, QuestionsFactory) {
+    .controller('QuestionsController', ['$scope', '$rootScope', '$cookies', '$state' ,'QuestionsFactory', function($scope, $rootScope, $cookies, $state, QuestionsFactory) {
         $rootScope.user = $cookies.get('user');
         $rootScope.username = $cookies.get('username');
         $rootScope.token = $cookies.get('token');
+        if($rootScope.token === undefined){
+            // $scope.alertType = "info";
+            // $scope.alertMsg = "Please login first.";
+            $state.go('app.login-user');
+        }
         $scope.allQuestions = QuestionsFactory.questions;
         $scope.totalQuestions = QuestionsFactory.totalQuestions;
         $scope.totalHardQuestions = QuestionsFactory.totalHardQuestions;
@@ -205,7 +210,6 @@ angular.module('QnA')
             function(response) {
                 $scope.errors = response.data;
             });
-        console.log($scope.getAllQuestions); 
     }])
 
 
