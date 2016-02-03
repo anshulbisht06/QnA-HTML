@@ -5,7 +5,7 @@ angular.module('QnA')
     .controller('IndexController', ['$scope', '$rootScope', '$cookies', 'indexFactory', function($scope, $rootScope, $cookies, indexFactory) {
         $rootScope.user = $cookies.get('user');
         $rootScope.username = $cookies.get('username');
-        $rootScope.isAuthenticated = $cookies.get('isAuthenticated');
+        $rootScope.token = $cookies.get('token');
     }])
 
 
@@ -21,7 +21,6 @@ angular.module('QnA')
           return $http.post('http://localhost:8000/logout/', data, config)
             .success(function(data, status, headers, config) {
             $cookies.remove('token');
-            $cookies.remove('isAuthenticated');
             $cookies.remove('username');
             $cookies.remove('user');
             $state.go('app.login-user');
@@ -48,11 +47,11 @@ angular.module('QnA')
         }
     }])     
 
-    
+
     .controller("LoginController",[ '$scope', '$rootScope', '$http', '$state', '$cookies', function ($scope, $rootScope, $http, $state, $cookies) {
         $rootScope.user = undefined;
         $rootScope.username = undefined;
-        $rootScope.isAuthenticated = undefined;
+        $rootScope.token = undefined;
 
         $scope.postLogin = function () {
            // use $.param jQuery function to serialize data from JSON 
@@ -73,7 +72,6 @@ angular.module('QnA')
                 $scope.postDataResponse = data;
                 $cookies.put('token', data.token);
                 $cookies.put('username', data.username);
-                $cookies.put('isAuthenticated', true);
                 $cookies.put('user', data.userID);
 
                 $scope.isFormInvalid = false;
@@ -92,44 +90,11 @@ angular.module('QnA')
     }])
 
 
-    .controller('QuestionsController', ['$scope', 'allQuestionsFactory', function($scope, allQuestionsFactory) {
-        $scope.allQuestions = allQuestionsFactory.questions;
-        $scope.totalQuestions = allQuestionsFactory.totalQuestions;
-        $scope.totalHardQuestions = allQuestionsFactory.totalHardQuestions;
-        $scope.totalEasyQuestions = allQuestionsFactory.totalEasyQuestions;
-        $scope.totalMediumQuestions = allQuestionsFactory.totalMediumQuestions;
-        $scope.tab = 1;
-        $scope.filterLevel = false;
-        $scope.selectTab = function(setTab) {
-                $scope.tab = setTab;
-                if (setTab === 1) {
-                    $scope.filterLevel = false;
-                }              
-                else if (setTab === 2) {
-                    $scope.filterLevel = "E";
-                }
-                else if (setTab === 3) {
-                    $scope.filterLevel = "M";
-                }
-                else if (setTab === 4) {
-                    $scope.filterLevel = "H";
-                }
-                else {
-                    $scope.filterLevel = "U";
-                }
-            };
-        $scope.isTabSelected = function(checkTab) {
-                return ($scope.tab === checkTab);
-            };     
-    }])
-
-
     .controller('CreateQuizController', ['$scope', '$rootScope', '$state', '$cookies', 'QuestionsFactory','QuizFactory', function($scope, $rootScope, $state, $cookies, QuestionsFactory, QuizFactory) {
         $scope.createQuizForm = {title:"",description:"",url:"",category:"",random_order:false,answers_at_end:false,single_attempt:false,exam_paper:false,max_questions:"",pass_mark:"",success_text:"",fail_text:""};
         $rootScope.user = $cookies.get('user');
         $rootScope.username = $cookies.get('username');
-        $rootScope.isAuthenticated = $cookies.get('isAuthenticated');
-        console.log($scope.isAuthenticated);
+        $rootScope.token = $cookies.get('token');
         $scope.postQuiz = function() {
             var response = QuizFactory.createQuiz($cookies.get('token')).save($scope.createQuizForm).$promise.then(
                 function(response){
@@ -149,8 +114,12 @@ angular.module('QnA')
         }
     }])
 
-    .controller('CreateCategoryController', ['$scope', '$cookies', 'CategoryFactory', 'QuizFactory', function($scope, $cookies, CategoryFactory, QuizFactory) {
+
+    .controller('CreateCategoryController', ['$scope', '$rootScope', '$cookies', 'CategoryFactory', 'QuizFactory', function($scope, $rootScope, $cookies, CategoryFactory, QuizFactory) {
         $scope.createCategoryform = {category:""};
+        $rootScope.user = $cookies.get('user');
+        $rootScope.username = $cookies.get('username');
+        $rootScope.token = $cookies.get('token');
         $scope.postCategory = function() { 
             $scope.createdCategory = $scope.createCategoryform.category;
             var response = CategoryFactory.createCategory($cookies.get('token')).save($scope.createCategoryform).$promise.then(
@@ -196,7 +165,11 @@ angular.module('QnA')
                 });
     }])
 
-    .controller('QuestionsController', ['$scope', '$cookies', 'QuestionsFactory', function($scope, $cookies, QuestionsFactory) {
+
+    .controller('QuestionsController', ['$scope', '$rootScope', '$cookies', 'QuestionsFactory', function($scope, $rootScope, $cookies, QuestionsFactory) {
+        $rootScope.user = $cookies.get('user');
+        $rootScope.username = $cookies.get('username');
+        $rootScope.token = $cookies.get('token');
         $scope.allQuestions = QuestionsFactory.questions;
         $scope.totalQuestions = QuestionsFactory.totalQuestions;
         $scope.totalHardQuestions = QuestionsFactory.totalHardQuestions;
@@ -234,7 +207,12 @@ angular.module('QnA')
             });
         console.log($scope.getAllQuestions); 
     }])
-    .controller('CreateQuestionController', ['$scope', '$cookies', 'QuestionsFactory', function($scope, $cookies, QuestionsFactory) {
+
+
+    .controller('CreateQuestionController', ['$scope', '$rootScope', '$cookies', 'QuestionsFactory', function($scope, $rootScope, $cookies, QuestionsFactory) {
+        $rootScope.user = $cookies.get('user');
+        $rootScope.username = $cookies.get('username');
+        $rootScope.token = $cookies.get('token');
         $scope.allSubCategories = QuestionsFactory.getAllSubcategories($cookies.get('token')).query(
             function(response) {
                 $scope.isSubCategoryEmpty = false;

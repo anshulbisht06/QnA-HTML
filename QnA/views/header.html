@@ -12,15 +12,17 @@
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
-	    <ul class="nav navbar-nav navbar-right">
-	      <li><a ui-sref="app" ng-if="isAuthenticated"><span class="glyphicon glyphicon-user"></span> Welcome {{username}}</a></li>
-        <li><a ui-sref="app.login-user" ng-if="isAuthenticated == undefined"><span class="glyphicon glyphicon-sign-in"></span>Sign In</a></li>
-
-        <li><a ui-sref="app.register-user" ng-if="isAuthenticated == undefined"><span class="glyphicon glyphicon-sign-up"></span>Sign Up</a></li>
-        <li><a ng-controller="LogoutController" ng-click="postLogout()" ng-if="isAuthenticated">Logout</a></li>
-	      <!-- <li><a ui-sref="app.create-quiz"><span class="glyphicon glyphicon-plus"></span> My Quizzes</a></li> -->
-        <!-- <li><a ui-sref="app.questions"><span class="glyphicon glyphicon-pencil"></span> My Questions</a></li> -->
-	    </ul>     
+	    <ul class="nav navbar-nav navbar-right" ng-if="token">
+	      <li><a ui-sref="app"><span class="glyphicon glyphicon-user"></span> Welcome {{username}}</a></li>
+        <li><a ng-controller="LogoutController" ng-click="postLogout()">Logout</a></li>
+	      <li><a ui-sref="app.create-quiz"><span class="glyphicon glyphicon-plus"></span> My Quizzes</a></li>
+        <li><a ui-sref="app.questions"><span class="glyphicon glyphicon-pencil"></span> My Questions</a></li>
+	    </ul>
+      <ul class="nav navbar-nav navbar-right" ng-if="token == undefined">
+        <li><a ui-sref="app"><span class="glyphicon glyphicon-user"></span> Welcome Guest!</a></li>
+        <li><a ui-sref="app.login-user"><span class="glyphicon glyphicon-sign-in"></span>Sign In</a></li>
+        <li><a ui-sref="app.register-user"><span class="glyphicon glyphicon-sign-up"></span>Sign Up</a></li>
+      </ul>   
 	 </div>
   </div>
 </nav>
