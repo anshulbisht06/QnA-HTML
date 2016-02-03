@@ -1,11 +1,18 @@
 /* global $ */
 angular.module('QnA')
-
-
-    .controller('IndexController', ['$scope', '$rootScope', '$cookies', 'indexFactory', function($scope, $rootScope, $cookies, indexFactory) {
+    
+    .controller('CookiesController', ['$scope', '$rootScope', '$cookies', '$state', function($scope, $rootScope, $cookies, $state) {
         $rootScope.user = $cookies.get('user');
         $rootScope.username = $cookies.get('username');
         $rootScope.token = $cookies.get('token');
+        if($rootScope.token === undefined){
+            $state.go('app.login-user');
+        }
+    }])
+
+
+    .controller('IndexController', ['$scope', '$rootScope', '$cookies', '$controller', function($scope, $rootScope, $cookies, $controller) {
+        $controller('CookiesController', {$scope : $scope});
     }])
 
 
@@ -90,14 +97,9 @@ angular.module('QnA')
     }])
 
 
-    .controller('CreateQuizController', ['$scope', '$rootScope', '$state', '$cookies', 'QuestionsFactory','QuizFactory', function($scope, $rootScope, $state, $cookies, QuestionsFactory, QuizFactory) {
+    .controller('CreateQuizController', ['$scope', '$controller', '$state', '$cookies', 'QuestionsFactory','QuizFactory', function($scope, $controller, $state, $cookies, QuestionsFactory, QuizFactory) {
         $scope.createQuizForm = {title:"",description:"",url:"",category:"",random_order:false,answers_at_end:false,single_attempt:false,exam_paper:false,max_questions:"",pass_mark:"",success_text:"",fail_text:""};
-        $rootScope.user = $cookies.get('user');
-        $rootScope.username = $cookies.get('username');
-        $rootScope.token = $cookies.get('token');
-        if($rootScope.token === undefined){
-            $state.go('app.login-user');
-        }
+        $controller('CookiesController', {$scope : $scope});
         $scope.postQuiz = function() {
             var response = QuizFactory.createQuiz($cookies.get('token')).save($scope.createQuizForm).$promise.then(
                 function(response){
@@ -118,11 +120,9 @@ angular.module('QnA')
     }])
 
 
-    .controller('CreateCategoryController', ['$scope', '$rootScope', '$cookies', 'CategoryFactory', 'QuizFactory', function($scope, $rootScope, $cookies, CategoryFactory, QuizFactory) {
+    .controller('CreateCategoryController', ['$scope', '$controller', '$cookies', 'CategoryFactory', 'QuizFactory', function($scope, $controller, $cookies, CategoryFactory, QuizFactory) {
         $scope.createCategoryform = {category:""};
-        $rootScope.user = $cookies.get('user');
-        $rootScope.username = $cookies.get('username');
-        $rootScope.token = $cookies.get('token');
+        $controller('CookiesController', {$scope : $scope});
         if($rootScope.token === undefined){
             $state.go('app.login-user');
         }
@@ -172,13 +172,8 @@ angular.module('QnA')
     }])
 
 
-    .controller('QuestionsController', ['$scope', '$rootScope', '$cookies', '$state' ,'QuestionsFactory', function($scope, $rootScope, $cookies, $state, QuestionsFactory) {
-        $rootScope.user = $cookies.get('user');
-        $rootScope.username = $cookies.get('username');
-        $rootScope.token = $cookies.get('token');
-        if($rootScope.token === undefined){
-            $state.go('app.login-user');
-        }
+    .controller('QuestionsController', ['$scope', '$controller', '$cookies', '$state' ,'QuestionsFactory', function($scope, $controller, $cookies, $state, QuestionsFactory) {
+        $controller('CookiesController', {$scope : $scope});
         $scope.allQuestions = QuestionsFactory.questions;
         $scope.totalQuestions = QuestionsFactory.totalQuestions;
         $scope.totalHardQuestions = QuestionsFactory.totalHardQuestions;
@@ -217,10 +212,8 @@ angular.module('QnA')
     }])
 
 
-    .controller('CreateQuestionController', ['$scope', '$rootScope', '$cookies', 'QuestionsFactory', function($scope, $rootScope, $cookies, QuestionsFactory) {
-        $rootScope.user = $cookies.get('user');
-        $rootScope.username = $cookies.get('username');
-        $rootScope.token = $cookies.get('token');
+    .controller('CreateQuestionController', ['$scope', '$controller', '$cookies', 'QuestionsFactory', function($scope, $controller, $cookies, QuestionsFactory) {
+        $controller('CookiesController', {$scope : $scope});
         $scope.allSubCategories = QuestionsFactory.getAllSubcategories($cookies.get('token')).query(
             function(response) {
                 $scope.isSubCategoryEmpty = false;
