@@ -1,10 +1,14 @@
 /* global $ */
 angular.module('QnA')
+
+
     .controller('IndexController', ['$scope', '$rootScope', '$cookies', 'indexFactory', function($scope, $rootScope, $cookies, indexFactory) {
         $rootScope.user = $cookies.get('user');
         $rootScope.username = $cookies.get('username');
         $rootScope.isAuthenticated = $cookies.get('isAuthenticated');
     }])
+
+
     .controller('LogoutController', ['$scope', '$http', '$state','$cookies', function($scope, $http, $state, $cookies) {
         var config = {
                 headers : {
@@ -27,6 +31,8 @@ angular.module('QnA')
           })
         }
     }])
+
+
     .controller('UserRegisterController', ['$scope', 'UserRegisterFactory', function($scope, UserRegisterFactory) {
         $scope.registerUserForm = {username:"",email:"",password:"",first_name:""};
         $scope.postRegister = function() { 
@@ -41,16 +47,20 @@ angular.module('QnA')
                 });
         }
     }])     
+
+    
     .controller("LoginController",[ '$scope', '$rootScope', '$http', '$state', '$cookies', function ($scope, $rootScope, $http, $state, $cookies) {
         $rootScope.user = undefined;
         $rootScope.username = undefined;
         $rootScope.isAuthenticated = undefined;
+
         $scope.postLogin = function () {
            // use $.param jQuery function to serialize data from JSON 
             var data = $.param({
                 username: $scope.username,
                 password: $scope.password
             });
+            
             // $window.localStorage.token
             var config = {
                 headers : {
@@ -65,9 +75,11 @@ angular.module('QnA')
                 $cookies.put('username', data.username);
                 $cookies.put('isAuthenticated', true);
                 $cookies.put('user', data.userID);
+
                 $scope.isFormInvalid = false;
                 $scope.alertType = "success";
                 $scope.alertMsg = "Successfully login.";
+                // $route.reload();
                 $state.go('app');
             })
             .error(function (data, status, header, config) {
@@ -79,7 +91,8 @@ angular.module('QnA')
         };
     }])
 
-    .controller('QuestionsController', ['$scope', '$rootScope', 'allQuestionsFactory', function($scope, $rootScope, allQuestionsFactory) {
+
+    .controller('QuestionsController', ['$scope', 'allQuestionsFactory', function($scope, allQuestionsFactory) {
         $scope.allQuestions = allQuestionsFactory.questions;
         $scope.totalQuestions = allQuestionsFactory.totalQuestions;
         $scope.totalHardQuestions = allQuestionsFactory.totalHardQuestions;

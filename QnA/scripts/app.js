@@ -30,6 +30,7 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                     }
                 }
                 })
+            
             .state('app.register-user', {
                 url:'register/',
                 views :{

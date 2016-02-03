@@ -5,6 +5,8 @@ angular.module('QnA')
     .service('indexFactory', function() { 
         // this.introductionCarousel = ['images/bg.png', 'images/wedding.png', 'images/corporate-party.png'];
     })
+
+
     .service('UserRegisterFactory',['$resource', 'baseURL', function($resource, baseURL) { 
         this.createUser = function(token){
             return $resource(baseURL+"register/", null,
@@ -15,6 +17,8 @@ angular.module('QnA')
                     );
         }
     }])
+
+
     .service('QuizFactory', ['$resource', 'baseURL', function($resource, baseURL) { 
         this.createQuiz = function(token){
                 return $resource(baseURL+"quiz/create/", null,
@@ -37,6 +41,7 @@ angular.module('QnA')
         }
     }])
 
+
     .service('CategoryFactory', ['$resource', 'baseURL', function($resource, baseURL) {
         this.createCategory = function(token){
                 return $resource(baseURL+"quiz/category/create/", null,
@@ -54,6 +59,7 @@ angular.module('QnA')
         };
 
     }])
+
 
     .service('QuestionsFactory', ['$resource', 'baseURL', function($resource, baseURL) {
         questions = {'Clinical Audit - 1' : [], 'Clinical Audit - 2' : []};
