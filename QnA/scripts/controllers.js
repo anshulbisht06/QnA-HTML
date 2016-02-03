@@ -95,6 +95,9 @@ angular.module('QnA')
         $rootScope.user = $cookies.get('user');
         $rootScope.username = $cookies.get('username');
         $rootScope.token = $cookies.get('token');
+        if($rootScope.token === undefined){
+            $state.go('app.login-user');
+        }
         $scope.postQuiz = function() {
             var response = QuizFactory.createQuiz($cookies.get('token')).save($scope.createQuizForm).$promise.then(
                 function(response){
@@ -120,6 +123,9 @@ angular.module('QnA')
         $rootScope.user = $cookies.get('user');
         $rootScope.username = $cookies.get('username');
         $rootScope.token = $cookies.get('token');
+        if($rootScope.token === undefined){
+            $state.go('app.login-user');
+        }
         $scope.postCategory = function() { 
             $scope.createdCategory = $scope.createCategoryform.category;
             var response = CategoryFactory.createCategory($cookies.get('token')).save($scope.createCategoryform).$promise.then(
@@ -171,8 +177,6 @@ angular.module('QnA')
         $rootScope.username = $cookies.get('username');
         $rootScope.token = $cookies.get('token');
         if($rootScope.token === undefined){
-            // $scope.alertType = "info";
-            // $scope.alertMsg = "Please login first.";
             $state.go('app.login-user');
         }
         $scope.allQuestions = QuestionsFactory.questions;
