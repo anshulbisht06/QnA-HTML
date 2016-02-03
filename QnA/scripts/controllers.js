@@ -4,7 +4,26 @@ angular.module('QnA')
     .controller('IndexController', ['$scope', 'indexFactory', function($scope, indexFactory) {
     }])
 
-    .controller('LogoutController', ['$scope', '$http', '$state','$cookies', function($scope, $http, $state, $cookies) {
+    .controller('userController',['$rootScope', '$scope', function($rootScope, $scope){
+        $rootScope.token = getCookie('token');
+        $rootScope.username = getCookie('username');
+        $rootScope.email = getCookie('email');
+        console.log('>>>>>>>>>>>>>>>>>'+$scope.token);
+        // $scope.option = ['login', 'register'];
+
+        $rootScope.isUserLogin = function(){
+            if($rootScope.token && $rootScope.username && $rootScope.email){
+                // $scope.option = []
+                return true;
+            }
+            else{
+                // $scope.option 
+                return false
+            }
+        }
+        }])
+
+    .controller('LogoutController', ['$rootScope','$scope', '$http', '$state','$cookies', function($rootScope, $scope, $http, $state, $cookies) {
         $scope.postLogout = function logout() {
           // return $http.post('http://localhost:8000/#/')
             // .success(function(data, status, headers, config) {
@@ -12,7 +31,12 @@ angular.module('QnA')
             $cookies.remove('email');
             $cookies.remove('username');
             console.log('Logout user now ...')
-            $state.go('app.login-user');
+
+            $rootScope.username = '';
+            $rootScope.email = '';
+            $rootScope.token = '';
+            
+            $state.go('app');
           // })
             // .error(function logoutErrorFn(data, status, headers, config) {
             // console.error('Epic failure!');
@@ -20,7 +44,7 @@ angular.module('QnA')
         }
     }])
 
-    .controller("LoginController",[ '$scope', '$http', '$state', function ($scope, $http, $state) {
+    .controller("LoginController",[ '$rootScope','$scope', '$http', '$state','$window', function ($rootScope ,$scope, $http, $state, $window) {
         // $cookies.myFavorite = 'oatmeal';
         // console.log($cookies.myFavorite)
         $scope.postLogin = function () {
@@ -29,6 +53,7 @@ angular.module('QnA')
                 username: $scope.username,
                 password: $scope.password
             });
+            
             // $window.localStorage.token
             var config = {
                 headers : {
@@ -42,9 +67,15 @@ angular.module('QnA')
                 setCookie('token',data.token);
                 setCookie('username',data.username);
                 setCookie('email',data.email);
+
+                $rootScope.username = data.username;
+                $rootScope.email = data.email;
+                $rootScope.token = data.token;
+
                 $scope.isFormInvalid = false;
                 $scope.alertType = "success";
                 $scope.alertMsg = "Successfully login.";
+                // $route.reload();
                 $state.go('app');
             })
             .error(function (data, status, header, config) {
