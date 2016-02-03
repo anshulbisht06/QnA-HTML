@@ -1,7 +1,19 @@
 /* global $ */
 angular.module('QnA')
 
-    .controller('IndexController', ['$scope', 'indexFactory', function($scope, indexFactory) {
+    .controller('IndexController', ['$rootScope', '$scope', 'indexFactory', '$cookies', function($rootScope, $scope, indexFactory, $cookies) {
+        console.log($cookies.get('token'));
+        $rootScope.token = $cookies.get('token');
+        $rootScope.username = $cookies.get('username');
+        $rootScope.email = $cookies.get('email');
+        $rootScope.isLogin = function(){
+            if($rootScope.token && $rootScope.username){
+                return true
+            }
+            else{
+                return false
+            }
+        };
     }])
 
     .controller('LogoutController', ['$rootScope','$scope', '$http', '$state','$cookies', function($rootScope, $scope, $http, $state, $cookies) {
@@ -11,13 +23,12 @@ angular.module('QnA')
             $cookies.remove('token');
             $cookies.remove('email');
             $cookies.remove('username');
-            console.log('Logout user now ...')
 
-            $rootScope.username = '';
-            $rootScope.email = '';
-            $rootScope.token = '';
+            $rootScope.username = undefined;
+            $rootScope.email = undefined;
+            $rootScope.token = undefined;
             
-            $state.go('app');
+            $state.go('app.login-user');
           // })
             // .error(function logoutErrorFn(data, status, headers, config) {
             // console.error('Epic failure!');
