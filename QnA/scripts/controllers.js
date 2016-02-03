@@ -124,7 +124,8 @@ angular.module('QnA')
     }])
 
 
-    .controller('CreateQuizController', ['$scope', '$state', 'QuestionsFactory','QuizFactory', function($scope, $state, QuestionsFactory, QuizFactory) {
+    .controller('CreateQuizController', ['$scope', '$state', 'QuestionsFactory','QuizFactory', '$controller', function($scope, $state, QuestionsFactory, QuizFactory, $controller) {
+        $controller('IndexController', {$scope: $scope});
         $scope.createQuizForm = {title:"",description:"",url:"",category:"",random_order:false,answers_at_end:false,single_attempt:false,exam_paper:false,max_questions:"",pass_mark:"",success_text:"",fail_text:""};
         $scope.postQuiz = function() {
             var response = QuizFactory.createQuiz().save($scope.createQuizForm).$promise.then(

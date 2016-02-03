@@ -11,15 +11,15 @@
         </button>
       </div>
     </div>
-    <div id="navbar" ng-controller='LoginController' class="navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
+    <div id="navbar" class="navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
       
       <ul class="nav navbar-nav navbar-right">
-        <li><a ui-sref="app.login-user" ng-if='isLogin()'><span class="glyphicon glyphicon-sign-in"></span>{{username}}</a></li>
-        <li><a ng-if='isLogin()' ng-controller="LogoutController" ng-click="postLogout()">Logout</a></li>
-	      <li><a ng-if='isLogin()' ui-sref="app.create-quiz"><span class="glyphicon glyphicon-plus"></span> My Quizzes</a></li>
-        <li><a ng-if='isLogin()' ui-sref="app.questions"><span class="glyphicon glyphicon-pencil"></span> My Questions</a></li>
-        <li><a ng-if='!isLogin()' ui-sref="app.login-user"><span class="glyphicon glyphicon-sign-in"></span>Sign In</a></li>
-        <li><a ng-if='!isLogin()' ui-sref="app.register-user"><span class="glyphicon glyphicon-sign-up"></span>Sign Up</a></li>
+        <li><a ui-sref="app.login-user" ng-if='token'><span class="glyphicon glyphicon glyphicon-user"></span>&nbsp;{{username}}</a></li>
+        <li><a ng-if='token' ng-controller="LogoutController" ng-click="postLogout()">Logout</a></li>
+	      <li><a ng-if='token' ui-sref="app.create-quiz"><span class="glyphicon glyphicon-plus"></span> My Quizzes</a></li>
+        <li><a ng-if='token' ui-sref="app.questions"><span class="glyphicon glyphicon-pencil"></span> My Questions</a></li>
+        <li><a ng-if='!token' ui-sref="app.login-user"><span class="glyphicon glyphicon-sign-in"></span>Sign In</a></li>
+        <li><a ng-if='!token' ui-sref="app.register-user"><span class="glyphicon glyphicon-sign-up"></span>Sign Up</a></li>
 	    </ul>
 
 	 </div>
