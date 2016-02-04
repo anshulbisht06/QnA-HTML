@@ -23,3 +23,6 @@ a:hover{
 a.list-group-item:selection{
 	background-color: red;
 }
+.red-text{
+	color:red;
+}
