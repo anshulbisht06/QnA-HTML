@@ -13,22 +13,27 @@
 			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 			<hr>
 				<form role="form" name="questionCreateForm" ng-submit="postQuestion()" enctype="multipart/form-data" novalidate>
-				  <div class="form-group" ng-class="{'has-error': isSubCategoryEmpty || errors.sub_category[0] }" >
+				  <div class="form-group" ng-if="!unableToGetAllSubCategories" ng-class="{'has-error': errors.sub_category || questionCreateForm.sub_category.$touched && questionCreateForm.sub_category.$error.required }">
 				  <label for="subcategory">Select a sub-category into which the question will be added</label>
 					<select class="form-control" id="sub_category" name="sub_category" ng-model="createQuestionForm.sub_category" required>
-						<option value="" disabled>Select here...</option>
-					    <option ng-repeat="subcategory in allSubCategories" value="{{ subcategory.id }}">{{ subcategory.sub_category }}</option>
+						<option value="" disabled>Select sub-category here</option>
+					    <option ng-repeat="sc in allSubCategories" value="{{ sc.id }}">{{ sc.sub_category_name }}</option>
 					</select>
-				    <span ng-show="noSubCategory" class="help-block">{{ errors }}</span>
-			   		<span ng-show="isFormInvalid" class="help-block">{{ errors.sub_category[0] }}</span>
-				  </div><br>
+			   		<span ng-if="errors.sub_category" class="help-block">{{ errors.sub_category[0] }}</span>
+			   		<span ng-if="questionCreateForm.sub_category.$touched && questionCreateForm.sub_category.$error.required" class="help-block">Sub-category is required.</span>
+				  </div>
+  				  <div class="form-group" ng-if="unableToGetAllSubCategories">
+  				  	<p>{{ errors }}</p>
+  				  </div>
+				  <br>
 				  <div class="form-group">
 				  	<input type="file" name="figure" id="figure" ng-model="createQuestionForm.figure">
 				  </div><br>
-				  <div class="form-group" ng-class="{'has-error': errors.content[0] }">
+				  <div class="form-group" ng-class="{'has-error': errors.content || questionCreateForm.content.$touched && questionCreateForm.content.$error.required }">
 				  	<label for="content">Enter the question content</label>
 			    	<textarea name="content" id="content" rows="4" class="form-control" ng-model="createQuestionForm.content" required></textarea>
-			   		<span ng-show="isFormInvalid" class="help-block">{{ errors.content[0] }}</span>
+			   		<span ng-if="errors.content" class="help-block">{{ errors.content[0] }}</span>
+			   		<span ng-if="questionCreateForm.content.$touched && questionCreateForm.content.$error.required" class="help-block">Question content is required.</span>
 				  </div><br>
 				  <div class="form-group">
 				  	<label for="content">Enter the explanation of question</label>
@@ -36,7 +41,7 @@
 				  </div><br>
 				  <div class="form-group">
 				  	<label for="level">Level of Question</label>
-					<select class="form-control" id="level" name="level" ng-model="createQuestionForm.level" ng-init="createQuestionForm.level = 'E'">
+					<select class="form-control" id="level" name="level" ng-model="createQuestionForm.level">
 						<option value="E">Easy</option>
 						<option value="M">Medium</option>
 						<option value="H">Hard</option>
@@ -44,31 +49,32 @@
 				  </div><br>
 				  <div class="form-group">
 				  	<label for="answer_order">Display order of MCQs</label>
-					<select class="form-control" id="answer_order" name="answer_order" ng-model="createQuestionForm.answer_order" ng-init="createQuestionForm.answer_order = 'random'">
+					<select class="form-control" id="answer_order" name="answer_order" ng-model="createQuestionForm.answer_order">
 						<option value="random">Random</option>
 						<option value="content">Content</option>
 					</select>
 				  </div><br>
 
-				  	<div class="form-group"  ng-class="{'has-error': errors.optionerrors && isFormInvalid }">
+				  	<div class="form-group"  ng-class="{'has-error': errors.optionerrors }">
 					  	<div class="row">
-				   		<span ng-show="isFormInvalid" class="help-block">{{ errors.optionerrors }}</span>
+				   		<span ng-if="errors.optionerrors" class="help-block">{{ errors.optionerrors }}</span>
 				   		</div>
 				  		<div ng-repeat="option in optionss">
 				  			<div class="row">
 				  				<div class="col-md-2">
 				  					<input type="radio" name="correctoption" size="100" ng-model="createQuestionForm.correctoption" value="{{option.optionid}}">
 				  				</div>
-				  				<div class="col-md-10">
-					    			<textarea cols="80" rows="3" name="optioncontent-{{option.optionid}}" id="optioncontent-{{option.optionid}}" class="form-control" ng-model="createQuestionForm.optioncontent[option.optionid]" placeholder="Content for option - {{$index}}">{{ option.content }}</textarea><hr>
+				  				<div class="col-md-10" ng-class="{'has-error' : questionCreateForm.optioncontent.$touched && questionCreateForm.optioncontent.$error.required }">
+					    			<textarea cols="80" rows="3" name="optioncontent-{{option.optionid}}" id="optioncontent-{{option.optionid}}" class="form-control" ng-model="createQuestionForm.optioncontent[option.optionid]" placeholder="Content for option - {{$index}}" required>{{ option.content }}</textarea><hr>
 				  				</div>
+				  				<span ng-if="questionCreateForm.optioncontent.$touched && questionCreateForm.optioncontent.$error.required" class="help-block">Option content is required.</span>
 				  			</div>
 					  </div>
 				  	</div>
 				  	<div class="form-group">
 				  		<button type="button" class="btn btn-primary btn-md" ng-click="addOptions()"><span class="glyphicon glyphicon-plus"></span>&nbsp;Add more options</button>
 				  	</div>
-				  <button type="submit" class="btn btn-primary btn-block" ng-disabled="createQuestionForm.$invalid">Create Question</button>
+				  <button type="submit" class="btn btn-primary btn-block" ng-disabled="questionCreateForm.$invalid">Create Question</button>
 				</form>
 			</div>
 			<div class="col-lg-2 col-md-2 col-sm-2"></div>

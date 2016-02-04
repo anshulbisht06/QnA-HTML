@@ -28,7 +28,7 @@ angular.module('QnA')
                     );
         };
         this.getAllQuiz = function(token, userid, quizid){
-            return $resource(baseURL+"quiz/get/"+userid+"/quiz/"+quizid+"/", null,
+            return $resource(baseURL+"quiz/get/"+userid+"/"+quizid+"/", null,
                     {
                         query: {
                         headers: {'Authorization': 'JWT ' + token},
@@ -55,7 +55,7 @@ angular.module('QnA')
         };
 
         this.getAllCategories = function(token, userid, quizid){
-        return $resource(baseURL+"quiz/get/"+userid+"/category/"+quizid+"/", null,
+        return $resource(baseURL+"quiz/category/get/"+userid+"/"+quizid+"/", null,
         {
             query: {
             headers: {'Authorization': 'JWT ' + token},
@@ -77,8 +77,8 @@ angular.module('QnA')
                     );
         };
 
-        this.getAllSubcategories = function(token, userid, quizid){
-        return $resource(baseURL+"quiz/get/"+userid+"/subcategory/"+quizid+"/", null,
+        this.getAllSubcategories = function(token, userid, quizid, categoryid){
+        return $resource(baseURL+"quiz/subcategory/get/"+userid+"/"+quizid+"/"+categoryid+"/", null,
             {
                 query: {
                 headers: {'Authorization': 'JWT ' + token},

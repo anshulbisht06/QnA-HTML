@@ -263,35 +263,36 @@ angular.module('QnA')
     }])
 
 
-    .controller('CreateQuestionController', ['$scope', '$controller', '$cookies', 'SubCategoryFactory', 'QuestionsFactory', function($scope, $controller, $cookies, SubCategoryFactory, QuestionsFactory) {
+    .controller('CreateQuestionController', ['$scope', '$controller', '$cookies', '$state', 'QuizFactory', 'CategoryFactory', 'SubCategoryFactory', 'QuestionsFactory', function($scope, $controller, $cookies, $state, QuizFactory, CategoryFactory, SubCategoryFactory, QuestionsFactory) {
         $controller('CookiesController', {$scope : $scope});
-
-        $scope.allSubCategories = SubCategoryFactory.getAllSubcategories($cookies.get('token')).query(
+        if($scope.user){
+        $scope.allSubCategories = SubCategoryFactory.getAllSubcategories($cookies.get('token'), $scope.user, 'all', 'all').query(
             function(response) {
-                $scope.isSubCategoryEmpty = false;
+                $scope.subCategories = response;
             },
             function(response) {
                 $scope.errors = response.data;
-                console.log($scope.errors);
-                $scope.isSubCategoryEmpty = true;
+                $scope.unableToGetAllSubCategories = true;
             });
+        }
+        $scope.createQuestionForm = {content:"",explanation:"", level:"E", answer_order:"random", sub_category:""};
         $scope.postQuestion = function() {
+            console.log($scope.createQuestionForm);
             var response = QuestionsFactory.createQuestion($cookies.get('token')).save($scope.createQuestionForm).$promise.then(
                 function(response){
                     $scope.alertType = "success";
                     $scope.alertMsg = "Your question has been created.";
-                    $scope.createQuestionForm = {content:"",explanation:""};
+                    $scope.createQuestionForm = {content:"",explanation:"", level:"E", answer_order:"random", sub_category:""};
                     $scope.questionCreateForm.$setPristine();
-                    $scope.isFormInvalid = false;
-                    // $state.go('app.questions');                     
+                    $state.go('app.create-question');                     
                 },
                 function(response) {
                     $scope.alertType = "danger";
                     $scope.alertMsg = "Unable to create the question. See below errors.";
                     $scope.errors = response.data;
-                    $scope.isFormInvalid = true;
                 });
         }
+
         $scope.optionss = [
             {
                 optionid : 1,
