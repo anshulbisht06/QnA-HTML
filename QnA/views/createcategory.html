@@ -3,7 +3,7 @@
 <div class="jumbotron">
     <div class="row">
     </div>
-    <div class="row" ng-hide="isCategoryCreated">
+    <div class="row">
 	    <div class="row">
 			<h2 class="text-center hidden-xs">Create category.</h2>
 			<h4 class="text-center visible-xs">Create category.</h4>
@@ -11,15 +11,15 @@
 		<div class="row">
 			<form role="form" name="categoryCreateForm" ng-submit="postCategory()" novalidate>
 				<div class="col-lg-4 col-md-4 col-sm-4">
-					<div class="list-group" ng-if="!unableToGetAllQuiz">
+					<div class="list-group" ng-if="!unableToGetAllQuiz" ng-class="{'has-error': errors.quiz || categoryCreateForm.quiz.$touched && categoryCreateForm.quiz.$error.required }">
 					  <!-- <a href="" class="list-group-item" ng-repeat="quiz in quizzes track by $index" ng-click="selectQuiz(quiz.id)">{{ quiz.title }}</a> -->
-					  <label for="quizzes">Your quizzes (select anyone)</label>
+					  <label for="quiz">Your quizzes (select anyone)</label>
 				      <select class="form-control" id="quiz" name="quiz" ng-model="createCategoryform.quiz" required>
-				      	<option value="Select a quiz first." disabled>Select a quiz first.</option>
+				      	<option value="" disabled>Select a quiz first.</option>
 				        <option ng-repeat="q in allQuiz track by $index" value="{{ q.id }}">{{ q.title }}</option>
 				      </select>
-					   <span ng-if="errors.quiz" class="help-block">{{ errors.quiz[0] }}</span>
-				      <span ng-if="categoryCreateForm.quizzes.$touched && categoryCreateForm.quizzes.$error.required" class="help-block">Category name is required.</span>
+					   <span ng-if="errors.quiz" class="help-block">Please select a quiz.</span>
+				      <span ng-if="categoryCreateForm.quiz.$touched && categoryCreateForm.quiz.$error.required" class="help-block">Category name is required.</span>
 					</div>
 					<div class="list-group" ng-if="unableToGetAllQuiz">
 						<p>{{ errors }}</p>
@@ -38,28 +38,5 @@
 			</form>
 		</div>
 	</div>
-<!-- 	<div class="row" ng-show="isCategoryCreated">
-		<div class="row">
-			<h2 class="text-center hidden-xs">Now create a sub-category of above created Category - <strong>{{ createdCategory }}</strong>.</h2>
-			<h4 class="text-center visible-xs">Now create a sub-category of above created Category - <strong>{{ createdCategory }}</strong></h4>
-		</div>
-		<div class="row">
-			<div class="col-lg-2 col-md-2 col-sm-2"></div>
-			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-				<form role="form" name="subcategoryCreateForm" ng-submit="postSubCategory()" novalidate>
-					<div class="form-group">
-					  	<input type="hidden" name="createdCategory" value="{{ createdCategory }}" ng-model="subcreateCategoryform.createdCategory">
-					</div>
-					  <div class="form-group" ng-class="{'has-error': isFormInvalid1 }">
-					    <input type="text" maxlength="250" class="form-control" id="sub_category" name="sub_category" ng-model="subcreateCategoryform.sub_category" required>
-					    <span ng-show="isFormInvalid1" class="help-block">{{ errors.sub_category[0] }}</span>
-			    		<span ng-show="subcategoryCreateForm.category.$touched && subcategoryCreateForm.category.$error.required" class="help-block">Sub-Category name is required.</span>
-					  </div>
-					  <button type="submit" class="btn btn-primary btn-md" ng-disabled="subcategoryCreateForm.$invalid">Create Sub-Category</button>
-				</form>
-			</div>
-			<div class="col-lg-2 col-md-2 col-sm-2"></div>
-		</div>
-	</div> -->
 </div>
 </div>

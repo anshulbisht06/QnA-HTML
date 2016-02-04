@@ -53,6 +53,22 @@ angular.module('QnA')
                     { stripTrailingSlashes: false }
                     );
         };
+
+        this.getAllCategories = function(token, userid, quizid){
+        return $resource(baseURL+"quiz/get/"+userid+"/category/"+quizid+"/", null,
+        {
+            query: {
+            headers: {'Authorization': 'JWT ' + token},
+            method : 'GET',
+            isArray : true,
+            }
+        },
+        { stripTrailingSlashes: false }
+        )};
+    }])
+
+
+    .service('SubCategoryFactory', ['$resource', 'baseURL', function($resource, baseURL) {
         this.createSubCategory = function(token){
                 return $resource(baseURL+"quiz/subcategory/create/", null,
                     {'save':   {method:'POST', headers: {'Authorization': 'JWT ' + token} }
@@ -61,6 +77,18 @@ angular.module('QnA')
                     );
         };
 
+        this.getAllSubcategories = function(token, userid, quizid){
+        return $resource(baseURL+"quiz/get/"+userid+"/subcategory/"+quizid+"/", null,
+            {
+                query: {
+                headers: {'Authorization': 'JWT ' + token},
+                method : 'GET',
+                isArray : true,
+                }
+            },
+            { stripTrailingSlashes: false }
+            )
+        };
     }])
 
 
@@ -112,18 +140,7 @@ angular.module('QnA')
         this.totalMediumQuestions = totalMediumQuestions;
 
 
-        this.getAllSubcategories = function(token){
-                return $resource(baseURL+"quiz/subcategory/get/all/", null,
-                {
-                    query: {
-                    headers: {'Authorization': 'JWT ' + token},
-                    method : 'GET',
-                    isArray : true,
-                    }
-                },
-                { stripTrailingSlashes: false }
-                );
-        };
+
 
         this.createQuestion = function(token){
             return $resource(baseURL+"question/mcq/create/", null,

@@ -139,7 +139,6 @@ angular.module('QnA')
     }])
 
 
-
     .controller('CreateCategoryController', ['$scope','$state', '$controller', '$cookies', 'CategoryFactory', 'QuizFactory','$stateParams', function($scope, $state, $controller, $cookies, CategoryFactory, QuizFactory, $stateParams) {
         $controller('CookiesController', {$scope : $scope});
         if($scope.user){
@@ -160,49 +159,67 @@ angular.module('QnA')
             $scope.alertMsg = "Please select or create a category first";
             $scope.createCategoryform = {category : "", quiz : $scope._id};
         }else{
-            $scope.createCategoryform = {category : "", quiz : "Select a quiz first."};
+            $scope.createCategoryform = {category : "", quiz : ""};
         }
 
         $scope.postCategory = function() { 
-            $scope.createdCategory = $scope.createCategoryform.category;
             var response = CategoryFactory.createCategory($cookies.get('token')).save($scope.createCategoryform).$promise.then(
                 function(response){
                     $scope.isFormInvalid = false;
                     $scope.alertType = "success";
                     $scope.isCategoryCreated = true;
-                    $scope.alertMsg = "Your category named " + $scope.createdCategory + " has been created. Now please create a sub-category of it.";
+                    $scope.alertMsg = "Your category named " + $scope.createCategoryform.category + " has been created. Now please create a sub-category of it.";
                     $scope.createCategoryform = {category:""};
                     $scope.categoryCreateForm.$setPristine();
-                    // $state.go('app.create-category');                     
+                    $state.go('app.create-subcategory', {obj:{'categoryid':response.id, 'categoryname':response.category}});                     
                 },
                 function(response) {
                     $scope.isFormInvalid = true;
                     $scope.alertType = "danger";
                     $scope.isCategoryCreated = false;
-                    $scope.alertMsg = "Unable to create the category - " + $scope.createdCategory + ". See below error.";
-                    // console.log(response.data);
+                    $scope.alertMsg = "Unable to create the category - " + $scope.createCategoryform.category + ". See below error.";
                     $scope.errors = response.data;
                     $scope.createCategoryform = {category : "", quiz : [$scope._id]};
                 });
         }
-        // $scope.postSubCategory = function() {
-        //     var response = CategoryFactory.createSubCategory($cookies.get('token')).save($scope.subcreateCategoryform).$promise.then(
-        //         function(response){
-        //             $scope.isFormInvalid1 = false;
-        //             $scope.alertType = "success";
-        //             $scope.createCategory = $scope.subcreateCategoryform.createdCategory;
-        //             $scope.alertMsg = "Your sub-category named " + $scope.subcreateCategoryform.sub_category + " has been created for " + $scope.createdCategory + ".";   
-        //         },
-        //         function(response) {
-        //             $scope.isFormInvalid1 = true;
-        //             $scope.alertType = "danger";
-        //             $scope.createCategory = $scope.subcreateCategoryform.createdCategory;
-        //             $scope.alertMsg = "Unable to create the sub-category for " + $scope.createdCategory + ". See below error.";
-        //             $scope.errors = response.data;
-        //         });
-        // }
+    }])
+
+
+    .controller('CreateSubCategoryController', ['$scope','$state', '$controller', '$cookies', 'CategoryFactory', 'SubCategoryFactory','$stateParams', function($scope, $state, $controller, $cookies, CategoryFactory, SubCategoryFactory, $stateParams) {
+        $controller('CookiesController', {$scope : $scope});
+        if($scope.user){
+            $scope.getAllCategories = CategoryFactory.getAllCategories($cookies.get('token'), $scope.user, "all").query(
+            function(response){
+                $scope.allCategories = response;
+            },
+            function(response){
+                $scope.unableToGetAllCategories = true;
+                $scope.errors = "Unable to get your categories.";
+            });
+        }
+        $scope.categoryid = $stateParams.obj ? $stateParams.obj.categoryid.toString() : "";
+        if($scope.categoryid){
+            $scope.alertType = "info";
+            $scope.alertMsg = "Please select or create a sub-category first";
+            $scope.createSubCategoryform = {sub_category_name : "", category : $scope.categoryid};
+        }else{
+            $scope.createSubCategoryform = {sub_category_name : "", category : ""};
+        }
+        $scope.postSubCategory = function() {
+            var response = SubCategoryFactory.createSubCategory($cookies.get('token')).save($scope.createSubCategoryform).$promise.then(
+                function(response){
+                    $scope.alertType = "success";
+                    $scope.alertMsg = "Your sub-category named " + $scope.createSubCategoryform.sub_category_name + " has been created.";   
+                },
+                function(response) {
+                    $scope.alertType = "danger";
+                    $scope.alertMsg = "Unable to create the sub-category for " + $scope.createSubCategoryform.sub_category_name + ". See below error.";
+                    $scope.errors = response.data;
+                });
+        }
 
     }])
+
 
 
     .controller('QuestionsController', ['$scope', '$controller', '$cookies', '$state' ,'QuestionsFactory', function($scope, $controller, $cookies, $state, QuestionsFactory) {
@@ -246,10 +263,10 @@ angular.module('QnA')
     }])
 
 
-    .controller('CreateQuestionController', ['$scope', '$controller', '$cookies', 'QuestionsFactory', function($scope, $controller, $cookies, QuestionsFactory) {
+    .controller('CreateQuestionController', ['$scope', '$controller', '$cookies', 'SubCategoryFactory', 'QuestionsFactory', function($scope, $controller, $cookies, SubCategoryFactory, QuestionsFactory) {
         $controller('CookiesController', {$scope : $scope});
 
-        $scope.allSubCategories = QuestionsFactory.getAllSubcategories($cookies.get('token')).query(
+        $scope.allSubCategories = SubCategoryFactory.getAllSubcategories($cookies.get('token')).query(
             function(response) {
                 $scope.isSubCategoryEmpty = false;
             },

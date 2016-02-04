@@ -62,6 +62,18 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                         obj: null
                     }
                 })
+            .state('app.create-subcategory', {
+                url:'create/subcategory/',
+                views :{
+                    'content@': {
+                        controller  : 'CreateSubCategoryController',
+                        templateUrl : 'views/createsubcategory.html'
+                    }
+                },
+                params: {
+                        obj: null
+                    }
+                })
             .state('app.questions', {
                 url:'questions/all/',
                 views :{
