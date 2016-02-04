@@ -164,27 +164,26 @@ angular.module('QnA')
         }
 
         $scope.postCategory = function() { 
-            console.log($scope.createCategoryform);
-            // $scope.createdCategory = $scope.createCategoryform.category;
-            // var response = CategoryFactory.createCategory($cookies.get('token')).save($scope.createCategoryform).$promise.then(
-            //     function(response){
-            //         $scope.isFormInvalid = false;
-            //         $scope.alertType = "success";
-            //         $scope.isCategoryCreated = true;
-            //         $scope.alertMsg = "Your category named " + $scope.createdCategory + " has been created. Now please create a sub-category of it.";
-            //         $scope.createCategoryform = {category:""};
-            //         $scope.categoryCreateForm.$setPristine();
-            //         // $state.go('app.create-category');                     
-            //     },
-            //     function(response) {
-            //         $scope.isFormInvalid = true;
-            //         $scope.alertType = "danger";
-            //         $scope.isCategoryCreated = false;
-            //         $scope.alertMsg = "Unable to create the category - " + $scope.createdCategory + ". See below error.";
-            //         // console.log(response.data);
-            //         $scope.errors = response.data;
-            //         $scope.createCategoryform = {category : "", quiz : [$scope._id]};
-            //     });
+            $scope.createdCategory = $scope.createCategoryform.category;
+            var response = CategoryFactory.createCategory($cookies.get('token')).save($scope.createCategoryform).$promise.then(
+                function(response){
+                    $scope.isFormInvalid = false;
+                    $scope.alertType = "success";
+                    $scope.isCategoryCreated = true;
+                    $scope.alertMsg = "Your category named " + $scope.createdCategory + " has been created. Now please create a sub-category of it.";
+                    $scope.createCategoryform = {category:""};
+                    $scope.categoryCreateForm.$setPristine();
+                    // $state.go('app.create-category');                     
+                },
+                function(response) {
+                    $scope.isFormInvalid = true;
+                    $scope.alertType = "danger";
+                    $scope.isCategoryCreated = false;
+                    $scope.alertMsg = "Unable to create the category - " + $scope.createdCategory + ". See below error.";
+                    // console.log(response.data);
+                    $scope.errors = response.data;
+                    $scope.createCategoryform = {category : "", quiz : [$scope._id]};
+                });
         }
         // $scope.postSubCategory = function() {
         //     var response = CategoryFactory.createSubCategory($cookies.get('token')).save($scope.subcreateCategoryform).$promise.then(
