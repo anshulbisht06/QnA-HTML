@@ -109,7 +109,7 @@ angular.module('QnA')
                 $scope.isFormInvalid = true;
                 $scope.alertType = "danger";
                 $scope.alertMsg = "Unable to login. See the errors below.";
-                $scope.errors = data.errors;
+                $scope.errors = data.errors? data.errors:'';
             });
         };
     }])
@@ -136,6 +136,8 @@ angular.module('QnA')
                     $scope.errors = response.data;
                 }); 
         }
+
+
     }])
 
 
@@ -313,5 +315,12 @@ angular.module('QnA')
                                 correct :  false
                                 });
             $scope.optionCount = $scope.optionCount + 1;
+        }
+        $scope.removeOption = function(op_id){
+            if(op_id > 2){
+                var all = $scope.optionss;
+                $scope.optionss = all.filter(function(el) { return el.optionid != op_id; });
+                console.log($scope.optionss);
+            }
         }
     }]);

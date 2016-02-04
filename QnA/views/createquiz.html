@@ -1,5 +1,6 @@
 <div class="container-fluid">
 <div ng-include src="'views/alertmsg.html'"></div>
+
 <div class="jumbotron">
     <div class="row">
     </div>
@@ -9,7 +10,7 @@
 	</div>
 	<div class="row">
 		<div class="col-lg-2 col-md-2 col-sm-2"></div>
-		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
 			<form role="form" name="quizCreateForm" ng-submit="postQuiz()" novalidate>
 			  
 			  <div class="form-group" ng-class="{'has-error': errors.title || quizCreateForm.title.$touched && quizCreateForm.title.$error.required  }">

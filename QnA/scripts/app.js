@@ -50,6 +50,17 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                     }
                 }
                 })
+
+            .state('app.all-quiz', {
+                url:'my/quizies/',
+                views :{
+                    'content@': {
+                        controller  : 'CreateQuizController',
+                        templateUrl : 'views/my_tests.html'
+                    }
+                }
+                })
+
             .state('app.create-category', {
                 url:'create/category/',
                 views :{

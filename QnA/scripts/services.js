@@ -27,8 +27,8 @@ angular.module('QnA')
                     { stripTrailingSlashes: false }
                     );
         };
-        this.getAllQuiz = function(token, userid, quizid){
-            return $resource(baseURL+"quiz/get/"+userid+"/"+quizid+"/", null,
+        this.getAllQuiz = function(token, userid){
+            return $resource(baseURL+"quiz/get/"+userid+"/quiz/", null,
                     {
                         query: {
                         headers: {'Authorization': 'JWT ' + token},

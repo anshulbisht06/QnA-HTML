@@ -13,8 +13,8 @@
     </div>
     <div id="navbar" class="navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
       <ul class="nav navbar-nav navbar-center" ng-if="token">
-         <li><a ui-sref="app.create-quiz"><span class="glyphicon glyphicon-plus"></span> My Quizzes</a></li>
-         <li><a ui-sref="app.questions"><span class="glyphicon glyphicon-pencil"></span> My Questions</a></li>
+         <li><a ui-sref="app.all-quiz"><span class="glyphicon"></span> My Quizzes</a></li>
+         <li><a ui-sref="app.questions"><span class="glyphicon"></span> My Questions</a></li>
       </ul> 
 	    <ul class="nav navbar-nav navbar-right" ng-if="token">
         <li class="dropdown">
@@ -30,7 +30,6 @@
       <ul class="nav navbar-nav navbar-right" ng-if="token == undefined">
         <li><a ui-sref="app.login-user"><span class="glyphicon glyphicon-sign-in"></span>Sign In</a></li>
         <li><a ui-sref="app.register-user"><span class="glyphicon glyphicon-sign-up"></span>Sign Up</a></li>
-      </ul>   
-
+      </ul>
   </div>
 </nav>
