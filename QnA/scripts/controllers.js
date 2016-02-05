@@ -255,9 +255,10 @@ angular.module('QnA')
         $scope.isTabSelected = function(checkTab) {
                 return ($scope.tab === checkTab);
             }; 
-        $scope.getAllQuestions = QuestionsFactory.getAllQuestions($cookies.get('token')).query(
+        $scope.getAllQuestions = QuestionsFactory.getAllQuestions($cookies.get('token'), $scope.user, 'all', 'all', 'all').query(
             function(response) {
                 $scope.allQuestions = response;
+                console.log($scope.allQuestions);
             },
             function(response) {
                 $scope.errors = response.data;

@@ -98,13 +98,13 @@ angular.module('QnA')
         totalEasyQuestions = 0;
         totalMediumQuestions = 0;
         totalHardQuestions = 0;
-        this.getAllQuestions = function(token){
-                return $resource(baseURL+"quiz/questions/all/", null,
+        this.getAllQuestions = function(token, userid, quizid, categoryid, subcategoryid){
+                return $resource(baseURL+"quiz/questions/get/"+userid+"/"+quizid+"/"+categoryid+"/"+subcategoryid+"/", null,
                 {
                     query: {
                     headers: {'Authorization': 'JWT ' + token},
                     method : 'GET',
-                    isArray : true,
+                    isArray : false,
                     }
                 },
                 { stripTrailingSlashes: false }
@@ -119,16 +119,15 @@ angular.module('QnA')
         //     if(l==='H')
         //         totalHardQuestions+=1;
         //     q = {
-        //             id : i,
-        //             level : l,
-        //             type : 'mcq',
-        //             question : 'If during a clinical audit "all/most standards were not met", the next course of action must be _____.',
-        //             options : [
-        //                 { id : 0, content : 'After action has been implemented, repeat data collection only for those standards not met', correct : false}, 
-        //                 { id : 1, content : 'After action has been implemented, repeat entire clinical audit process', correct : true},
-        //                 { id : 2, content : 'Repeat clinical audit process at a later date to ensure that this is maintained', correct : false},
-        //                 { id : 3, content : 'Review and modify standards – repeat entire clinical audit', correct : false},
-        //                 ]            
+                    // id : i,
+                    // level : l,
+                    // question : 'If during a clinical audit "all/most standards were not met", the next course of action must be _____.',
+                    // options : [
+                    //     { id : 0, content : 'After action has been implemented, repeat data collection only for those standards not met', correct : false}, 
+                    //     { id : 1, content : 'After action has been implemented, repeat entire clinical audit process', correct : true},
+                    //     { id : 2, content : 'Repeat clinical audit process at a later date to ensure that this is maintained', correct : false},
+                    //     { id : 3, content : 'Review and modify standards – repeat entire clinical audit', correct : false},
+                    //     ]            
         //         }
         //     questions['Clinical Audit - 1'].push(q);
         //     questions['Clinical Audit - 2'].push(q);
