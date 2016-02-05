@@ -226,12 +226,16 @@ angular.module('QnA')
 
     .controller('QuestionsController', ['$scope', '$controller', '$cookies', '$state' ,'QuestionsFactory', function($scope, $controller, $cookies, $state, QuestionsFactory) {
         $controller('CookiesController', {$scope : $scope});
-
-        $scope.allQuestions = QuestionsFactory.questions;
-        $scope.totalQuestions = QuestionsFactory.totalQuestions;
-        $scope.totalHardQuestions = QuestionsFactory.totalHardQuestions;
-        $scope.totalEasyQuestions = QuestionsFactory.totalEasyQuestions;
-        $scope.totalMediumQuestions = QuestionsFactory.totalMediumQuestions;
+        var q ='';
+        $scope.getAllQuestions = QuestionsFactory.getAllQuestions($cookies.get('token'), $scope.user, 'all', 'all', 'all').query(
+            function(response) {
+                $scope.allQuestions = response;
+                $scope.questionsLevelInfo = $scope.allQuestions.questionsLevelInfo;
+                delete $scope.allQuestions.questionsLevelInfo;
+            },
+            function(response) {
+                $scope.errors = response.data;
+            });
         $scope.tab = 1;
         $scope.filterLevel = false;
         $scope.selectTab = function(setTab) {
@@ -255,14 +259,6 @@ angular.module('QnA')
         $scope.isTabSelected = function(checkTab) {
                 return ($scope.tab === checkTab);
             }; 
-        $scope.getAllQuestions = QuestionsFactory.getAllQuestions($cookies.get('token'), $scope.user, 'all', 'all', 'all').query(
-            function(response) {
-                $scope.allQuestions = response;
-                console.log($scope.allQuestions);
-            },
-            function(response) {
-                $scope.errors = response.data;
-            });
     }])
 
 

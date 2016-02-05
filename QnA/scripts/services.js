@@ -94,10 +94,6 @@ angular.module('QnA')
 
     .service('QuestionsFactory', ['$resource', 'baseURL', function($resource, baseURL) {
         questions = {'Clinical Audit - 1' : [], 'Clinical Audit - 2' : []};
-        levels = ['E','H','M'];
-        totalEasyQuestions = 0;
-        totalMediumQuestions = 0;
-        totalHardQuestions = 0;
         this.getAllQuestions = function(token, userid, quizid, categoryid, subcategoryid){
                 return $resource(baseURL+"quiz/questions/get/"+userid+"/"+quizid+"/"+categoryid+"/"+subcategoryid+"/", null,
                 {
@@ -132,11 +128,11 @@ angular.module('QnA')
         //     questions['Clinical Audit - 1'].push(q);
         //     questions['Clinical Audit - 2'].push(q);
         // }
-        this.questions = questions;
-        this.totalQuestions = totalHardQuestions+totalEasyQuestions+totalMediumQuestions;
-        this.totalHardQuestions = totalHardQuestions;
-        this.totalEasyQuestions = totalEasyQuestions;
-        this.totalMediumQuestions = totalMediumQuestions;
+        // this.questions = questions;
+        // this.totalQuestions = totalHardQuestions+totalEasyQuestions+totalMediumQuestions;
+        // this.totalHardQuestions = totalHardQuestions;
+        // this.totalEasyQuestions = totalEasyQuestions;
+        // this.totalMediumQuestions = totalMediumQuestions;
 
 
 
