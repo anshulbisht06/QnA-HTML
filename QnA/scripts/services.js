@@ -94,13 +94,13 @@ angular.module('QnA')
 
     .service('QuestionsFactory', ['$resource', 'baseURL', function($resource, baseURL) {
         questions = {'Clinical Audit - 1' : [], 'Clinical Audit - 2' : []};
-        this.getAllQuestions = function(token, userid, quizid, categoryid, subcategoryid){
-                return $resource(baseURL+"quiz/questions/get/"+userid+"/"+quizid+"/"+categoryid+"/"+subcategoryid+"/", null,
+        this.getAllQuestions = function(token, userid){
+                return $resource(baseURL+"quiz/questions/get/"+userid+"/", null,
                 {
                     query: {
                     headers: {'Authorization': 'JWT ' + token},
                     method : 'GET',
-                    isArray : false,
+                    isArray : true,
                     }
                 },
                 { stripTrailingSlashes: false }

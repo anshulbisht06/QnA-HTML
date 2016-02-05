@@ -38,11 +38,24 @@
 				  <li ng-class="{active : isTabSelected(3)}"><a ng-click="selectTab(3)">Medium <span class="badge">{{ questionsLevelInfo[1] }}</span></a></li>
 				  <li ng-class="{active : isTabSelected(4)}"><a ng-click="selectTab(4)">Hard <span class="badge">{{ questionsLevelInfo[2] }}</span></a></li>
 				</ul>
-			</div><hr>
-			<div class="row" ng-if="allQuestions" ng-repeat="(quiz, categories) in allQuestions">
-				<div ng-repeat="(category, subCategories) in categories">
-				  <ul class="list-group" ng-repeat="(subCategory, questionsList) in subCategories">
-				  	<li class="list-group-item" ng-show="questionsList" ng-repeat="question in questionsList | filter:filterLevel:true">
+			</div>
+			<div class="row">
+			<br>
+				<div class="col-lg-4 col-md-4 col-sm-4">
+					<input type="search" class="form-control" ng-model="filterByQuiz" placeholder="Search by quiz">
+				</div>
+				<div class="col-lg-4 col-md-4 col-sm-4">
+					<input type="search" class="form-control" ng-model="filterByCategory" placeholder="Search by category">
+				</div>
+				<div class="col-lg-4 col-md-4 col-sm-4">
+					<input type="search" class="form-control" ng-model="filterBySubCategory" placeholder="Search by sub-category">
+				</div>
+			</div>
+			<hr>
+			<div class="row" ng-if="AllQuizzes" ng-repeat="quiz in AllQuizzes | filter:{title:filterByQuiz}">
+				<div ng-if="quiz.categories" ng-repeat="category in quiz.categories | filter:{category:filterByCategory}">
+				  <ul class="list-group" ng-if="category.subcategories" ng-repeat="subcategory in category.subcategories | filter:{subcategory:filterBySubCategory}">
+				  	<li class="list-group-item" ng-if="subcategory.questions" ng-mouseenter="hoverOnQuestion(question.id)" ng-mouseleave="hoverOutQuestion()" ng-repeat="question in subcategory.questions | filter:filterLevel:true">
 				  		<p>
 					  	<div class="row">
 						  	<div class="col-lg-1 col-md-1 col-sm-1">
@@ -53,22 +66,26 @@
 							  	</div><br>
 							  	<div class="row">
 							  	    <div class="btn-group" data-toggle="buttons">
-							  	    	<div ng-repeat="option in question.options">
+						  	    		<div class="row options" ng-repeat="option in question.options">
 							                <label class="btn btn-default" ng-class="{'active':option.correct}">
 								                {{$index + 1}}
 							                </label>
-							                {{ option.content }}
+						                	{{ option.content }}
 						                </div>
 					                </div>
 							  	</div>
-							  	<div class="row text-right">
-							  		<div class="col-lg-3 col-md-3 col-sm-3">
-							  			<h4><span class="label label-default">{{ subCategory }}</span></h4>
+							  	<div class="row text-left">
+							  		<div class="col-lg-6 col-md-6 col-sm-6">
+							  			<h4><span class="label label-default">{{ subcategory.subcategory }}</span></h4>
 							  		</div>
 							  		<div class="col-lg-1 col-md-1 col-sm-1">
-							  			<h4><span class="label label-default">{{ question.level | levelFull }}</span></h4>
+							  			<h4><span class="label label-default">{{ question.level | capitalize }}</span></h4>
 							  		</div>
-							  		<div class="col-lg-9 col-md-9 col-sm-9">
+							  		<div class="col-lg-5 col-md-5 col-sm-5 text-right" ng-if="isHoveredOver">
+							  			<ul class="list-inline">
+										  <li><a><span class="glyphicon glyphicon-pencil"></span></a></li>
+										  <li><a><span class="glyphicon glyphicon-remove"></span></a></li>										
+										</ul>
 							  		</div>
 							  	</div>
 						  	</div>
@@ -78,7 +95,7 @@
 				  </ul>
 				</div>
 			</div>
-			<div class="row text-center" ng-if="!allQuestions">
+			<div class="row text-center" ng-if="!AllQuizzes">
 				<h3>No quiz found!!!</h3>
 			</div>
 		</div> 

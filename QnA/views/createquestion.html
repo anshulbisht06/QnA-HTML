@@ -17,7 +17,7 @@
 				  <label for="subcategory">Select a sub-category into which the question will be added</label>
 					<select class="form-control" id="sub_category" name="sub_category" ng-model="createQuestionForm.sub_category" required>
 						<option value="" disabled>Select sub-category here</option>
-					    <option ng-repeat="sc in allSubCategories" value="{{ sc.id }}">{{ sc.sub_category_name }}</option>
+					    <option ng-repeat="sc in allSubCategories" value="{{ sc.category }}-{{ sc.id }}">{{ sc.sub_category_name }}</option>
 					</select>
 			   		<span ng-if="errors.sub_category" class="help-block">{{ errors.sub_category[0] }}</span>
 			   		<span ng-if="questionCreateForm.sub_category.$touched && questionCreateForm.sub_category.$error.required" class="help-block">Sub-category is required.</span>
@@ -42,9 +42,9 @@
 				  <div class="form-group">
 				  	<label for="level">Level of Question</label>
 					<select class="form-control" id="level" name="level" ng-model="createQuestionForm.level">
-						<option value="E">Easy</option>
-						<option value="M">Medium</option>
-						<option value="H">Hard</option>
+						<option value="easy">Easy</option>
+						<option value="medium">Medium</option>
+						<option value="hard">Hard</option>
 					</select>
 				  </div><br>
 				  <div class="form-group">

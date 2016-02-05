@@ -226,12 +226,13 @@ angular.module('QnA')
 
     .controller('QuestionsController', ['$scope', '$controller', '$cookies', '$state' ,'QuestionsFactory', function($scope, $controller, $cookies, $state, QuestionsFactory) {
         $controller('CookiesController', {$scope : $scope});
-        var q ='';
-        $scope.getAllQuestions = QuestionsFactory.getAllQuestions($cookies.get('token'), $scope.user, 'all', 'all', 'all').query(
+        $scope.getAllQuestions = QuestionsFactory.getAllQuestions($cookies.get('token'), $scope.user).query(
             function(response) {
-                $scope.allQuestions = response;
-                $scope.questionsLevelInfo = $scope.allQuestions.questionsLevelInfo;
-                delete $scope.allQuestions.questionsLevelInfo;
+                $scope.AllQuizzes = response;
+                if($scope.AllQuizzes){
+                $scope.questionsLevelInfo = $scope.AllQuizzes[0].questions_level_info;
+                $scope.AllQuizzes.shift();
+                }
             },
             function(response) {
                 $scope.errors = response.data;
@@ -244,21 +245,28 @@ angular.module('QnA')
                     $scope.filterLevel = false;
                 }              
                 else if (setTab === 2) {
-                    $scope.filterLevel = "E";
+                    $scope.filterLevel = "easy";
                 }
                 else if (setTab === 3) {
-                    $scope.filterLevel = "M";
+                    $scope.filterLevel = "medium";
                 }
                 else if (setTab === 4) {
-                    $scope.filterLevel = "H";
+                    $scope.filterLevel = "hard";
                 }
                 else {
-                    $scope.filterLevel = "U";
+                    $scope.filterLevel = "Unknown";
                 }
             };
         $scope.isTabSelected = function(checkTab) {
                 return ($scope.tab === checkTab);
-            }; 
+            };
+
+        $scope.hoverOnQuestion = function(questionid){
+            $scope.isHoveredOver = true;
+        }
+        $scope.hoverOutQuestion = function(questionid){
+            $scope.isHoveredOver = false;
+        }
     }])
 
 
@@ -274,7 +282,7 @@ angular.module('QnA')
                 $scope.unableToGetAllSubCategories = true;
             });
         }
-        $scope.createQuestionForm = {content:"",explanation:"", level:"E", answer_order:"random", sub_category:""};
+        $scope.createQuestionForm = {content:"",explanation:"", level:"easy", answer_order:"random", sub_category:""};
         $scope.postQuestion = function() {
             console.log($scope.createQuestionForm);
             var response = QuestionsFactory.createQuestion($cookies.get('token')).save($scope.createQuestionForm).$promise.then(
@@ -317,7 +325,6 @@ angular.module('QnA')
             if(op_id > 2){
                 var all = $scope.optionss;
                 $scope.optionss = all.filter(function(el) { return el.optionid != op_id; });
-                console.log($scope.optionss);
             }
         }
     }]);
