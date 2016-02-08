@@ -83,8 +83,9 @@
 							  		</div>
 							  		<div class="col-lg-5 col-md-5 col-sm-5 text-right" ng-if="isHoveredOver">
 							  			<ul class="list-inline">
-										  <li><a><span class="glyphicon glyphicon-pencil"></span></a></li>
-										  <li><a><span class="glyphicon glyphicon-remove"></span></a></li>										
+										  <li><a ui-sref="app.update-question({questionid : '{{ question.id }}' })" title="Edit the question"><span class="glyphicon glyphicon-pencil"></span></a></li>
+										  <li><a ui-sref="app.update-answers({questionid : '{{ question.id }}' })" title="Edit the answers"><span class="glyphicon glyphicon-list"></span></a></li>	
+										  <li><a title="Delete the question"><span class="glyphicon glyphicon-remove"></span></a></li>
 										</ul>
 							  		</div>
 							  	</div>
