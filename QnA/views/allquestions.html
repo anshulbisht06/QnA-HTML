@@ -1,4 +1,5 @@
 <div class="container-fluid">
+<div ng-include src="'views/alertmsg.html'"></div>
 	<div class="row" style="margin-right: 0">
 	<div class="row">
 		<a ui-sref="app.create-question" class="btn btn-primary btn-md right" style="margin-right: 10px;">Create Question</a>
@@ -55,7 +56,7 @@
 			<div class="row" ng-if="AllQuizzes" ng-repeat="quiz in AllQuizzes | filter:{title:filterByQuiz}">
 				<div ng-if="quiz.categories" ng-repeat="category in quiz.categories | filter:{category:filterByCategory}">
 				  <ul class="list-group" ng-if="category.subcategories" ng-repeat="subcategory in category.subcategories | filter:{subcategory:filterBySubCategory}">
-				  	<li class="list-group-item" ng-if="subcategory.questions" ng-mouseenter="hoverOnQuestion(question.id)" ng-mouseleave="hoverOutQuestion()" ng-repeat="question in subcategory.questions | filter:filterLevel:true">
+				  	<li class="list-group-item" ng-if="subcategory.questions" ng-mouseenter="hoverOnQuestion(question.id)" ng-mouseleave="hoverOutQuestion()" ng-repeat="question in subcategory.questions | filter:filterLevel:true" id="Q{{question.id}}">
 				  		<p>
 					  	<div class="row">
 						  	<div class="col-lg-1 col-md-1 col-sm-1">
@@ -85,7 +86,7 @@
 							  			<ul class="list-inline">
 										  <li><a ui-sref="app.update-question({questionid : '{{ question.id }}' })" title="Edit the question"><span class="glyphicon glyphicon-pencil"></span></a></li>
 										  <li><a ui-sref="app.update-answers({questionid : '{{ question.id }}' })" title="Edit the answers"><span class="glyphicon glyphicon-list"></span></a></li>	
-										  <li><a title="Delete the question"><span class="glyphicon glyphicon-remove"></span></a></li>
+										  <li><a ng-click="deleteQuestion(question.id)"><span class="glyphicon glyphicon-remove"></span></a></li>
 										</ul>
 							  		</div>
 							  	</div>

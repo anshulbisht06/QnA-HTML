@@ -135,6 +135,14 @@ angular.module('QnA')
                     { stripTrailingSlashes: false }
                     );
         }
+        this.deleteQuestion = function(token, userid, questionid){
+            return $resource(baseURL+"quiz/question/"+userid+"/"+questionid+"/", null,
+                    {'delete':   
+                    { method:'DELETE', headers: {'Authorization': 'JWT ' + token}} 
+                    },
+                    { stripTrailingSlashes: false }
+                    );
+        }
 
         this.getAnswers = function(token, userid, questionid){
                 return $resource(baseURL+"quiz/answers/"+userid+"/"+questionid+"/", null,
@@ -148,6 +156,15 @@ angular.module('QnA')
                 { stripTrailingSlashes: false }
                 );
         };
+        this.updateAnswers = function(token, userid, questionid){
+            return $resource(baseURL+"quiz/answers/"+userid+"/"+questionid+"/", null,
+                    {'update':   
+                    { method:'PUT', headers: {'Authorization': 'JWT ' + token}} 
+                    },
+                    { stripTrailingSlashes: false }
+                    );
+        }
+
 
     }])
 
