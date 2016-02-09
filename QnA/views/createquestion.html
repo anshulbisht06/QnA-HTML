@@ -14,9 +14,11 @@
 			</div>
 			<hr>
 				<form role="form" name="questionCreateForm" ng-submit="postQuestion()" enctype="multipart/form-data" novalidate>
+				  {{unableToGetAllSubCategories}}
 				  <div class="form-group" ng-if="!unableToGetAllSubCategories" ng-class="{'has-error': errors.sub_category || questionCreateForm.sub_category.$touched && questionCreateForm.sub_category.$error.required }">
 				  <label for="subcategory">Select a sub-category into which the question will be added</label>
 					<select class="form-control" id="sub_category" name="sub_category" ng-model="createQuestionForm.sub_category" required>
+						{{allSubCategories}}
 						<option value="" disabled>Select sub-category here</option>
 					    <option ng-repeat="sc in allSubCategories" value="{{ sc.category }}-{{ sc.id }}">{{ sc.sub_category_name }}</option>
 					</select>
@@ -80,25 +82,30 @@
 				  <button type="submit" class="btn btn-primary btn-block" ng-disabled="questionCreateForm.$invalid">Create Question</button>
 				</form>
 			</div>
-			<div class="col-lg-4 col-md-4 col-sm-4 ">
+			<div class="col-lg-4 col-md-4 col-sm-4 " ng-controller='XlsHandlerController'>
 				<div class="row">
 					<h2 class="text-center hidden-xs">Add question in bulk.</h2>
 					<h4 class="text-center visible-xs">Add questions in bulk.</h4>
 				</div>
 				<hr>
 				Step1:<p> Select a sub-category here </p>
-				<select class="form-control" id="sub_category" name="sub_category" ng-model="createQuestionForm.sub_category" required>
+				<select class="form-control" id="sub_category" name="sub_category" ng-model="sub_category_id" value='' required>
 					<option value="" disabled>Select sub-category here</option>
-				    <option ng-repeat="sc in allSubCategories" value="{{ sc.id }}">{{ sc.sub_category_name }}</option>
+				    <option ng-repeat="sc in allSubCategories" value="{{ sc.id }}>>{{sc.sub_category_name}}">
+				    {{ sc.sub_category_name }}</option>
 				</select>
 				<br>
 				<br>
 				Step2: <p>Download our questions.xls file and fill this file</p>
-				<a href='javascript:void(0);' class="glyphicon glyphicon-download" ng-click="downloadDemoXls('mcq', 15)"></a>
+				<button class="btn btn-lg glyphicon glyphicon-download" 
+					ng-click="downloadDemoXls('mcq', sub_category_id)">Download</button>	
 				<br>
 				<br>
 				Step3: <p>Upload your xls file and wait .. .</p>
-				<p class="glyphicon glyphicon-upload"></p>
+				 <div>
+			         <input type = "file" file-model = "myFile" class='btn'/>
+			         <button class="btn btn-lg glyphicon glyphicon-upload" ng-click = "uploadFile()">Upload</button>
+			      </div>
 			</div>
 		</div>
 	</div>

@@ -1,5 +1,12 @@
 /* global $ */
+var baseURL= 'http://localhost:8000/';
+
 var appmodule = angular.module('QnA', ['ui.router', 'ngResource', 'ngCookies']);
+
+// appmodule.constant("baseURL","http://localhost:8000/");
+// appmodule.constant('config', {
+    // baseURL: 'http://localhost:8000/',
+// });
 
 appmodule.config(function($stateProvider, $urlRouterProvider) {
         $stateProvider	        

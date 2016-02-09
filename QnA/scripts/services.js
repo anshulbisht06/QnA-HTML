@@ -1,13 +1,13 @@
 /* global $ */
 
 angular.module('QnA')
-    .constant("baseURL","http://localhost:8000/")
+    .constant('baseURL',baseURL)
     .service('indexFactory', function() { 
         // this.introductionCarousel = ['images/bg.png', 'images/wedding.png', 'images/corporate-party.png'];
     })
 
 
-    .service('UserRegisterFactory',['$resource', 'baseURL', function($resource, baseURL) { 
+    .service('UserRegisterFactory',['$resource', 'config', function($resource, baseURL) { 
         this.createUser = function(token){
             return $resource(baseURL+"register/", null,
                     {'save':   
@@ -92,7 +92,7 @@ angular.module('QnA')
     }])
 
 
-    .service('QuestionsFactory', ['$resource', 'baseURL', function($resource, baseURL) {
+    .service('QuestionsFactory', ['$resource', 'baseURL', '$http', function($resource, baseURL, $http) {
         this.getAllQuestions = function(token, userid){
                 return $resource(baseURL+"quiz/questions/get/"+userid+"/", null,
                 {
@@ -129,11 +129,6 @@ angular.module('QnA')
                     );
         }
 
-        this.getXlsForUpload = function(token, que_type, quiz_name){
-            return $resource(baseURL+"question/download/xls?que_type="+que_type, null,
-                    {'save':
-                    { method:'GET', headers: {'Authorization': 'JWT ' + token}} 
-
         this.updateQuestion = function(token, userid, questionid){
             return $resource(baseURL+"quiz/question/"+userid+"/"+questionid+"/", null,
                     {'update':   
@@ -142,6 +137,7 @@ angular.module('QnA')
                     { stripTrailingSlashes: false }
                     );
         }
+
         this.deleteQuestion = function(token, userid, questionid){
             return $resource(baseURL+"quiz/question/"+userid+"/"+questionid+"/", null,
                     {'delete':   
@@ -173,3 +169,37 @@ angular.module('QnA')
         }
     }])
 
+    
+    .service('fileUpload', ['$http', function ($http) {
+            this.uploadFileToUrl = function(file, uploadUrl){
+               var fd = new FormData();
+               fd.append('file', file);
+            
+               $http.post(uploadUrl, fd, {
+                  transformRequest: angular.identity,
+                  headers: {'Content-Type': undefined}
+               })
+            
+               .success(function(){
+               })
+            
+               .error(function(){
+               });
+            }
+         }])
+
+    .directive('fileModel', ['$parse', function ($parse) {
+            return {
+               restrict: 'A',
+               link: function(scope, element, attrs) {
+                  var model = $parse(attrs.fileModel);
+                  var modelSetter = model.assign;
+                  
+                  element.bind('change', function(){
+                     scope.$apply(function(){
+                        modelSetter(scope, element[0].files[0]);
+                     });
+                  });
+               }
+            };
+         }]);

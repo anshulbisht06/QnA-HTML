@@ -1,6 +1,5 @@
 /* global $ */
 angular.module('QnA')
-    
     .directive('onlyNum', function() {
       return function(scope, element, attrs) {
 
@@ -14,7 +13,6 @@ angular.module('QnA')
                 });
                 event.preventDefault();
             }
-
         });
      };
   })
@@ -43,7 +41,7 @@ angular.module('QnA')
             }
         var data = {};
         $scope.postLogout = function logout() {
-          return $http.post('http://localhost:8000/logout/', data, config)
+          return $http.post(baseURL+'logout/', data, config)
             .success(function(data, status, headers, config) {
             $cookies.remove('token');
             $cookies.remove('username');
@@ -79,6 +77,7 @@ angular.module('QnA')
         $rootScope.token = undefined;
 
         $scope.postLogin = function () {
+
            // use $.param jQuery function to serialize data from JSON 
             var data = $.param({
                 username: $scope.username,
@@ -91,9 +90,22 @@ angular.module('QnA')
                 }
             }
 
-            $http.post('http://localhost:8000/login/', data, config)
+            $http.post(baseURL+'login/', data, config)
             .success(function (data, status, headers, config) {
                 $scope.postDataResponse = data;
+                var expireDate = new Date();
+
+                if($scope.remember){
+                    expireDate.setDate(expireDate.getDate() + 1);
+                }
+
+                options={
+                    path : '/',
+                    secure: true,
+                    expires: expireDate
+
+                };
+
                 $cookies.put('token', data.token);
                 $cookies.put('username', data.username);
                 $cookies.put('user', data.userID);
@@ -102,7 +114,7 @@ angular.module('QnA')
                 $scope.alertType = "success";
                 $scope.alertMsg = "Successfully login.";
                 // $route.reload();
-                $state.go('app');
+                $state.go('app.create-quiz');
             })
             .error(function (data, status, header, config) {
                 $scope.isFormInvalid = true;
@@ -338,22 +350,30 @@ angular.module('QnA')
                 var all = $scope.optionss;
                 $scope.optionss = all.filter(function(el) { return el.optionid != op_id; });
             }
-        };
-
+        };        
+    }])
+    
+    .controller('XlsHandlerController',['$scope', '$http', 'fileUpload', function($scope, $http, fileUpload){
         // Function for download xls file on any type of quetions .... ;)
-        $scope.downloadDemoXls = function(que_type, quiz_name){
-            console.log(que_type, quiz_name)
-                $scope.allSubCategories = QuestionsFactory.getXlsForUpload($cookies.get('token'), que_type, quiz_name).query(
-            function(response) {
-                console.log('que_type, quiz_name')
-            },
-            function(response) {
-                console.log('ERROR .................')
-                // $scope.errors = response.data;
-                // $scope.unableToGetAllSubCategories = true;
+        $scope.downloadDemoXls = function(que_type, sub_cat_info){
+            // console.log(token)
+            $http.post(baseURL+"quiz/question/download/xls/", {que_type:que_type,
+                sub_cat_info:sub_cat_info}, { responseType: 'arraybuffer' })
+              .success(function(data) {
+                var file = new Blob([data], { type: 'application/xls' });
+                saveAs(file, sub_cat_info.split('>>')[1]+'.xls');
             });
             };
-        }
+
+        $scope.uploadFile = function(){
+               var file = $scope.myFile;
+               
+               console.log('file is ' );
+               console.dir(file);
+               
+               var uploadUrl = baseURL+"question/test/";
+               fileUpload.uploadFileToUrl(file, uploadUrl);
+            };
     }])
 
     .controller('UpdateQuestionController', ['$scope', '$controller', '$cookies', '$state', '$stateParams', 'QuestionsFactory', function($scope, $controller, $cookies, $state, $stateParams, QuestionsFactory) {

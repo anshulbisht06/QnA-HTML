@@ -24,7 +24,7 @@
 							</div>
 		  				</div>
 		  				<div class="col-md-6">
-		  				<textarea cols="80" rows="3" name="optioncontent" id="optioncontent-{{option.id}}" class="form-control" placeholder="Content for option - {{$index}}" required>{{ option.content }}</textarea>
+		  				<textarea cols="80" rows="3" name="optioncontent" id="optioncontent-{{option.id}}" class="form-control" placeholder="Content for option - {{$index}}" ng-model="updateAnswersForm.optionsContent[option.id]" required>{{ option.content }}</textarea>
 			    			<!-- <textarea cols="80" rows="3" name="optioncontent-{{option.optionid}}" id="optioncontent-{{option.optionid}}" class="form-control" ng-model="updateAnswersForm.optioncontent[option.optionid]" placeholder="Content for option - {{$index}}" required>{{ option.content }}</textarea><hr> -->
 		  				</div>
 				  	</div>
