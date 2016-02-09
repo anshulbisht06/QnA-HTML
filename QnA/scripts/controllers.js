@@ -225,12 +225,13 @@ angular.module('QnA')
 
     .controller('QuestionsController', ['$scope', '$controller', '$cookies', '$state' ,'QuestionsFactory', function($scope, $controller, $cookies, $state, QuestionsFactory) {
         $controller('CookiesController', {$scope : $scope});
-        var q ='';
-        $scope.getAllQuestions = QuestionsFactory.getAllQuestions($cookies.get('token'), $scope.user, 'all', 'all', 'all').query(
+        $scope.getAllQuestions = QuestionsFactory.getAllQuestions($cookies.get('token'), $scope.user).query(
             function(response) {
-                $scope.allQuestions = response;
-                $scope.questionsLevelInfo = $scope.allQuestions.questionsLevelInfo;
-                delete $scope.allQuestions.questionsLevelInfo;
+                $scope.AllQuizzes = response;
+                if($scope.AllQuizzes){
+                $scope.questionsLevelInfo = $scope.AllQuizzes[0].questions_level_info;
+                $scope.AllQuizzes.shift();
+                }
             },
             function(response) {
                 $scope.errors = response.data;
@@ -252,12 +253,33 @@ angular.module('QnA')
                     $scope.filterLevel = "hard";
                 }
                 else {
-                    $scope.filterLevel = "U";
+                    $scope.filterLevel = "Unknown";
                 }
             };
         $scope.isTabSelected = function(checkTab) {
                 return ($scope.tab === checkTab);
-            }; 
+            };
+
+        $scope.hoverOnQuestion = function(questionid){
+            $scope.isHoveredOver = true;
+        }
+        $scope.hoverOutQuestion = function(questionid){
+            $scope.isHoveredOver = false;
+        }
+        $scope.deleteQuestion = function(questionid){
+            var response = QuestionsFactory.deleteQuestion($cookies.get('token'), $scope.user, questionid).delete().$promise.then(
+                function(response){
+                    // $scope.alertType = "success";
+                    // $scope.alertMsg = "The question has been delete.";
+                    // $('#Q'+questionid).hide();
+                    window.location.reload();                   
+                },
+                function(response) {
+                    // $scope.alertType = "danger";
+                    // $scope.alertMsg = "Unable to delete the question. See below errors.";
+                    $scope.errors = response.data;
+                });
+        }
     }])
 
 
@@ -275,7 +297,6 @@ angular.module('QnA')
         }
         $scope.createQuestionForm = {content:"",explanation:"", level:"easy", answer_order:"random", sub_category:""};
         $scope.postQuestion = function() {
-            console.log($scope.createQuestionForm);
             var response = QuestionsFactory.createQuestion($cookies.get('token')).save($scope.createQuestionForm).$promise.then(
                 function(response){
                     $scope.alertType = "success";
@@ -316,7 +337,6 @@ angular.module('QnA')
             if(op_id > 2){
                 var all = $scope.optionss;
                 $scope.optionss = all.filter(function(el) { return el.optionid != op_id; });
-                console.log($scope.optionss);
             }
         };
 
@@ -333,5 +353,67 @@ angular.module('QnA')
                 // $scope.unableToGetAllSubCategories = true;
             });
             };
+        }
+    }])
 
+    .controller('UpdateQuestionController', ['$scope', '$controller', '$cookies', '$state', '$stateParams', 'QuestionsFactory', function($scope, $controller, $cookies, $state, $stateParams, QuestionsFactory) {
+        $controller('CookiesController', {$scope : $scope});
+        $scope.question = QuestionsFactory.getQuestion($cookies.get('token'), $scope.user, $stateParams.questionid).get()
+            .$promise.then(
+                function(response){
+                    $scope.question = response.question;
+                    $scope.updateQuestionForm = {content : $scope.question.content, level : $scope.question.level, explanation : $scope.question.explanation };
+                },
+                function(response) {
+                    $scope.unableToGetQuestion = response.data;
+                }
+            );
+        $scope.putQuestion = function() {
+            var response = QuestionsFactory.updateQuestion($cookies.get('token'), $scope.user, $stateParams.questionid).update($scope.updateQuestionForm).$promise.then(
+                function(response){
+                    $scope.alertType = "success";
+                    $scope.alertMsg = "Your question has been updated.";
+                    // $state.go('app.update-question');                     
+                },
+                function(response) {
+                    $scope.alertType = "danger";
+                    $scope.alertMsg = "Unable to update the question. See below errors.";
+                    $scope.errors = response.data;
+                });
+        }
+    }])
+    .controller('UpdateAnswersController', ['$scope', '$controller', '$cookies', '$state', '$stateParams', 'QuestionsFactory', function($scope, $controller, $cookies, $state, $stateParams, QuestionsFactory) {
+        $controller('CookiesController', {$scope : $scope});
+        $scope.answers = QuestionsFactory.getAnswers($cookies.get('token'), $scope.user, $stateParams.questionid).get()
+            .$promise.then(
+                function(response){
+                    $scope.answers = response.answers;
+                    actualAnswerID = "";
+                    optionsContent = {};
+                    for(var i=0;i<$scope.answers.options.length;i++){
+                        if($scope.answers.options[i].correct){
+                            actualAnswerID = $scope.answers.options[i].id;
+                        }
+                        optionsContent[$scope.answers.options[i].id] = $scope.answers.options[i].content;
+                    }
+                    $scope.updateAnswersForm = {correctOption : actualAnswerID.toString(), optionsContent : optionsContent};
+                    // $scope.updateQuestionForm = {content : $scope.question.content, level : $scope.question.level, explanation : $scope.question.explanation };
+                },
+                function(response) {
+                    $scope.unableToGetAnswers = response.data;
+                }
+            );
+        $scope.putAnswers = function() {
+            var response = QuestionsFactory.updateAnswers($cookies.get('token'), $scope.user, $stateParams.questionid).update($scope.updateAnswersForm).$promise.then(
+                function(response){
+                    $scope.alertType = "success";
+                    $scope.alertMsg = "Your answers has been updated.";
+                    // $state.go('app.update-question');                     
+                },
+                function(response) {
+                    $scope.alertType = "danger";
+                    $scope.alertMsg = "Unable to update the answers. See below errors.";
+                    $scope.errors = response.data;
+                });
+        }
     }]);

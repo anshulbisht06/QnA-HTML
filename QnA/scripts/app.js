@@ -102,7 +102,26 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                         templateUrl : 'views/createquestion.html'
                     }
                 }
+                })
+            .state('app.update-question', {
+                url:'update/question/:questionid',
+                views :{
+                    'content@': {
+                        controller  : 'UpdateQuestionController',
+                        templateUrl : 'views/updatequestion.html'
+                    }
+                }
+                })
+            .state('app.update-answers', {
+                url:'update/answers/:questionid',
+                views :{
+                    'content@': {
+                        controller  : 'UpdateAnswersController',
+                        templateUrl : 'views/updateanswers.html'
+                    }
+                }
                 });
+
 
         // $locationProvider.html5Mode(true);   
         $urlRouterProvider.otherwise('/');

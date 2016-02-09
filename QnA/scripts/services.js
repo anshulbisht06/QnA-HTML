@@ -93,11 +93,24 @@ angular.module('QnA')
 
 
     .service('QuestionsFactory', ['$resource', 'baseURL', function($resource, baseURL) {
-        questions = {'Clinical Audit - 1' : [], 'Clinical Audit - 2' : []};
-        this.getAllQuestions = function(token, userid, quizid, categoryid, subcategoryid){
-                return $resource(baseURL+"quiz/questions/get/"+userid+"/"+quizid+"/"+categoryid+"/"+subcategoryid+"/", null,
+        this.getAllQuestions = function(token, userid){
+                return $resource(baseURL+"quiz/questions/get/"+userid+"/", null,
                 {
                     query: {
+                    headers: {'Authorization': 'JWT ' + token},
+                    method : 'GET',
+                    isArray : true,
+                    }
+                },
+                { stripTrailingSlashes: false }
+                );
+        };
+
+
+        this.getQuestion = function(token, userid, questionid){
+                return $resource(baseURL+"quiz/question/"+userid+"/"+questionid+"/", null,
+                {
+                    get: {
                     headers: {'Authorization': 'JWT ' + token},
                     method : 'GET',
                     isArray : false,
@@ -106,38 +119,6 @@ angular.module('QnA')
                 { stripTrailingSlashes: false }
                 );
         };
-
-
-        // for(var i=0;i<30;i++){
-        //     l = levels[Math.floor(Math.random() * levels.length)];
-        //     if(l==='E')
-        //         totalEasyQuestions+=1;
-        //     if(l==='M')
-        //         totalMediumQuestions+=1;
-        //     if(l==='H')
-        //         totalHardQuestions+=1;
-        //     q = {
-                    // id : i,
-                    // level : l,
-                    // question : 'If during a clinical audit "all/most standards were not met", the next course of action must be _____.',
-                    // options : [
-                    //     { id : 0, content : 'After action has been implemented, repeat data collection only for those standards not met', correct : false}, 
-                    //     { id : 1, content : 'After action has been implemented, repeat entire clinical audit process', correct : true},
-                    //     { id : 2, content : 'Repeat clinical audit process at a later date to ensure that this is maintained', correct : false},
-                    //     { id : 3, content : 'Review and modify standards – repeat entire clinical audit', correct : false},
-                    //     ]            
-        //         }
-        //     questions['Clinical Audit - 1'].push(q);
-        //     questions['Clinical Audit - 2'].push(q);
-        // }
-        // this.questions = questions;
-        // this.totalQuestions = totalHardQuestions+totalEasyQuestions+totalMediumQuestions;
-        // this.totalHardQuestions = totalHardQuestions;
-        // this.totalEasyQuestions = totalEasyQuestions;
-        // this.totalMediumQuestions = totalMediumQuestions;
-
-
-
 
         this.createQuestion = function(token){
             return $resource(baseURL+"question/mcq/create/", null,
@@ -152,6 +133,40 @@ angular.module('QnA')
             return $resource(baseURL+"question/download/xls?que_type="+que_type, null,
                     {'save':
                     { method:'GET', headers: {'Authorization': 'JWT ' + token}} 
+
+        this.updateQuestion = function(token, userid, questionid){
+            return $resource(baseURL+"quiz/question/"+userid+"/"+questionid+"/", null,
+                    {'update':   
+                    { method:'PUT', headers: {'Authorization': 'JWT ' + token}} 
+                    },
+                    { stripTrailingSlashes: false }
+                    );
+        }
+        this.deleteQuestion = function(token, userid, questionid){
+            return $resource(baseURL+"quiz/question/"+userid+"/"+questionid+"/", null,
+                    {'delete':   
+                    { method:'DELETE', headers: {'Authorization': 'JWT ' + token}} 
+                    },
+                    { stripTrailingSlashes: false }
+                    );
+        }
+
+        this.getAnswers = function(token, userid, questionid){
+                return $resource(baseURL+"quiz/answers/"+userid+"/"+questionid+"/", null,
+                {
+                    get: {
+                    headers: {'Authorization': 'JWT ' + token},
+                    method : 'GET',
+                    isArray : false,
+                    }
+                },
+                { stripTrailingSlashes: false }
+                );
+        };
+        this.updateAnswers = function(token, userid, questionid){
+            return $resource(baseURL+"quiz/answers/"+userid+"/"+questionid+"/", null,
+                    {'update':   
+                    { method:'PUT', headers: {'Authorization': 'JWT ' + token}} 
                     },
                     { stripTrailingSlashes: false }
                     );

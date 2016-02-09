@@ -26,3 +26,9 @@ a.list-group-item:selection{
 .red-text{
 	color:red;
 }
+.option-content{
+white-space: pre-line;
+}
+.options{
+	margin-top: 3px;
+}
