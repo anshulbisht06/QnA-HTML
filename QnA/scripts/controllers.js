@@ -24,8 +24,7 @@ angular.module('QnA')
         $rootScope.username = $cookies.get('username');
         $rootScope.token = $cookies.get('token');
         if($rootScope.token === undefined){
-            $state.go('app.login-user');
-
+            $state.go('app.login-user');    
         }
     }])
 
@@ -244,13 +243,13 @@ angular.module('QnA')
                     $scope.filterLevel = false;
                 }              
                 else if (setTab === 2) {
-                    $scope.filterLevel = "E";
+                    $scope.filterLevel = "easy";
                 }
                 else if (setTab === 3) {
-                    $scope.filterLevel = "M";
+                    $scope.filterLevel = "medium";
                 }
                 else if (setTab === 4) {
-                    $scope.filterLevel = "H";
+                    $scope.filterLevel = "hard";
                 }
                 else {
                     $scope.filterLevel = "U";
@@ -274,14 +273,14 @@ angular.module('QnA')
                 $scope.unableToGetAllSubCategories = true;
             });
         }
-        $scope.createQuestionForm = {content:"",explanation:"", level:"E", answer_order:"random", sub_category:""};
+        $scope.createQuestionForm = {content:"",explanation:"", level:"easy", answer_order:"random", sub_category:""};
         $scope.postQuestion = function() {
             console.log($scope.createQuestionForm);
             var response = QuestionsFactory.createQuestion($cookies.get('token')).save($scope.createQuestionForm).$promise.then(
                 function(response){
                     $scope.alertType = "success";
                     $scope.alertMsg = "Your question has been created.";
-                    $scope.createQuestionForm = {content:"",explanation:"", level:"E", answer_order:"random", sub_category:""};
+                    $scope.createQuestionForm = {content:"",explanation:"", level:"easy", answer_order:"random", sub_category:""};
                     $scope.questionCreateForm.$setPristine();
                     $state.go('app.create-question');                     
                 },
@@ -319,5 +318,20 @@ angular.module('QnA')
                 $scope.optionss = all.filter(function(el) { return el.optionid != op_id; });
                 console.log($scope.optionss);
             }
-        }
+        };
+
+        // Function for download xls file on any type of quetions .... ;)
+        $scope.downloadDemoXls = function(que_type, quiz_name){
+            console.log(que_type, quiz_name)
+                $scope.allSubCategories = QuestionsFactory.getXlsForUpload($cookies.get('token'), que_type, quiz_name).query(
+            function(response) {
+                console.log('que_type, quiz_name')
+            },
+            function(response) {
+                console.log('ERROR .................')
+                // $scope.errors = response.data;
+                // $scope.unableToGetAllSubCategories = true;
+            });
+            };
+
     }]);

@@ -35,7 +35,7 @@ angular.module('QnA')
                         method : 'GET',
                         isArray : true,
                         }
-                    },
+                    }                                                                                                                                                                                                                                                                                                                                                                                                             ,
                     { stripTrailingSlashes: false }
                     );
         }
@@ -106,6 +106,8 @@ angular.module('QnA')
                 { stripTrailingSlashes: false }
                 );
         };
+
+
         // for(var i=0;i<30;i++){
         //     l = levels[Math.floor(Math.random() * levels.length)];
         //     if(l==='E')
@@ -141,6 +143,15 @@ angular.module('QnA')
             return $resource(baseURL+"question/mcq/create/", null,
                     {'save':   
                     { method:'POST', headers: {'Authorization': 'JWT ' + token}} 
+                    },
+                    { stripTrailingSlashes: false }
+                    );
+        }
+
+        this.getXlsForUpload = function(token, que_type, quiz_name){
+            return $resource(baseURL+"question/download/xls?que_type="+que_type, null,
+                    {'save':
+                    { method:'GET', headers: {'Authorization': 'JWT ' + token}} 
                     },
                     { stripTrailingSlashes: false }
                     );
