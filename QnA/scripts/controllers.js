@@ -1,6 +1,6 @@
 /* global $ */
 angular.module('QnA')
-    
+    .constant("baseURL","http://localhost:8000/")
     .directive('onlyNum', function() {
       return function(scope, element, attrs) {
 
@@ -25,7 +25,6 @@ angular.module('QnA')
         $rootScope.token = $cookies.get('token');
         if($rootScope.token === undefined){
             $state.go('app.login-user');
-
         }
     }])
 
@@ -35,7 +34,7 @@ angular.module('QnA')
     }])
 
 
-    .controller('LogoutController', ['$scope', '$http', '$state','$cookies', function($scope, $http, $state, $cookies) {
+    .controller('LogoutController', ['$scope', '$http', '$state','$cookies', 'baseURL', function($scope, $http, $state, $cookies, baseURL) {
         var config = {
                 headers : {
                     'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;',
@@ -44,7 +43,7 @@ angular.module('QnA')
             }
         var data = {};
         $scope.postLogout = function logout() {
-          return $http.post('http://localhost:8000/logout/', data, config)
+          return $http.post(baseURL+'logout/', data, config)
             .success(function(data, status, headers, config) {
             $cookies.remove('token');
             $cookies.remove('username');
@@ -61,7 +60,7 @@ angular.module('QnA')
     .controller('UserRegisterController', ['$scope', 'UserRegisterFactory', function($scope, UserRegisterFactory) {
         $scope.registerUserForm = {username:"",email:"",password:"",first_name:""};
         $scope.postRegister = function() { 
-            var response = UserRegisterFactory.createUser().save($scope.registerUserForm).$promise.then(
+            UserRegisterFactory.createUser().save($scope.registerUserForm).$promise.then(
                 function(response){
                     $scope.isFormInvalid = false;
                     $scope.userRegisterForm.$setPristine();
@@ -74,7 +73,7 @@ angular.module('QnA')
     }])     
 
 
-    .controller("LoginController",[ '$scope', '$rootScope', '$http', '$state', '$cookies', function ($scope, $rootScope, $http, $state, $cookies) {
+    .controller("LoginController",[ '$scope', '$rootScope', '$http', '$state', '$cookies', 'baseURL', function ($scope, $rootScope, $http, $state, $cookies, baseURL) {
         $rootScope.user = undefined;
         $rootScope.username = undefined;
         $rootScope.token = undefined;
@@ -92,7 +91,7 @@ angular.module('QnA')
                 }
             }
 
-            $http.post('http://localhost:8000/login/', data, config)
+            $http.post(baseURL+'login/', data, config)
             .success(function (data, status, headers, config) {
                 $scope.postDataResponse = data;
                 $cookies.put('token', data.token);
@@ -100,10 +99,10 @@ angular.module('QnA')
                 $cookies.put('user', data.userID);
 
                 $scope.isFormInvalid = false;
-                $scope.alertType = "success";
-                $scope.alertMsg = "Successfully login.";
+                // $scope.alertType = "success";
+                // $scope.alertMsg = "Successfully login.";
                 // $route.reload();
-                $state.go('app');
+                $state.go('app.all-quiz');
             })
             .error(function (data, status, header, config) {
                 $scope.isFormInvalid = true;
@@ -115,12 +114,12 @@ angular.module('QnA')
     }])
 
 
-    .controller('CreateQuizController', ['$scope', '$controller', '$state', '$cookies', 'QuestionsFactory','QuizFactory', function($scope, $controller, $state, $cookies, QuestionsFactory, QuizFactory) {
+    .controller('CreateQuizController', ['$scope', '$controller', '$state', '$cookies', 'QuestionsFactory','QuizFactory', 'CategoryFactory', function($scope, $controller, $state, $cookies, QuestionsFactory, QuizFactory, CategoryFactory) {
         $controller('CookiesController', {$scope : $scope});
         $scope.createQuizForm = {title:"",description:"",url:"",category:"",random_order:false,answers_at_end:false,single_attempt:false,exam_paper:false,max_questions:"",pass_mark:"",success_text:"",fail_text:""};
         $scope.postQuiz = function() {
             $scope.createQuizForm.user = $scope.user;
-            var response = QuizFactory.createQuiz($cookies.get('token')).save($scope.createQuizForm).$promise.then(
+            QuizFactory.createQuiz($cookies.get('token')).save($scope.createQuizForm).$promise.then(
                 function(response){
                     $scope.isFormInvalid = false;
                     $scope.alertType = "success";
@@ -136,15 +135,24 @@ angular.module('QnA')
                     $scope.errors = response.data;
                 }); 
         }
-
-
+        $scope.getCategories = function(quizid, quiztitle){
+            CategoryFactory.getAllCategories($cookies.get('token'), $scope.user, parseInt(quizid)).query(
+            function(response){
+                $scope.allCategories = response;
+                $scope.quiztitle = quiztitle;
+                $('#categoriesModal').modal('toggle');
+            },
+            function(response){
+                $scope.unableToGetAllCategories = "Unable to get your categories.";
+        });
+        }
     }])
 
 
     .controller('CreateCategoryController', ['$scope','$state', '$controller', '$cookies', 'CategoryFactory', 'QuizFactory','$stateParams', function($scope, $state, $controller, $cookies, CategoryFactory, QuizFactory, $stateParams) {
         $controller('CookiesController', {$scope : $scope});
         if($scope.user){
-            $scope.getAllQuiz = QuizFactory.getAllQuiz($cookies.get('token'), $scope.user, "all").query(
+            QuizFactory.getAllQuiz($cookies.get('token'), $scope.user, "all").query(
             function(response){
                 $scope.allQuiz = response;
             },
@@ -165,7 +173,7 @@ angular.module('QnA')
         }
 
         $scope.postCategory = function() { 
-            var response = CategoryFactory.createCategory($cookies.get('token')).save($scope.createCategoryform).$promise.then(
+            CategoryFactory.createCategory($cookies.get('token')).save($scope.createCategoryform).$promise.then(
                 function(response){
                     $scope.isFormInvalid = false;
                     $scope.alertType = "success";
@@ -189,16 +197,14 @@ angular.module('QnA')
 
     .controller('CreateSubCategoryController', ['$scope','$state', '$controller', '$cookies', 'CategoryFactory', 'SubCategoryFactory','$stateParams', function($scope, $state, $controller, $cookies, CategoryFactory, SubCategoryFactory, $stateParams) {
         $controller('CookiesController', {$scope : $scope});
-        if($scope.user){
-            $scope.getAllCategories = CategoryFactory.getAllCategories($cookies.get('token'), $scope.user, "all").query(
-            function(response){
-                $scope.allCategories = response;
-            },
-            function(response){
-                $scope.unableToGetAllCategories = true;
-                $scope.errors = "Unable to get your categories.";
-            });
-        }
+        CategoryFactory.getAllCategories($cookies.get('token'), $scope.user, "all").query(
+        function(response){
+            $scope.allCategories = response;
+        },
+        function(response){
+            $scope.unableToGetAllCategories = true;
+            $scope.errors = "Unable to get your categories.";
+        });
         $scope.categoryid = $stateParams.obj ? $stateParams.obj.categoryid.toString() : "";
         if($scope.categoryid){
             $scope.alertType = "info";
@@ -226,12 +232,12 @@ angular.module('QnA')
 
     .controller('QuestionsController', ['$scope', '$controller', '$cookies', '$state' ,'QuestionsFactory', function($scope, $controller, $cookies, $state, QuestionsFactory) {
         $controller('CookiesController', {$scope : $scope});
-        $scope.getAllQuestions = QuestionsFactory.getAllQuestions($cookies.get('token'), $scope.user).query(
+        QuestionsFactory.getAllQuestions($cookies.get('token'), $scope.user).query(
             function(response) {
-                $scope.AllQuizzes = response;
-                if($scope.AllQuizzes){
-                $scope.questionsLevelInfo = $scope.AllQuizzes[0].questions_level_info;
-                $scope.AllQuizzes.shift();
+                $scope.allQuestions = response;
+                if($scope.allQuestions){
+                $scope.questionsLevelInfo = $scope.allQuestions[0].questions_level_info;
+                $scope.allQuestions.shift();
                 }
             },
             function(response) {
@@ -281,13 +287,19 @@ angular.module('QnA')
                     $scope.errors = response.data;
                 });
         }
+        $scope.quizNotSelected = true;
+        $scope.quizSelected = function(selectedQuizCategories){
+            $scope.quizNotSelected = false;
+            $scope.categoryNotSelected = true;
+            $scope.categories = selectedQuizCategories;
+        }     
     }])
 
 
     .controller('CreateQuestionController', ['$scope', '$controller', '$cookies', '$state', 'QuizFactory', 'CategoryFactory', 'SubCategoryFactory', 'QuestionsFactory', function($scope, $controller, $cookies, $state, QuizFactory, CategoryFactory, SubCategoryFactory, QuestionsFactory) {
         $controller('CookiesController', {$scope : $scope});
         if($scope.user){
-        $scope.allSubCategories = SubCategoryFactory.getAllSubcategories($cookies.get('token'), $scope.user, 'all', 'all').query(
+        SubCategoryFactory.getAllSubcategories($cookies.get('token'), $scope.user, 'all', 'all').query(
             function(response) {
                 $scope.subCategories = response;
             },
@@ -341,9 +353,11 @@ angular.module('QnA')
             }
         }
     }])
+
+
     .controller('UpdateQuestionController', ['$scope', '$controller', '$cookies', '$state', '$stateParams', 'QuestionsFactory', function($scope, $controller, $cookies, $state, $stateParams, QuestionsFactory) {
         $controller('CookiesController', {$scope : $scope});
-        $scope.question = QuestionsFactory.getQuestion($cookies.get('token'), $scope.user, $stateParams.questionid).get()
+        QuestionsFactory.getQuestion($cookies.get('token'), $scope.user, $stateParams.questionid).get()
             .$promise.then(
                 function(response){
                     $scope.question = response.question;
@@ -354,7 +368,7 @@ angular.module('QnA')
                 }
             );
         $scope.putQuestion = function() {
-            var response = QuestionsFactory.updateQuestion($cookies.get('token'), $scope.user, $stateParams.questionid).update($scope.updateQuestionForm).$promise.then(
+            QuestionsFactory.updateQuestion($cookies.get('token'), $scope.user, $stateParams.questionid).update($scope.updateQuestionForm).$promise.then(
                 function(response){
                     $scope.alertType = "success";
                     $scope.alertMsg = "Your question has been updated.";
@@ -367,9 +381,11 @@ angular.module('QnA')
                 });
         }
     }])
+
+
     .controller('UpdateAnswersController', ['$scope', '$controller', '$cookies', '$state', '$stateParams', 'QuestionsFactory', function($scope, $controller, $cookies, $state, $stateParams, QuestionsFactory) {
         $controller('CookiesController', {$scope : $scope});
-        $scope.answers = QuestionsFactory.getAnswers($cookies.get('token'), $scope.user, $stateParams.questionid).get()
+        QuestionsFactory.getAnswers($cookies.get('token'), $scope.user, $stateParams.questionid).get()
             .$promise.then(
                 function(response){
                     $scope.answers = response.answers;
@@ -389,7 +405,7 @@ angular.module('QnA')
                 }
             );
         $scope.putAnswers = function() {
-            var response = QuestionsFactory.updateAnswers($cookies.get('token'), $scope.user, $stateParams.questionid).update($scope.updateAnswersForm).$promise.then(
+            QuestionsFactory.updateAnswers($cookies.get('token'), $scope.user, $stateParams.questionid).update($scope.updateAnswersForm).$promise.then(
                 function(response){
                     $scope.alertType = "success";
                     $scope.alertMsg = "Your answers has been updated.";
@@ -401,4 +417,45 @@ angular.module('QnA')
                     $scope.errors = response.data;
                 });
         }
-    }]);
+    }])
+
+
+    .controller('ViewUpdateQuizController', ['$scope', '$controller', '$cookies', '$state', '$stateParams', 'QuizFactory', function($scope, $controller, $cookies, $state, $stateParams, QuizFactory) {
+            $controller('CookiesController', {$scope : $scope});
+            QuizFactory.getQuiz($cookies.get('token'), $scope.user, $stateParams.quizid).get()
+            .$promise.then(
+                function(response){
+                    $scope.quiz = response;
+                },
+                function(response) {
+                    $scope.unableToGetQuiz = response.data;
+                }
+            );
+            $scope.editorEnabled = false;
+  
+            $scope.enableEditor = function() {
+                $scope.editorEnabled = true;
+            };
+
+            $scope.putQuiz = function() {
+                QuizFactory.updateQuiz($cookies.get('token'), $scope.user, $stateParams.quizid).update($scope.quiz).$promise.then(
+                function(response){
+                    $scope.alertType = "success";
+                    $scope.alertMsg = "Your quiz details has been updated.";
+                    $scope.editorEnabled = false;
+                },
+                function(response) {
+                    $scope.alertType = "danger";
+                    $scope.alertMsg = "Unable to update the quiz details. See below errors.";
+                    $scope.errors = response.data;
+                    $scope.editorEnabled = true;
+                });
+            }
+        }])
+
+
+        .controller('ViewQuizCategoriesController', ['$scope', '$controller', '$cookies', '$state', '$stateParams', 'CategoryFactory', function($scope, $controller, $cookies, $state, $stateParams, CategoryFactory) {
+            $controller('CookiesController', {$scope : $scope});
+
+            
+        }]);

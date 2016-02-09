@@ -52,11 +52,11 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                 })
 
             .state('app.all-quiz', {
-                url:'my/quizies/',
+                url:'quiz/all/',
                 views :{
                     'content@': {
                         controller  : 'CreateQuizController',
-                        templateUrl : 'views/my_tests.html'
+                        templateUrl : 'views/allquizzes.html'
                     }
                 }
                 })
@@ -120,7 +120,25 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                         templateUrl : 'views/updateanswers.html'
                     }
                 }
-                });
+                })
+            .state('app.view-quiz', {
+                url:'quiz/:quizid',
+                views :{
+                    'content@': {
+                        controller  : 'ViewUpdateQuizController',
+                        templateUrl : 'views/viewupdatequiz.html'
+                    }
+                }
+                })
+            // .state('app.view-categories', {
+            //     url:'quiz/:quizid/:categoryid/',
+            //     views :{
+            //         'content@': {
+            //             controller  : 'ViewQuizCategoriesController',
+            //             templateUrl : 'views/viewcategories.html'
+            //         }
+            //     }
+            //     });
 
 
         // $locationProvider.html5Mode(true);   

@@ -39,6 +39,26 @@ angular.module('QnA')
                     { stripTrailingSlashes: false }
                     );
         }
+        this.getQuiz = function(token, userid, quizid){
+            return $resource(baseURL+"quiz/detail/"+userid+"/"+quizid+"/", null,
+                    {
+                        get: {
+                        headers: {'Authorization': 'JWT ' + token},
+                        method : 'GET',
+                        isArray : false,
+                        }
+                    },
+                    { stripTrailingSlashes: false }
+                    );
+        }
+        this.updateQuiz = function(token, userid, questionid){
+            return $resource(baseURL+"quiz/update/"+userid+"/"+questionid+"/", null,
+                    {'update':   
+                    { method:'PUT', headers: {'Authorization': 'JWT ' + token}} 
+                    },
+                    { stripTrailingSlashes: false }
+                    );
+        }
     }])
 
 
@@ -61,6 +81,18 @@ angular.module('QnA')
             headers: {'Authorization': 'JWT ' + token},
             method : 'GET',
             isArray : true,
+            }
+        },
+        { stripTrailingSlashes: false }
+        )};
+
+        this.getCategory = function(token, userid, quizid, categoryid){
+        return $resource(baseURL+"quiz/category/get/"+userid+"/"+quizid+"/"+categoryid+"/", null,
+        {
+            get: {
+            headers: {'Authorization': 'JWT ' + token},
+            method : 'GET',
+            isArray : false,
             }
         },
         { stripTrailingSlashes: false }

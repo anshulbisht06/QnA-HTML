@@ -10,6 +10,7 @@ header{
 }
 a:hover{
 	cursor: pointer;
+	text-decoration: none;
 }
 .jumbotron{
 	background-color: white;
@@ -31,4 +32,10 @@ white-space: pre-line;
 }
 .options{
 	margin-top: 3px;
+}
+a{
+	text-decoration: none;
+}
+ul.quizlist > li{
+	margin-top: 5px;
 }
