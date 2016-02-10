@@ -1,6 +1,5 @@
 <div class="container-fluid">
 <div ng-include src="'views/alertmsg.html'"></div>
-
 <div class="jumbotron">
     <div class="row">
     </div>
@@ -12,18 +11,18 @@
 		<div class="col-lg-2 col-md-2 col-sm-2"></div>
 		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
 			<form role="form" name="quizCreateForm" ng-submit="postQuiz()" novalidate>
-			  
+
 			  <div class="form-group" ng-class="{'has-error': errors.title || quizCreateForm.title.$touched && quizCreateForm.title.$error.required  }">
 			    <label for="title">Title <span class="red-text">*</span></label>
 			    <input type="text" maxlength="60" class="form-control" id="title" name="title" ng-model="createQuizForm.title" required>
 			    <br/>
 			    <span ng-if="errors.title" class="help-block">{{ errors.title[0] }}</span>
 			    <span ng-if="quizCreateForm.title.$touched && quizCreateForm.title.$error.required" class="help-block">Quiz title is required.</span>
-			  </div>
-			  
+			  </div>		
+			  	  
 			  <div class="form-group" ng-class="{'has-error': quizCreateForm.description.$error.minlength }">
 			    <label for="description">Description</label>
-			    <textarea name="description" ng-minlength="20" id="description" rows="4" class="form-control" ng-model="createQuizForm.description">		    
+			    <textarea name="description" ng-minlength="20" id="description" rows="4" class="form-control" ng-model="createQuizForm.description">    
 			    </textarea>
 			    <span ng-if="quizCreateForm.description.$error.minlength">Must be atleast 20 characters long.</span>
 			  </div>
@@ -35,11 +34,11 @@
 			    <span ng-if="quizCreateForm.url.$touched && quizCreateForm.url.$error.required" class="help-block">Quiz URL is required.</span>
 			  </div>
 
-			  <div class="form-group">
+			 <!--  <div class="form-group">
 			    <label for="category">Category </label>
 			    <input type="text" maxlength="60" class="form-control" id="category" name="category" ng-model="createQuizForm.category">
 			  </div>
-
+ -->
 			  <div class="row">
 				<div class="col-lg-6 col-md-6 col-sm-6">
 				  <div class="checkbox">
