@@ -12,30 +12,21 @@
 		<div class="col-lg-1 col-md-1 col-sm-1"></div>
 		<div class="col-lg-3 col-md-3 col-sm-3">
 			<div class="panel panel-info">
-				<div class="row" style="margin: auto;" ng-if="quizNotSelected">
-					<ul style="list-style-type: none;" class="quizlist">
-						<div class="row" ng-if="allQuestions" ng-repeat="quiz in allQuestions">
-							<div class="col-lg-1 col-md-1 col-sm-1">
-								<span class="glyphicon glyphicon-expand" ng-if="quiz.categories.length!=0" ng-click="quizSelected(quiz.categories)"></span>
-							</div>
-							<div class="col-lg-10 col-md-10 col-sm-10">
-								<li>{{quiz.title | capitalize}}</li>
-							</div>
-							<div class="col-lg-1 col-md-1 col-sm-1"></div>
-						</div>
+				<div class="row sidemenurow" style="margin: auto;" ng-if="quizNotSelected">
+					<ul style="list-style-type: none;" class="sidemenu">
+						<li ng-if="allQuizzes" ng-repeat="quiz in allQuizzes" ng-click="filterQuiz(quiz.id)"><span title="Go inside" class="glyphicon glyphicon-expand left" ng-if="quiz.categories" ng-click="quizSelected(quiz.id, quiz.title , quiz.categories)"></span>&nbsp;&nbsp;{{quiz.title|capitalize}}</li>
 					</ul>
 				</div>
 				<div class="row" style="margin: auto;" ng-if="categoryNotSelected && !quizNotSelected">
-					<ul style="list-style-type: none;" class="quizlist">
-						<div class="row" ng-if="categories" ng-repeat="category in categories">
-							<div class="col-lg-1 col-md-1 col-sm-1">
-								<span class="glyphicon glyphicon-expand" ng-if="quiz.subcategories.length!=0"></span>
-							</div>
-							<div class="col-lg-10 col-md-10 col-sm-10">
-								<li ng-click="quizSelected()">{{category.category}}</li>
-							</div>
-							<div class="col-lg-1 col-md-1 col-sm-1"></div>
-						</div>
+				<p style="margin-top:10px;margin-left: 5px;color:blue;"><span  title="Go back" class="glyphicon glyphicon-arrow-left back" ng-click="quizDeselected()"></span> &nbsp;{{ selectedQuizTitle|capitalize }}</p>
+					<ul style="list-style-type: none;" class="sidemenu">
+						<li ng-if="categorieslist" ng-repeat="category in categorieslist" ng-click="filterCategory(selectedQuizId, category.id)"><span class="glyphicon glyphicon-expand left" ng-if="quiz.subcategories.length!=0" ng-click="categorySelected(category.id, category.category, category.subcategories)" title="Go inside" ></span>&nbsp;&nbsp;{{category.category|capitalize}}</li>
+					</ul>
+				</div>
+				<div class="row" style="margin: auto;" ng-if="subcategoryNotSelected && !categoryNotSelected && !quizNotSelected">
+				<p style="margin-top:10px;margin-left: 5px;color:blue;"><span title="Go back" class="glyphicon glyphicon-arrow-left back" ng-click="categoryDeselected()"></span> &nbsp;{{ selectedCategoryName|capitalize }}</p>
+					<ul style="list-style-type: none;" class="sidemenu">
+						<li ng-if="subcategorieslist" ng-repeat="subcategory in subcategorieslist" ng-click="filterSubCategory(selectedQuizId, selectedCategoryId, subcategory.id)"><span class="glyphicon glyphicon-minus left"></span>&nbsp;&nbsp;{{subcategory.subcategory|capitalize}}</li>
 					</ul>
 				</div>
 			</div>
@@ -109,7 +100,7 @@
 				</div>
 			</div>
 			<div class="row text-center" ng-if="!allQuestions">
-				<h3>No quiz found!!!</h3>
+				<h3>No questions available. First select a quiz/category/subcategory.</h3>
 			</div>
 		</div> 
 	</div>
