@@ -36,6 +36,9 @@ white-space: pre-line;
 a{
 	text-decoration: none;
 }
-ul.quizlist > li{
-	margin-top: 5px;
+ul.sidemenu{
+	cursor: pointer;
+}
+ul.sidemenu > li{
+	margin-top: 20px;
 }

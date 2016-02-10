@@ -230,11 +230,11 @@ angular.module('QnA')
 
 
 
-    .controller('QuestionsController', ['$scope', '$controller', '$cookies', '$state' ,'QuestionsFactory', function($scope, $controller, $cookies, $state, QuestionsFactory) {
+    .controller('QuestionsController', ['$scope', '$controller', '$cookies', '$state', '$http', 'QuestionsFactory', function($scope, $controller, $cookies, $state, $http, QuestionsFactory) {
         $controller('CookiesController', {$scope : $scope});
         QuestionsFactory.getAllQuestions($cookies.get('token'), $scope.user).query(
             function(response) {
-                $scope.allQuestions = response;
+                $scope.allQuizzes = response;
                 if($scope.allQuestions){
                 $scope.questionsLevelInfo = $scope.allQuestions[0].questions_level_info;
                 $scope.allQuestions.shift();
@@ -288,11 +288,76 @@ angular.module('QnA')
                 });
         }
         $scope.quizNotSelected = true;
-        $scope.quizSelected = function(selectedQuizCategories){
+        $scope.quizSelected = function(selectedQuizId, selectedQuizTitle, selectedCategories){
+            $scope.quizNotSelected = false;
+            $scope.selectedQuizId = selectedQuizId;
+            $scope.selectedQuizTitle = selectedQuizTitle;
+            $scope.categoryNotSelected = true;
+            $scope.categorieslist = selectedCategories;
+        } 
+        $scope.quizDeselected = function(){
+            $scope.quizNotSelected = true;
+            delete $scope.selectedQuizId;
+            delete $scope.selectedQuizTitle;
+            $scope.categoryNotSelected = true;
+            delete $scope.categorieslist;
+        }
+        $scope.categorySelected = function(selectedCategoryId, selectedCategoryName, selectedSubCategories){
+            $scope.quizNotSelected = false;
+            $scope.categoryNotSelected = false;
+            $scope.selectedCategoryId = selectedCategoryId;
+            $scope.selectedCategoryName = selectedCategoryName;
+            $scope.subcategoryNotSelected = true;
+            $scope.subcategorieslist = selectedSubCategories;
+        }
+        $scope.categoryDeselected = function(){
             $scope.quizNotSelected = false;
             $scope.categoryNotSelected = true;
-            $scope.categories = selectedQuizCategories;
-        }     
+            delete $scope.subcategorieslist;
+        }
+        $scope.filterQuiz = function(quizid){
+            // $scope.filterByQuiz = selectedQuiz;
+            QuestionsFactory.getQuestionUnderQuiz($cookies.get('token'), $scope.user, quizid).query(
+            function(response) {
+                $scope.allQuestions = response;
+                if($scope.allQuestions){
+                $scope.questionsLevelInfo = $scope.allQuestions[0].questions_level_info;
+                $scope.allQuestions.shift();
+                }
+            },
+            function(response) {
+                $scope.errors = response.data;
+            });
+        }
+
+        $scope.filterCategory = function(quizid, categoryid){
+            // $scope.filterByCategory = selectedCategory;
+            QuestionsFactory.getQuestionUnderCategory($cookies.get('token'), $scope.user, quizid, categoryid).query(
+            function(response) {
+                $scope.allQuestions = response;
+                if($scope.allQuestions){
+                $scope.questionsLevelInfo = $scope.allQuestions[0].questions_level_info;
+                $scope.allQuestions.shift();
+                }
+            },
+            function(response) {
+                $scope.errors = response.data;
+            });
+        }
+        $scope.filterSubCategory = function(quizid, categoryid, subcategoryid){
+            // $scope.filterBySubCategory = selectedSubCategory;
+            QuestionsFactory.getQuestionUnderSubCategory($cookies.get('token'), $scope.user, quizid, categoryid, subcategoryid).query(
+            function(response) {
+                $scope.allQuestions = response;
+                if($scope.allQuestions){
+                $scope.questionsLevelInfo = $scope.allQuestions[0].questions_level_info;
+                $scope.allQuestions.shift();
+                }
+            },
+            function(response) {
+                $scope.errors = response.data;
+            });
+        } 
     }])
 
 

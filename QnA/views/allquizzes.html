@@ -50,7 +50,7 @@
       </div>
       <div class="modal-body">
         <p ng-if="!unableToGetAllCategories">
-        <span ng-repeat="category in allCategories" style="font-size: 18px;color:black;"><span class="label label-info">{{ category.category | capitalize }}</span>&nbsp;&nbsp;</span>
+        <span ng-repeat="category in allCategories" style="font-size: 18px;color:black;"><span class="label label-info">{{ category.category_name | capitalize }}</span>&nbsp;&nbsp;</span>
         </p>
         <p ng-if="!unableToGetAllCategories">
         <span>{{ unableToGetAllCategories }}</span>

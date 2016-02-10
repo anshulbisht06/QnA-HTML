@@ -151,6 +151,45 @@ angular.module('QnA')
                 );
         };
 
+        this.getQuestionUnderQuiz = function(token, userid, quizid){
+                return $resource(baseURL+"quiz/questions/get/"+userid+"/"+quizid+"/", null,
+                {
+                    query: {
+                    headers: {'Authorization': 'JWT ' + token},
+                    method : 'GET',
+                    isArray : true,
+                    }
+                },
+                { stripTrailingSlashes: false }
+                );
+        };
+
+        this.getQuestionUnderCategory = function(token, userid, quizid, categoryid){
+                return $resource(baseURL+"quiz/questions/get/"+userid+"/"+quizid+"/"+categoryid+"/", null,
+                {
+                    query: {
+                    headers: {'Authorization': 'JWT ' + token},
+                    method : 'GET',
+                    isArray : true,
+                    }
+                },
+                { stripTrailingSlashes: false }
+                );
+        };
+
+        this.getQuestionUnderSubCategory = function(token, userid, quizid, categoryid, subcategoryid){
+                return $resource(baseURL+"quiz/questions/get/"+userid+"/"+quizid+"/"+categoryid+"/"+subcategoryid+"/", null,
+                {
+                    query: {
+                    headers: {'Authorization': 'JWT ' + token},
+                    method : 'GET',
+                    isArray : true,
+                    }
+                },
+                { stripTrailingSlashes: false }
+                );
+        };
+
         this.createQuestion = function(token){
             return $resource(baseURL+"question/mcq/create/", null,
                     {'save':   
