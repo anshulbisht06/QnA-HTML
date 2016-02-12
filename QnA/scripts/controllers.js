@@ -357,9 +357,9 @@ angular.module('QnA')
                 $scope.errors = response.data;
             });
         }
-        $scope.filterSubCategory = function(quizid, categoryid, subcategoryid){
+        $scope.filterSubCategory = function(subcategoryid){
             // $scope.filterBySubCategory = selectedSubCategory;
-            QuestionsFactory.getQuestionUnderSubCategory($cookies.get('token'), $scope.user, quizid, categoryid, subcategoryid).query(
+            QuestionsFactory.getQuestionUnderSubCategory($cookies.get('token'), $scope.user, subcategoryid, false).query(
             function(response) {
                 $scope.allQuestions = response;
                 if($scope.allQuestions){
@@ -568,9 +568,48 @@ angular.module('QnA')
         }])
 
 
-    .controller('AddQuizStackController', ['$scope', '$controller', '$cookies', '$state', '$stateParams', 'QuizStackFactory', function($scope, $controller, $cookies, $state, $stateParams, QuizStackFactory) {
+    .controller('AddQuizStackController', ['$scope', '$controller', '$cookies', '$state', '$stateParams', 'QuizStackFactory', 'SubCategoryFactory', 'QuestionsFactory', function($scope, $controller, $cookies, $state, $stateParams, QuizStackFactory, SubCategoryFactory, QuestionsFactory) {
             $controller('CookiesController', {$scope : $scope});
-
+            SubCategoryFactory.getAllSubcategories($cookies.get('token'), $scope.user, 'all').query(
+            function(response) {
+                $scope.subCategories = response;
+            },
+            function(response) {
+                $scope.errors = response.data;
+                $scope.unableToGetAllSubCategories = true;
+            });
+            $scope.makeEditable = function(element){
+                console.log(element);
+            } 
+            $scope.selectedSubCategoryDropdown = "";
+            $scope.selectSubCategory = function(subCategoryId){
+                QuestionsFactory.getQuestionUnderSubCategory($cookies.get('token'), $scope.user, subCategoryId, true).query(
+                    function(response) {
+                        $scope.selectedSubCategory = response[0];
+                        levelHtml = '<select class="form-control" name="section_level">'
+                        for(var i=0;i<$scope.selectedSubCategory['section_level'].length;i++){
+                            levelHtml += '<option value="'+$scope.selectedSubCategory['section_level'][i]+'">'+$scope.selectedSubCategory['section_level'][i]+'</option>';
+                        }
+                        levelHtml += '</select>';
+                        html = '<tr ng-controller="AddQuizStackController">'+
+                                    '<td><input type="text" class="form-control" ondblclick="makeEditable(this)" onblur="makeUneditable(this)" name="sectionname" value="'+$scope.selectedSubCategory['sectionname']+'" readonly></td>'+
+                                    '<td>'+$scope.selectedSubCategory['subcategory']+'</td>'+
+                                    '<td>'+levelHtml+'</td>'+
+                                    '<td><select class="form-control" name="selection"><option value="mcq">mcq</option><option value="objective">objective</option></select></td>'+
+                                    '<td><input type="number" min="1"  max="50" class="form-control" ondblclick="makeEditable(this)" onblur="makeUneditable(this)" name="no_questions" value="'+$scope.selectedSubCategory['no_questions']+'" readonly></td>'+
+                                    '<td><input type="number" min="1" max="180" class="form-control" ondblclick="makeEditable(this)" onblur="makeUneditable(this)" name="duration" value="'+$scope.selectedSubCategory['duration']+'" readonly></td>'+
+                                    '<td><select class="form-control" name="istimed"><option value="yes">yes</option><option value="no">no</option></select></td>'+
+                                    '<td><input type="number" min="1" max="100" class="form-control" ondblclick="makeEditable(this)" onblur="makeUneditable(this)" name="correct_grade" value="'+$scope.selectedSubCategory['correct_grade']+'" readonly></td>'+
+                                    '<td><input type="number" min="0" max="100" class="form-control" ondblclick="makeEditable(this)"onblur="makeUneditable(this)" name="incorrect_grade" value="'+$scope.selectedSubCategory['incorrect_grade']+'" readonly></td>'+
+                                    '<td><select name="selection"><option value="random">random</option><option value="content">content</option></select></td>'+
+                                +'</tr>'
+                        angular.element(document.querySelector('#selectedCategoriesRow')).append(html);
+                        $scope.selectedSubCategoryDropdown = "";
+                    },
+                    function(response) {
+                        $scope.errors = response.data;
+                    });
+            }
         }]);
 
     

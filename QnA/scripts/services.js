@@ -28,7 +28,7 @@ angular.module('QnA')
                     );
         };
         this.getAllQuiz = function(token, userid){
-            return $resource(baseURL+"quiz/get/"+userid+"/quiz/", null,
+            return $resource(baseURL+"quiz/get/"+userid+"/all/", null,
                     {
                         query: {
                         headers: {'Authorization': 'JWT ' + token},
@@ -187,8 +187,8 @@ angular.module('QnA')
                 );
         };
 
-        this.getQuestionUnderSubCategory = function(token, userid, quizid, categoryid, subcategoryid){
-                return $resource(baseURL+"quiz/questions/get/"+userid+"/"+quizid+"/"+categoryid+"/"+subcategoryid+"/", null,
+        this.getQuestionUnderSubCategory = function(token, userId, subCategoryId, questionFormat){
+                return $resource(baseURL+"quiz/questions/get/"+userId+"/", { 'questionFormat': questionFormat, 'subCategoryId' : subCategoryId},
                 {
                     query: {
                     headers: {'Authorization': 'JWT ' + token},
