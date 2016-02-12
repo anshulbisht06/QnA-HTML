@@ -132,8 +132,8 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                 url:'quiz/:quizid',
                 views :{
                     'content@': {
-                        controller  : 'ViewUpdateQuizController',
-                        templateUrl : 'views/viewupdatequiz.html'
+                        controller  : 'AddQuizStackController',
+                        templateUrl : 'views/addquizstack.html'
                     }
                 }
                 })

@@ -7,7 +7,7 @@
 	    		<h4 class="text-center"> Total Quiz: {{allQuiz.length}} </h4>
 	    	</div>
 	    	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-	    		<a ui-sref="app.create-quiz" class="btn btn-primary right"><span class="glyphicon glyphicon-plus"></span>AddQuiz</a>
+	    		<a ui-sref="app.create-quiz" class="btn btn-primary right"><span class="glyphicon glyphicon-plus"></span>&nbsp;AddQuiz</a>
 			</div>	
 
 		</div>
@@ -17,7 +17,15 @@
 		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
 			<div class="col-lg-4 col-md-4 col-sm-4" ng-repeat='quiz in allQuiz'>
 				<div class="panel panel-info">
-			      <div class="panel-heading">{{quiz.title | capitalize}}</div>
+			      <div class="panel-heading"><a ui-sref="app.view-quiz({ quizid : '{{ quiz.id }}'})">{{quiz.title | capitalize}}</a>
+			      		<div class="dropdown right">
+						  <span data-toggle="dropdown" class="glyphicon glyphicon-option-vertical"></span>
+						  <ul class="dropdown-menu">
+						    <li><a ui-sref="app.view-quiz({quizid : '{{ quiz.id }}' })">View/Update details</a></li>
+						    <li><a href="" ng-click="getCategories(quiz.id, quiz.title)">View Categories</a></li>
+						  </ul>
+						</div>
+			      </div>
 			      <div class="panel-body">
 			      	<div class="row text-center">
 						<h5 class="help-block">Questions: {{quiz.max_questions}}</h5>
@@ -25,27 +33,18 @@
 						<h5 class="help-block">Passing Marks: {{quiz.pass_mark}}</h5>
 					</div>
 					<div class="row">
-						
-						<div class="dropdown right">
-						  <span data-toggle="dropdown" class="glyphicon glyphicon-option-vertical"></span>
-						  <ul class="dropdown-menu">
-						    <li><a ui-sref="app.view-quiz({quizid : '{{ quiz.id }}' })">View/Update details</a></li>
-						    <li><a href="" ng-click="getCategories(quiz.id, quiz.title)">View Categories</a></li>
-						  </ul>
-						</div>
 					</div>
 			      </div>
 			      <div>
 					<button class="btn btn-block btn-primary" ng-click=''>Review Test</button>
 				  </div>
-			    </div>	
-
+			    </div>
 			</div>
 		</div>
 		<div class="col-lg-2 col-md-2 col-sm-2"></div>
 	</div>
 </div>
-<div id="categoriesModal" class="modal fade" role="dialog">
+<!-- <div id="categoriesModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -64,9 +63,8 @@
         <button type="button" class="btn btn-default" data-dismiss="modal" id="categoriesModalClose">Close</button>
       </div>
     </div>
-
   </div>
-</div>
+</div> -->
 </div>
 
 

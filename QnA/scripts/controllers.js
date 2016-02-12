@@ -221,12 +221,11 @@ angular.module('QnA')
             $scope.errors = "Unable to get your categories.";
         });
         $scope.categoryid = $stateParams.obj ? $stateParams.obj.categoryid.toString() : "";
+        $scope.createSubCategoryform = { sub_category_name : "", category : "", user : $scope.user };
         if($scope.categoryid){
             $scope.alertType = "info";
             $scope.alertMsg = "Please select or create a sub-category first";
-            $scope.createSubCategoryform = {sub_category_name : "", category : $scope.categoryid};
-        }else{
-            $scope.createSubCategoryform = {sub_category_name : "", category : ""};
+            $scope.createSubCategoryform.category = $scope.categoryid;
         }
         $scope.postSubCategory = function() {
             var response = SubCategoryFactory.createSubCategory($cookies.get('token')).save($scope.createSubCategoryform).$promise.then(
@@ -249,10 +248,9 @@ angular.module('QnA')
         $controller('CookiesController', {$scope : $scope});
         QuestionsFactory.getAllQuestions($cookies.get('token'), $scope.user).query(
             function(response) {
-                $scope.allQuizzes = response;
-                if($scope.allQuestions){
-                $scope.questionsLevelInfo = $scope.allQuestions[0].questions_level_info;
-                $scope.allQuestions.shift();
+                $scope.questions = response;
+                if($scope.questions){
+                $scope.questionsLevelInfo = $scope.questions.questions_level_info;
                 }
             },
             function(response) {
@@ -281,12 +279,12 @@ angular.module('QnA')
         $scope.isTabSelected = function(checkTab) {
                 return ($scope.tab === checkTab);
             };
-
+        $scope.isHoveredOver = {};
         $scope.hoverOnQuestion = function(questionid){
-            $scope.isHoveredOver = true;
+            $scope.isHoveredOver[questionid] = true;
         }
         $scope.hoverOutQuestion = function(questionid){
-            $scope.isHoveredOver = false;
+            $scope.isHoveredOver[questionid] = false;
         }
         $scope.deleteQuestion = function(questionid){
             var response = QuestionsFactory.deleteQuestion($cookies.get('token'), $scope.user, questionid).delete().$promise.then(
@@ -372,6 +370,19 @@ angular.module('QnA')
             function(response) {
                 $scope.errors = response.data;
             });
+        }
+        $scope.renameField = function(fieldType, oldValue, newValue){
+            if(fieldType==='category'){
+                $('#fieldType').html('Category');
+                $('#oldValue').html(oldValue);
+                $scope.categoryRenameForm = { category_name: "", old_category_name : oldValue, quiz: $scope.selectedQuizId };
+                $('#renameModal').modal('toggle');
+            }
+
+        }
+        $scope.renameCategory = function(){
+            console.log($scope.categoryRenameForm);
+            CategoryFactory.renameCategory($cookies.get('token')).update($scope.categoryRenameForm);
         } 
     }])
 
@@ -379,7 +390,7 @@ angular.module('QnA')
     .controller('CreateQuestionController', ['$scope', '$controller', '$cookies', '$state', 'QuizFactory', 'CategoryFactory', 'SubCategoryFactory', 'QuestionsFactory', function($scope, $controller, $cookies, $state, QuizFactory, CategoryFactory, SubCategoryFactory, QuestionsFactory) {
         $controller('CookiesController', {$scope : $scope});
         if($scope.user){
-        SubCategoryFactory.getAllSubcategories($cookies.get('token'), $scope.user, 'all', 'all').query(
+        SubCategoryFactory.getAllSubcategories($cookies.get('token'), $scope.user, 'all').query(
             function(response) {
                 $scope.subCategories = response;
             },
@@ -436,23 +447,25 @@ angular.module('QnA')
     .controller('XlsHandlerController',['$scope', '$http', 'fileUpload', function($scope, $http, fileUpload){
         // Function for download xls file on any type of quetions .... ;)
         $scope.downloadDemoXls = function(que_type, sub_cat_info){
-            // console.log(token)
+            if(sub_cat_info===undefined){
+                // $scope.noSubCategoryPresent = true;
+            }else{
             $http.post(baseURL+"quiz/question/download/xls/", {que_type:que_type,
                 sub_cat_info:sub_cat_info}, { responseType: 'arraybuffer' })
               .success(function(data) {
                 var file = new Blob([data], { type: 'application/xls' });
                 saveAs(file, sub_cat_info.split('>>')[1]+'.xls');
-            });
+            })
             };
-
+        }
         $scope.uploadFile = function(){
                var file = $scope.myFile;
-               
-               console.log('file is ' );
-               console.dir(file);
-               
+               if(file===undefined){
+                // $scope.noSubCategoryPresent = true;
+            } else{            
                var uploadUrl = baseURL+"question/test/";
                fileUpload.uploadFileToUrl(file, uploadUrl);
+            }
             };
     }])
 
@@ -555,8 +568,10 @@ angular.module('QnA')
         }])
 
 
-        .controller('ViewQuizCategoriesController', ['$scope', '$controller', '$cookies', '$state', '$stateParams', 'CategoryFactory', function($scope, $controller, $cookies, $state, $stateParams, CategoryFactory) {
+    .controller('AddQuizStackController', ['$scope', '$controller', '$cookies', '$state', '$stateParams', 'QuizStackFactory', function($scope, $controller, $cookies, $state, $stateParams, QuizStackFactory) {
             $controller('CookiesController', {$scope : $scope});
 
-            
         }]);
+
+    
+

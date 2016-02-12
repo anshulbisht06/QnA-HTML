@@ -3,7 +3,7 @@
 <div class="jumbotron">
     <div class="row">
     </div>
-    <div class="row" ng-hide="isCategoryCreated">
+    <div class="row">
 	    
 		<div class="row ">
 			
@@ -14,18 +14,16 @@
 			</div>
 			<hr>
 				<form role="form" name="questionCreateForm" ng-submit="postQuestion()" enctype="multipart/form-data" novalidate>
-				  {{unableToGetAllSubCategories}}
-				  <div class="form-group" ng-if="!unableToGetAllSubCategories" ng-class="{'has-error': errors.sub_category || questionCreateForm.sub_category.$touched && questionCreateForm.sub_category.$error.required }">
+				  <div class="form-group" ng-if="!unableToGetsubCategories" ng-class="{'has-error': errors.sub_category || questionCreateForm.sub_category.$touched && questionCreateForm.sub_category.$error.required }">
 				  <label for="subcategory">Select a sub-category into which the question will be added</label>
 					<select class="form-control" id="sub_category" name="sub_category" ng-model="createQuestionForm.sub_category" required>
-						{{allSubCategories}}
 						<option value="" disabled>Select sub-category here</option>
-					    <option ng-repeat="sc in allSubCategories" value="{{ sc.category }}-{{ sc.id }}">{{ sc.sub_category_name }}</option>
+					    <option ng-repeat="sc in subCategories" value="{{ sc.id }}">{{ sc.sub_category_name }}</option>
 					</select>
 			   		<span ng-if="errors.sub_category" class="help-block">{{ errors.sub_category[0] }}</span>
 			   		<span ng-if="questionCreateForm.sub_category.$touched && questionCreateForm.sub_category.$error.required" class="help-block">Sub-category is required.</span>
 				  </div>
-  				  <div class="form-group" ng-if="unableToGetAllSubCategories">
+  				  <div class="form-group" ng-if="unableToGetsubCategories">
   				  	<p>{{ errors }}</p>
   				  </div>
 				  <br>
@@ -87,12 +85,13 @@
 					<h2 class="text-center hidden-xs">Add question in bulk.</h2>
 					<h4 class="text-center visible-xs">Add questions in bulk.</h4>
 				</div>
-				<hr>
+				<hr><br>
 				Step1:<p> Select a sub-category here </p>
-				<select class="form-control" id="sub_category" name="sub_category" ng-model="sub_category_id" value='' required>
+				<select class="form-control" id="sub_category1" name="sub_category" ng-model="sub_category_id" ng-class="{'has-error':noSubCategoryPresent}">
 					<option value="" disabled>Select sub-category here</option>
-				    <option ng-repeat="sc in allSubCategories" value="{{ sc.id }}>>{{sc.sub_category_name}}">
+				    <option ng-repeat="sc in subCategories" value="{{sc.sub_category_name}}">
 				    {{ sc.sub_category_name }}</option>
+				    <span ng-if="noSubCategoryPresent">Select a sub-category first.</span>
 				</select>
 				<br>
 				<br>

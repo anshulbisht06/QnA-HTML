@@ -97,6 +97,15 @@ angular.module('QnA')
         },
         { stripTrailingSlashes: false }
         )};
+
+        this.renameCategory = function(token){
+            return $resource(baseURL+"quiz/category/rename/", null,
+                    {'update':   
+                    { method:'PUT', headers: {'Authorization': 'JWT ' + token}} 
+                    },
+                    { stripTrailingSlashes: false }
+                    );
+        }
     }])
 
 
@@ -109,8 +118,8 @@ angular.module('QnA')
                     );
         };
 
-        this.getAllSubcategories = function(token, userid, quizid, categoryid){
-        return $resource(baseURL+"quiz/subcategory/get/"+userid+"/"+quizid+"/"+categoryid+"/", null,
+        this.getAllSubcategories = function(token, userid, categoryid){
+        return $resource(baseURL+"quiz/subcategory/get/"+userid+"/"+categoryid+"/", null,
             {
                 query: {
                 headers: {'Authorization': 'JWT ' + token},
@@ -131,7 +140,7 @@ angular.module('QnA')
                     query: {
                     headers: {'Authorization': 'JWT ' + token},
                     method : 'GET',
-                    isArray : true,
+                    isArray : false,
                     }
                 },
                 { stripTrailingSlashes: false }
@@ -280,3 +289,8 @@ angular.module('QnA')
                }
             };
          }])
+
+
+    .service('QuizStackFactory', ['$resource', 'baseURL', function($resource, baseURL) {
+
+    }]);
