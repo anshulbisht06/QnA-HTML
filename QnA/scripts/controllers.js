@@ -243,7 +243,6 @@ angular.module('QnA')
     }])
 
 
-
     .controller('QuestionsController', ['$scope', '$controller', '$cookies', '$state', '$http', 'QuestionsFactory', function($scope, $controller, $cookies, $state, $http, QuestionsFactory) {
         $controller('CookiesController', {$scope : $scope});
         QuestionsFactory.getAllQuestions($cookies.get('token'), $scope.user).query(
@@ -611,16 +610,18 @@ angular.module('QnA')
                         levelHtml += '</select>';
                         levelWiseQsHtml +=  selectNoQuestions($scope.selectedSubCategory['questions_level_info'][0])+'</select>';
                         html = '<tr ng-controller="AddQuizStackController">'+
-                                    '<td><input type="text" class="form-control" ng-click="okie()"" ondblclick="makeEditable(this)" onblur="makeUneditable(this)" name="sectionname" value="'+$scope.selectedSubCategory['sectionname']+'" readonly></td>'+
-                                    '<td>'+$scope.selectedSubCategory['subcategory']+'</td>'+
-                                    '<td ng-click="changeNoQuestions('+count+')">'+levelHtml+'</td>'+
-                                    '<td><select class="form-control" name="selection"><option value="mcq">mcq</option><option value="objective">objective</option></select></td>'+
-                                    '<td id="levelwiseqs'+count+'">'+levelWiseQsHtml+'</td>'+
-                                    '<td><input type="number" min="1" max="180" class="form-control" ondblclick="makeEditable(this)" onblur="makeUneditable(this)" name="duration" value="'+$scope.selectedSubCategory['duration']+'" readonly></td>'+
-                                    '<td><select class="form-control" name="istimed"><option value="yes">yes</option><option value="no">no</option></select></td>'+
-                                    '<td><input type="number" min="1" max="100" class="form-control" ondblclick="makeEditable(this)" onblur="makeUneditable(this)" name="correct_grade" value="'+$scope.selectedSubCategory['correct_grade']+'" readonly></td>'+
-                                    '<td><input type="number" min="0" max="100" class="form-control" ondblclick="makeEditable(this)"onblur="makeUneditable(this)" name="incorrect_grade" value="'+$scope.selectedSubCategory['incorrect_grade']+'" readonly></td>'+
-                                    '<td><select name="selection"><option value="random">random</option><option value="content">content</option></select></td>'+
+                                    '<td style="width:130px;"><input type="text" class="form-control" ng-click="okie()"" ondblclick="makeEditable(this)" onblur="makeUneditable(this)" name="sectionname" value="'+$scope.selectedSubCategory['sectionname']+'" readonly></td>'+
+                                    '<td style="width:200px;">'+$scope.selectedSubCategory['subcategory']+'</td>'+
+                                    '<td style="width:130px;" ng-click="changeNoQuestions('+count+')">'+levelHtml+'</td>'+
+                                    '<td style="width:130px;"><select class="form-control" name="selection"><option value="mcq">mcq</option><option value="objective">objective</option></select></td>'+
+                                    '<td style="width:130px;" id="levelwiseqs'+count+'">'+levelWiseQsHtml+'</td>'+
+                                    '<td style="width:130px;"><input type="number" min="1" max="180" class="form-control" ondblclick="makeEditable(this)" onblur="makeUneditable(this)" name="duration" value="'+$scope.selectedSubCategory['duration']+'" readonly></td>'+
+                                    '<td style="width:130px;"><select class="form-control" name="istimed"><option value="yes">yes</option><option value="no">no</option></select></td>'+
+                                    '<td style="width:130px;"><input type="number" min="1" max="100" class="form-control" ondblclick="makeEditable(this)" onblur="makeUneditable(this)" name="correct_grade" value="'+$scope.selectedSubCategory['correct_grade']+'" readonly></td>'+
+                                    '<td style="width:130px;"><input type="number" min="0" max="100" class="form-control" ondblclick="makeEditable(this)"onblur="makeUneditable(this)" name="incorrect_grade" value="'+$scope.selectedSubCategory['incorrect_grade']+'" readonly></td>'+
+                                    '<td style="width:130px;"><select class="form-control" name="selection"><option value="random">random</option><option value="content">content</option></select></td>'+
+                                    '<td style="width:60px;"><a href="javascript:void(0);"><span class="glyphicon glyphicon-ok-circle" style="font-size: 30px;color:green;"></span></a></td>'+
+                                    '<td style="width:60px;"><a href="javascript:void(0);"><span class="glyphicon glyphicon-remove-circle" style="font-size: 30px;color:red;"></span></a></td>'+
                                 +'</tr>';
                         $scope.selectedQuestions.push({
                             count :    { 

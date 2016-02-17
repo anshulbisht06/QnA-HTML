@@ -27,8 +27,49 @@
 	      		</div>
 	      	</div>
 	      	<div class="col-lg-1 col-md-1 col-sm-1">
-	      		<button class="btn btn-info" type="button">Preview</button>
+	      		<button class="btn btn-info" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">
+	      			Preview
+	      		</button>
 	      	</div>
+			<!-- Modal -->
+			<div id="myModal" class="modal fade" role="dialog">
+			  <div class="modal-dialog" style='width: 900px;'>
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal">&times;</button>
+			        <h4 class="modal-title">Test: Example</h4>
+			      </div>
+			      <div class="modal-body col-md-12">
+			      	<!-- <div class=""> -->
+			      		<div class="col-md-1">Que.1: &nbsp;&nbsp;</div>
+			      		<div class="col-md-8">
+			      			<p>Some test questions to ask ?</p>	
+			      			<div class='col-md-3'>
+			      			 <input type="checkbox" class="myClass" style='margin:3%;' value="yes" id="answer" name="answer" data-color="green" />
+			      			 YES
+			      			 <br>
+			      			 <input type="checkbox" class="myClass" style='margin:3%;' value="yes" id="answer" name="answer" data-color="green" />
+			      			 NO
+			      			 </div>
+			      			 <div class='col-md-3'>
+			      			 <input type="checkbox" class="myClass" style='margin:3%;' value="yes" id="answer" name="answer" data-color="green" />
+			      			 WHY?
+			      			 <br>
+			      			 <input type="checkbox" class="myClass" style='margin:3%;' value="yes" id="answer" name="answer" data-color="green" />
+		      				 IF
+		      				 </div>
+			      		</div>
+			      	<!-- </div> -->
+			        <!-- <p><span>Que.1: &nbsp;&nbsp;</span> Some test questions to ask ?</p> -->
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			      </div>
+			    </div>
+
+			  </div>
+			</div>
+
 	      	<div class="col-lg-2 col-md-2 col-sm-2">	      		
 	      	</div>
 		</div><br><br>
@@ -47,6 +88,7 @@
 			        <th>Correct Grade</th>
 			        <th>Incorrect Grade</th>
 			        <th>Selection</th>
+			        <th></th>
 			      </tr>
 			    </thead>
 			    <tbody id="selectedCategoriesRow">
@@ -59,3 +101,12 @@
 </div>
 <br>
 </div>
+<script>
+$(document).on("ready", function() {
+    // initialize with defaults
+    $("#input-id").checkboxX();
+
+    // with plugin options
+    $("#input-id").checkboxX({threeState: true, size:'lg'});
+});
+</script>
