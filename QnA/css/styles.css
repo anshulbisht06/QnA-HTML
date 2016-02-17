@@ -57,6 +57,12 @@ ul.sidemenu > li{
     color:#000;
     border-radius:0;
 }
+.removefromstackbutton{
+	font-size: 30px;
+	color:red;
+}
 .addtostackbutton{
 	cursor: pointer;
+	font-size: 30px;
+	color:green;
 }

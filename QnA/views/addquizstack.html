@@ -11,11 +11,6 @@
 			        		<option value="" disabled>Select sub-category here...</option>
 			        		<option ng-repeat="subcategory in subCategories" value="{{ subcategory.id }}">{{ subcategory.sub_category_name }}</option>
 			        	</select>
-			        <!-- <span class="input-group-btn">
-	                  <button class="btn btn-primary" type="button" ng-click="go()">
-	                    Add
-	                  </button>
-	               </span> -->
 		      	</div>
 	      	</div>
 	      	<div class="col-lg-1 col-md-1 col-sm-1">	      		
@@ -27,12 +22,15 @@
 	      		</div>
 	      	</div>
 	      	<div class="col-lg-1 col-md-1 col-sm-1">
-	      		<button class="btn btn-info" type="button">Preview</button>
+	      		<button class="btn btn-info" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">
+	      			Preview
+	      		</button>
 	      	</div>
 	      	<div class="col-lg-2 col-md-2 col-sm-2">	
 	      		<button class="btn btn-primary" type="button" ng-click="addStack()">
 	                Add
 	            </button>      		
+	      	<div class="col-lg-2 col-md-2 col-sm-2">	      		
 	      	</div>
 		</div><br><br>
 		<div class="row">
@@ -62,4 +60,39 @@
 	<div class="col-lg-1 col-md-1 col-sm-1"></div>		
 </div>
 <br>
+</div>
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog" style='width: 900px;'>
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Test: Example</h4>
+      </div>
+      <div class="modal-body col-md-12">
+      		<div class="col-md-1">Que.1: &nbsp;&nbsp;</div>
+      		<div class="col-md-8">
+      			<p>Some test questions to ask ?</p>	
+      			<div class='col-md-3'>
+      			 <input type="checkbox" class="myClass" style='margin:3%;' value="yes" id="answer" name="answer" data-color="green" />
+      			 YES
+      			 <br>
+      			 <input type="checkbox" class="myClass" style='margin:3%;' value="yes" id="answer" name="answer" data-color="green" />
+      			 NO
+      			 </div>
+      			 <div class='col-md-3'>
+      			 <input type="checkbox" class="myClass" style='margin:3%;' value="yes" id="answer" name="answer" data-color="green" />
+      			 WHY?
+      			 <br>
+      			 <input type="checkbox" class="myClass" style='margin:3%;' value="yes" id="answer" name="answer" data-color="green" />
+  				 IF
+  				 </div>
+      		</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 </div>
