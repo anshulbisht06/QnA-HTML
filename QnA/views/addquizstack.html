@@ -11,11 +11,11 @@
 			        		<option value="" disabled>Select sub-category here...</option>
 			        		<option ng-repeat="subcategory in subCategories" value="{{ subcategory.id }}">{{ subcategory.sub_category_name }}</option>
 			        	</select>
-			        <span class="input-group-btn">
-	                  <button class="btn btn-primary" type="button">
+			        <!-- <span class="input-group-btn">
+	                  <button class="btn btn-primary" type="button" ng-click="go()">
 	                    Add
 	                  </button>
-	               </span>
+	               </span> -->
 		      	</div>
 	      	</div>
 	      	<div class="col-lg-1 col-md-1 col-sm-1">	      		
@@ -23,13 +23,16 @@
 	      	<div class="col-lg-3 col-md-3 col-sm-3">
 	      		<div class="input-group">
 	      			<span class="input-group-addon">Duration(in min)</span>
-	      			<input type="text" class="form-control" name="duration" value="" id="duration">
+	      			<input type="text" class="form-control" name="duration" value="" id="totalduration">
 	      		</div>
 	      	</div>
 	      	<div class="col-lg-1 col-md-1 col-sm-1">
 	      		<button class="btn btn-info" type="button">Preview</button>
 	      	</div>
-	      	<div class="col-lg-2 col-md-2 col-sm-2">	      		
+	      	<div class="col-lg-2 col-md-2 col-sm-2">	
+	      		<button class="btn btn-primary" type="button" ng-click="addStack()">
+	                Add
+	            </button>      		
 	      	</div>
 		</div><br><br>
 		<div class="row">
@@ -47,9 +50,10 @@
 			        <th>Correct Grade</th>
 			        <th>Incorrect Grade</th>
 			        <th>Selection</th>
+			        <th></th>
 			      </tr>
 			    </thead>
-			    <tbody id="selectedCategoriesRow">
+			    <tbody id="selectedQuestionsRow">
 			    </tbody>
 			  </table>
 		  </div>

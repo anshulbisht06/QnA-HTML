@@ -74,8 +74,8 @@ angular.module('QnA')
                     );
         };
 
-        this.getAllCategories = function(token, userid, quizid){
-        return $resource(baseURL+"quiz/category/get/"+userid+"/"+quizid+"/", null,
+        this.getAllCategories = function(token, userid, categoryid){
+        return $resource(baseURL+"quiz/category/get/"+userid+"/"+categoryid+"/", null,
         {
             query: {
             headers: {'Authorization': 'JWT ' + token},
@@ -292,5 +292,18 @@ angular.module('QnA')
 
 
     .service('QuizStackFactory', ['$resource', 'baseURL', function($resource, baseURL) {
-
+        selectedQuestions = [];
+        this.addSelectedLevelQuestions = function(questionsLevelInfo){
+            selectedQuestions.push(questionsLevelInfo); 
+        }
+        this.getSelectedLevelQuestions = function(index){
+            return selectedQuestions[index];
+        }
+        finalStack = [];
+        this.addToFinalStack  = function(value){
+            finalStack.push(value);
+        }
+        this.getStack = function(index){
+            return finalStack[index];
+        }
     }]);

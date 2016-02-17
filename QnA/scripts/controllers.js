@@ -568,7 +568,7 @@ angular.module('QnA')
         }])
 
 
-    .controller('AddQuizStackController', ['$scope', '$controller', '$cookies', '$state', '$compile', 'QuizStackFactory', 'SubCategoryFactory', 'QuestionsFactory', function($scope, $controller, $cookies, $state, $compile, QuizStackFactory, SubCategoryFactory, QuestionsFactory) {
+    .controller('AddQuizStackController', ['$scope', '$controller', '$cookies', '$stateParams', '$compile', 'QuizStackFactory', 'SubCategoryFactory', 'QuestionsFactory', function($scope, $controller, $cookies, $stateParams, $compile, QuizStackFactory, SubCategoryFactory, QuestionsFactory) {
             $controller('CookiesController', {$scope : $scope});
             SubCategoryFactory.getAllSubcategories($cookies.get('token'), $scope.user, 'all').query(
             function(response) {
@@ -579,64 +579,66 @@ angular.module('QnA')
                 $scope.unableToGetAllSubCategories = true;
             });
             $scope.selectedSubCategoryDropdown = "";
-            $scope.selectedQuestions = [];
             selectNoQuestions = function(noOfQuestions){
-                result = '';
+                result = '<select class="form-control" name="no_questions">';
                 for(var i=0;i<noOfQuestions;i++){
-                            result += '<option value="'+(i+1)+'">'+(i+1)+'</option>';
+                    result += '<option value="'+(i+1)+'">'+(i+1)+'</option>';
                 }
-                return result;
+                return result + '</select>';
             }
-            count = 0;
-            l = { 'easy' : 0, 'medium' : 1, 'hard' : 2, 'total' : 3 };
+            $scope.count = 0;
             $scope.changeNoQuestions = function(count){
                 result = '';
-                console.log(count);
-                // console.log(count, level, scope.selectedQuestions[parseInt(count)]['qs'][l[level]]);
-                // for(var i=0;i<$scope.selectedQuestions[count]['qs'][l[level]];i++){
-                //             result += '<option value="'+(i+1)+'">'+(i+1)+'</option>';
-                // }
-                // angular.element(document.querySelector('#levelwiseqs'+count)).html(result);
+                levelInfo = { 'easy' : 0, 'medium' : 1, 'hard' : 2, 'total' : 3 };
+                splitValue = $scope.modelForLevels[count].split('-');
+                angular.element(document.querySelector('#levelwiseqs'+count)).html(selectNoQuestions(QuizStackFactory.getSelectedLevelQuestions(count)[levelInfo[splitValue[0]]]));
             }
+            $scope.modelForLevels = [];
+            $scope.duration = [];
+            stack = {}
             $scope.selectSubCategory = function(subCategoryId){
+                $scope.finalStack = [];
                 QuestionsFactory.getQuestionUnderSubCategory($cookies.get('token'), $scope.user, subCategoryId, true).query(
                     function(response) {
                         $scope.selectedSubCategory = response[0];
-
-                        levelHtml = '<select class="form-control" name="section_level">';
-                        levelWiseQsHtml = '<select class="form-control" name="no_questions">';
+                        QuizStackFactory.addToFinalStack({
+                                'quiz' : $stateParams.quizid,
+                                'subcategory' : $scope.selectedSubCategory['subcategory'],
+                                'sectionname' : $scope.selectSubCategory['sectionname']
+                        })
+                        QuizStackFactory.addSelectedLevelQuestions($scope.selectedSubCategory['questions_level_info']);
+                        initialnoOfQuestionIndex = $scope.selectedSubCategory['questions_level_info'].findIndex(val=>val>0);
+                        // initialLevel = { 0 : 'easy', 1 : 'medium' , 2 : 'hard' , 3 : 'total' }[initialnoOfQuestionIndex];
+                        levelHtml = '<select class="form-control" name="section_level" id="section_level'+$scope.count+'" ng-model="modelForLevels['+$scope.count+']" ng-change="changeNoQuestions('+$scope.count+')"><option value="" disabled>Select here</option>';
                         for(var i=0;i<$scope.selectedSubCategory['section_level'].length;i++){
-                            levelHtml += '<option value="'+$scope.selectedSubCategory['section_level'][i]+'">'+$scope.selectedSubCategory['section_level'][i]+'</option>';
+                            levelHtml += '<option value="'+$scope.selectedSubCategory['section_level'][i]+'-'+i+'">'+$scope.selectedSubCategory['section_level'][i]+'</option>';
                         }
                         levelHtml += '</select>';
-                        levelWiseQsHtml +=  selectNoQuestions($scope.selectedSubCategory['questions_level_info'][0])+'</select>';
-                        html = '<tr ng-controller="AddQuizStackController">'+
-                                    '<td><input type="text" class="form-control" ng-click="okie()"" ondblclick="makeEditable(this)" onblur="makeUneditable(this)" name="sectionname" value="'+$scope.selectedSubCategory['sectionname']+'" readonly></td>'+
+                        html = '<tr>'+
+                                    '<td><input type="text" class="form-control" ng-model="s.sectionname['+$scope.sectionname+']" ondblclick="makeEditable(this)" onblur="makeUneditable(this)" name="sectionname" value="'+$scope.selectedSubCategory['sectionname']+'" readonly></td>'+
                                     '<td>'+$scope.selectedSubCategory['subcategory']+'</td>'+
-                                    '<td ng-click="changeNoQuestions('+count+')">'+levelHtml+'</td>'+
+                                    '<td>'+levelHtml+'</td>'+
                                     '<td><select class="form-control" name="selection"><option value="mcq">mcq</option><option value="objective">objective</option></select></td>'+
-                                    '<td id="levelwiseqs'+count+'">'+levelWiseQsHtml+'</td>'+
-                                    '<td><input type="number" min="1" max="180" class="form-control" ondblclick="makeEditable(this)" onblur="makeUneditable(this)" name="duration" value="'+$scope.selectedSubCategory['duration']+'" readonly></td>'+
+                                    '<td id="levelwiseqs'+$scope.count+'">'+selectNoQuestions($scope.selectedSubCategory['questions_level_info'][initialnoOfQuestionIndex])+'</td>'+
+                                    '<td><input type="number" min="1" max="180" class="form-control" id="duration'+$scope.count+'" ondblclick="makeEditable(this)" onblur="makeUneditable(this); name="duration" value="'+$scope.selectedSubCategory['duration']+'" readonly></td>'+
                                     '<td><select class="form-control" name="istimed"><option value="yes">yes</option><option value="no">no</option></select></td>'+
                                     '<td><input type="number" min="1" max="100" class="form-control" ondblclick="makeEditable(this)" onblur="makeUneditable(this)" name="correct_grade" value="'+$scope.selectedSubCategory['correct_grade']+'" readonly></td>'+
-                                    '<td><input type="number" min="0" max="100" class="form-control" ondblclick="makeEditable(this)"onblur="makeUneditable(this)" name="incorrect_grade" value="'+$scope.selectedSubCategory['incorrect_grade']+'" readonly></td>'+
+                                    '<td><input type="number" min="-100" max="100" class="form-control" ondblclick="makeEditable(this)"onblur="makeUneditable(this)" name="incorrect_grade" value="'+$scope.selectedSubCategory['incorrect_grade']+'" readonly></td>'+
                                     '<td><select name="selection"><option value="random">random</option><option value="content">content</option></select></td>'+
+                                    '<td><span class="glyphicon glyphicon-plus addtostackbutton" ng-click="addToStack('+$scope.count+')"></span></td>'
                                 +'</tr>';
-                        $scope.selectedQuestions.push({
-                            count :    { 
-                                'subcategory' : $scope.selectedSubCategory['subcategory'],
-                                'qs' : $scope.selectedSubCategory['questions_level_info'],
-
-                                }
-                            })
-                        angular.element(document.querySelector('#selectedCategoriesRow')).append($compile(html)($scope));
+                        angular.element(document.querySelector('#selectedQuestionsRow')).append($compile(html)($scope));
                         $scope.selectedSubCategoryDropdown = "";
-                        count += 1;
-
+                        // stack[$scope.count.toString()] = s;
+                        // $scope.finalStack.push(stack);
+                        $scope.count += 1;
                     },
                     function(response) {
                         $scope.errors = response.data;
                     });
+            }
+            $scope.addToStack = function(count){
+                console.log(QuizStackFactory.getStack(count));
             }
         }]);
 

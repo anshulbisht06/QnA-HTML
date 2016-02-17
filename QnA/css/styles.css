@@ -57,3 +57,6 @@ ul.sidemenu > li{
     color:#000;
     border-radius:0;
 }
+.addtostackbutton{
+	cursor: pointer;
+}
