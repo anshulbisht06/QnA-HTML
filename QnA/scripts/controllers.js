@@ -582,7 +582,7 @@ angular.module('QnA')
                 console.log(response);
                 for(i=0;i<response.length;i++){
                 html = '<tr id="oldstackrow'+i+'">'+
-                        '<td style="width:130px;">'+response[i].sectionname+'</td>'+
+                        '<td style="width:130px;">'+response[i].section_name+'</td>'+
                         '<td style="width:200px;">'+$('#subcategory'+response[i].subcategory).text()+'</td>'+
                         '<td style="width:130px;">'+response[i].level+'</td>'+
                         '<td style="width:130px;">'+response[i].que_type+'</td>'+
@@ -628,7 +628,7 @@ angular.module('QnA')
                         s[$scope.count] = {
                                 'quiz' : $stateParams.quizid,
                                 'subcategory' : $scope.selectedSubCategory['subcategory_id'],
-                                'sectionname' : $scope.selectedSubCategory['sectionname'],
+                                'section_name' : $scope.selectedSubCategory['section_name'],
                                 'level' : $scope.selectSubCategory['level'],
                                 'que_type' : $scope.selectSubCategory['que_type'],
                                 'no_questions' : $scope.selectSubCategory['no_questions'],
@@ -649,7 +649,7 @@ angular.module('QnA')
                         }
                         levelHtml += '</select>';
                         html = '<tr id="newstackrow'+$scope.count+'">'+
-                                    '<td style="width:130px;"><input type="text" class="form-control" ondblclick="makeEditable(this)" onblur="makeUneditable(this)" name="sectionname" value="'+$scope.selectedSubCategory['sectionname']+'" readonly></td>'+
+                                    '<td style="width:130px;"><input type="text" class="form-control" ondblclick="makeEditable(this)" onblur="makeUneditable(this)" name="section_name" value="'+$scope.selectedSubCategory['section_name']+'" readonly></td>'+
                                     '<td style="width:200px;">'+$scope.selectedSubCategory['subcategory']+'</td>'+
                                     '<td style="width:130px;">'+levelHtml+'</td>'+
                                     '<td style="width:130px;"><select class="form-control" id="que_type'+$scope.count+'" name="que_type"><option value="mcq">mcq</option><option value="objective">objective</option></select></td>'+
