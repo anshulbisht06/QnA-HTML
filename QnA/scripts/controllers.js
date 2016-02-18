@@ -579,8 +579,9 @@ angular.module('QnA')
             });
             QuizStackFactory.getQuizStack($cookies.get('token'), $stateParams.quizid, 'all').query(
             function(response) {
-                console.log(response);
+                total_duration = 0;
                 for(i=0;i<response.length;i++){
+                    total_duration += parseInt(response[i].duration);
                 html = '<tr id="oldstackrow'+i+'">'+
                         '<td style="width:130px;">'+response[i].section_name+'</td>'+
                         '<td style="width:200px;">'+$('#subcategory'+response[i].subcategory).text()+'</td>'+
@@ -596,6 +597,7 @@ angular.module('QnA')
                     +'</tr>';
                 angular.element(document.querySelector('#existingQuestionsRow')).append($compile(html)($scope));
                 }
+                document.querySelector('#totalduration').value = total_duration;
             },
             function(response) {
                 $scope.unableToGetAllSavedStacks= true;
@@ -623,7 +625,6 @@ angular.module('QnA')
                 QuestionsFactory.getQuestionUnderSubCategory($cookies.get('token'), $scope.user, subCategoryId, true).query(
                     function(response) {
                         $scope.selectedSubCategory = response[0];
-                        console.log($scope.selectedSubCategory);
                         s = {}
                         s[$scope.count] = {
                                 'quiz' : $stateParams.quizid,
@@ -706,15 +707,12 @@ angular.module('QnA')
             $scope.removeFromStackAndSave = function(quizid, quizstackid){
                 QuizStackFactory.deleteFromStack($cookies.get('token'), quizid, quizstackid).delete().$promise.then(
                 function(response){
-                    // $scope.alertType = "success";
-                    // $scope.alertMsg = "The question has been delete.";
-                    // $('#Q'+questionid).hide();
                     window.location.reload();                   
                 },
                 function(response) {
-                    // $scope.alertType = "danger";
-                    // $scope.alertMsg = "Unable to delete the question. See below errors.";
-                    $scope.errors = response.data;
+                    $scope.alertType = "danger";
+                    $scope.alertMsg = "Unable to delete the quiz stack. See below errors.";
+                    alert(response.data.errors);
                 });
             }
             $scope.go = function(){
