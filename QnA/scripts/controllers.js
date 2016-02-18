@@ -577,9 +577,32 @@ angular.module('QnA')
                 $scope.errors = response.data;
                 $scope.unableToGetAllSubCategories = true;
             });
+            QuizStackFactory.getQuizStack($cookies.get('token'), $stateParams.quizid, 'all').query(
+            function(response) {
+                console.log(response);
+                for(i=0;i<response.length;i++){
+                html = '<tr id="oldstackrow'+i+'">'+
+                        '<td style="width:130px;">'+response[i].sectionname+'</td>'+
+                        '<td style="width:200px;">'+$('#subcategory'+response[i].subcategory).text()+'</td>'+
+                        '<td style="width:130px;">'+response[i].level+'</td>'+
+                        '<td style="width:130px;">'+response[i].que_type+'</td>'+
+                        '<td style="width:130px;">'+response[i].no_questions+'</td>'+
+                        '<td style="width:130px;">'+response[i].duration+'</td>'+
+                        '<td style="width:130px;">'+response[i].istimed+'</td>'+
+                        '<td style="width:130px;">'+response[i].correct_grade+'</td>'+
+                        '<td style="width:130px;">'+response[i].incorrect_grade+'</td>'+
+                        '<td style="width:130px;">'+response[i].question_order+'</td>'+
+                        '<td style="width:60px;"><a href="javascript:void(0);"><span class="glyphicon glyphicon-trash removefromstackbutton" ng-click="removeFromStackAndSave('+response[i].id+')"></span></a></td>'+
+                    +'</tr>';
+                angular.element(document.querySelector('#existingQuestionsRow')).append($compile(html)($scope));
+                }
+            },
+            function(response) {
+                $scope.unableToGetAllSavedStacks= true;
+            });
             $scope.selectedSubCategoryDropdown = "";
             selectNoQuestions = function(noOfQuestions){
-                result = '<select class="form-control" name="no_questions">';
+                result = '<select class="form-control" name="no_questions" id="no_questions'+$scope.count+'">';
                 for(var i=0;i<noOfQuestions;i++){
                     result += '<option value="'+(i+1)+'">'+(i+1)+'</option>';
                 }
@@ -599,35 +622,45 @@ angular.module('QnA')
                 $scope.finalStack = [];
                 QuestionsFactory.getQuestionUnderSubCategory($cookies.get('token'), $scope.user, subCategoryId, true).query(
                     function(response) {
-                        console.log($scope.selectSubCategory['sectionname']);
                         $scope.selectedSubCategory = response[0];
-                        QuizStackFactory.addToFinalStack({
+                        console.log($scope.selectedSubCategory);
+                        s = {}
+                        s[$scope.count] = {
                                 'quiz' : $stateParams.quizid,
-                                'subcategory' : $scope.selectedSubCategory['subcategory'],
+                                'subcategory' : $scope.selectedSubCategory['subcategory_id'],
                                 'sectionname' : $scope.selectedSubCategory['sectionname'],
-                        })
+                                'level' : $scope.selectSubCategory['level'],
+                                'que_type' : $scope.selectSubCategory['que_type'],
+                                'no_questions' : $scope.selectSubCategory['no_questions'],
+                                'duration' : $scope.selectSubCategory['duration'],
+                                'istimed' : $scope.selectSubCategory['istimed'],
+                                'correct_grade' : $scope.selectSubCategory['correct_grade'],
+                                'incorrect_grade' : $scope.selectSubCategory['incorrect_grade'],
+                                'question_order' : $scope.selectSubCategory['question_order'],
 
+                            }
+                        QuizStackFactory.addToFinalStack(s);
                         QuizStackFactory.addSelectedLevelQuestions($scope.selectedSubCategory['questions_level_info']);
                         initialnoOfQuestionIndex = $scope.selectedSubCategory['questions_level_info'].findIndex(val=>val>0);
                         // initialLevel = { 0 : 'easy', 1 : 'medium' , 2 : 'hard' , 3 : 'total' }[initialnoOfQuestionIndex];
-                        levelHtml = '<select class="form-control" name="section_level" id="section_level'+$scope.count+'" ng-model="modelForLevels['+$scope.count+']" ng-change="changeNoQuestions('+$scope.count+')"><option value="" disabled>Select here</option>';
-                        for(var i=0;i<$scope.selectedSubCategory['section_level'].length;i++){
-                            levelHtml += '<option value="'+$scope.selectedSubCategory['section_level'][i]+'-'+i+'">'+$scope.selectedSubCategory['section_level'][i]+'</option>';
+                        levelHtml = '<select class="form-control" name="level" id="level'+$scope.count+'" ng-model="modelForLevels['+$scope.count+']" ng-change="changeNoQuestions('+$scope.count+')"><option value="" disabled>Select here</option>';
+                        for(var i=0;i<$scope.selectedSubCategory['level'].length;i++){
+                            levelHtml += '<option value="'+$scope.selectedSubCategory['level'][i]+'-'+i+'">'+$scope.selectedSubCategory['level'][i]+'</option>';
                         }
                         levelHtml += '</select>';
-                        html = '<tr>'+
+                        html = '<tr id="newstackrow'+$scope.count+'">'+
                                     '<td style="width:130px;"><input type="text" class="form-control" ondblclick="makeEditable(this)" onblur="makeUneditable(this)" name="sectionname" value="'+$scope.selectedSubCategory['sectionname']+'" readonly></td>'+
                                     '<td style="width:200px;">'+$scope.selectedSubCategory['subcategory']+'</td>'+
                                     '<td style="width:130px;">'+levelHtml+'</td>'+
-                                    '<td style="width:130px;"><select class="form-control" name="selection"><option value="mcq">mcq</option><option value="objective">objective</option></select></td>'+
+                                    '<td style="width:130px;"><select class="form-control" id="que_type'+$scope.count+'" name="que_type"><option value="mcq">mcq</option><option value="objective">objective</option></select></td>'+
                                     '<td style="width:130px;" id="levelwiseqs'+$scope.count+'">'+selectNoQuestions($scope.selectedSubCategory['questions_level_info'][initialnoOfQuestionIndex])+'</td>'+
                                     '<td style="width:130px;"><input type="number" min="1" max="180" class="form-control" id="duration'+$scope.count+'" ondblclick="makeEditable(this)" onblur="makeUneditable(this); name="duration" value="'+$scope.selectedSubCategory['duration']+'" readonly></td>'+
-                                    '<td style="width:130px;"><select class="form-control" name="istimed"><option value="yes">yes</option><option value="no">no</option></select></td>'+
-                                    '<td style="width:130px;"><input type="number" min="1" max="100" class="form-control" ondblclick="makeEditable(this)" onblur="makeUneditable(this)" name="correct_grade" value="'+$scope.selectedSubCategory['correct_grade']+'" readonly></td>'+
-                                    '<td style="width:130px;"><input type="number" min="-100" max="100" class="form-control" ondblclick="makeEditable(this)"onblur="makeUneditable(this)" name="incorrect_grade" value="'+$scope.selectedSubCategory['incorrect_grade']+'" readonly></td>'+
-                                    '<td style="width:130px;"><select class="form-control" name="selection"><option value="random">random</option><option value="content">content</option></select></td>'+
-                                    '<td style="width:60px;"><a href="javascript:void(0);"><span class="glyphicon glyphicon-remove-circle removefromstackbutton"></span></a></td>'+
-                                    '<td style="width:60px;"><a href="javascript:void(0);"><span class="glyphicon glyphicon-ok-circle addtostackbutton" ng-click="addToStack('+$scope.count+')"></span></a></td>'+
+                                    '<td style="width:130px;"><select class="form-control" name="istimed" id="istimed'+$scope.count+'"><option value="yes">yes</option><option value="no">no</option></select></td>'+
+                                    '<td style="width:130px;"><input type="number" min="1" max="100" class="form-control" ondblclick="makeEditable(this)" onblur="makeUneditable(this)" name="correct_grade" id="correct_grade'+$scope.count+'" value="'+$scope.selectedSubCategory['correct_grade']+'" readonly></td>'+
+                                    '<td style="width:130px;"><input type="number" min="-100" max="100" class="form-control" ondblclick="makeEditable(this)"onblur="makeUneditable(this)" name="incorrect_grade" id="incorrect_grade'+$scope.count+'" value="'+$scope.selectedSubCategory['incorrect_grade']+'" readonly></td>'+
+                                    '<td style="width:130px;"><select class="form-control" name="question_order" id="question_order'+$scope.count+'"><option value="random">random</option><option value="content">content</option></select></td>'+
+                                    '<td style="width:60px;"><a href="javascript:void(0);"><span class="glyphicon glyphicon-remove-circle removefromstackbutton" ng-click="removeFromStack('+$scope.count+')"></span></a></td>'+
+                                    '<td style="width:60px;"><a href="javascript:void(0);"><span class="glyphicon glyphicon-ok-circle addtostackbutton" ng-click="addToStackAndSave('+$scope.count+')"></span></a></td>'+
                                 +'</tr>';
                         angular.element(document.querySelector('#selectedQuestionsRow')).append($compile(html)($scope));
                         $scope.selectedSubCategoryDropdown = "";
@@ -637,8 +670,45 @@ angular.module('QnA')
                         $scope.errors = response.data;
                     });
             }
-            $scope.addToStack = function(count){
-                console.log(QuizStackFactory.getStack(count));
+            $scope.addToStackAndSave = function(count){
+                r = QuizStackFactory.getValueFromStack(count);
+                r[count]['level'] = document.querySelector("#level"+count).value.split('-')[0];
+                if(r[count]['level']===""){
+                    alert('Fill all fields correctly!');
+                    return;
+                }
+                r[count]['que_type'] = document.querySelector("#que_type"+count).value;
+                r[count]['no_questions']  = document.querySelector("#levelwiseqs"+count+" select").value;
+                r[count]['duration']  = document.querySelector("#duration"+count).value;
+                if(document.querySelector("#istimed"+count).value==='yes')
+                    r[count]['istimed'] = true;
+                else
+                    r[count]['istimed'] = false;
+                r[count]['correct_grade'] = document.querySelector("#correct_grade"+count).value;
+                r[count]['incorrect_grade'] = document.querySelector("#incorrect_grade"+count).value;
+                r[count]['question_order'] = document.querySelector("#question_order"+count).value;
+                QuizStackFactory.updateFinalStack(count, r[count]);
+
+                QuizStackFactory.addToQuizStack($cookies.get('token')).save(QuizStackFactory.getValueFromStack(count)[count]).$promise.then(
+                function(response){
+                    $scope.alertType = "success";
+                    $scope.alertMsg = "Your quiz stack has been updated.";
+                },
+                function(response) {
+                    $scope.alertType = "danger";
+                    $scope.alertMsg = "Unable to update the quiz stack.";
+                    alert(response.data);
+                });
+            }
+            $scope.removeFromStack = function(count){
+                QuizStackFactory.removeFromStack(count);
+                document.querySelector("#newstackrow"+count).style.display = "none";
+            }
+            $scope.removeFromStackAndSave = function(quizstackid){
+                console.log(quizstackid);
+            }
+            $scope.go = function(){
+                console.log(QuizStackFactory.showStack());
             }
         }]);
 

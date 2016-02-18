@@ -9,7 +9,7 @@
 				<div class="input-group">
 			        	<select class="form-control" id="subcategoryname" name="subcategoryname" ng-model="selectedSubCategoryDropdown" ng-change="selectSubCategory(selectedSubCategoryDropdown)">
 			        		<option value="" disabled>Select sub-category here...</option>
-			        		<option ng-repeat="subcategory in subCategories" value="{{ subcategory.id }}">{{ subcategory.sub_category_name }}</option>
+			        		<option ng-repeat="subcategory in subCategories" value="{{ subcategory.id }}" id="subcategory{{ subcategory.id }}">{{ subcategory.sub_category_name }}</option>
 			        	</select>
 		      	</div>
 	      	</div>
@@ -27,12 +27,15 @@
 	      		</button>
 	      	</div>
 	      	<div class="col-lg-2 col-md-2 col-sm-2">	
-	      		<button class="btn btn-primary" type="button" ng-click="addStack()">
+	      		<button class="btn btn-primary" type="button" ng-click="go()">
 	                Add
 	            </button>      		
 	      	<div class="col-lg-2 col-md-2 col-sm-2">	      		
 	      	</div>
 		</div><br><br>
+		<div class="row text-center" ng-if="unableToGetAllSavedStacks">
+			<h3>Unable to fetch existing stacks inside this quiz.</h3>
+		</div>
 		<div class="row">
 		  <div class="table-responsive">          
 			  <table class="table">
@@ -52,6 +55,8 @@
 			      </tr>
 			    </thead>
 			    <tbody id="selectedQuestionsRow">
+			    </tbody>
+			    <tbody id="existingQuestionsRow">
 			    </tbody>
 			  </table>
 		  </div>

@@ -303,7 +303,43 @@ angular.module('QnA')
         this.addToFinalStack  = function(value){
             finalStack.push(value);
         }
-        this.getStack = function(index){
+        this.getValueFromStack = function(index){
             return finalStack[index];
         }
+        this.removeFromStack = function(index){
+            delete finalStack[index];
+        }
+        // this.emptyFromStack = function(index){
+        //     finalStack[index] = {};
+        // }
+        this.updateFinalStack = function(index, value){
+            finalStack[index][index] = value;
+        }
+        this.showStack = function(){
+            return finalStack;
+        }
+
+        // function to create an entry in QuizStack table.
+        this.addToQuizStack = function(token){
+            return $resource(baseURL+"stack/create/", null,
+                {'save':   
+                { method:'POST', headers: {'Authorization': 'JWT ' + token} } 
+                },
+                { stripTrailingSlashes: false }
+                );
+        }
+
+        // function to fetch either all quiz stacks or with a specifid id.
+        this.getQuizStack = function(token, quizid, quizstackid){
+                return $resource(baseURL+"stack/get/"+quizid+"/"+quizstackid+"/", null,
+                {
+                    query: {
+                    headers: {'Authorization': 'JWT ' + token},
+                    method : 'GET',
+                    isArray : true,
+                    }
+                },
+                { stripTrailingSlashes: false }
+                );
+        };
     }]);
