@@ -342,4 +342,14 @@ angular.module('QnA')
                 { stripTrailingSlashes: false }
                 );
         };
+
+        //function to remove existing quiz stack item (from backend also)
+        this.deleteFromStack = function(token,quizid, quizstackid){
+            return $resource(baseURL+"stack/delete/"+quizid+"/"+quizstackid+"/", null,
+                {'delete':   
+                { method:'DELETE', headers: {'Authorization': 'JWT ' + token} } 
+                },
+                { stripTrailingSlashes: false }
+                );
+        }
     }]);

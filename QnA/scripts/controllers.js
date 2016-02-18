@@ -286,7 +286,7 @@ angular.module('QnA')
             $scope.isHoveredOver[questionid] = false;
         }
         $scope.deleteQuestion = function(questionid){
-            var response = QuestionsFactory.deleteQuestion($cookies.get('token'), $scope.user, questionid).delete().$promise.then(
+            QuestionsFactory.deleteQuestion($cookies.get('token'), $scope.user, questionid).delete().$promise.then(
                 function(response){
                     // $scope.alertType = "success";
                     // $scope.alertMsg = "The question has been delete.";
@@ -592,7 +592,7 @@ angular.module('QnA')
                         '<td style="width:130px;">'+response[i].correct_grade+'</td>'+
                         '<td style="width:130px;">'+response[i].incorrect_grade+'</td>'+
                         '<td style="width:130px;">'+response[i].question_order+'</td>'+
-                        '<td style="width:60px;"><a href="javascript:void(0);"><span class="glyphicon glyphicon-trash removefromstackbutton" ng-click="removeFromStackAndSave('+response[i].id+')"></span></a></td>'+
+                        '<td style="width:60px;"><a href="javascript:void(0);"><span class="glyphicon glyphicon-trash removefromstackbutton" ng-click="removeFromStackAndSave('+response[i].quiz+', '+response[i].id+')"></span></a></td>'+
                     +'</tr>';
                 angular.element(document.querySelector('#existingQuestionsRow')).append($compile(html)($scope));
                 }
@@ -691,8 +691,7 @@ angular.module('QnA')
 
                 QuizStackFactory.addToQuizStack($cookies.get('token')).save(QuizStackFactory.getValueFromStack(count)[count]).$promise.then(
                 function(response){
-                    $scope.alertType = "success";
-                    $scope.alertMsg = "Your quiz stack has been updated.";
+                    window.location.reload();
                 },
                 function(response) {
                     $scope.alertType = "danger";
@@ -704,8 +703,19 @@ angular.module('QnA')
                 QuizStackFactory.removeFromStack(count);
                 document.querySelector("#newstackrow"+count).style.display = "none";
             }
-            $scope.removeFromStackAndSave = function(quizstackid){
-                console.log(quizstackid);
+            $scope.removeFromStackAndSave = function(quizid, quizstackid){
+                QuizStackFactory.deleteFromStack($cookies.get('token'), quizid, quizstackid).delete().$promise.then(
+                function(response){
+                    // $scope.alertType = "success";
+                    // $scope.alertMsg = "The question has been delete.";
+                    // $('#Q'+questionid).hide();
+                    window.location.reload();                   
+                },
+                function(response) {
+                    // $scope.alertType = "danger";
+                    // $scope.alertMsg = "Unable to delete the question. See below errors.";
+                    $scope.errors = response.data;
+                });
             }
             $scope.go = function(){
                 console.log(QuizStackFactory.showStack());
