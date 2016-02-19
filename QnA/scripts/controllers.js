@@ -565,6 +565,22 @@ angular.module('QnA')
                 });
             }
         }])
+    
+
+    .controller('PreviewQuizController', ['$scope', '$controller', '$cookies', '$state', '$stateParams', '$http', function($scope, $controller, $cookies, $state, $stateParams, $http) {
+            $scope._data = undefined;
+            $scope.getQuizPreview = function() {
+                $http({
+                  method: 'GET',
+                  url: baseURL+'stack/get/test/1/'
+                }).then(function successCallback(response) {
+                    $scope.all_que_data = response.data;
+                  }, function errorCallback(response) {
+                    console.log('error :(')
+                  });
+            };  
+            
+        }])
 
 
     .controller('AddQuizStackController', ['$scope', '$controller', '$cookies', '$stateParams', '$compile', 'QuizStackFactory', 'SubCategoryFactory', 'QuestionsFactory', function($scope, $controller, $cookies, $stateParams, $compile, QuizStackFactory, SubCategoryFactory, QuestionsFactory) {
@@ -579,7 +595,7 @@ angular.module('QnA')
             });
             QuizStackFactory.getQuizStack($cookies.get('token'), $stateParams.quizid, 'all').query(
             function(response) {
-                console.log(response);
+                // console.log(response);
                 for(i=0;i<response.length;i++){
                 html = '<tr id="oldstackrow'+i+'">'+
                         '<td style="width:130px;">'+response[i].section_name+'</td>'+
@@ -592,7 +608,7 @@ angular.module('QnA')
                         '<td style="width:130px;">'+response[i].correct_grade+'</td>'+
                         '<td style="width:130px;">'+response[i].incorrect_grade+'</td>'+
                         '<td style="width:130px;">'+response[i].question_order+'</td>'+
-                        '<td style="width:60px;"><a href="javascript:void(0);"><span class="glyphicon glyphicon-trash removefromstackbutton" ng-click="removeFromStackAndSave('+response[i].id+')"></span></a></td>'+
+                        '<td style="width:60px;"><a href="javascript:void(0);"><span class="glyphicon glyphicon-trash removefromstackbutton" style="font-size:20px;" ng-click="removeFromStackAndSave('+response[i].id+')"></span></a></td>'+
                     +'</tr>';
                 angular.element(document.querySelector('#existingQuestionsRow')).append($compile(html)($scope));
                 }
