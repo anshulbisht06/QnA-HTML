@@ -21,11 +21,46 @@
 	      			<input type="text" class="form-control" name="duration" value="" id="totalduration">
 	      		</div>
 	      	</div>
-	      	<div class="col-lg-1 col-md-1 col-sm-1">
-	      		<button class="btn btn-info" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">
-	      			Preview
-	      		</button>
-	      	</div>
+	      	<div ng-controller="PreviewQuizController">
+		      	<div class="col-lg-1 col-md-1 col-sm-1">
+		      		<button class="btn btn-info" type="button" ng-click='getQuizPreview()' class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">
+		      			Preview
+		      		</button>
+		      	</div>
+		      	<div id="myModal" class="modal fade" role="dialog" >
+				  <div class="modal-dialog" style='width: 900px;'>
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <button type="button" class="close" data-dismiss="modal">&times;</button>
+				        <h4 class="modal-title">Test: Example</h4>
+				      </div>
+				      <div class="modal-body col-md-12">
+				      		<div class="col-md-12" ng-repeat="data in all_que_data.data|orderBy:['section_name']">
+				      			<!-- {{data}} -->
+				      			<h3>{{data.section_name}}, Total Questions: {{data.total_questions}}, Total Time: 00:00 minutes</h3>
+				      			<div ng-repeat='cont in data.question_stack'>
+				      			<div class="panel panel-default panel-body">
+					      			<p>Q{{$index+1}}. {{cont.content}}</p>
+					      			<div ng-repeat='option in cont.options'>
+						      			<div class='col-md-6'>
+						      			 <input type="checkbox" class="myClass" style='margin:3%;' value="yes" id="answer" name="answer" data-color="green" />
+						      			 {{option.content}}
+						      			 <br>
+						      			 </div>
+					  				 </div>
+				  				 </div>
+				  				 </div>
+				  				 <br>
+				      		</div>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				      </div>
+				    </div>
+
+				  </div>
+				</div>
+			</div>
 	      	<div class="col-lg-2 col-md-2 col-sm-2">	
 	      		<button class="btn btn-primary" type="button" ng-click="go()">
 	                Add
@@ -66,38 +101,5 @@
 </div>
 <br>
 </div>
-<div id="myModal" class="modal fade" role="dialog">
-  <div class="modal-dialog" style='width: 900px;'>
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Test: Example</h4>
-      </div>
-      <div class="modal-body col-md-12">
-      		<div class="col-md-1">Que.1: &nbsp;&nbsp;</div>
-      		<div class="col-md-8">
-      			<p>Some test questions to ask ?</p>	
-      			<div class='col-md-3'>
-      			 <input type="checkbox" class="myClass" style='margin:3%;' value="yes" id="answer" name="answer" data-color="green" />
-      			 YES
-      			 <br>
-      			 <input type="checkbox" class="myClass" style='margin:3%;' value="yes" id="answer" name="answer" data-color="green" />
-      			 NO
-      			 </div>
-      			 <div class='col-md-3'>
-      			 <input type="checkbox" class="myClass" style='margin:3%;' value="yes" id="answer" name="answer" data-color="green" />
-      			 WHY?
-      			 <br>
-      			 <input type="checkbox" class="myClass" style='margin:3%;' value="yes" id="answer" name="answer" data-color="green" />
-  				 IF
-  				 </div>
-      		</div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
 
-  </div>
-</div>
 </div>
