@@ -101,12 +101,21 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                     }
                 }
                 })
-            .state('app.create-question', {
-                url:'create/question/',
+            .state('app.create-mcq-question', {
+                url:'mcq/create/question/',
                 views :{
                     'content@': {
                         controller  : 'CreateQuestionController',
-                        templateUrl : 'views/createquestion.html'
+                        templateUrl : 'views/createmcqquestion.html'
+                    }
+                }
+                })
+            .state('app.create-objective-question', {
+                url:'objective/create/question/',
+                views :{
+                    'content@': {
+                        controller  : 'CreateQuestionController',
+                        templateUrl : 'views/createobjectivequestion.html'
                     }
                 }
                 })

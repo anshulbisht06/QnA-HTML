@@ -22,8 +22,7 @@ angular.module('QnA')
         $rootScope.user = $cookies.get('user');
         $rootScope.username = $cookies.get('username');
         $rootScope.token = $cookies.get('token');
-        if($rootScope.token === undefined){
-    
+        if($rootScope.token === undefined){    
             $state.go('app.login-user');
         }
     }])
@@ -398,50 +397,75 @@ angular.module('QnA')
                 $scope.unableToGetAllSubCategories = true;
             });
         }
-        $scope.createQuestionForm = {content:"",explanation:"", level:"easy", answer_order:"random", sub_category:""};
-        $scope.postQuestion = function() {
-            var response = QuestionsFactory.createQuestion($cookies.get('token')).save($scope.createQuestionForm).$promise.then(
-                function(response){
-                    $scope.alertType = "success";
-                    $scope.alertMsg = "Your question has been created.";
-                    $scope.createQuestionForm = {content:"",explanation:"", level:"easy", answer_order:"random", sub_category:""};
-                    $scope.questionCreateForm.$setPristine();
-                    $state.go('app.create-question');                     
-                },
-                function(response) {
-                    $scope.alertType = "danger";
-                    $scope.alertMsg = "Unable to create the question. See below errors.";
-                    $scope.errors = response.data;
-                });
-        }
-
-        $scope.optionss = [
-            {
-                optionid : 1,
-                content : '',
-                correct : true
-            },
-            {
-                optionid : 2,
-                content : '',
-                correct : false
-            },
-            ];
-        $scope.optionCount = 3;
-        $scope.addOptions = function(){
-            $scope.optionss.push({                 
-                                optionid : $scope.optionCount,
-                                content : '',
-                                correct :  false
-                                });
-            $scope.optionCount = $scope.optionCount + 1;
-        }
-        $scope.removeOption = function(op_id){
-            if(op_id > 2){
-                var all = $scope.optionss;
-                $scope.optionss = all.filter(function(el) { return el.optionid != op_id; });
+        if($state.current.name === "app.create-mcq-question")
+        {
+            $scope.createMCQQuestionForm = {content:"",explanation:"", level:"easy", answer_order:"random", sub_category:"", que_type:"mcq"};
+            $scope.postMCQQuestion = function() {
+                QuestionsFactory.createQuestion($cookies.get('token'), "mcq").save($scope.createMCQQuestionForm).$promise.then(
+                    function(response){
+                        $scope.alertType = "success";
+                        $scope.alertMsg = "Your question has been created.";
+                        $scope.createMCQQuestionForm = {content:"",explanation:"", level:"easy", answer_order:"random", sub_category:""};
+                        $scope.mcqQuestionCreateForm.$setPristine();
+                        $state.go('app.create-mcq-question');                     
+                    },
+                    function(response) {
+                        $scope.alertType = "danger";
+                        $scope.alertMsg = "Unable to create the question. See below errors.";
+                        $scope.errors = response.data;
+                    });
             }
-        };        
+
+            $scope.optionss = [
+                {
+                    optionid : 1,
+                    content : '',
+                    correct : true
+                },
+                {
+                    optionid : 2,
+                    content : '',
+                    correct : false
+                },
+                ];
+            $scope.optionCount = 3;
+            $scope.addOptions = function(){
+                $scope.optionss.push({                 
+                                    optionid : $scope.optionCount,
+                                    content : '',
+                                    correct :  false
+                                    });
+                $scope.optionCount = $scope.optionCount + 1;
+            }
+            $scope.removeOption = function(op_id){
+                if(op_id > 2){
+                    var all = $scope.optionss;
+                    $scope.optionss = all.filter(function(el) { return el.optionid != op_id; });
+                }
+            };
+        }
+        else if($state.current.name === "app.create-objective-question"){
+            $scope.createObjectiveQuestionForm = {content:"",explanation:"", level:"easy", answer_order:"random", sub_category:"", que_type:"objective"};
+            $scope.postObjectiveQuestion = function() {
+                var objectiveFormData = {content:$('#contentid').html(), explanation:$scope.createObjectiveQuestionForm.explanation, answer_order:$scope.createObjectiveQuestionForm.answer_order
+                                    , level:$scope.createObjectiveQuestionForm.level, sub_category:$scope.createObjectiveQuestionForm.sub_category, que_type:"objective"
+                                    };
+                QuestionsFactory.createQuestion($cookies.get('token'), "objective").save(objectiveFormData).$promise.then(
+                    function(response){
+                        $scope.alertType = "success";
+                        $scope.alertMsg = "Your question has been created.";
+                        $scope.objectiveQuestionCreateForm.$setPristine();
+                        $state.go('app.create-objective-question');                     
+                    },
+                    function(response) {
+                        $scope.alertType = "danger";
+                        $scope.alertMsg = "Unable to create the question. See below errors.";
+                        $scope.errors = response.data;
+                    });
+                // console.log($('#contentid').html());
+                // console.log($scope.createObjectiveQuestionForm);
+            }
+        }
     }])
     .controller('XlsHandlerController',['$scope', '$http', 'fileUpload', function($scope, $http, fileUpload){
         // Function for download xls file on any type of quetions .... ;)
@@ -650,7 +674,7 @@ angular.module('QnA')
                         }
                         levelHtml += '</select>';
                         html = '<tr id="newstackrow'+$scope.count+'">'+
-                                    '<td style="width:130px;"><input type="text" class="form-control" ondblclick="makeEditable(this)" onblur="makeUneditable(this)" name="section_name" value="'+$scope.selectedSubCategory['section_name']+'" readonly></td>'+
+                                    '<td style="width:130px;"><input type="text" class="form-control" ondblclick="makeEditable(this)" onblur="makeUneditable(this)" name="section_name"  id="section_name'+$scope.count+'" value="'+$scope.selectedSubCategory['section_name']+'" readonly></td>'+
                                     '<td style="width:200px;">'+$scope.selectedSubCategory['subcategory']+'</td>'+
                                     '<td style="width:130px;">'+levelHtml+'</td>'+
                                     '<td style="width:130px;"><select class="form-control" id="que_type'+$scope.count+'" name="que_type"><option value="mcq">mcq</option><option value="objective">objective</option></select></td>'+
@@ -679,6 +703,7 @@ angular.module('QnA')
                     return;
                 }
                 r[count]['que_type'] = document.querySelector("#que_type"+count).value;
+                r[count]['section_name'] = document.querySelector("#section_name"+count).value;
                 r[count]['no_questions']  = document.querySelector("#levelwiseqs"+count+" select").value;
                 r[count]['duration']  = document.querySelector("#duration"+count).value;
                 if(document.querySelector("#istimed"+count).value==='yes')

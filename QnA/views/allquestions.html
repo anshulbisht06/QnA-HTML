@@ -2,7 +2,14 @@
 <div ng-include src="'views/alertmsg.html'"></div>
 	<div class="row" style="margin-right: 0">
 	<div class="row">
-		<a ui-sref="app.create-question" class="btn btn-primary btn-md right" style="margin-right: 10px;">Create Question</a>
+		<div class="dropdown">
+		  <button class="btn btn-primary btn-md right dropdown-toggle" style="margin-right: 140px;" type="button" data-toggle="dropdown">Create Question
+		  <span class="caret"></span></button>
+		  <ul class="dropdown-menu pull-right">
+		    <li><a ui-sref="app.create-mcq-question">MCQ</a></li>
+		    <li><a ui-sref="app.create-objective-question">Objective</a></li>
+		  </ul>
+		</div>
 	</div>
 	<div class="row">
 		<h2 class="text-center hidden-xs">Your questions</h2>

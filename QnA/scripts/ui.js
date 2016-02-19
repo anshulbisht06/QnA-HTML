@@ -6,6 +6,9 @@ function makeEditable(element){
 function makeUneditable(element){
 	element.readOnly = true;
 }
+function insertBlank(selector) {
+	document.querySelector(selector).innerHTML += ' <span class="_blank-outer">&nbsp;<span class="inline _blank blank">Answer</span></span>&nbsp; ';
+}
 // function sumDurations(element){
 // 	sum += parseInt(element.value) - temp;
 // 	temp = parseInt(element.value);

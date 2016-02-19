@@ -66,3 +66,17 @@ ul.sidemenu > li{
 	font-size: 30px;
 	color:green;
 }
+.editable{
+	cursor: text;
+}
+.inline{
+	display: inline-block;
+}
+.blank {
+    min-width: 50px;
+    height: 20px;
+    border-bottom: 1px dotted #000000;
+    margin: 0 5px;
+    outline: none;
+    vertical-align: initial;
+}

@@ -200,8 +200,8 @@ angular.module('QnA')
                 );
         };
 
-        this.createQuestion = function(token){
-            return $resource(baseURL+"question/mcq/create/", null,
+        this.createQuestion = function(token, type){
+            return $resource(baseURL+"question/"+type+"/create/", null,
                     {'save':   
                     { method:'POST', headers: {'Authorization': 'JWT ' + token}} 
                     },

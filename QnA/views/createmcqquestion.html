@@ -3,46 +3,44 @@
 <div class="jumbotron">
     <div class="row">
     </div>
-    <div class="row">
-	    
+    <div class="row">	    
 		<div class="row ">
-			
 			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 verticalLine">
 			<div class="row">
-				<h2 class="text-center hidden-xs">Add a question here.</h2>
-				<h4 class="text-center visible-xs">Add a question here.</h4>
+				<h2 class="text-center hidden-xs">Add MCQ question(s).</h2>
+				<h4 class="text-center visible-xs">Add MCQ question(s).</h4>
 			</div>
 			<hr>
-				<form role="form" name="questionCreateForm" ng-submit="postQuestion()" enctype="multipart/form-data" novalidate>
-				  <div class="form-group" ng-if="!unableToGetsubCategories" ng-class="{'has-error': errors.sub_category || questionCreateForm.sub_category.$touched && questionCreateForm.sub_category.$error.required }">
+				<form role="form" name="mcqQuestionCreateForm" ng-submit="postMCQQuestion()" enctype="multipart/form-data" novalidate>
+				  <div class="form-group" ng-if="!unableToGetsubCategories" ng-class="{'has-error': errors.sub_category || mcqQuestionCreateForm.sub_category.$touched && mcqQuestionCreateForm.sub_category.$error.required }">
 				  <label for="subcategory">Select a sub-category into which the question will be added</label>
-					<select class="form-control" id="sub_category" name="sub_category" ng-model="createQuestionForm.sub_category" required>
+					<select class="form-control" id="sub_category" name="sub_category" ng-model="createMCQQuestionForm.sub_category" required>
 						<option value="" disabled>Select sub-category here</option>
 					    <option ng-repeat="sc in subCategories" value="{{ sc.id }}">{{ sc.sub_category_name }}</option>
 					</select>
 			   		<span ng-if="errors.sub_category" class="help-block">{{ errors.sub_category[0] }}</span>
-			   		<span ng-if="questionCreateForm.sub_category.$touched && questionCreateForm.sub_category.$error.required" class="help-block">Sub-category is required.</span>
+			   		<span ng-if="mcqQuestionCreateForm.sub_category.$touched && mcqQuestionCreateForm.sub_category.$error.required" class="help-block">Sub-category is required.</span>
 				  </div>
   				  <div class="form-group" ng-if="unableToGetsubCategories">
   				  	<p>{{ errors }}</p>
   				  </div>
 				  <br>
 				  <div class="form-group">
-				  	<input type="file" name="figure" id="figure" ng-model="createQuestionForm.figure">
+				  	<input type="file" name="figure" id="figure" ng-model="createMCQQuestionForm.figure">
 				  </div><br>
-				  <div class="form-group" ng-class="{'has-error': errors.content || questionCreateForm.content.$touched && questionCreateForm.content.$error.required }">
+				  <div class="form-group" ng-class="{'has-error': errors.content || mcqQuestionCreateForm.content.$touched && mcqQuestionCreateForm.content.$error.required }">
 				  	<label for="content">Enter the question content</label>
-			    	<textarea name="content" id="content" rows="4" class="form-control" ng-model="createQuestionForm.content" required></textarea>
+			    	<textarea name="content" id="content" rows="4" class="form-control" ng-model="createMCQQuestionForm.content" required></textarea>
 			   		<span ng-if="errors.content" class="help-block">{{ errors.content[0] }}</span>
-			   		<span ng-if="questionCreateForm.content.$touched && questionCreateForm.content.$error.required" class="help-block">Question content is required.</span>
+			   		<span ng-if="mcqQuestionCreateForm.content.$touched && mcqQuestionCreateForm.content.$error.required" class="help-block">Question content is required.</span>
 				  </div><br>
 				  <div class="form-group">
 				  	<label for="content">Enter the explanation of question</label>
-			    	<textarea name="explanation" id="explanation" rows="4" class="form-control" ng-model="createQuestionForm.explanation"></textarea>
+			    	<textarea name="explanation" id="explanation" rows="4" class="form-control" ng-model="createMCQQuestionForm.explanation"></textarea>
 				  </div><br>
 				  <div class="form-group">
 				  	<label for="level">Level of Question</label>
-					<select class="form-control" id="level" name="level" ng-model="createQuestionForm.level">
+					<select class="form-control" id="level" name="level" ng-model="createMCQQuestionForm.level">
 						<option value="easy">Easy</option>
 						<option value="medium">Medium</option>
 						<option value="hard">Hard</option>
@@ -50,7 +48,7 @@
 				  </div><br>
 				  <div class="form-group">
 				  	<label for="answer_order">Display order of MCQs</label>
-					<select class="form-control" id="answer_order" name="answer_order" ng-model="createQuestionForm.answer_order">
+					<select class="form-control" id="answer_order" name="answer_order" ng-model="createMCQQuestionForm.answer_order">
 						<option value="random">Random</option>
 						<option value="content">Content</option>
 					</select>
@@ -63,10 +61,10 @@
 				  		<div ng-repeat="option in optionss">
 				  			<div class="row">
 				  				<div class="col-md-2">
-				  					<input type="radio" name="correctoption" size="100" ng-model="createQuestionForm.correctoption" value="{{option.optionid}}">
+				  					<input type="radio" name="correctoption" size="100" ng-model="createMCQQuestionForm.correctoption" value="{{option.optionid}}">
 				  				</div>
 				  				<div class="col-md-6">
-					    			<textarea cols="80" rows="3" name="optioncontent-{{option.optionid}}" id="optioncontent-{{option.optionid}}" class="form-control" ng-model="createQuestionForm.optioncontent[option.optionid]" placeholder="Content for option - {{$index}}" required>{{ option.content }}</textarea><hr>
+					    			<textarea cols="80" rows="3" name="optioncontent-{{option.optionid}}" id="optioncontent-{{option.optionid}}" class="form-control" ng-model="createMCQQuestionForm.optioncontent[option.optionid]" placeholder="Content for option - {{$index}}" required>{{ option.content }}</textarea><hr>
 				  				</div>
 				  				<div class="col-md-3">
 				  					<h3><a href="javascript:void"><span class="glyphicon glyphicon-remove-sign" ng-if='option.optionid > 2' ng-click="removeOption(option.optionid)"></span></a></h3>
@@ -77,7 +75,7 @@
 				  	<div class="form-group">
 				  		<button type="button" class="btn btn-primary btn-md" ng-click="addOptions()"><span class="glyphicon glyphicon-plus"></span>&nbsp;Add more options</button>
 				  	</div>
-				  <button type="submit" class="btn btn-primary btn-block" ng-disabled="questionCreateForm.$invalid">Create Question</button>
+				  <button type="submit" class="btn btn-primary btn-block" ng-disabled="mcqQuestionCreateForm.$invalid">Create Question</button>
 				</form>
 			</div>
 			<div class="col-lg-4 col-md-4 col-sm-4 " ng-controller='XlsHandlerController'>
