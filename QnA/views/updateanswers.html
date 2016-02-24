@@ -3,7 +3,7 @@
 <div class="jumbotron">
     <div class="row">
     </div>
-    <div class="row" ng-hide="isCategoryCreated">
+    <div class="row">
 	    <div class="row">
 			<h2 class="text-center hidden-xs">Update answers.</h2>
 			<h4 class="text-center visible-xs">Update answers.</h4>
@@ -13,11 +13,12 @@
 			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 				<hr>
 				<h4 class="left">Category : <span class="label label-default">{{ answers.category }}</span></h4>
-				<h4 class="right">SubCategory : <span class="label label-default">{{ answers.sub_category }}</span></h4><br><br><br><br>
-				<h3>Q.&nbsp;{{ answers.content }}</h3><hr>
+				<h4 class="right">SubCategory : <span class="label label-default">{{ answers.sub_category_name }}</span></h4><br><br><br><br>
+				<h4>Q.&nbsp;{{ answers.content | insertBlank }}</h4>
+				<hr>
 			<form role="form" name="answersUpdateForm" ng-submit="putAnswers()" novalidate>
 				<div class="form-group">
-					<div class="row" ng-repeat="option in answers.options">
+					<div ng-if="que_type==='mcq'" class="row" ng-repeat="option in answers.options">
 		  				<div class="col-md-2">
 		  					<div class="radio">
 							  <label><input value="{{ option.id }}" type="radio" ng-model="updateAnswersForm.correctOption" name="correctoption"></label>
@@ -27,6 +28,14 @@
 		  				<textarea cols="80" rows="3" name="optioncontent" id="optioncontent-{{option.id}}" class="form-control" placeholder="Content for option - {{$index}}" ng-model="updateAnswersForm.optionsContent[option.id]" required>{{ option.content }}</textarea>
 			    			<!-- <textarea cols="80" rows="3" name="optioncontent-{{option.optionid}}" id="optioncontent-{{option.optionid}}" class="form-control" ng-model="updateAnswersForm.optioncontent[option.optionid]" placeholder="Content for option - {{$index}}" required>{{ option.content }}</textarea><hr> -->
 		  				</div>
+				  	</div>
+				  	<div ng-if="que_type==='objective'">
+				  		<div class="form-group" ng-class="{'has-error': errors.correct || answersUpdateForm.correct.$touched && answersUpdateForm.correct.$error.required }">
+						  	<label for="content">Enter the correct answer</label>
+					    	<textarea name="correct" id="correct" rows="4" class="form-control" ng-model="updateAnswersForm.correct"></textarea>
+					    	<span ng-if="errors.correct" class="help-block">{{ errors.correct[0] }}</span>
+					   		<span ng-if="answersUpdateForm.correct.$touched && answersUpdateForm.correct.$error.required" class="help-block">Correct answer is required.</span>
+						</div><br>
 				  	</div>
 				</div>
 			  	<div class="form-group">

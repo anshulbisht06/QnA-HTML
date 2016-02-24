@@ -120,7 +120,7 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                 }
                 })
             .state('app.update-question', {
-                url:'update/question/:questionid',
+                url:'update/question/:questionParams',
                 views :{
                     'content@': {
                         controller  : 'UpdateQuestionController',
@@ -129,7 +129,7 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                 }
                 })
             .state('app.update-answers', {
-                url:'update/answers/:questionid',
+                url:'update/answers/:questionParams',
                 views :{
                     'content@': {
                         controller  : 'UpdateAnswersController',

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="QnA">
+<html lang="en" ng-app="QnA" ng-cloak>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,10 +13,12 @@
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
     <!-- endbuild -->
-
+    <!-- build:js scripts/main.js  -->
     <script src="js/jquery.js"></script>
     <script src="js/bootstrap.js"></script>    
     <script src="js/angular.js"></script>
+    <!-- endbuild -->
+
 
 </head>
 <body>
@@ -47,16 +49,18 @@
 </footer>
 
   <!-- build:js scripts/main.js  -->
-
     <script src="js/angular-ui-router.js"></script>
     <script src="js/angular-resource.js"></script>
     <script src="js/angular-cookies.js"></script>
     <!-- // <script src="js/typeahead.js"></script> -->
     <script src="scripts/app.js"></script>
+    <script src="scripts/directives.js"></script>
     <script src="scripts/controllers.js"></script>
     <script src="scripts/services.js"></script>
     <script src="scripts/filters.js"></script>
     <script src="scripts/ui.js"></script>
     <script src="js/file_saver.js"></script>
+  <!-- endbuild -->
+
 </body>
 </html>

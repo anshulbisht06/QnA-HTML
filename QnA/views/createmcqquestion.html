@@ -28,6 +28,7 @@
 				  <div class="form-group">
 				  	<input type="file" name="figure" id="figure" ng-model="createMCQQuestionForm.figure">
 				  </div><br>
+				  	<input type="hidden" name="que_type" id="que_type" ng-model="createMCQQuestionForm.que_type" value="mcq">
 				  <div class="form-group" ng-class="{'has-error': errors.content || mcqQuestionCreateForm.content.$touched && mcqQuestionCreateForm.content.$error.required }">
 				  	<label for="content">Enter the question content</label>
 			    	<textarea name="content" id="content" rows="4" class="form-control" ng-model="createMCQQuestionForm.content" required></textarea>
@@ -85,23 +86,28 @@
 				</div>
 				<hr><br>
 				Step1:<p> Select a sub-category here </p>
-				<select class="form-control" id="sub_category1" name="sub_category" ng-model="sub_category_id" ng-class="{'has-error':noSubCategoryPresent}">
-					<option value="" disabled>Select sub-category here</option>
-				    <option ng-repeat="sc in subCategories" value="{{sc.sub_category_name}}">
-				    {{ sc.sub_category_name }}</option>
-				    <span ng-if="noSubCategoryPresent">Select a sub-category first.</span>
-				</select>
+				<div  ng-class="{'has-error': noSubCategoryPresent}">
+					<select class="form-control" id="sub_category1" name="sub_category" ng-model="sub_cat_info" ng-class="{'has-error':noSubCategoryPresent}">
+						<option value="" disabled>Select sub-category here</option>
+					    <option ng-repeat="sc in subCategories" value="{{ sc.id }}>>{{ sc.sub_category_name }}">
+					    {{ sc.sub_category_name }}</option>
+					</select>
+					<span ng-if="noSubCategoryPresent" class="red-text">Select a sub-category first.</span>
+				</div>
 				<br>
 				<br>
 				Step2: <p>Download our questions.xls file and fill this file</p>
 				<button class="btn btn-lg glyphicon glyphicon-download" 
-					ng-click="downloadDemoXls('mcq', sub_category_id)">Download</button>	
+					ng-click="downloadDemoXls('mcq', sub_cat_info)">Download</button>	
 				<br>
 				<br>
 				Step3: <p>Upload your xls file and wait .. .</p>
 				 <div>
+			        <div ng-class="{ 'has-error': noFileUploaded }">
 			         <input type = "file" file-model = "myFile" class='btn'/>
-			         <button class="btn btn-lg glyphicon glyphicon-upload" ng-click = "uploadFile()">Upload</button>
+			         <span ng-if="noFileUploaded" class="red-text">No file has been uploaded.</span>
+			        </div>
+			         <button class="btn btn-lg glyphicon glyphicon-upload" ng-click = "uploadFile('mcq')">Upload</button>
 			      </div>
 			</div>
 		</div>

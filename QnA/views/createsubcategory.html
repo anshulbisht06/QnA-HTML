@@ -15,7 +15,7 @@
 					  <!-- <a href="" class="list-group-item" ng-repeat="quiz in quizzes track by $index" ng-click="selectQuiz(quiz.id)">{{ quiz.title }}</a> -->
 					  <label for="category">Your categories (select anyone) {{categoryid}}</label>
 				      <select class="form-control" id="category" name="category" ng-model="createSubCategoryform.category">
-				      	<option value="" disabled>Select a category first.</option>
+				      	<option value="" disabled>Select a category (optional).</option>
 				        <option ng-repeat="c in allCategories track by $index" value="{{ c.id }}">{{ c.category_name }}</option>
 				      </select>
 					   <span ng-if="errors.category" class="help-block">Please select a category.</span>
