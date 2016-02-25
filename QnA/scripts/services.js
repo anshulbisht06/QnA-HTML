@@ -200,12 +200,10 @@ angular.module('QnA')
                 );
         };
 
-        this.createQuestion = function(token, type, figure){
-            var fd = new FormData();
-            fd.append('figure', figure); 
-            return $resource(baseURL+"question/"+type+"/create/", fd,
+        this.createQuestion = function(token, type, formData){ 
+            return $resource(baseURL+"question/"+type+"/create/", formData,
                     {'save':   
-                    { method:'POST', transformRequest: angular.identity, headers: {'Authorization': 'JWT ' + token, 'Content-Type': undefined} } 
+                    { method:'POST', transformRequest: angular.identity, headers: {'Authorization': 'JWT ' + token, 'Content-Type': 'multipart/form-data'} } 
                     },
                     { stripTrailingSlashes: false }
                     );
@@ -273,23 +271,6 @@ angular.module('QnA')
     // Use to when user try to take a review on quiz
     .service('quizReview', ['$http', function ($http) {
             
-         }])
-    
-
-    .directive('fileModel', ['$parse', function ($parse) {
-            return {
-               restrict: 'A',
-               link: function(scope, element, attrs) {
-                  var model = $parse(attrs.fileModel);
-                  var modelSetter = model.assign;
-                  
-                  element.bind('change', function(){
-                     scope.$apply(function(){
-                        modelSetter(scope, element[0].files[0]);
-                     });
-                  });
-               }
-            };
          }])
 
 

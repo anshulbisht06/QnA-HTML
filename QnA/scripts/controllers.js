@@ -385,7 +385,7 @@ angular.module('QnA')
     }])
 
 
-    .controller('CreateQuestionController', ['$scope', '$controller', '$cookies', '$state', 'QuizFactory', 'CategoryFactory', 'SubCategoryFactory', 'QuestionsFactory', function($scope, $controller, $cookies, $state, QuizFactory, CategoryFactory, SubCategoryFactory, QuestionsFactory) {
+    .controller('CreateQuestionController', ['$scope', '$controller', '$cookies', '$state', 'QuizFactory', 'CategoryFactory', 'SubCategoryFactory', 'QuestionsFactory', 'Upload', function($scope, $controller, $cookies, $state, QuizFactory, CategoryFactory, SubCategoryFactory, QuestionsFactory, Upload) {
         $controller('CookiesController', {$scope : $scope});
         if($scope.user){
         SubCategoryFactory.getAllSubcategories($cookies.get('token'), $scope.user, 'all').query(
@@ -446,28 +446,24 @@ angular.module('QnA')
         }
         else if($state.current.name === "app.create-objective-question"){
             $scope.createObjectiveQuestionForm = {content:"",correct:"",explanation:"", level:"easy", sub_category:"", que_type:"objective"};
-            var formdata = new FormData();
-            $scope.getTheFiles = function ($files) {
-                angular.forEach($files, function (value, key) {
-                    formdata.append(key, value);
-                });
-            console.log($files);
-            };
+            // $scope.getTheFiles = function($files){
+            //     angular.forEach($files, function(value, key){
+            //         new FormData().append(key, value);
+            //     });
+            // $scope.createObjectiveQuestionForm.figure = $files;
+            // };
             $scope.postObjectiveQuestion = function() {
-                console.log($scope.createObjectiveQuestionForm);
-                QuestionsFactory.createQuestion($cookies.get('token'), "objective", $scope.createObjectiveQuestionForm.figure).save($scope.createObjectiveQuestionForm).$promise.then(
-                            function(response){
-                                $scope.alertType = "success";
-                                $scope.alertMsg = "Your question has been created.";
-                                $scope.objectiveQuestionCreateForm.$setPristine();
-                                $state.go('app.create-objective-question');                     
-                            },
-                            function(response) {
-                                $scope.alertType = "danger";
-                                $scope.alertMsg = "Unable to create the question. See below errors.";
-                                $scope.errors = response.data;
-                            }
-                    );
+                Upload.upload({
+                    url: baseURL+"question/objective/create/",
+                    data: { figure: $scope.figure, 'data': $scope.createObjectiveQuestionForm }
+                }).then(function(response) {
+                    console.log('Success ');
+                }, function (response) {
+                    alert("Error in uploading image. Try again!")
+                }, function(event) {
+                    var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                    console.log('progress: ' + progressPercentage);
+                });
             }
         }
     }])

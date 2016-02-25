@@ -1,7 +1,7 @@
 /* global $ */
 var baseURL= 'http://localhost:8000/';
 
-var appmodule = angular.module('QnA', ['ui.router', 'ngResource', 'ngCookies']);
+var appmodule = angular.module('QnA', ['ui.router', 'ngResource', 'ngCookies', 'ngFileUpload']);
 
 // appmodule.constant("baseURL","http://localhost:8000/");
 // appmodule.constant('config', {
