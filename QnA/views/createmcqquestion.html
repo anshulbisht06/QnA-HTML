@@ -82,7 +82,7 @@
 				  <button type="submit" class="btn btn-primary btn-block" ng-disabled="mcqQuestionCreateForm.$invalid">Create Question</button>
 				</form>
 			</div>
-			<div class="col-lg-4 col-md-4 col-sm-4 " ng-controller='XlsHandlerController'>
+			<div class="col-lg-4 col-md-4 col-sm-4">
 				<div class="row">
 					<h2 class="text-center hidden-xs">Add question in bulk.</h2>
 					<h4 class="text-center visible-xs">Add questions in bulk.</h4>
@@ -107,7 +107,7 @@
 				Step3: <p>Upload your xls file and wait .. .</p>
 				 <div>
 			        <div ng-class="{ 'has-error': noFileUploaded }">
-			         <input type = "file" file-model = "myFile" class='btn'/>
+			         <input type="file" name="myFile" id="myFile" ngf-select ng-model="myFile" ngf-max-size="20MB">
 			         <span ng-if="noFileUploaded" class="red-text">No file has been uploaded.</span>
 			        </div>
 			         <button class="btn btn-lg glyphicon glyphicon-upload" ng-click = "uploadFile('mcq')">Upload</button>

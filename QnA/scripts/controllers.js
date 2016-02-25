@@ -397,24 +397,28 @@ angular.module('QnA')
                 $scope.unableToGetAllSubCategories = true;
             });
         }
+        $scope.upload = function(postUrl, data, figure){
+            $('#progressBarModal').modal('show');
+            Upload.upload({
+                    url: baseURL+postUrl,
+                    data: { figure: figure, data: data },
+                    headers: {'Authorization': 'JWT ' + $cookies.get('token')},
+                }).then(function(response) {
+                }, function (response) {
+                    $scope.error = true;
+                    $('#progressBarModalBody').html('<span class="red-text">Error in creating question. Try again!</span>');
+                }, function(event) {
+                    var percentage = parseInt(100.0 * event.loaded / event.total).toString();
+                    $('#progress-bar').css('width', percentage+'%');
+                    $('#percentage').html(percentage);
+                });
+        }
+
+
         if($state.current.name === "app.create-mcq-question")
         {
             $scope.createMCQQuestionForm = {content:"",explanation:"", level:"easy", answer_order:"random", sub_category:"", que_type:"mcq"};
             $scope.postMCQQuestion = function() {
-                console.log($scope.createMCQQuestionForm)
-                // QuestionsFactory.createQuestion($cookies.get('token'), "mcq").save($scope.createMCQQuestionForm).$promise.then(
-                //     function(response){
-                //         $scope.alertType = "success";
-                //         $scope.alertMsg = "Your question has been created.";
-                //         $scope.createMCQQuestionForm = {content:"",explanation:"", level:"easy", answer_order:"random", sub_category:""};
-                //         $scope.mcqQuestionCreateForm.$setPristine();
-                //         $state.go('app.create-mcq-question');                     
-                //     },
-                //     function(response) {
-                //         $scope.alertType = "danger";
-                //         $scope.alertMsg = "Unable to create the question. See below errors.";
-                //         $scope.errors = response.data;
-                //     });
                 $scope.upload("question/mcq/create/", $scope.createMCQQuestionForm, $scope.figure);
             }
 
@@ -453,25 +457,7 @@ angular.module('QnA')
             }
         }
 
-        $scope.upload = function(postUrl, data, figure){
-            $('#progressBarModal').modal('show');
-            Upload.upload({
-                    url: baseURL+postUrl,
-                    data: { figure: figure, 'data': data },
-                    headers: {'Authorization': 'JWT ' + $cookies.get('token')},
-                }).then(function(response) {
-                }, function (response) {
-                    $scope.error = true;
-                    $('#progressBarModalBody').html('<span class="red-text">Error in creating question. Try again!</span>');
-                }, function(event) {
-                    var percentage = parseInt(100.0 * event.loaded / event.total).toString();
-                    $('#progress-bar').css('width', percentage+'%');
-                    $('#percentage').html(percentage);
-                });
-        }
-    }])
-    .controller('XlsHandlerController',['$scope', '$cookies', '$http', 'fileUpload', function($scope, $cookies, $http, fileUpload){
-        // Function for download xls file on any type of quetions .... ;)
+
         $scope.downloadDemoXls = function(que_type, sub_cat_info){
             if(sub_cat_info===undefined){
                 $scope.noSubCategoryPresent = true;
@@ -484,14 +470,17 @@ angular.module('QnA')
             })
             };
         }
+
+        // Function for download xls file on any type of quetions .... ;)
         $scope.uploadFile = function(que_type){
                var file = $scope.myFile;
                if(file===undefined){
                 $scope.noFileUploaded = true;
-            } else{            
-               fileUpload.uploadFileToUrl(file, baseURL+"question/"+que_type+"/bulkupload/", $cookies.get('token'));
+            } else{
+                $scope.upload("question/"+que_type+"/bulkupload/", {}, file);                   
             }
             };
+
     }])
 
     .controller('UpdateQuestionController', ['$scope', '$controller', '$cookies', '$state', '$stateParams', 'QuestionsFactory', function($scope, $controller, $cookies, $state, $stateParams, QuestionsFactory) {
