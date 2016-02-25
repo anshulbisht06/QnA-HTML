@@ -6,7 +6,7 @@ angular.module('QnA')
 
          var keyCode = [8,9,37,39,48,49,50,51,52,53,54,55,56,57,96,97,98,99,100,101,102,103,104,105,110];
           element.bind("keydown", function(event) {
-            console.log($.inArray(event.which,keyCode));
+            // console.log($.inArray(event.which,keyCode));
             if($.inArray(event.which,keyCode) == -1) {
                 scope.$apply(function(){
                     scope.$eval(attrs.onlyNum);
@@ -129,7 +129,11 @@ angular.module('QnA')
 
 
     .controller('CreateQuizController', ['$scope', '$controller', '$state', '$cookies', 'QuestionsFactory','QuizFactory', 'CategoryFactory', function($scope, $controller, $state, $cookies, QuestionsFactory, QuizFactory, CategoryFactory) {
+        // pagination
+        $scope.curPage = 0;
+        $scope.pageSize = 9;
         $controller('CookiesController', {$scope : $scope});
+
         $scope.createQuizForm = {title:"",description:"",url:"",category:"",random_order:false,answers_at_end:false,single_attempt:false,exam_paper:false,max_questions:"",pass_mark:"",success_text:"",fail_text:""};
         $scope.postQuiz = function() {
             $scope.createQuizForm.user = $scope.user;
@@ -162,7 +166,6 @@ angular.module('QnA')
         }
     }])
 
-
     .controller('CreateCategoryController', ['$scope','$state', '$controller', '$cookies', 'CategoryFactory', 'QuizFactory','$stateParams', function($scope, $state, $controller, $cookies, CategoryFactory, QuizFactory, $stateParams) {
         $controller('CookiesController', {$scope : $scope});
         if($scope.user){
@@ -174,6 +177,11 @@ angular.module('QnA')
                 $scope.unableToGetAllQuiz = true;
                 $scope.errors = "Unable to get your quizzes.";
             });
+            $scope.numberOfPages = function(){
+                    if($scope.allQuiz){
+                        return Math.ceil($scope.allQuiz.length / $scope.pageSize);
+                    }
+                };
         }
         $scope._id = $stateParams.obj ? $stateParams.obj.id.toString() : "";
         if($scope._id){
@@ -379,7 +387,7 @@ angular.module('QnA')
 
         }
         $scope.renameCategory = function(){
-            console.log($scope.categoryRenameForm);
+            // console.log($scope.categoryRenameForm);
             CategoryFactory.renameCategory($cookies.get('token')).update($scope.categoryRenameForm);
         } 
     }])
@@ -592,7 +600,6 @@ angular.module('QnA')
     
 
     .controller('PreviewQuizController', ['$scope', '$controller', '$cookies', '$state', '$stateParams', '$http', function($scope, $controller, $cookies, $state, $stateParams, $http) {
-            $scope._data = undefined;
             $scope.getQuizPreview = function() {
                 $http({
                   method: 'GET',
@@ -609,6 +616,7 @@ angular.module('QnA')
 
     .controller('AddQuizStackController', ['$scope', '$controller', '$cookies', '$stateParams', '$compile', 'QuizStackFactory', 'SubCategoryFactory', 'QuestionsFactory', function($scope, $controller, $cookies, $stateParams, $compile, QuizStackFactory, SubCategoryFactory, QuestionsFactory) {
             $controller('CookiesController', {$scope : $scope});
+            var total_duration = 0;
             SubCategoryFactory.getAllSubcategories($cookies.get('token'), $scope.user, 'all').query(
             function(response) {
                 $scope.subCategories = response;
@@ -619,30 +627,31 @@ angular.module('QnA')
             });
             QuizStackFactory.getQuizStack($cookies.get('token'), $stateParams.quizid, 'all').query(
             function(response) {
-                total_duration = 0;
-                for(i=0;i<response.length;i++){
+                for(i = 0; i < response.length; i++){
                     total_duration += parseInt(response[i].duration);
-                html = '<tr id="oldstackrow'+i+'">'+
-                        '<td style="width:130px;">'+response[i].section_name+'</td>'+
-                        '<td style="width:200px;">'+$('#subcategory'+response[i].subcategory).text()+'</td>'+
-                        '<td style="width:130px;">'+response[i].level+'</td>'+
-                        '<td style="width:130px;">'+response[i].que_type+'</td>'+
-                        '<td style="width:130px;">'+response[i].no_questions+'</td>'+
-                        '<td style="width:130px;">'+response[i].duration+'</td>'+
-                        '<td style="width:130px;">'+response[i].istimed+'</td>'+
-                        '<td style="width:130px;">'+response[i].correct_grade+'</td>'+
-                        '<td style="width:130px;">'+response[i].incorrect_grade+'</td>'+
-                        '<td style="width:130px;">'+response[i].question_order+'</td>'+
-                        '<td style="width:60px;"><a href="javascript:void(0);"><span class="glyphicon glyphicon-trash removefromstackbutton" ng-click="removeFromStackAndSave('+response[i].quiz+', '+response[i].id+')"></span></a></td>'+
 
-                    +'</tr>';
+                    html = '<tr id="oldstackrow'+i+'">'+
+                            '<td style="width:130px;">'+response[i].section_name+'</td>'+
+                            '<td style="width:200px;">'+$('#subcategory'+response[i].subcategory).text()+'</td>'+
+                            '<td style="width:130px;">'+response[i].level+'</td>'+
+                            '<td style="width:130px;">'+response[i].que_type+'</td>'+
+                            '<td style="width:130px;">'+response[i].no_questions+'</td>'+
+                            '<td style="width:130px;">'+response[i].duration+'</td>'+
+                            '<td style="width:130px;">'+response[i].istimed+'</td>'+
+                            '<td style="width:130px;">'+response[i].correct_grade+'</td>'+
+                            '<td style="width:130px;">'+response[i].incorrect_grade+'</td>'+
+                            '<td style="width:130px;">'+response[i].question_order+'</td>'+
+                            '<td style="width:60px;"><a href="javascript:void(0);"><span class="glyphicon glyphicon-trash removefromstackbutton" ng-click="removeFromStackAndSave('+response[i].quiz+', '+response[i].id+')"></span></a></td>'+
+
+                        +'</tr>';
                 angular.element(document.querySelector('#existingQuestionsRow')).append($compile(html)($scope));
+                $scope.total_duration = total_duration;
                 }
-                document.querySelector('#totalduration').value = total_duration;
+                // document.querySelector('#totalduration').value = total_duration;
             },
             function(response) {
                 $scope.unableToGetAllSavedStacks= true;
-            });
+            });            
             $scope.selectedSubCategoryDropdown = "";
             selectNoQuestions = function(noOfQuestions){
                 result = '<select class="form-control" name="no_questions" id="no_questions'+$scope.count+'">';

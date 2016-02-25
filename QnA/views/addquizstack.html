@@ -17,8 +17,8 @@
 	      	</div>
 	      	<div class="col-lg-3 col-md-3 col-sm-3">
 	      		<div class="input-group">
-	      			<span class="input-group-addon">Duration(in min)</span>
-	      			<input type="text" class="form-control" name="duration" value="" id="totalduration">
+	      			<span class="input-group-addon">Duration: <span style='color:black;'>{{total_duration|time}} (HH:MM)</span></span>
+	      			<!-- <input type="text" class="form-control" name="duration" value="{{total_duration|time}}" id="totalduration" readonly="true"> -->
 	      		</div>
 	      	</div>
 	      	<div ng-controller="PreviewQuizController">
@@ -37,7 +37,8 @@
 				      <div class="modal-body col-md-12">
 				      		<div class="col-md-12" ng-repeat="data in all_que_data.data|orderBy:['section_name']">
 				      			<!-- {{data}} -->
-				      			<h3>{{data.section_name}}, Total Questions: {{data.total_questions}}, Total Time: 00:00 minutes</h3>
+				      			<h3>{{data.section_name}}</h3>
+				      			<h4>Total Questions: {{data.total_questions}}, Total Time: {{data.time_duration|time }} minutes</h4>
 				      			<div ng-repeat='cont in data.question_stack'>
 				      			<div class="panel panel-default panel-body">
 					      			<p>Q{{$index+1}}. {{cont.content}}</p>
