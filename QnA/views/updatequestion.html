@@ -19,12 +19,22 @@
 				  	<label for="figure">Add a figure</label>
 				  	<input type="file" name="figure" id="figure" ng-model="updateQuestionForm.figure">
 				  </div><br>
-				  <div class="form-group" ng-class="{'has-error': errors.content || questionUpdateForm.content.$touched && questionUpdateForm.content.$error.required }">
+				  <div ng-if="que_type==='mcq'" class="form-group" ng-class="{'has-error': errors.content || questionUpdateForm.content.$touched && questionUpdateForm.content.$error.required }">
 				  	<label for="content">Enter the question content</label>
 			    	<textarea name="content" id="content" rows="4" class="form-control" ng-model="updateQuestionForm.content" required></textarea>
 			   		<span ng-if="errors.content" class="help-block">{{ errors.content[0] }}</span>
 			   		<span ng-if="questionUpdateForm.content.$touched && questionUpdateForm.content.$error.required" class="help-block">Question content is required.</span>
-				  </div><br>
+				  </div>
+				  <div ng-if="que_type==='objective'" class="form-group" ng-class="{'has-error': errors.content[0] }">
+				  	<div class="form-group" ng-class="{'has-error': errors.content[0] || questionUpdateForm.content.$touched && questionUpdateForm.content.$error.required }">
+				  	<div class="right"><button type="button" class="btn btn-md btn-danger" id="insertblankbutton" onclick="insertBlank('#content')">Insert Blank</button></div><br>
+				  	<label for="content">Enter the question content</label>
+			    	<input type="text" name="content" id="content" class="form-control" ng-model="updateQuestionForm.content" required>
+			   		<span ng-if="errors.content[0]" class="help-block">{{ errors.content[0] }}</span>
+			   		<span ng-if="questionUpdateForm.content.$touched && questionUpdateForm.content.$error.required" class="help-block">Question content is required.</span>
+				  </div>
+				  </div>
+				  <br>
 				  <div class="form-group">
 				  	<label for="content">Enter the explanation of question</label>
 			    	<textarea name="explanation" id="explanation" rows="4" class="form-control" ng-model="updateQuestionForm.explanation"></textarea>

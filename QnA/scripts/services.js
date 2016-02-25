@@ -200,19 +200,19 @@ angular.module('QnA')
                 );
         };
 
-        this.createQuestion = function(token, type){
-            return $resource(baseURL+"question/"+type+"/create/", null,
+        this.createQuestion = function(token, type, formData){ 
+            return $resource(baseURL+"question/"+type+"/create/", formData,
                     {'save':   
-                    { method:'POST', headers: {'Authorization': 'JWT ' + token}} 
+                    { method:'POST', transformRequest: angular.identity, headers: {'Authorization': 'JWT ' + token, 'Content-Type': 'multipart/form-data'} } 
                     },
                     { stripTrailingSlashes: false }
                     );
         }
 
-        this.updateQuestion = function(token, userid, questionid){
+        this.updateQuestion = function(token, userid, questionid, que_type){
             return $resource(baseURL+"quiz/question/"+userid+"/"+questionid+"/", null,
                     {'update':   
-                    { method:'PUT', headers: {'Authorization': 'JWT ' + token}} 
+                    { method:'PUT', headers: {'Authorization': 'JWT ' + token}, params : {'que_type': que_type}} 
                     },
                     { stripTrailingSlashes: false }
                     );
@@ -227,11 +227,12 @@ angular.module('QnA')
                     );
         }
 
-        this.getAnswers = function(token, userid, questionid){
+        this.getAnswers = function(token, userid, questionid, que_type){
                 return $resource(baseURL+"quiz/answers/"+userid+"/"+questionid+"/", null,
                 {
                     get: {
                     headers: {'Authorization': 'JWT ' + token},
+                    params : {'que_type': que_type},
                     method : 'GET',
                     isArray : false,
                     }
@@ -239,10 +240,10 @@ angular.module('QnA')
                 { stripTrailingSlashes: false }
                 );
         };
-        this.updateAnswers = function(token, userid, questionid){
+        this.updateAnswers = function(token, userid, questionid, que_type){
             return $resource(baseURL+"quiz/answers/"+userid+"/"+questionid+"/", null,
                     {'update':   
-                    { method:'PUT', headers: {'Authorization': 'JWT ' + token}} 
+                    { method:'PUT', headers: {'Authorization': 'JWT ' + token}, params : {'que_type': que_type}} 
                     },
                     { stripTrailingSlashes: false }
                     );
@@ -251,19 +252,18 @@ angular.module('QnA')
 
     // Use this service for upload XLS file to create question's .. . 
     .service('fileUpload', ['$http', function ($http) {
-            this.uploadFileToUrl = function(file, uploadUrl){
+            this.uploadFileToUrl = function(file, uploadUrl, token){
                var fd = new FormData();
-               fd.append('file', file);
-            
+               fd.append('file', file);            
                $http.post(uploadUrl, fd, {
                   transformRequest: angular.identity,
-                  headers: {'Content-Type': undefined}
-               })
-            
-               .success(function(){
-               })
-            
-               .error(function(){
+                  headers: {'Content-Type': undefined, 'Authorization': 'JWT ' + token}
+               })            
+               .success(function(data, status, headers, config){
+                    alert("All questions uploaded successfully!");
+               })            
+               .error(function(data, status, headers, config){
+                    alert("There is some problem with the file.Please fill according to the format.");
                });
             }
          }])
@@ -271,23 +271,6 @@ angular.module('QnA')
     // Use to when user try to take a review on quiz
     .service('quizReview', ['$http', function ($http) {
             
-         }])
-    
-
-    .directive('fileModel', ['$parse', function ($parse) {
-            return {
-               restrict: 'A',
-               link: function(scope, element, attrs) {
-                  var model = $parse(attrs.fileModel);
-                  var modelSetter = model.assign;
-                  
-                  element.bind('change', function(){
-                     scope.$apply(function(){
-                        modelSetter(scope, element[0].files[0]);
-                     });
-                  });
-               }
-            };
          }])
 
 

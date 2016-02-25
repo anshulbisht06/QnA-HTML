@@ -393,7 +393,7 @@ angular.module('QnA')
     }])
 
 
-    .controller('CreateQuestionController', ['$scope', '$controller', '$cookies', '$state', 'QuizFactory', 'CategoryFactory', 'SubCategoryFactory', 'QuestionsFactory', function($scope, $controller, $cookies, $state, QuizFactory, CategoryFactory, SubCategoryFactory, QuestionsFactory) {
+    .controller('CreateQuestionController', ['$scope', '$controller', '$cookies', '$state', 'QuizFactory', 'CategoryFactory', 'SubCategoryFactory', 'QuestionsFactory', 'Upload', function($scope, $controller, $cookies, $state, QuizFactory, CategoryFactory, SubCategoryFactory, QuestionsFactory, Upload) {
         $controller('CookiesController', {$scope : $scope});
         if($scope.user){
         SubCategoryFactory.getAllSubcategories($cookies.get('token'), $scope.user, 'all').query(
@@ -409,19 +409,21 @@ angular.module('QnA')
         {
             $scope.createMCQQuestionForm = {content:"",explanation:"", level:"easy", answer_order:"random", sub_category:"", que_type:"mcq"};
             $scope.postMCQQuestion = function() {
-                QuestionsFactory.createQuestion($cookies.get('token'), "mcq").save($scope.createMCQQuestionForm).$promise.then(
-                    function(response){
-                        $scope.alertType = "success";
-                        $scope.alertMsg = "Your question has been created.";
-                        $scope.createMCQQuestionForm = {content:"",explanation:"", level:"easy", answer_order:"random", sub_category:""};
-                        $scope.mcqQuestionCreateForm.$setPristine();
-                        $state.go('app.create-mcq-question');                     
-                    },
-                    function(response) {
-                        $scope.alertType = "danger";
-                        $scope.alertMsg = "Unable to create the question. See below errors.";
-                        $scope.errors = response.data;
-                    });
+                console.log($scope.createMCQQuestionForm)
+                // QuestionsFactory.createQuestion($cookies.get('token'), "mcq").save($scope.createMCQQuestionForm).$promise.then(
+                //     function(response){
+                //         $scope.alertType = "success";
+                //         $scope.alertMsg = "Your question has been created.";
+                //         $scope.createMCQQuestionForm = {content:"",explanation:"", level:"easy", answer_order:"random", sub_category:""};
+                //         $scope.mcqQuestionCreateForm.$setPristine();
+                //         $state.go('app.create-mcq-question');                     
+                //     },
+                //     function(response) {
+                //         $scope.alertType = "danger";
+                //         $scope.alertMsg = "Unable to create the question. See below errors.";
+                //         $scope.errors = response.data;
+                //     });
+                $scope.upload("question/mcq/create/", $scope.createMCQQuestionForm, $scope.figure);
             }
 
             $scope.optionss = [
@@ -453,67 +455,72 @@ angular.module('QnA')
             };
         }
         else if($state.current.name === "app.create-objective-question"){
-            $scope.createObjectiveQuestionForm = {content:"",explanation:"", level:"easy", answer_order:"random", sub_category:"", que_type:"objective"};
+            $scope.createObjectiveQuestionForm = {content:"",correct:"",explanation:"", level:"easy", sub_category:"", que_type:"objective"};
             $scope.postObjectiveQuestion = function() {
-                var objectiveFormData = {content:$('#contentid').html(), explanation:$scope.createObjectiveQuestionForm.explanation, answer_order:$scope.createObjectiveQuestionForm.answer_order
-                                    , level:$scope.createObjectiveQuestionForm.level, sub_category:$scope.createObjectiveQuestionForm.sub_category, que_type:"objective"
-                                    };
-                QuestionsFactory.createQuestion($cookies.get('token'), "objective").save(objectiveFormData).$promise.then(
-                    function(response){
-                        $scope.alertType = "success";
-                        $scope.alertMsg = "Your question has been created.";
-                        $scope.objectiveQuestionCreateForm.$setPristine();
-                        $state.go('app.create-objective-question');                     
-                    },
-                    function(response) {
-                        $scope.alertType = "danger";
-                        $scope.alertMsg = "Unable to create the question. See below errors.";
-                        $scope.errors = response.data;
-                    });
-                // console.log($('#contentid').html());
-                // console.log($scope.createObjectiveQuestionForm);
+                $scope.upload("question/objective/create/", $scope.createObjectiveQuestionForm, $scope.figure);
             }
         }
+
+        $scope.upload = function(postUrl, data, figure){
+            $('#progressBarModal').modal('show');
+            Upload.upload({
+                    url: baseURL+postUrl,
+                    data: { figure: figure, 'data': data },
+                    headers: {'Authorization': 'JWT ' + $cookies.get('token')},
+                }).then(function(response) {
+                }, function (response) {
+                    $scope.error = true;
+                    $('#progressBarModalBody').html('<span class="red-text">Error in creating question. Try again!</span>');
+                }, function(event) {
+                    var percentage = parseInt(100.0 * event.loaded / event.total).toString();
+                    $('#progress-bar').css('width', percentage+'%');
+                    $('#percentage').html(percentage);
+                });
+        }
     }])
-    .controller('XlsHandlerController',['$scope', '$http', 'fileUpload', function($scope, $http, fileUpload){
+    .controller('XlsHandlerController',['$scope', '$cookies', '$http', 'fileUpload', function($scope, $cookies, $http, fileUpload){
         // Function for download xls file on any type of quetions .... ;)
         $scope.downloadDemoXls = function(que_type, sub_cat_info){
             if(sub_cat_info===undefined){
-                // $scope.noSubCategoryPresent = true;
+                $scope.noSubCategoryPresent = true;
             }else{
             $http.post(baseURL+"quiz/question/download/xls/", {que_type:que_type,
                 sub_cat_info:sub_cat_info}, { responseType: 'arraybuffer' })
               .success(function(data) {
                 var file = new Blob([data], { type: 'application/xls' });
-                saveAs(file, sub_cat_info.split('>>')[1]+'.xls');
+                saveAs(file, sub_cat_info.split('>>')[1]+'_'+que_type+'.xls');
             })
             };
         }
-        $scope.uploadFile = function(){
+        $scope.uploadFile = function(que_type){
                var file = $scope.myFile;
                if(file===undefined){
-                // $scope.noSubCategoryPresent = true;
+                $scope.noFileUploaded = true;
             } else{            
-               var uploadUrl = baseURL+"question/test/";
-               fileUpload.uploadFileToUrl(file, uploadUrl);
+               fileUpload.uploadFileToUrl(file, baseURL+"question/"+que_type+"/bulkupload/", $cookies.get('token'));
             }
             };
     }])
 
     .controller('UpdateQuestionController', ['$scope', '$controller', '$cookies', '$state', '$stateParams', 'QuestionsFactory', function($scope, $controller, $cookies, $state, $stateParams, QuestionsFactory) {
         $controller('CookiesController', {$scope : $scope});
-        QuestionsFactory.getQuestion($cookies.get('token'), $scope.user, $stateParams.questionid).get()
+        $scope.que_type = $stateParams.questionParams.split(':')[1];
+        QuestionsFactory.getQuestion($cookies.get('token'), $scope.user, $stateParams.questionParams.split(':')[0]).get()
             .$promise.then(
                 function(response){
                     $scope.question = response.question;
                     $scope.updateQuestionForm = {content : $scope.question.content, level : $scope.question.level, explanation : $scope.question.explanation };
+                    if($scope.que_type==='objective')
+                        $scope.updateQuestionForm.content = $scope.question.content.replace(/<>/g,'<<Answer>>');
                 },
                 function(response) {
                     $scope.unableToGetQuestion = response.data;
                 }
             );
         $scope.putQuestion = function() {
-            QuestionsFactory.updateQuestion($cookies.get('token'), $scope.user, $stateParams.questionid).update($scope.updateQuestionForm).$promise.then(
+            if($scope.que_type==='objective')
+                // $scope.updateQuestionForm.content = $('#content').html();
+            QuestionsFactory.updateQuestion($cookies.get('token'), $scope.user, $stateParams.questionParams.split(':')[0], $stateParams.questionParams.split(':')[1]).update($scope.updateQuestionForm).$promise.then(
                 function(response){
                     $scope.alertType = "success";
                     $scope.alertMsg = "Your question has been updated.";
@@ -530,19 +537,25 @@ angular.module('QnA')
 
     .controller('UpdateAnswersController', ['$scope', '$controller', '$cookies', '$state', '$stateParams', 'QuestionsFactory', function($scope, $controller, $cookies, $state, $stateParams, QuestionsFactory) {
         $controller('CookiesController', {$scope : $scope});
-        QuestionsFactory.getAnswers($cookies.get('token'), $scope.user, $stateParams.questionid).get()
+        $scope.que_type = $stateParams.questionParams.split(':')[1];
+        QuestionsFactory.getAnswers($cookies.get('token'), $scope.user, $stateParams.questionParams.split(':')[0], $stateParams.questionParams.split(':')[1]).get()
             .$promise.then(
                 function(response){
                     $scope.answers = response.answers;
-                    actualAnswerID = "";
-                    optionsContent = {};
-                    for(var i=0;i<$scope.answers.options.length;i++){
-                        if($scope.answers.options[i].correct){
-                            actualAnswerID = $scope.answers.options[i].id;
+                    if($scope.que_type==='mcq'){
+                        actualAnswerID = "";
+                        optionsContent = {};
+                        for(var i=0;i<$scope.answers.options.length;i++){
+                            if($scope.answers.options[i].correct){
+                                actualAnswerID = $scope.answers.options[i].id;
+                            }
+                            optionsContent[$scope.answers.options[i].id] = $scope.answers.options[i].content;
                         }
-                        optionsContent[$scope.answers.options[i].id] = $scope.answers.options[i].content;
+                        $scope.updateAnswersForm = {correctOption : actualAnswerID.toString(), optionsContent : optionsContent};
                     }
-                    $scope.updateAnswersForm = {correctOption : actualAnswerID.toString(), optionsContent : optionsContent};
+                    else if($scope.que_type==='objective'){
+                        $scope.updateAnswersForm = { correct: $scope.answers.correct, content: $scope.answers.content, sub_category: $scope.answers.sub_category };
+                    }
                     // $scope.updateQuestionForm = {content : $scope.question.content, level : $scope.question.level, explanation : $scope.question.explanation };
                 },
                 function(response) {
@@ -550,11 +563,9 @@ angular.module('QnA')
                 }
             );
         $scope.putAnswers = function() {
-            QuestionsFactory.updateAnswers($cookies.get('token'), $scope.user, $stateParams.questionid).update($scope.updateAnswersForm).$promise.then(
+            QuestionsFactory.updateAnswers($cookies.get('token'), $scope.user, $stateParams.questionParams.split(':')[0], $stateParams.questionParams.split(':')[1]).update($scope.updateAnswersForm).$promise.then(
                 function(response){
-                    $scope.alertType = "success";
-                    $scope.alertMsg = "Your answers has been updated.";
-                    // $state.go('app.update-question');                     
+                    $state.go('app.questions');                     
                 },
                 function(response) {
                     $scope.alertType = "danger";
@@ -629,21 +640,20 @@ angular.module('QnA')
             function(response) {
                 for(i = 0; i < response.length; i++){
                     total_duration += parseInt(response[i].duration);
+                html = '<tr id="oldstackrow'+i+'">'+
+                        '<td style="width:130px;">'+response[i].section_name+'</td>'+
+                        '<td style="width:200px;">'+$('#subcategory'+response[i].subcategory).text()+'</td>'+
+                        '<td style="width:130px;">'+response[i].level+'</td>'+
+                        '<td style="width:130px;">'+response[i].que_type+'</td>'+
+                        '<td style="width:130px;">'+response[i].no_questions+'</td>'+
+                        '<td style="width:130px;">'+response[i].duration+'</td>'+
+                        '<td style="width:130px;">'+response[i].istimed+'</td>'+
+                        '<td style="width:130px;">'+response[i].correct_grade+'</td>'+
+                        '<td style="width:130px;">'+response[i].incorrect_grade+'</td>'+
+                        '<td style="width:130px;">'+response[i].question_order+'</td>'+
+                        '<td style="width:60px;"><a href="javascript:void(0);"><span class="glyphicon glyphicon-trash removefromstackbutton" ng-click="removeFromStackAndSave('+response[i].quiz+', '+response[i].id+')" title="Click to delete permanently."></span></a></td>'+
 
-                    html = '<tr id="oldstackrow'+i+'">'+
-                            '<td style="width:130px;">'+response[i].section_name+'</td>'+
-                            '<td style="width:200px;">'+$('#subcategory'+response[i].subcategory).text()+'</td>'+
-                            '<td style="width:130px;">'+response[i].level+'</td>'+
-                            '<td style="width:130px;">'+response[i].que_type+'</td>'+
-                            '<td style="width:130px;">'+response[i].no_questions+'</td>'+
-                            '<td style="width:130px;">'+response[i].duration+'</td>'+
-                            '<td style="width:130px;">'+response[i].istimed+'</td>'+
-                            '<td style="width:130px;">'+response[i].correct_grade+'</td>'+
-                            '<td style="width:130px;">'+response[i].incorrect_grade+'</td>'+
-                            '<td style="width:130px;">'+response[i].question_order+'</td>'+
-                            '<td style="width:60px;"><a href="javascript:void(0);"><span class="glyphicon glyphicon-trash removefromstackbutton" ng-click="removeFromStackAndSave('+response[i].quiz+', '+response[i].id+')"></span></a></td>'+
-
-                        +'</tr>';
+                    +'</tr>';
                 angular.element(document.querySelector('#existingQuestionsRow')).append($compile(html)($scope));
                 $scope.total_duration = total_duration;
                 }
@@ -710,8 +720,8 @@ angular.module('QnA')
                                     '<td style="width:130px;"><input type="number" min="1" max="100" class="form-control" ondblclick="makeEditable(this)" onblur="makeUneditable(this)" name="correct_grade" id="correct_grade'+$scope.count+'" value="'+$scope.selectedSubCategory['correct_grade']+'" readonly></td>'+
                                     '<td style="width:130px;"><input type="number" min="-100" max="100" class="form-control" ondblclick="makeEditable(this)"onblur="makeUneditable(this)" name="incorrect_grade" id="incorrect_grade'+$scope.count+'" value="'+$scope.selectedSubCategory['incorrect_grade']+'" readonly></td>'+
                                     '<td style="width:130px;"><select class="form-control" name="question_order" id="question_order'+$scope.count+'"><option value="random">random</option><option value="content">content</option></select></td>'+
-                                    '<td style="width:60px;"><a href="javascript:void(0);"><span class="glyphicon glyphicon-remove-circle removefromstackbutton" ng-click="removeFromStack('+$scope.count+')"></span></a></td>'+
-                                    '<td style="width:60px;"><a href="javascript:void(0);"><span class="glyphicon glyphicon-ok-circle addtostackbutton" ng-click="addToStackAndSave('+$scope.count+')"></span></a></td>'+
+                                    '<td style="width:60px;"><a href="javascript:void(0);"><span class="glyphicon glyphicon-remove-circle removefromstackbutton" ng-click="removeFromStack('+$scope.count+')" title="Click to remove it."></span></a></td>'+
+                                    '<td style="width:60px;"><a href="javascript:void(0);"><span class="glyphicon glyphicon-ok-circle addtostackbutton" ng-click="addToStackAndSave('+$scope.count+')" title="Click to save it."></span></a></td>'+
                                 +'</tr>';
                         angular.element(document.querySelector('#selectedQuestionsRow')).append($compile(html)($scope));
                         $scope.selectedSubCategoryDropdown = "";

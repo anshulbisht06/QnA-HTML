@@ -21,7 +21,6 @@ angular.module('QnA').filter('levelFull', function() {
       return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
     }
 })
-
 .filter('pagination', function()
 {
  return function(input, start)
@@ -42,4 +41,11 @@ angular.module('QnA').filter('levelFull', function() {
     	return parseInt(input/60)+':'+input%60;
     }
   };
+
+.filter('insertBlank', function() {
+    return function(input) {
+      if(input!=undefined && input.indexOf("<>")!=-1)
+  		return input.replace(/<>/g, "____________");    	
+      return input;
+    }
 });

@@ -1,5 +1,6 @@
 <div class="container-fluid">
 <div ng-include src="'views/alertmsg.html'"></div>
+<div ng-include src="'views/progressbardisplay.html'"></div>
 <div class="jumbotron">
     <div class="row">
     </div>
@@ -11,6 +12,9 @@
 				<h4 class="text-center visible-xs">Add Objective question(s).</h4>
 			</div>
 			<hr>
+			  	<div class="form-group text-center" ng-if="errors.errors">
+  				  	<p>{{errors.errors}}</p>
+  				</div>
 				<form role="form" name="objectiveQuestionCreateForm" ng-submit="postObjectiveQuestion()" enctype="multipart/form-data" novalidate>
 				  <div class="form-group" ng-if="!unableToGetsubCategories" ng-class="{'has-error': errors.sub_category || objectiveQuestionCreateForm.sub_category.$touched && objectiveQuestionCreateForm.sub_category.$error.required }">
 				  <label for="subcategory">Select a sub-category into which the question will be added</label>
@@ -22,18 +26,26 @@
 			   		<span ng-if="objectiveQuestionCreateForm.sub_category.$touched && objectiveQuestionCreateForm.sub_category.$error.required" class="help-block">Sub-category is required.</span>
 				  </div>
   				  <div class="form-group" ng-if="unableToGetsubCategories">
-  				  	<p>{{ errors }}</p>
+  				  	<span>Unable to fetch subcategories.</span>
   				  </div>
 				  <br>
 				  <div class="form-group">
-				  	<input type="file" name="figure" id="figure" ng-model="createObjectiveQuestionForm.figure">
+				  	<input type="file" name="figure" id="figure" ngf-select ng-model="figure" ngf-pattern="'image/*'"
+					    ngf-accept="'image/*'" ngf-max-size="5MB" ngf-min-height="100" 
+					    ngf-resize="{width: 100, height: 100}">
 				  </div><br>
-				  <div class="form-group" ng-class="{'has-error': errors.content || objectiveQuestionCreateForm.content.$touched && objectiveQuestionCreateForm.content.$error.required }">
-				  	<div class="right"><button type="button" class="btn btn-md btn-danger" id="insertblankbutton" onclick="insertBlank('#contentid')">Insert Blank</button></div><br>
+				  <div class="form-group" ng-class="{'has-error': errors.content[0] || objectiveQuestionCreateForm.content.$touched && objectiveQuestionCreateForm.content.$error.required }">
+				  	<div class="right"><button type="button" class="btn btn-md btn-danger" id="insertblankbutton" onclick="insertBlank('#content')">Insert Blank</button></div><br>
 				  	<label for="content">Enter the question content</label>
-			    	<div name="content" id="contentid" rows="4" class="form-control editable" ng-model="createObjectiveQuestionForm.content" contenteditable required></div>
-			   		<span ng-if="errors.content" class="help-block">{{ errors.content[0] }}</span>
-			   		<!-- <span ng-if="objectiveQuestionCreateForm.content.$touched && objectiveQuestionCreateForm.content.$viewValue==''" class="help-block">Question content is required.</span> -->
+			    	<input type="text" name="content" id="content" class="form-control" ng-model="createObjectiveQuestionForm.content" autocomplete="off" required>
+			   		<span ng-if="errors.content[0]" class="help-block">{{ errors.content[0] }}</span>
+			   		<span ng-if="objectiveQuestionCreateForm.content.$touched && objectiveQuestionCreateForm.content.$error.required" class="help-block">Question content is required.</span>
+				  </div><br>
+				  <div class="form-group" ng-class="{'has-error': errors.correct || objectiveQuestionCreateForm.correct.$touched && objectiveQuestionCreateForm.correct.$error.required }">
+				  	<label for="content">Enter the correct answer</label>
+			    	<textarea name="correct" id="correct" rows="4" class="form-control" ng-model="createObjectiveQuestionForm.correct" required></textarea>
+			    	<span ng-if="errors.correct" class="help-block">{{ errors.correct[0] }}</span>
+			   		<span ng-if="objectiveQuestionCreateForm.correct.$touched && objectiveQuestionCreateForm.correct.$error.required" class="help-block">Correct answer is required.</span>
 				  </div><br>
 				  <div class="form-group">
 				  	<label for="content">Enter the explanation of question</label>
@@ -48,35 +60,40 @@
 					</select>
 				  </div><br>
 				  <br>
-				  <button type="submit" class="btn btn-primary btn-block">Create Question</button>
+				  <button type="submit" class="btn btn-primary btn-block" ng-disabled="objectiveQuestionCreateForm.$invalid">Create Question</button>
 				</form>
 			</div>
-<!-- 			<div class="col-lg-4 col-md-4 col-sm-4 " ng-controller='XlsHandlerController'>
+			<div class="col-lg-4 col-md-4 col-sm-4 " ng-controller='XlsHandlerController'>
 				<div class="row">
 					<h2 class="text-center hidden-xs">Add question in bulk.</h2>
 					<h4 class="text-center visible-xs">Add questions in bulk.</h4>
 				</div>
 				<hr><br>
 				Step1:<p> Select a sub-category here </p>
-				<select class="form-control" id="sub_category1" name="sub_category" ng-model="sub_category_id" ng-class="{'has-error':noSubCategoryPresent}">
-					<option value="" disabled>Select sub-category here</option>
-				    <option ng-repeat="sc in subCategories" value="{{sc.sub_category_name}}">
-				    {{ sc.sub_category_name }}</option>
-				    <span ng-if="noSubCategoryPresent">Select a sub-category first.</span>
-				</select>
+				<div  ng-class="{'has-error': noSubCategoryPresent}">
+					<select class="form-control" id="sub_category1" name="sub_category" ng-model="sub_cat_info" ng-class="{'has-error':noSubCategoryPresent}">
+						<option value="" disabled>Select sub-category here</option>
+					    <option ng-repeat="sc in subCategories" value="{{ sc.id }}>>{{ sc.sub_category_name }}">
+					    {{ sc.sub_category_name }}</option>
+					</select>
+					<span ng-if="noSubCategoryPresent" class="red-text">Select a sub-category first.</span>
+				</div>
 				<br>
 				<br>
-				Step2: <p>Download our questions.xls file and fill this file</p>
+				Step2: <p>Download XLS file and fill this file.</p>
 				<button class="btn btn-lg glyphicon glyphicon-download" 
-					ng-click="downloadDemoXls('mcq', sub_category_id)">Download</button>	
+					ng-click="downloadDemoXls('objective', sub_cat_info)">Download</button>	
 				<br>
 				<br>
-				Step3: <p>Upload your xls file and wait .. .</p>
+				Step3: <p>Upload the XLS file and wait.</p>
 				 <div>
-			         <input type = "file" file-model = "myFile" class='btn'/>
-			         <button class="btn btn-lg glyphicon glyphicon-upload" ng-click = "uploadFile()">Upload</button>
+				 	<div ng-class="{'has-error': noFileUploaded}">
+			         <input type = "file" file-model="myFile" class='btn'/>
+			         <span ng-if="noFileUploaded" class="red-text">No file has been uploaded.<br></span>
+			        </div><br>
+			         <button class="btn btn-lg glyphicon glyphicon-upload" ng-click="uploadFile('objective')">Upload</button>
 			      </div>
-			</div> -->
+			</div>
 		</div>
 	</div>
 </div>
