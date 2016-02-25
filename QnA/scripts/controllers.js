@@ -401,19 +401,21 @@ angular.module('QnA')
         {
             $scope.createMCQQuestionForm = {content:"",explanation:"", level:"easy", answer_order:"random", sub_category:"", que_type:"mcq"};
             $scope.postMCQQuestion = function() {
-                QuestionsFactory.createQuestion($cookies.get('token'), "mcq").save($scope.createMCQQuestionForm).$promise.then(
-                    function(response){
-                        $scope.alertType = "success";
-                        $scope.alertMsg = "Your question has been created.";
-                        $scope.createMCQQuestionForm = {content:"",explanation:"", level:"easy", answer_order:"random", sub_category:""};
-                        $scope.mcqQuestionCreateForm.$setPristine();
-                        $state.go('app.create-mcq-question');                     
-                    },
-                    function(response) {
-                        $scope.alertType = "danger";
-                        $scope.alertMsg = "Unable to create the question. See below errors.";
-                        $scope.errors = response.data;
-                    });
+                console.log($scope.createMCQQuestionForm)
+                // QuestionsFactory.createQuestion($cookies.get('token'), "mcq").save($scope.createMCQQuestionForm).$promise.then(
+                //     function(response){
+                //         $scope.alertType = "success";
+                //         $scope.alertMsg = "Your question has been created.";
+                //         $scope.createMCQQuestionForm = {content:"",explanation:"", level:"easy", answer_order:"random", sub_category:""};
+                //         $scope.mcqQuestionCreateForm.$setPristine();
+                //         $state.go('app.create-mcq-question');                     
+                //     },
+                //     function(response) {
+                //         $scope.alertType = "danger";
+                //         $scope.alertMsg = "Unable to create the question. See below errors.";
+                //         $scope.errors = response.data;
+                //     });
+                $scope.upload("question/mcq/create/", $scope.createMCQQuestionForm, $scope.figure);
             }
 
             $scope.optionss = [
@@ -446,25 +448,26 @@ angular.module('QnA')
         }
         else if($state.current.name === "app.create-objective-question"){
             $scope.createObjectiveQuestionForm = {content:"",correct:"",explanation:"", level:"easy", sub_category:"", que_type:"objective"};
-            // $scope.getTheFiles = function($files){
-            //     angular.forEach($files, function(value, key){
-            //         new FormData().append(key, value);
-            //     });
-            // $scope.createObjectiveQuestionForm.figure = $files;
-            // };
             $scope.postObjectiveQuestion = function() {
-                Upload.upload({
-                    url: baseURL+"question/objective/create/",
-                    data: { figure: $scope.figure, 'data': $scope.createObjectiveQuestionForm }
-                }).then(function(response) {
-                    console.log('Success ');
-                }, function (response) {
-                    alert("Error in uploading image. Try again!")
-                }, function(event) {
-                    var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                    console.log('progress: ' + progressPercentage);
-                });
+                $scope.upload("question/objective/create/", $scope.createObjectiveQuestionForm, $scope.figure);
             }
+        }
+
+        $scope.upload = function(postUrl, data, figure){
+            $('#progressBarModal').modal('show');
+            Upload.upload({
+                    url: baseURL+postUrl,
+                    data: { figure: figure, 'data': data },
+                    headers: {'Authorization': 'JWT ' + $cookies.get('token')},
+                }).then(function(response) {
+                }, function (response) {
+                    $scope.error = true;
+                    $('#progressBarModalBody').html('<span class="red-text">Error in creating question. Try again!</span>');
+                }, function(event) {
+                    var percentage = parseInt(100.0 * event.loaded / event.total).toString();
+                    $('#progress-bar').css('width', percentage+'%');
+                    $('#percentage').html(percentage);
+                });
         }
     }])
     .controller('XlsHandlerController',['$scope', '$cookies', '$http', 'fileUpload', function($scope, $cookies, $http, fileUpload){
