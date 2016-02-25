@@ -483,14 +483,15 @@ angular.module('QnA')
 
     }])
 
-    .controller('UpdateQuestionController', ['$scope', '$controller', '$cookies', '$state', '$stateParams', 'QuestionsFactory', function($scope, $controller, $cookies, $state, $stateParams, QuestionsFactory) {
+    .controller('UpdateQuestionController', ['$scope', '$controller', '$cookies', '$state', '$stateParams', 'QuestionsFactory', 'Upload', function($scope, $controller, $cookies, $state, $stateParams, QuestionsFactory, Upload) {
         $controller('CookiesController', {$scope : $scope});
         $scope.que_type = $stateParams.questionParams.split(':')[1];
+
         QuestionsFactory.getQuestion($cookies.get('token'), $scope.user, $stateParams.questionParams.split(':')[0]).get()
             .$promise.then(
                 function(response){
                     $scope.question = response.question;
-                    $scope.updateQuestionForm = {content : $scope.question.content, level : $scope.question.level, explanation : $scope.question.explanation };
+                    $scope.updateQuestionForm = {content : $scope.question.content, level : $scope.question.level, explanation : $scope.question.explanation, que_type : $scope.question.que_type };
                     if($scope.que_type==='objective')
                         $scope.updateQuestionForm.content = $scope.question.content.replace(/<>/g,'<<Answer>>');
                 },
@@ -498,20 +499,39 @@ angular.module('QnA')
                     $scope.unableToGetQuestion = response.data;
                 }
             );
-        $scope.putQuestion = function() {
-            if($scope.que_type==='objective')
-                // $scope.updateQuestionForm.content = $('#content').html();
-            QuestionsFactory.updateQuestion($cookies.get('token'), $scope.user, $stateParams.questionParams.split(':')[0], $stateParams.questionParams.split(':')[1]).update($scope.updateQuestionForm).$promise.then(
-                function(response){
-                    $scope.alertType = "success";
-                    $scope.alertMsg = "Your question has been updated.";
-                    // $state.go('app.update-question');                     
-                },
-                function(response) {
-                    $scope.alertType = "danger";
-                    $scope.alertMsg = "Unable to update the question. See below errors.";
-                    $scope.errors = response.data;
+        $scope.upload = function(postUrl, data){
+            $('#progressBarModal').modal('show');
+            Upload.upload({
+                    url: baseURL+postUrl,
+                    method : 'PUT',
+                    data: { data: data },
+                    headers: {'Authorization': 'JWT ' + $cookies.get('token')},
+                }).then(function(response) {
+                }, function (response) {
+                    $scope.error = true;
+                    $('#progressBarModalBody').html('<span class="red-text">Error in updating the question. Try again!</span>');
+                }, function(event) {
+                    var percentage = parseInt(100.0 * event.loaded / event.total).toString();
+                    $('#progress-bar').css('width', percentage+'%');
+                    $('#percentage').html(percentage);
                 });
+        }
+
+        $scope.putQuestion = function() {
+            console.log($scope.figure);
+                // $scope.updateQuestionForm.content = $('#content').html();
+            // QuestionsFactory.updateQuestion($cookies.get('token'), $scope.user, $stateParams.questionParams.split(':')[0], $stateParams.questionParams.split(':')[1]).update($scope.updateQuestionForm).$promise.then(
+            //     function(response){
+            //         $scope.alertType = "success";
+            //         $scope.alertMsg = "Your question has been updated.";
+            //         // $state.go('app.update-question');                     
+            //     },
+            //     function(response) {
+            //         $scope.alertType = "danger";
+            //         $scope.alertMsg = "Unable to update the question. See below errors.";
+            //         $scope.errors = response.data;
+            //     });
+            $scope.upload("quiz/question/"+$scope.user+"/"+$stateParams.questionParams.split(':')[0]+"/", $scope.updateQuestionForm);
         }
     }])
 
@@ -568,8 +588,7 @@ angular.module('QnA')
                     $scope.unableToGetQuiz = response.data;
                 }
             );
-            $scope.editorEnabled = false;
-  
+            $scope.editorEnabled = false;  
             $scope.enableEditor = function() {
                 $scope.editorEnabled = true;
             };
