@@ -385,7 +385,7 @@ angular.module('QnA')
     }])
 
 
-    .controller('CreateQuestionController', ['$scope', '$controller', '$cookies', '$state', 'QuizFactory', 'CategoryFactory', 'SubCategoryFactory', 'QuestionsFactory', 'Upload', function($scope, $controller, $cookies, $state, QuizFactory, CategoryFactory, SubCategoryFactory, QuestionsFactory, Upload) {
+    .controller('CreateQuestionController', ['$scope', '$controller', '$cookies', '$state', '$http', 'QuizFactory', 'CategoryFactory', 'SubCategoryFactory', 'QuestionsFactory', 'Upload', function($scope, $controller, $cookies, $state, $http, QuizFactory, CategoryFactory, SubCategoryFactory, QuestionsFactory, Upload) {
         $controller('CookiesController', {$scope : $scope});
         if($scope.user){
         SubCategoryFactory.getAllSubcategories($cookies.get('token'), $scope.user, 'all').query(
@@ -473,6 +473,7 @@ angular.module('QnA')
             if(sub_cat_info===undefined){
                 $scope.noSubCategoryPresent = true;
             }else{
+                console.log(que_type, sub_cat_info);
             $http.post(baseURL+"quiz/question/download/xls/", {que_type:que_type,
                 sub_cat_info:sub_cat_info}, { responseType: 'arraybuffer' })
               .success(function(data) {
