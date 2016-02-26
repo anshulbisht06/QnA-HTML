@@ -88,7 +88,7 @@
 				Step3: <p>Upload the XLS file and wait.</p>
 				 <div>
 				 	<div ng-class="{'has-error': noFileUploaded}">
-			         <input type = "file" file-model="myFile" class='btn'/>
+			         <input type = "file" ng-model="myFile" class='btn'/>
 			         <span ng-if="noFileUploaded" class="red-text">No file has been uploaded.<br></span>
 			        </div><br>
 			         <button class="btn btn-lg glyphicon glyphicon-upload" ng-click="uploadFile('objective')">Upload</button>

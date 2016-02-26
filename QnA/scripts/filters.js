@@ -40,7 +40,7 @@ angular.module('QnA').filter('levelFull', function() {
     else{
     	return parseInt(input/60)+':'+input%60;
     }
-  };
+  }})
 
 .filter('insertBlank', function() {
     return function(input) {
@@ -48,4 +48,4 @@ angular.module('QnA').filter('levelFull', function() {
   		return input.replace(/<>/g, "____________");    	
       return input;
     }
-});
+})
