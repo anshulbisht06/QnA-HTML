@@ -399,19 +399,27 @@ angular.module('QnA')
         }
         $scope.upload = function(postUrl, data, figure){
             $('#progressBarModal').modal('show');
+            $scope.error = false;
             Upload.upload({
                     url: baseURL+postUrl,
                     data: { figure: figure, data: data },
                     headers: {'Authorization': 'JWT ' + $cookies.get('token')},
+                    resumeChunkSize: '1MB',
                 }).then(function(response) {
                 }, function (response) {
                     $scope.error = true;
-                    $('#progressBarModalBody').html('<span class="red-text">Error in creating question. Try again!</span>');
                 }, function(event) {
                     var percentage = parseInt(100.0 * event.loaded / event.total).toString();
                     $('#progress-bar').css('width', percentage+'%');
                     $('#percentage').html(percentage);
                 });
+        }
+        $scope.changeImage = function(){
+            $scope.isImageChanged = true;
+        }
+        $scope.removeImage = function(){
+            $scope.isImageChanged = false;
+            $scope.figure = undefined;
         }
 
 
@@ -454,6 +462,9 @@ angular.module('QnA')
             $scope.createObjectiveQuestionForm = {content:"",correct:"",explanation:"", level:"easy", sub_category:"", que_type:"objective"};
             $scope.postObjectiveQuestion = function() {
                 $scope.upload("question/objective/create/", $scope.createObjectiveQuestionForm, $scope.figure);
+            }
+            $scope.insertBlank = function(){
+                $scope.createObjectiveQuestionForm.content += " <<Answer>> ";
             }
         }
 
@@ -501,6 +512,7 @@ angular.module('QnA')
             );
         $scope.upload = function(postUrl, data){
             $('#progressBarModal').modal('show');
+            $scope.error = false;
             Upload.upload({
                     url: baseURL+postUrl,
                     method : 'PUT',
@@ -509,7 +521,6 @@ angular.module('QnA')
                 }).then(function(response) {
                 }, function (response) {
                     $scope.error = true;
-                    $('#progressBarModalBody').html('<span class="red-text">Error in updating the question. Try again!</span>');
                 }, function(event) {
                     var percentage = parseInt(100.0 * event.loaded / event.total).toString();
                     $('#progress-bar').css('width', percentage+'%');
@@ -518,19 +529,6 @@ angular.module('QnA')
         }
 
         $scope.putQuestion = function() {
-            console.log($scope.figure);
-                // $scope.updateQuestionForm.content = $('#content').html();
-            // QuestionsFactory.updateQuestion($cookies.get('token'), $scope.user, $stateParams.questionParams.split(':')[0], $stateParams.questionParams.split(':')[1]).update($scope.updateQuestionForm).$promise.then(
-            //     function(response){
-            //         $scope.alertType = "success";
-            //         $scope.alertMsg = "Your question has been updated.";
-            //         // $state.go('app.update-question');                     
-            //     },
-            //     function(response) {
-            //         $scope.alertType = "danger";
-            //         $scope.alertMsg = "Unable to update the question. See below errors.";
-            //         $scope.errors = response.data;
-            //     });
             $scope.upload("quiz/question/"+$scope.user+"/"+$stateParams.questionParams.split(':')[0]+"/", $scope.updateQuestionForm);
         }
     }])

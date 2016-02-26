@@ -10,11 +10,11 @@ function makeEditable(element){
 function makeUneditable(element){
 	element.readOnly = true;
 }
-function insertBlank(selector) {
-	var element = document.querySelector(selector);
-	element.value += ' <<Answer>> ';
-	element.focus();
-}
+// function insertBlank(selector) {
+// 	var element = document.querySelector(selector);
+// 	element.value += ' <<Answer>> ';
+// 	element.focus();
+// }
 function upload(file) {
 	console.log(file); 
 }

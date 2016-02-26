@@ -32,10 +32,11 @@
 				  <div class="form-group">
 				  	<input type="file" name="figure" id="figure" ngf-select ng-model="figure" ngf-pattern="'image/*'"
 					    ngf-accept="'image/*'" ngf-max-size="5MB" ngf-min-height="100" 
-					    ngf-resize="{width: 100, height: 100}">
+					    ngf-resize="{width: 100, height: 100}" ng-change="changeImage()" style="display: inline;">
+					<span class="glyphicon glyphicon-remove red-text" ng-if="isImageChanged" ng-click="removeImage()" style="cursor: pointer;"></span>
 				  </div><br>
 				  <div class="form-group" ng-class="{'has-error': errors.content[0] || objectiveQuestionCreateForm.content.$touched && objectiveQuestionCreateForm.content.$error.required }">
-				  	<div class="right"><button type="button" class="btn btn-md btn-danger" id="insertblankbutton" onclick="insertBlank('#content')">Insert Blank</button></div><br>
+				  	<div class="right"><button type="button" class="btn btn-md btn-danger" id="insertblankbutton" ng-click="insertBlank()">Insert Blank</button></div><br>
 				  	<label for="content">Enter the question content</label>
 			    	<input type="text" name="content" id="content" class="form-control" ng-model="createObjectiveQuestionForm.content" autocomplete="off" required>
 			   		<span ng-if="errors.content[0]" class="help-block">{{ errors.content[0] }}</span>
