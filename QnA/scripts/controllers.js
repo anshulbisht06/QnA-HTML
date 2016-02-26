@@ -405,24 +405,36 @@ angular.module('QnA')
                 $scope.unableToGetAllSubCategories = true;
             });
         }
+        $scope.upload = function(postUrl, data, figure){
+            $('#progressBarModal').modal('show');
+            $scope.error = false;
+            Upload.upload({
+                    url: baseURL+postUrl,
+                    data: { figure: figure, data: data },
+                    headers: {'Authorization': 'JWT ' + $cookies.get('token')},
+                    resumeChunkSize: '1MB',
+                }).then(function(response) {
+                }, function (response) {
+                    $scope.error = true;
+                }, function(event) {
+                    var percentage = parseInt(100.0 * event.loaded / event.total).toString();
+                    $('#progress-bar').css('width', percentage+'%');
+                    $('#percentage').html(percentage);
+                });
+        }
+        $scope.changeImage = function(){
+            $scope.isImageChanged = true;
+        }
+        $scope.removeImage = function(){
+            $scope.isImageChanged = false;
+            $scope.figure = undefined;
+        }
+
+
         if($state.current.name === "app.create-mcq-question")
         {
             $scope.createMCQQuestionForm = {content:"",explanation:"", level:"easy", answer_order:"random", sub_category:"", que_type:"mcq"};
             $scope.postMCQQuestion = function() {
-                console.log($scope.createMCQQuestionForm)
-                // QuestionsFactory.createQuestion($cookies.get('token'), "mcq").save($scope.createMCQQuestionForm).$promise.then(
-                //     function(response){
-                //         $scope.alertType = "success";
-                //         $scope.alertMsg = "Your question has been created.";
-                //         $scope.createMCQQuestionForm = {content:"",explanation:"", level:"easy", answer_order:"random", sub_category:""};
-                //         $scope.mcqQuestionCreateForm.$setPristine();
-                //         $state.go('app.create-mcq-question');                     
-                //     },
-                //     function(response) {
-                //         $scope.alertType = "danger";
-                //         $scope.alertMsg = "Unable to create the question. See below errors.";
-                //         $scope.errors = response.data;
-                //     });
                 $scope.upload("question/mcq/create/", $scope.createMCQQuestionForm, $scope.figure);
             }
 
@@ -459,27 +471,12 @@ angular.module('QnA')
             $scope.postObjectiveQuestion = function() {
                 $scope.upload("question/objective/create/", $scope.createObjectiveQuestionForm, $scope.figure);
             }
+            $scope.insertBlank = function(){
+                $scope.createObjectiveQuestionForm.content += " <<Answer>> ";
+            }
         }
 
-        $scope.upload = function(postUrl, data, figure){
-            $('#progressBarModal').modal('show');
-            Upload.upload({
-                    url: baseURL+postUrl,
-                    data: { figure: figure, 'data': data },
-                    headers: {'Authorization': 'JWT ' + $cookies.get('token')},
-                }).then(function(response) {
-                }, function (response) {
-                    $scope.error = true;
-                    $('#progressBarModalBody').html('<span class="red-text">Error in creating question. Try again!</span>');
-                }, function(event) {
-                    var percentage = parseInt(100.0 * event.loaded / event.total).toString();
-                    $('#progress-bar').css('width', percentage+'%');
-                    $('#percentage').html(percentage);
-                });
-        }
-    }])
-    .controller('XlsHandlerController',['$scope', '$cookies', '$http', 'fileUpload', function($scope, $cookies, $http, fileUpload){
-        // Function for download xls file on any type of quetions .... ;)
+
         $scope.downloadDemoXls = function(que_type, sub_cat_info){
             if(sub_cat_info===undefined){
                 $scope.noSubCategoryPresent = true;
@@ -492,24 +489,28 @@ angular.module('QnA')
             })
             };
         }
+
+        // Function for download xls file on any type of quetions .... ;)
         $scope.uploadFile = function(que_type){
                var file = $scope.myFile;
                if(file===undefined){
                 $scope.noFileUploaded = true;
-            } else{            
-               fileUpload.uploadFileToUrl(file, baseURL+"question/"+que_type+"/bulkupload/", $cookies.get('token'));
+            } else{
+                $scope.upload("question/"+que_type+"/bulkupload/", {}, file);                   
             }
             };
+
     }])
 
-    .controller('UpdateQuestionController', ['$scope', '$controller', '$cookies', '$state', '$stateParams', 'QuestionsFactory', function($scope, $controller, $cookies, $state, $stateParams, QuestionsFactory) {
+    .controller('UpdateQuestionController', ['$scope', '$controller', '$cookies', '$state', '$stateParams', 'QuestionsFactory', 'Upload', function($scope, $controller, $cookies, $state, $stateParams, QuestionsFactory, Upload) {
         $controller('CookiesController', {$scope : $scope});
         $scope.que_type = $stateParams.questionParams.split(':')[1];
+
         QuestionsFactory.getQuestion($cookies.get('token'), $scope.user, $stateParams.questionParams.split(':')[0]).get()
             .$promise.then(
                 function(response){
                     $scope.question = response.question;
-                    $scope.updateQuestionForm = {content : $scope.question.content, level : $scope.question.level, explanation : $scope.question.explanation };
+                    $scope.updateQuestionForm = {content : $scope.question.content, level : $scope.question.level, explanation : $scope.question.explanation, que_type : $scope.question.que_type };
                     if($scope.que_type==='objective')
                         $scope.updateQuestionForm.content = $scope.question.content.replace(/<>/g,'<<Answer>>');
                 },
@@ -517,20 +518,26 @@ angular.module('QnA')
                     $scope.unableToGetQuestion = response.data;
                 }
             );
-        $scope.putQuestion = function() {
-            if($scope.que_type==='objective')
-                // $scope.updateQuestionForm.content = $('#content').html();
-            QuestionsFactory.updateQuestion($cookies.get('token'), $scope.user, $stateParams.questionParams.split(':')[0], $stateParams.questionParams.split(':')[1]).update($scope.updateQuestionForm).$promise.then(
-                function(response){
-                    $scope.alertType = "success";
-                    $scope.alertMsg = "Your question has been updated.";
-                    // $state.go('app.update-question');                     
-                },
-                function(response) {
-                    $scope.alertType = "danger";
-                    $scope.alertMsg = "Unable to update the question. See below errors.";
-                    $scope.errors = response.data;
+        $scope.upload = function(postUrl, data){
+            $('#progressBarModal').modal('show');
+            $scope.error = false;
+            Upload.upload({
+                    url: baseURL+postUrl,
+                    method : 'PUT',
+                    data: { data: data },
+                    headers: {'Authorization': 'JWT ' + $cookies.get('token')},
+                }).then(function(response) {
+                }, function (response) {
+                    $scope.error = true;
+                }, function(event) {
+                    var percentage = parseInt(100.0 * event.loaded / event.total).toString();
+                    $('#progress-bar').css('width', percentage+'%');
+                    $('#percentage').html(percentage);
                 });
+        }
+
+        $scope.putQuestion = function() {
+            $scope.upload("quiz/question/"+$scope.user+"/"+$stateParams.questionParams.split(':')[0]+"/", $scope.updateQuestionForm);
         }
     }])
 
@@ -587,8 +594,7 @@ angular.module('QnA')
                     $scope.unableToGetQuiz = response.data;
                 }
             );
-            $scope.editorEnabled = false;
-  
+            $scope.editorEnabled = false;  
             $scope.enableEditor = function() {
                 $scope.editorEnabled = true;
             };

@@ -29,7 +29,8 @@
 				  <div class="form-group">
 				  	<input type="file" name="figure" id="figure" ngf-select ng-model="figure" ngf-pattern="'image/*'"
 					    ngf-accept="'image/*'" ngf-max-size="5MB" ngf-min-height="100" 
-					    ngf-resize="{width: 100, height: 100}">
+					    ngf-resize="{width: 100, height: 100}" ng-change="changeImage()" style="display: inline;">
+					<span class="glyphicon glyphicon-remove red-text" ng-if="isImageChanged" ng-click="removeImage()" style="cursor: pointer;"></span>
 				  </div><br>
 				  	<input type="hidden" name="que_type" id="que_type" ng-model="createMCQQuestionForm.que_type" value="mcq">
 				  <div class="form-group" ng-class="{'has-error': errors.content || mcqQuestionCreateForm.content.$touched && mcqQuestionCreateForm.content.$error.required }">
@@ -82,7 +83,7 @@
 				  <button type="submit" class="btn btn-primary btn-block" ng-disabled="mcqQuestionCreateForm.$invalid">Create Question</button>
 				</form>
 			</div>
-			<div class="col-lg-4 col-md-4 col-sm-4 " ng-controller='XlsHandlerController'>
+			<div class="col-lg-4 col-md-4 col-sm-4">
 				<div class="row">
 					<h2 class="text-center hidden-xs">Add question in bulk.</h2>
 					<h4 class="text-center visible-xs">Add questions in bulk.</h4>
@@ -107,7 +108,7 @@
 				Step3: <p>Upload your xls file and wait .. .</p>
 				 <div>
 			        <div ng-class="{ 'has-error': noFileUploaded }">
-			         <input type = "file" file-model = "myFile" class='btn'/>
+			         <input type="file" name="myFile" id="myFile" ngf-select ng-model="myFile" ngf-max-size="20MB">
 			         <span ng-if="noFileUploaded" class="red-text">No file has been uploaded.</span>
 			        </div>
 			         <button class="btn btn-lg glyphicon glyphicon-upload" ng-click = "uploadFile('mcq')">Upload</button>
