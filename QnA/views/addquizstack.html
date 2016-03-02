@@ -1,5 +1,6 @@
 <div class="container-fluid">
 <div ng-include src="'views/alertmsg.html'"></div>
+<div class="row text-center"><h4><b>{{quizName|capitalize}}</b></h4></div>
 <div class="row"><br><br></div>
 <div class="row">
 	<div class="col-lg-1 col-md-1 col-sm-1"></div>
@@ -18,12 +19,11 @@
 	      	<div class="col-lg-3 col-md-3 col-sm-3">
 	      		<div class="input-group">
 	      			<span class="input-group-addon">Duration: <span style='color:black;'>{{total_duration|time}} (HH:MM)</span></span>
-	      			<!-- <input type="text" class="form-control" name="duration" value="{{total_duration|time}}" id="totalduration" readonly="true"> -->
 	      		</div>
 	      	</div>
-	      	<div ng-controller="PreviewQuizController">
+	      	<div>
 		      	<div class="col-lg-1 col-md-1 col-sm-1">
-		      		<button class="btn btn-info" type="button" ng-click='getQuizPreview()' class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">
+		      		<button type="button" class="btn btn-primary" ng-click="openTestWindow()">
 		      			Preview
 		      		</button>
 		      	</div>

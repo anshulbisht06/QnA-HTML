@@ -1,6 +1,5 @@
 /* global $ */
 angular.module('QnA')
-
     .directive('onlyNum', function() {
       return function(scope, element, attrs) {
 
@@ -37,7 +36,7 @@ angular.module('QnA')
         var config = {
                 headers : {
                     'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;',
-                    'Authorization' : 'JWT '+$cookies.get('token')
+                    // 'Authorization' : 'JWT '+$cookies.get('token')
                 }
             }
         var data = {};
@@ -137,7 +136,7 @@ angular.module('QnA')
         $scope.createQuizForm = {title:"",description:"",url:"",category:"",random_order:false,answers_at_end:false,single_attempt:false,exam_paper:false,max_questions:"",pass_mark:"",success_text:"",fail_text:""};
         $scope.postQuiz = function() {
             $scope.createQuizForm.user = $scope.user;
-            QuizFactory.createQuiz($cookies.get('token')).save($scope.createQuizForm).$promise.then(
+            QuizFactory.createQuiz().save($scope.createQuizForm).$promise.then(
                 function(response){
                     $scope.isFormInvalid = false;
                     $scope.alertType = "success";
@@ -154,7 +153,7 @@ angular.module('QnA')
                 }); 
         }
         $scope.getCategories = function(quizid, quiztitle){
-            CategoryFactory.getAllCategories($cookies.get('token'), $scope.user, parseInt(quizid)).query(
+            CategoryFactory.getAllCategories($scope.user, parseInt(quizid)).query(
             function(response){
                 $scope.allCategories = response;
                 $scope.quiztitle = quiztitle;
@@ -169,7 +168,7 @@ angular.module('QnA')
     .controller('CreateCategoryController', ['$scope','$state', '$controller', '$cookies', 'CategoryFactory', 'QuizFactory','$stateParams', function($scope, $state, $controller, $cookies, CategoryFactory, QuizFactory, $stateParams) {
         $controller('CookiesController', {$scope : $scope});
         if($scope.user){
-            QuizFactory.getAllQuiz($cookies.get('token'), $scope.user, "all").query(
+            QuizFactory.getAllQuiz($scope.user, "all").query(
             function(response){
                 $scope.allQuiz = response;
             },
@@ -195,7 +194,7 @@ angular.module('QnA')
         }
 
         $scope.postCategory = function() { 
-            CategoryFactory.createCategory($cookies.get('token')).save($scope.createCategoryform).$promise.then(
+            CategoryFactory.createCategory().save($scope.createCategoryform).$promise.then(
                 function(response){
                     $scope.isFormInvalid = false;
                     $scope.alertType = "success";
@@ -219,7 +218,7 @@ angular.module('QnA')
 
     .controller('CreateSubCategoryController', ['$scope','$state', '$controller', '$cookies', 'CategoryFactory', 'SubCategoryFactory','$stateParams', function($scope, $state, $controller, $cookies, CategoryFactory, SubCategoryFactory, $stateParams) {
         $controller('CookiesController', {$scope : $scope});
-        CategoryFactory.getAllCategories($cookies.get('token'), $scope.user, "all").query(
+        CategoryFactory.getAllCategories($scope.user, "all").query(
         function(response){
             $scope.allCategories = response;
         },
@@ -235,7 +234,7 @@ angular.module('QnA')
             $scope.createSubCategoryform.category = $scope.categoryid;
         }
         $scope.postSubCategory = function() {
-            var response = SubCategoryFactory.createSubCategory($cookies.get('token')).save($scope.createSubCategoryform).$promise.then(
+            var response = SubCategoryFactory.createSubCategory().save($scope.createSubCategoryform).$promise.then(
                 function(response){
                     $scope.alertType = "success";
                     $scope.alertMsg = "Your sub-category named " + $scope.createSubCategoryform.sub_category_name + " has been created.";   
@@ -252,7 +251,7 @@ angular.module('QnA')
 
     .controller('QuestionsController', ['$scope', '$controller', '$cookies', '$state', '$http', 'QuestionsFactory', function($scope, $controller, $cookies, $state, $http, QuestionsFactory) {
         $controller('CookiesController', {$scope : $scope});
-        QuestionsFactory.getAllQuestions($cookies.get('token'), $scope.user).query(
+        QuestionsFactory.getAllQuestions($scope.user).query(
             function(response) {
                 $scope.questions = response;
                 if($scope.questions){
@@ -293,7 +292,7 @@ angular.module('QnA')
             $scope.isHoveredOver[questionid] = false;
         }
         $scope.deleteQuestion = function(questionid){
-            QuestionsFactory.deleteQuestion($cookies.get('token'), $scope.user, questionid).delete().$promise.then(
+            QuestionsFactory.deleteQuestion($scope.user, questionid).delete().$promise.then(
                 function(response){
                     // $scope.alertType = "success";
                     // $scope.alertMsg = "The question has been delete.";
@@ -336,7 +335,7 @@ angular.module('QnA')
         }
         $scope.filterQuiz = function(quizid){
             // $scope.filterByQuiz = selectedQuiz;
-            QuestionsFactory.getQuestionUnderQuiz($cookies.get('token'), $scope.user, quizid).query(
+            QuestionsFactory.getQuestionUnderQuiz($scope.user, quizid).query(
             function(response) {
                 $scope.allQuestions = response;
                 if($scope.allQuestions){
@@ -351,7 +350,7 @@ angular.module('QnA')
 
         $scope.filterCategory = function(quizid, categoryid){
             // $scope.filterByCategory = selectedCategory;
-            QuestionsFactory.getQuestionUnderCategory($cookies.get('token'), $scope.user, quizid, categoryid).query(
+            QuestionsFactory.getQuestionUnderCategory($scope.user, quizid, categoryid).query(
             function(response) {
                 $scope.allQuestions = response;
                 if($scope.allQuestions){
@@ -365,7 +364,7 @@ angular.module('QnA')
         }
         $scope.filterSubCategory = function(subcategoryid){
             // $scope.filterBySubCategory = selectedSubCategory;
-            QuestionsFactory.getQuestionUnderSubCategory($cookies.get('token'), $scope.user, subcategoryid, false).query(
+            QuestionsFactory.getQuestionUnderSubCategory($scope.user, subcategoryid, false).query(
             function(response) {
                 $scope.allQuestions = response;
                 if($scope.allQuestions){
@@ -388,15 +387,15 @@ angular.module('QnA')
         }
         $scope.renameCategory = function(){
             // console.log($scope.categoryRenameForm);
-            CategoryFactory.renameCategory($cookies.get('token')).update($scope.categoryRenameForm);
+            CategoryFactory.renameCategory().update($scope.categoryRenameForm);
         } 
     }])
 
 
-    .controller('CreateQuestionController', ['$scope', '$controller', '$cookies', '$state', 'QuizFactory', 'CategoryFactory', 'SubCategoryFactory', 'QuestionsFactory', 'Upload', function($scope, $controller, $cookies, $state, QuizFactory, CategoryFactory, SubCategoryFactory, QuestionsFactory, Upload) {
+    .controller('CreateQuestionController', ['$scope', '$controller', '$cookies', '$state', '$http', 'QuizFactory', 'CategoryFactory', 'SubCategoryFactory', 'QuestionsFactory', 'Upload', function($scope, $controller, $cookies, $state, $http, QuizFactory, CategoryFactory, SubCategoryFactory, QuestionsFactory, Upload) {
         $controller('CookiesController', {$scope : $scope});
         if($scope.user){
-        SubCategoryFactory.getAllSubcategories($cookies.get('token'), $scope.user, 'all').query(
+        SubCategoryFactory.getAllSubcategories($scope.user, 'all').query(
             function(response) {
                 $scope.subCategories = response;
             },
@@ -411,7 +410,7 @@ angular.module('QnA')
             Upload.upload({
                     url: baseURL+postUrl,
                     data: { figure: figure, data: data },
-                    headers: {'Authorization': 'JWT ' + $cookies.get('token')},
+                    // headers: {'Authorization': 'JWT ' + $cookies.get('token')},
                     resumeChunkSize: '1MB',
                 }).then(function(response) {
                 }, function (response) {
@@ -481,6 +480,7 @@ angular.module('QnA')
             if(sub_cat_info===undefined){
                 $scope.noSubCategoryPresent = true;
             }else{
+                console.log(que_type, sub_cat_info);
             $http.post(baseURL+"quiz/question/download/xls/", {que_type:que_type,
                 sub_cat_info:sub_cat_info}, { responseType: 'arraybuffer' })
               .success(function(data) {
@@ -506,7 +506,7 @@ angular.module('QnA')
         $controller('CookiesController', {$scope : $scope});
         $scope.que_type = $stateParams.questionParams.split(':')[1];
 
-        QuestionsFactory.getQuestion($cookies.get('token'), $scope.user, $stateParams.questionParams.split(':')[0]).get()
+        QuestionsFactory.getQuestion($scope.user, $stateParams.questionParams.split(':')[0]).get()
             .$promise.then(
                 function(response){
                     $scope.question = response.question;
@@ -525,7 +525,7 @@ angular.module('QnA')
                     url: baseURL+postUrl,
                     method : 'PUT',
                     data: { data: data },
-                    headers: {'Authorization': 'JWT ' + $cookies.get('token')},
+                    // headers: {'Authorization': 'JWT ' + $cookies.get('token')},
                 }).then(function(response) {
                 }, function (response) {
                     $scope.error = true;
@@ -545,7 +545,7 @@ angular.module('QnA')
     .controller('UpdateAnswersController', ['$scope', '$controller', '$cookies', '$state', '$stateParams', 'QuestionsFactory', function($scope, $controller, $cookies, $state, $stateParams, QuestionsFactory) {
         $controller('CookiesController', {$scope : $scope});
         $scope.que_type = $stateParams.questionParams.split(':')[1];
-        QuestionsFactory.getAnswers($cookies.get('token'), $scope.user, $stateParams.questionParams.split(':')[0], $stateParams.questionParams.split(':')[1]).get()
+        QuestionsFactory.getAnswers($scope.user, $stateParams.questionParams.split(':')[0], $stateParams.questionParams.split(':')[1]).get()
             .$promise.then(
                 function(response){
                     $scope.answers = response.answers;
@@ -570,7 +570,7 @@ angular.module('QnA')
                 }
             );
         $scope.putAnswers = function() {
-            QuestionsFactory.updateAnswers($cookies.get('token'), $scope.user, $stateParams.questionParams.split(':')[0], $stateParams.questionParams.split(':')[1]).update($scope.updateAnswersForm).$promise.then(
+            QuestionsFactory.updateAnswers($scope.user, $stateParams.questionParams.split(':')[0], $stateParams.questionParams.split(':')[1]).update($scope.updateAnswersForm).$promise.then(
                 function(response){
                     $state.go('app.questions');                     
                 },
@@ -585,7 +585,7 @@ angular.module('QnA')
 
     .controller('ViewUpdateQuizController', ['$scope', '$controller', '$cookies', '$state', '$stateParams', 'QuizFactory', function($scope, $controller, $cookies, $state, $stateParams, QuizFactory) {
             $controller('CookiesController', {$scope : $scope});
-            QuizFactory.getQuiz($cookies.get('token'), $scope.user, $stateParams.quizid).get()
+            QuizFactory.getQuiz($scope.user, $stateParams.quizid).get()
             .$promise.then(
                 function(response){
                     $scope.quiz = response;
@@ -600,7 +600,7 @@ angular.module('QnA')
             };
 
             $scope.putQuiz = function() {
-                QuizFactory.updateQuiz($cookies.get('token'), $scope.user, $stateParams.quizid).update($scope.quiz).$promise.then(
+                QuizFactory.updateQuiz($scope.user, $stateParams.quizid).update($scope.quiz).$promise.then(
                 function(response){
                     $scope.alertType = "success";
                     $scope.alertMsg = "Your quiz details has been updated.";
@@ -631,10 +631,10 @@ angular.module('QnA')
         }])
 
 
-    .controller('AddQuizStackController', ['$scope', '$controller', '$cookies', '$stateParams', '$compile', 'QuizStackFactory', 'SubCategoryFactory', 'QuestionsFactory', function($scope, $controller, $cookies, $stateParams, $compile, QuizStackFactory, SubCategoryFactory, QuestionsFactory) {
+    .controller('AddQuizStackController', ['$scope', '$window', '$state', '$controller', '$cookies', '$stateParams', '$compile', 'QuizFactory', 'QuizStackFactory', 'SubCategoryFactory', 'QuestionsFactory', function($scope, $window, $state, $controller, $cookies, $stateParams, $compile, QuizFactory, QuizStackFactory, SubCategoryFactory, QuestionsFactory) {
             $controller('CookiesController', {$scope : $scope});
             var total_duration = 0;
-            SubCategoryFactory.getAllSubcategories($cookies.get('token'), $scope.user, 'all').query(
+            SubCategoryFactory.getAllSubcategories($scope.user, 'all').query(
             function(response) {
                 $scope.subCategories = response;
             },
@@ -642,9 +642,20 @@ angular.module('QnA')
                 $scope.errors = response.data;
                 $scope.unableToGetAllSubCategories = true;
             });
-            QuizStackFactory.getQuizStack($cookies.get('token'), $stateParams.quizid, 'all').query(
+            QuizFactory.getQuiz($scope.user, $stateParams.quizid).get()
+            .$promise.then(
+                function(response){
+                    $scope.quizName = response['title'];
+                },
+                function(response) {
+                    $scope.unableToGetQuizName = true;
+                }
+            );
+            QuizStackFactory.getQuizStack($stateParams.quizid, 'all').query(
             function(response) {
-                for(i = 0; i < response.length; i++){
+                $scope.existingStack = response;
+                total_duration = 0;
+                for(i=0;i<response.length;i++){
                     total_duration += parseInt(response[i].duration);
                 html = '<tr id="oldstackrow'+i+'">'+
                         '<td style="width:130px;">'+response[i].section_name+'</td>'+
@@ -688,7 +699,7 @@ angular.module('QnA')
             stack = {}
             $scope.selectSubCategory = function(subCategoryId){
                 $scope.finalStack = [];
-                QuestionsFactory.getQuestionUnderSubCategory($cookies.get('token'), $scope.user, subCategoryId, true).query(
+                QuestionsFactory.getQuestionUnderSubCategory($scope.user, subCategoryId, true).query(
                     function(response) {
                         $scope.selectedSubCategory = response[0];
                         s = {}
@@ -757,7 +768,7 @@ angular.module('QnA')
                 r[count]['question_order'] = document.querySelector("#question_order"+count).value;
                 QuizStackFactory.updateFinalStack(count, r[count]);
 
-                QuizStackFactory.addToQuizStack($cookies.get('token')).save(QuizStackFactory.getValueFromStack(count)[count]).$promise.then(
+                QuizStackFactory.addToQuizStack().save(QuizStackFactory.getValueFromStack(count)[count]).$promise.then(
                 function(response){
                     window.location.reload();
                 },
@@ -772,7 +783,7 @@ angular.module('QnA')
                 document.querySelector("#newstackrow"+count).style.display = "none";
             }
             $scope.removeFromStackAndSave = function(quizid, quizstackid){
-                QuizStackFactory.deleteFromStack($cookies.get('token'), quizid, quizstackid).delete().$promise.then(
+                QuizStackFactory.deleteFromStack(quizid, quizstackid).delete().$promise.then(
                 function(response){
                     window.location.reload();                   
                 },
@@ -785,6 +796,102 @@ angular.module('QnA')
             $scope.go = function(){
                 console.log(QuizStackFactory.showStack());
             }
+            $scope.openTestWindow = function(){
+                data = { 'quiz': $stateParams.quizid , 'quizName': $scope.quizName, 'quizStacks' : $scope.existingStack, 'details' : {} };
+                l = [];
+                console.log($scope.existingStack);
+                for(var i=0;i<$scope.existingStack.length;i++){
+                    if(l.indexOf($scope.existingStack[i].section_name)==-1){
+                        data['details'][$scope.existingStack[i].section_name] = { 'duration': 0, 'questions' : 0};
+                        l.push($scope.existingStack[i].section_name);
+                    }
+                    data['details'][$scope.existingStack[i].section_name]['duration'] += parseInt($scope.existingStack[i].duration);
+                    data['details'][$scope.existingStack[i].section_name]['questions'] += parseInt($scope.existingStack[i].no_questions);
+                }
+                $window.data = data;
+                $window.open($state.href('app.test-preview', {parameter: "parameter"}), "Test Window", "width=1280,height=890,resizable=0");
+            }
+        }])
+        .controller('TestPreviewController', ['$scope', '$controller', '$window', '$state', '$cookies', 'TestPreviewFactory', function($scope, $controller, $window, $state, $cookies, TestPreviewFactory) {
+            $controller('CookiesController', {$scope : $scope});
+            $scope.allQuestions = {};
+            $scope.getQuestionsBasedOnSection = function(sectionName, quizid){
+                TestPreviewFactory.getQuestionsBasedOnSection(quizid, sectionName).query(
+                    function(response){
+                        $scope.total_questions = response.total_questions;
+                        $scope.answersModel = {};
+                        TestPreviewFactory.addQuestionsForSection(sectionName, response.questions);
+                    },
+                    function(response){
+                        alert('Problem in getting questions from server-side.');
+                });
+            }
+            $scope.addQuestions = function(sectionName){
+                $scope.getQuestionsBasedOnSection($scope.sectionNames[0], $scope.quiz);
+            }
+            $scope.getQuestionsForThisSection = function(sectionName){
+                console.log(TestPreviewFactory.getQuestionsForASection(sectionName));
+            }
+            $scope.showAllQuestions = function(){
+                console.log(TestPreviewFactory.showAllQuestionsAdded());
+            }
+            $scope.changeQuestion = function(count){
+                // var question = TestPreviewFactory.getAQuestion($scope.selectedSection, count);
+                $scope.currentCount = count;
+                $scope.currentQuestion = TestPreviewFactory.getAQuestion($scope.selectedSection, count);
+                if(isMCQ($scope.currentQuestion.que_type)){
+                    $scope.currentOptions = $scope.currentQuestion.options;
+                }else{
+                    $scope.currentOptions = [];
+                }
+                console.log('----', $scope.currentOptions);
+            }
+            $scope.saveAnswer = function(count, answerId){
+                if(isMCQ($scope.currentQuestion.que_type))
+                {
+                    console.log($scope.currentQuestion.content);
+                    // if($scope.answersModel[$scope.currentQuestion.id]===answerId){
+
+                    // }else{
+                    //     $scope.answersModel[$scope.currentQuestion.id] = answerId;
+                    //     console.log($scope.answersModel);
+                    //     TestPreviewFactory.saveOrChangeAnswer($scope.selectedSection, count, answerId, newAnswer, oldAnswer);
+                    // }
+                }
+                else{
+                    console.log($scope.currentQuestion.content);
+                }
+            }
+            try{
+                if(isNotEmpty($window.opener.data)){
+                    $scope.quiz = $window.opener.data['quiz'];
+                    $scope.sectionNames = Object.keys($window.opener.data['details']).sort();
+                    $scope.selectedSection = $scope.sectionNames[0];
+                    $scope.addQuestions($scope.sectionNames[0]);
+                    // for(var i=0;i<sectionNames.length;i++){
+                    //     angular.element(document.querySelector('#sectionnames')).append('<option value='+sectionNames[i]+'>'+sectionNames[i]+'</option>');
+                    // }
+                    $scope.totalDuration = findTotalDuration($window.opener.data['quizStacks']);
+                    $scope.dataPresent = true;
+                }else{
+                    $scope.dataPresent = false;
+                }
+            }catch(e){
+                console.log(e);
+                $scope.dataPresent = false;
+            }
+        }])
+        .controller('TestPreviewHeaderController', ['$scope', '$controller', '$window', '$state', '$cookies', function($scope, $controller, $window, $state, $cookies) {
+            $controller('CookiesController', {$scope : $scope});
+            if(isNotEmpty($window.opener.data)){
+            $scope.quizName = $window.opener.data['quizName'];
+            $scope.closePreviewWindow = function(){
+                $window.close();
+            }
+            $scope.dataPresent = true;      
+            }else{
+                $scope.dataPresent = false;
+            }    
         }]);
 
     

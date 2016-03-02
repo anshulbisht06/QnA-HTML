@@ -21,6 +21,10 @@ a:hover{
 .left{
 	float: left;
 }
+.center{
+	position:absolute;
+    left:50%;
+}
 a.list-group-item:selection{
 	background-color: red;
 }
@@ -80,3 +84,6 @@ ul.sidemenu > li{
     outline: none;
     vertical-align: initial;
 }
+/*.border-bottom{
+	border-bottom: 1.5px solid gray;
+}*/

@@ -18,3 +18,27 @@ function makeUneditable(element){
 function upload(file) {
 	console.log(file); 
 }
+function sortObject(obj) {
+    return Object.keys(obj).sort().reduce(function (result, key) {
+        result[key] = obj[key];
+        return result;
+    }, {});
+}
+function isNotEmpty(object){
+   	for(var i in object){ return true;}
+  	return false;
+}
+function findTotalDuration(list){
+    var total = 0;
+    for(var i=0;i<list.length;i++){
+        total += parseInt(list[i]['duration']);
+    }
+    return total;
+}
+function isMCQ(value){
+    if(value === 'mcq'){
+        return true;
+    }else if(value === 'objective'){
+        return false;
+    }
+}
