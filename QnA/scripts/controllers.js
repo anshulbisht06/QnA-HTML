@@ -5,7 +5,6 @@ angular.module('QnA')
 
          var keyCode = [8,9,37,39,48,49,50,51,52,53,54,55,56,57,96,97,98,99,100,101,102,103,104,105,110];
           element.bind("keydown", function(event) {
-            console.log($.inArray(event.which,keyCode));
             if($.inArray(event.which,keyCode) == -1) {
                 scope.$apply(function(){
                     scope.$eval(attrs.onlyNum);
@@ -49,7 +48,6 @@ angular.module('QnA')
             $state.go('app.login-user');
           })
             .error(function logoutErrorFn(data, status, headers, config) {
-            console.error('Cannot logout!!!');
           })
         }
     }])
@@ -378,7 +376,6 @@ angular.module('QnA')
 
         }
         $scope.renameCategory = function(){
-            console.log($scope.categoryRenameForm);
             CategoryFactory.renameCategory($cookies.get('token')).update($scope.categoryRenameForm);
         } 
     }])
@@ -472,7 +469,6 @@ angular.module('QnA')
             if(sub_cat_info===undefined){
                 $scope.noSubCategoryPresent = true;
             }else{
-                console.log(que_type, sub_cat_info);
             $http.post(baseURL+"quiz/question/download/xls/", {que_type:que_type,
                 sub_cat_info:sub_cat_info}, { responseType: 'arraybuffer' })
               .success(function(data) {
@@ -790,7 +786,6 @@ angular.module('QnA')
             $scope.openTestWindow = function(){
                 data = { 'quiz': $stateParams.quizid , 'quizName': $scope.quizName, 'quizStacks' : $scope.existingStack, 'details' : {} };
                 l = [];
-                console.log($scope.existingStack);
                 for(var i=0;i<$scope.existingStack.length;i++){
                     if(l.indexOf($scope.existingStack[i].section_name)==-1){
                         data['details'][$scope.existingStack[i].section_name] = { 'duration': 0, 'questions' : 0};
@@ -803,7 +798,7 @@ angular.module('QnA')
                 $window.open($state.href('app.test-preview', {parameter: "parameter"}), "Test Window", "width=1280,height=890,resizable=0");
             }
         }])
-        .controller('TestPreviewController', ['$scope', '$controller', '$window', '$state', '$cookies', 'TestPreviewFactory', function($scope, $controller, $window, $state, $cookies, TestPreviewFactory) {
+        .controller('TestPreviewController', ['$scope', '$controller', '$window', '$state', '$cookies', '$interval', 'TestPreviewFactory', function($scope, $controller, $window, $state, $cookies, $interval, TestPreviewFactory) {
             $controller('CookiesController', {$scope : $scope});
             $scope.allQuestions = {};
             $scope.getQuestionsBasedOnSection = function(sectionName, quizid){
@@ -811,46 +806,57 @@ angular.module('QnA')
                     function(response){
                         $scope.total_questions = response.total_questions;
                         $scope.answersModel = {};
-                        TestPreviewFactory.addQuestionsForSection(sectionName, response.questions);
+                        var questionsAdded = TestPreviewFactory.addQuestionsForSection(sectionName, response.questions);
+                        console.log(questionsAdded);
+                        for(var i=0;i<questionsAdded.length;i++){
+                            $scope.answersModel[questionsAdded[i][i+1].id] = null;
+                        }
+                        console.log($scope.answersModel);
+                        $scope.changeQuestion(1);
                     },
                     function(response){
                         alert('Problem in getting questions from server-side.');
                 });
             }
             $scope.addQuestions = function(sectionName){
-                $scope.getQuestionsBasedOnSection($scope.sectionNames[0], $scope.quiz);
+                console.log(sectionName);
+                $scope.getQuestionsBasedOnSection(sectionName, $scope.quiz);
             }
             $scope.getQuestionsForThisSection = function(sectionName){
                 console.log(TestPreviewFactory.getQuestionsForASection(sectionName));
             }
-            $scope.showAllQuestions = function(){
-                console.log(TestPreviewFactory.showAllQuestionsAdded());
+            $scope.show = function(){
+                console.log($scope.answersModel);
             }
             $scope.changeQuestion = function(count){
-                // var question = TestPreviewFactory.getAQuestion($scope.selectedSection, count);
-                $scope.currentCount = count;
-                $scope.currentQuestion = TestPreviewFactory.getAQuestion($scope.selectedSection, count);
-                if(isMCQ($scope.currentQuestion.que_type)){
-                    $scope.currentOptions = $scope.currentQuestion.options;
-                }else{
-                    $scope.currentOptions = [];
+                if(count>=1 && count<=$scope.total_questions.length)
+                {
+                    // var question = TestPreviewFactory.getAQuestion($scope.selectedSection, count);
+                    $scope.currentCount = count;
+                    $scope.currentQuestion = TestPreviewFactory.getAQuestion($scope.selectedSection, count);
+                    if($scope.answersModel[$scope.currentQuestion.id]!=undefined)
+                    {
+                    }
+                    else{
+                        $scope.answersModel[$scope.currentQuestion.id] = undefined;
+                    }
+                    if(isMCQ($scope.currentQuestion.que_type)){
+                        $scope.currentOptions = $scope.currentQuestion.options;
+                    }else{
+                        $scope.currentOptions = [];
+                    }
                 }
-                console.log('----', $scope.currentOptions);
             }
             $scope.saveAnswer = function(count, answerId){
                 if(isMCQ($scope.currentQuestion.que_type))
                 {
-                    console.log($scope.currentQuestion.content);
-                    // if($scope.answersModel[$scope.currentQuestion.id]===answerId){
-
-                    // }else{
-                    //     $scope.answersModel[$scope.currentQuestion.id] = answerId;
-                    //     console.log($scope.answersModel);
-                    //     TestPreviewFactory.saveOrChangeAnswer($scope.selectedSection, count, answerId, newAnswer, oldAnswer);
-                    // }
+                    if($scope.answersModel[$scope.currentQuestion.id]===answerId){
+                    }else{
+                        $scope.answersModel[$scope.currentQuestion.id] = answerId;
+                        TestPreviewFactory.saveOrChangeAnswer($scope.selectedSection, count, answerId, true);
+                    }
                 }
                 else{
-                    console.log($scope.currentQuestion.content);
                 }
             }
             try{
@@ -863,6 +869,12 @@ angular.module('QnA')
                     //     angular.element(document.querySelector('#sectionnames')).append('<option value='+sectionNames[i]+'>'+sectionNames[i]+'</option>');
                     // }
                     $scope.totalDuration = findTotalDuration($window.opener.data['quizStacks']);
+                    $interval(function(){
+                        $scope.totalDuration -= 1;
+                        if($scope.totalDuration===0){
+                            alert('Time Over');
+                        }
+                    },1000, $scope.totalDuration);
                     $scope.dataPresent = true;
                 }else{
                     $scope.dataPresent = false;

@@ -28,12 +28,14 @@ function isNotEmpty(object){
    	for(var i in object){ return true;}
   	return false;
 }
+
+// in seconds
 function findTotalDuration(list){
     var total = 0;
     for(var i=0;i<list.length;i++){
         total += parseInt(list[i]['duration']);
     }
-    return total;
+    return total*60;
 }
 function isMCQ(value){
     if(value === 'mcq'){

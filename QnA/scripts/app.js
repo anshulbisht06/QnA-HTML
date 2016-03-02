@@ -48,7 +48,7 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                 views :{
                 	'content@': {
                         controller  : 'CreateQuizController',
-                        templateUrl : 'views/createquiz.html'
+                        templateUrl : 'views/create_quiz.html'
                     }
                 }
                 })
@@ -58,7 +58,7 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                 views :{
                     'content@': {
                         controller  : 'CreateQuizController',
-                        templateUrl : 'views/allquizzes.html'
+                        templateUrl : 'views/all_quizzes.html'
                     }
                 }
                 })
@@ -68,7 +68,7 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                 views :{
                     'content@': {
                         controller  : 'CreateCategoryController',
-                        templateUrl : 'views/createcategory.html'
+                        templateUrl : 'views/create_category.html'
                     }
                 },
                 params: {
@@ -80,7 +80,7 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                 views :{
                     'content@': {
                         controller  : 'CreateSubCategoryController',
-                        templateUrl : 'views/createsubcategory.html'
+                        templateUrl : 'views/create_subcategory.html'
                     }
                 },
                 params: {
@@ -92,7 +92,7 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                 views :{
                     'content@': {
                         controller  : 'QuestionsController',
-                        templateUrl : 'views/allquestions.html'
+                        templateUrl : 'views/all_questions.html'
                     }
                 }
                 })
@@ -101,7 +101,7 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                 views :{
                     'content@': {
                         controller  : 'CreateQuestionController',
-                        templateUrl : 'views/createmcqquestion.html'
+                        templateUrl : 'views/create_mcq_question.html'
                     }
                 }
                 })
@@ -110,7 +110,7 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                 views :{
                     'content@': {
                         controller  : 'CreateQuestionController',
-                        templateUrl : 'views/createobjectivequestion.html'
+                        templateUrl : 'views/create_objective_question.html'
                     }
                 }
                 })
@@ -119,7 +119,7 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                 views :{
                     'content@': {
                         controller  : 'UpdateQuestionController',
-                        templateUrl : 'views/updatequestion.html'
+                        templateUrl : 'views/update_question.html'
                     }
                 }
                 })
@@ -128,7 +128,7 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                 views :{
                     'content@': {
                         controller  : 'UpdateAnswersController',
-                        templateUrl : 'views/updateanswers.html'
+                        templateUrl : 'views/update_answers.html'
                     }
                 }
                 })
@@ -137,7 +137,7 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                 views :{
                     'content@': {
                         controller  : 'AddQuizStackController',
-                        templateUrl : 'views/addquizstack.html'
+                        templateUrl : 'views/add_quiz_stack.html'
                     }
                 }
                 })
@@ -155,11 +155,11 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                 views :{
                     'header@': {
                         controller  : 'TestPreviewHeaderController',
-                        templateUrl : 'views/testpreviewheader.html'
+                        templateUrl : 'views/test_preview_header.html'
                     },
                     'content@': {
                         controller  : 'TestPreviewController',
-                        templateUrl : 'views/testpreview.html'
+                        templateUrl : 'views/test_preview.html'
                     },
                     'footer@': ''
                 }

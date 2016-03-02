@@ -352,6 +352,7 @@ angular.module('QnA')
         }
         this.addQuestionsForSection = function(sectionName, data){
             allQuestions[sectionName] = data;
+            return data;
         }
         this.getQuestionsForASection = function(sectionName){
             return allQuestions[sectionName];
@@ -364,16 +365,12 @@ angular.module('QnA')
         }
         this.saveOrChangeAnswer = function(sectionName, count, answerid, value){
            var data = allQuestions[sectionName][count-1][count]['options'];
-           console.log(data);
            for(i=0;i<data.length;i++){
             if(data[i].id===answerid){
                 data[i].isSelected = value;
-                console.log(i);
             }else{
                 data[i].isSelected = false;
-                console.log(i,'9999');
             }
            }
-           console.log(allQuestions[sectionName][count-1][count]['options']);
         }
     }]);
