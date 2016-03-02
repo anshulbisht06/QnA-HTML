@@ -3,11 +3,6 @@ var baseURL= 'http://localhost:8000/';
 
 var appmodule = angular.module('QnA', ['ui.router', 'ngResource', 'ngCookies', 'ngFileUpload']);
 
-// appmodule.constant("baseURL","http://localhost:8000/");
-// appmodule.constant('config', {
-    // baseURL: 'http://localhost:8000/',
-// });
-
 appmodule.config(function($stateProvider, $urlRouterProvider) {
         $stateProvider	        
             // route for the home page
@@ -148,15 +143,28 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                 })
             // .state('app.view-categories', {
             //     url:'quiz/:quizid/:categoryid/',
-            //     views :{
-            //         'content@': {
-            //             controller  : 'ViewQuizCategoriesController',
-            //             templateUrl : 'views/viewcategories.html'
-            //         }
-            //     }
+                // views :{
+                //     'content@': {
+                //         controller  : 'ViewQuizCategoriesController',
+                //         templateUrl : 'views/viewcategories.html'
+                //     }
+                // }
             //     });
+            .state('app.test-preview', {
+                url:'test/preview/',
+                views :{
+                    'header@': {
+                        controller  : 'TestPreviewHeaderController',
+                        templateUrl : 'views/testpreviewheader.html'
+                    },
+                    'content@': {
+                        controller  : 'TestPreviewController',
+                        templateUrl : 'views/testpreview.html'
+                    },
+                    'footer@': ''
+                }
+                })
 
-
-        // $locationProvider.html5Mode(true);   
+        // $locationProvider.html5Mode(true);
         $urlRouterProvider.otherwise('/');
     });

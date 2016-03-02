@@ -40,7 +40,7 @@ angular.module('QnA')
                     );
         }
         this.getQuiz = function(token, userid, quizid){
-            return $resource(baseURL+"quiz/detail/"+userid+"/"+quizid+"/", null,
+            return $resource(baseURL+"quiz/get/"+userid+"/"+quizid+"/", null,
                     {
                         get: {
                         headers: {'Authorization': 'JWT ' + token},
@@ -275,7 +275,7 @@ angular.module('QnA')
 
 
     .service('QuizStackFactory', ['$resource', 'baseURL', function($resource, baseURL) {
-        selectedQuestions = [];
+        var selectedQuestions = [];
         this.addSelectedLevelQuestions = function(questionsLevelInfo){
             selectedQuestions.push(questionsLevelInfo); 
         }
@@ -334,5 +334,46 @@ angular.module('QnA')
                 },
                 { stripTrailingSlashes: false }
                 );
+        }
+    }])
+    .service('TestPreviewFactory', ['$resource', 'baseURL', function($resource, baseURL) {
+        var allQuestions = {}
+        this.getQuestionsBasedOnSection = function(token, quizid, sectionName){
+            return $resource(baseURL+"stack/get/questions/"+quizid+"/", { sectionName: sectionName},
+                {
+                    query: {
+                    headers: {'Authorization': 'JWT ' + token},
+                    method : 'GET',
+                    isArray : false,
+                    }
+                },
+                { stripTrailingSlashes: false }
+                );
+        }
+        this.addQuestionsForSection = function(sectionName, data){
+            allQuestions[sectionName] = data;
+        }
+        this.getQuestionsForASection = function(sectionName){
+            return allQuestions[sectionName];
+        }
+        this.showAllQuestionsAdded = function(){
+            return allQuestions;
+        }
+        this.getAQuestion = function(sectionName, count){
+            return allQuestions[sectionName][count-1][count];
+        }
+        this.saveOrChangeAnswer = function(sectionName, count, answerid, value){
+           var data = allQuestions[sectionName][count-1][count]['options'];
+           console.log(data);
+           for(i=0;i<data.length;i++){
+            if(data[i].id===answerid){
+                data[i].isSelected = value;
+                console.log(i);
+            }else{
+                data[i].isSelected = false;
+                console.log(i,'9999');
+            }
+           }
+           console.log(allQuestions[sectionName][count-1][count]['options']);
         }
     }]);

@@ -1,6 +1,5 @@
 /* global $ */
 angular.module('QnA')
-
     .directive('onlyNum', function() {
       return function(scope, element, attrs) {
 
@@ -625,7 +624,7 @@ angular.module('QnA')
         }])
 
 
-    .controller('AddQuizStackController', ['$scope', '$controller', '$cookies', '$stateParams', '$compile', 'QuizStackFactory', 'SubCategoryFactory', 'QuestionsFactory', function($scope, $controller, $cookies, $stateParams, $compile, QuizStackFactory, SubCategoryFactory, QuestionsFactory) {
+    .controller('AddQuizStackController', ['$scope', '$window', '$state', '$controller', '$cookies', '$stateParams', '$compile', 'QuizFactory', 'QuizStackFactory', 'SubCategoryFactory', 'QuestionsFactory', function($scope, $window, $state, $controller, $cookies, $stateParams, $compile, QuizFactory, QuizStackFactory, SubCategoryFactory, QuestionsFactory) {
             $controller('CookiesController', {$scope : $scope});
             SubCategoryFactory.getAllSubcategories($cookies.get('token'), $scope.user, 'all').query(
             function(response) {
@@ -635,8 +634,18 @@ angular.module('QnA')
                 $scope.errors = response.data;
                 $scope.unableToGetAllSubCategories = true;
             });
+            QuizFactory.getQuiz($cookies.get('token'), $scope.user, $stateParams.quizid).get()
+            .$promise.then(
+                function(response){
+                    $scope.quizName = response['title'];
+                },
+                function(response) {
+                    $scope.unableToGetQuizName = true;
+                }
+            );
             QuizStackFactory.getQuizStack($cookies.get('token'), $stateParams.quizid, 'all').query(
             function(response) {
+                $scope.existingStack = response;
                 total_duration = 0;
                 for(i=0;i<response.length;i++){
                     total_duration += parseInt(response[i].duration);
@@ -778,6 +787,102 @@ angular.module('QnA')
             $scope.go = function(){
                 console.log(QuizStackFactory.showStack());
             }
+            $scope.openTestWindow = function(){
+                data = { 'quiz': $stateParams.quizid , 'quizName': $scope.quizName, 'quizStacks' : $scope.existingStack, 'details' : {} };
+                l = [];
+                console.log($scope.existingStack);
+                for(var i=0;i<$scope.existingStack.length;i++){
+                    if(l.indexOf($scope.existingStack[i].section_name)==-1){
+                        data['details'][$scope.existingStack[i].section_name] = { 'duration': 0, 'questions' : 0};
+                        l.push($scope.existingStack[i].section_name);
+                    }
+                    data['details'][$scope.existingStack[i].section_name]['duration'] += parseInt($scope.existingStack[i].duration);
+                    data['details'][$scope.existingStack[i].section_name]['questions'] += parseInt($scope.existingStack[i].no_questions);
+                }
+                $window.data = data;
+                $window.open($state.href('app.test-preview', {parameter: "parameter"}), "Test Window", "width=1280,height=890,resizable=0");
+            }
+        }])
+        .controller('TestPreviewController', ['$scope', '$controller', '$window', '$state', '$cookies', 'TestPreviewFactory', function($scope, $controller, $window, $state, $cookies, TestPreviewFactory) {
+            $controller('CookiesController', {$scope : $scope});
+            $scope.allQuestions = {};
+            $scope.getQuestionsBasedOnSection = function(sectionName, quizid){
+                TestPreviewFactory.getQuestionsBasedOnSection($cookies.get('token'), quizid, sectionName).query(
+                    function(response){
+                        $scope.total_questions = response.total_questions;
+                        $scope.answersModel = {};
+                        TestPreviewFactory.addQuestionsForSection(sectionName, response.questions);
+                    },
+                    function(response){
+                        alert('Problem in getting questions from server-side.');
+                });
+            }
+            $scope.addQuestions = function(sectionName){
+                $scope.getQuestionsBasedOnSection($scope.sectionNames[0], $scope.quiz);
+            }
+            $scope.getQuestionsForThisSection = function(sectionName){
+                console.log(TestPreviewFactory.getQuestionsForASection(sectionName));
+            }
+            $scope.showAllQuestions = function(){
+                console.log(TestPreviewFactory.showAllQuestionsAdded());
+            }
+            $scope.changeQuestion = function(count){
+                // var question = TestPreviewFactory.getAQuestion($scope.selectedSection, count);
+                $scope.currentCount = count;
+                $scope.currentQuestion = TestPreviewFactory.getAQuestion($scope.selectedSection, count);
+                if(isMCQ($scope.currentQuestion.que_type)){
+                    $scope.currentOptions = $scope.currentQuestion.options;
+                }else{
+                    $scope.currentOptions = [];
+                }
+                console.log('----', $scope.currentOptions);
+            }
+            $scope.saveAnswer = function(count, answerId){
+                if(isMCQ($scope.currentQuestion.que_type))
+                {
+                    console.log($scope.currentQuestion.content);
+                    // if($scope.answersModel[$scope.currentQuestion.id]===answerId){
+
+                    // }else{
+                    //     $scope.answersModel[$scope.currentQuestion.id] = answerId;
+                    //     console.log($scope.answersModel);
+                    //     TestPreviewFactory.saveOrChangeAnswer($scope.selectedSection, count, answerId, newAnswer, oldAnswer);
+                    // }
+                }
+                else{
+                    console.log($scope.currentQuestion.content);
+                }
+            }
+            try{
+                if(isNotEmpty($window.opener.data)){
+                    $scope.quiz = $window.opener.data['quiz'];
+                    $scope.sectionNames = Object.keys($window.opener.data['details']).sort();
+                    $scope.selectedSection = $scope.sectionNames[0];
+                    $scope.addQuestions($scope.sectionNames[0]);
+                    // for(var i=0;i<sectionNames.length;i++){
+                    //     angular.element(document.querySelector('#sectionnames')).append('<option value='+sectionNames[i]+'>'+sectionNames[i]+'</option>');
+                    // }
+                    $scope.totalDuration = findTotalDuration($window.opener.data['quizStacks']);
+                    $scope.dataPresent = true;
+                }else{
+                    $scope.dataPresent = false;
+                }
+            }catch(e){
+                console.log(e);
+                $scope.dataPresent = false;
+            }
+        }])
+        .controller('TestPreviewHeaderController', ['$scope', '$controller', '$window', '$state', '$cookies', function($scope, $controller, $window, $state, $cookies) {
+            $controller('CookiesController', {$scope : $scope});
+            if(isNotEmpty($window.opener.data)){
+            $scope.quizName = $window.opener.data['quizName'];
+            $scope.closePreviewWindow = function(){
+                $window.close();
+            }
+            $scope.dataPresent = true;      
+            }else{
+                $scope.dataPresent = false;
+            }    
         }]);
 
     
