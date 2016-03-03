@@ -6,13 +6,17 @@ appmodule.factory('APIInterceptor', function($cookies){
 
 	return {
 			    request: function(config) {
-			    	config.headers.authorization = 'JWT '+$cookies.get('token');
+			    	if($cookies.get('token')){
+			    		config.headers.authorization = 'JWT '+$cookies.get('token');
+			    	}
+			     	else{
+			     		console.log('No token avail ...');
+			     	}
 			     	return config;
 			    },
 			    requestError: function(config) {
 			       	return config;
 			    },
-
 			    response: function(res) {
 			      	return res;
 			    },
@@ -23,170 +27,156 @@ appmodule.factory('APIInterceptor', function($cookies){
 		  }
 		  
 });
-
 appmodule.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
   		$httpProvider.interceptors.push('APIInterceptor');
 
-		$stateProvider      
-			// route for the home page
-			.state('app', {
-				url:'/',
-				views: {
-					'header': {
-						templateUrl : 'views/header.html'
-					},
-					'content': {
-						controller  : 'IndexController'
-					}
-					,
-					'footer': {
-						templateUrl : 'views/footer.html'
-					}
-				},
+        $stateProvider	        
+            // route for the home page
+            .state('app', {
+                url:'/',
+                views: {
+                    'header': {
+                        templateUrl : 'views/header.html'
+                    },
+                    'content': {
+                        controller  : 'IndexController'
+                    }
+                    ,
+                    'footer': {
+                        templateUrl : 'views/footer.html'
+                    }
+                },
+            })            
+            .state('app.login-user', {
+                url:'login/',
+                views :{
+                    'content@': {
+                        controller  : 'LoginController',
+                        templateUrl : 'views/login.html'
+                    }
+                }
+                })
+            
+            .state('app.register-user', {
+                url:'register/',
+                views :{
+                    'content@': {
+                        controller  : 'UserRegisterController',
+                        templateUrl : 'views/register.html'
+                    }
+                }
+                })
 
-			})
-			
-			.state('app.login-user', {
-				url:'login/',
-				views :{
-					'content@': {
-						controller  : 'LoginController',
-						templateUrl : 'views/login.html'
-					}
-				}
-				})
-			
-			.state('app.register-user', {
-				url:'register/',
-				views :{
-					'content@': {
-						controller  : 'UserRegisterController',
-						templateUrl : 'views/register.html'
-					}
-				}
-				})
-
-			.state('app.create-quiz', {
-				url:'create/quiz/',
-				views :{
-					'content@': {
-						controller  : 'CreateQuizController',
-						templateUrl : 'views/createquiz.html'
-					}
-				}
-				})
-
-			.state('app.all-quiz', {
-				url:'quiz/all/',
-				views :{
-					'content@': {
-						controller  : 'CreateQuizController',
-						templateUrl : 'views/allquizzes.html'
-					}
-				}
-				})
-
-			.state('app.create-category', {
-				url:'create/category/',
-				views :{
-					'content@': {
-						controller  : 'CreateCategoryController',
-						templateUrl : 'views/createcategory.html'
-					}
-				},
-				params: {
-						obj: null
-					}
-				})
-			.state('app.create-subcategory', {
-				url:'create/subcategory/',
-				views :{
-					'content@': {
-						controller  : 'CreateSubCategoryController',
-						templateUrl : 'views/createsubcategory.html'
-					}
-				},
-				params: {
-						obj: null
-					}
-				})
-			.state('app.questions', {
-				url:'questions/all/',
-				views :{
-					'content@': {
-						controller  : 'QuestionsController',
-						templateUrl : 'views/allquestions.html'
-					}
-				}
-				})
-			.state('app.create-mcq-question', {
-				url:'mcq/create/question/',
-				views :{
-					'content@': {
-						controller  : 'CreateQuestionController',
-						templateUrl : 'views/createmcqquestion.html'
-					}
-				}
-				})
-			.state('app.create-objective-question', {
-				url:'objective/create/question/',
-				views :{
-					'content@': {
-						controller  : 'CreateQuestionController',
-						templateUrl : 'views/createobjectivequestion.html'
-					}
-				}
-				})
-			.state('app.update-question', {
-				url:'update/question/:questionParams',
-				views :{
-					'content@': {
-						controller  : 'UpdateQuestionController',
-						templateUrl : 'views/updatequestion.html'
-					}
-				}
-				})
-			.state('app.update-answers', {
-				url:'update/answers/:questionParams',
-				views :{
-					'content@': {
-						controller  : 'UpdateAnswersController',
-						templateUrl : 'views/updateanswers.html'
-					}
-				}
-				})
-			.state('app.view-quiz', {
-				url:'quiz/:quizid',
-				views :{
-					'content@': {
-						controller  : 'AddQuizStackController',
-						templateUrl : 'views/addquizstack.html'
-					}
-				}
-				})
-			// .state('app.view-categories', {
-			//     url:'quiz/:quizid/:categoryid/',
-				// views :{
-				//     'content@': {
-				//         controller  : 'ViewQuizCategoriesController',
-				//         templateUrl : 'views/viewcategories.html'
-				//     }
-				// }
-			//     });
-			.state('app.test-preview', {
-				url:'test/preview/',
-				views :{
-					'header@': {
-						controller  : 'TestPreviewHeaderController',
-						templateUrl : 'views/testpreviewheader.html'
-					},
-					'content@': {
-						controller  : 'TestPreviewController',
-						templateUrl : 'views/testpreview.html'
-					},
-					'footer@': ''
-				}
-				})
+            .state('app.create-category', {
+                url:'create/category/',
+                views :{
+                    'content@': {
+                        controller  : 'CreateCategoryController',
+                        templateUrl : 'views/create_category.html'
+                    }
+                },
+                params: {
+                        obj: null
+                    }
+                })
+            .state('app.create-subcategory', {
+                url:'create/subcategory/',
+                views :{
+                    'content@': {
+                        controller  : 'CreateSubCategoryController',
+                        templateUrl : 'views/create_subcategory.html'
+                    }
+                },
+                params: {
+                        obj: null
+                    }
+                })
+            .state('app.questions', {
+                url:'questions/all/',
+                views :{
+                    'content@': {
+                        controller  : 'QuestionsController',
+                        templateUrl : 'views/all_questions.html'
+                    }
+                }
+                })
+            .state('app.create-mcq-question', {
+                url:'mcq/create/question/',
+                views :{
+                    'content@': {
+                        controller  : 'CreateQuestionController',
+                        templateUrl : 'views/create_mcq_question.html'
+                    }
+                }
+                })
+            .state('app.create-objective-question', {
+                url:'objective/create/question/',
+                views :{
+                    'content@': {
+                        controller  : 'CreateQuestionController',
+                        templateUrl : 'views/create_objective_question.html'
+                    }
+                }
+                })
+            .state('app.update-question', {
+                url:'update/question/:questionParams',
+                views :{
+                    'content@': {
+                        controller  : 'UpdateQuestionController',
+                        templateUrl : 'views/update_question.html'
+                    }
+                }
+                })
+            .state('app.update-answers', {
+                url:'update/answers/:questionParams',
+                views :{
+                    'content@': {
+                        controller  : 'UpdateAnswersController',
+                        templateUrl : 'views/update_answers.html'
+                    }
+                }
+                })
+            .state('app.update-quiz', {
+                url:'quiz/:quizid',
+                views :{
+                    'content@': {
+                        controller  : 'ViewUpdateQuizController',
+                        templateUrl : 'views/view_update_quiz.html'
+                    }
+                }
+                })
+            .state('app.view-quiz', {
+                url:'quiz/:quizid/addstack/',
+                views :{
+                    'content@': {
+                        controller  : 'AddQuizStackController',
+                        templateUrl : 'views/add_quiz_stack.html'
+                    }
+                }
+                })
+            // .state('app.view-categories', {
+            //     url:'quiz/:quizid/:categoryid/',
+                // views :{
+                //     'content@': {
+                //         controller  : 'ViewQuizCategoriesController',
+                //         templateUrl : 'views/viewcategories.html'
+                //     }
+                // }
+            //     });
+            .state('app.test-preview', {
+                url:'test/preview/',
+                views :{
+                    'header@': {
+                        controller  : 'TestPreviewHeaderController',
+                        templateUrl : 'views/test_preview_header.html'
+                    },
+                    'content@': {
+                        controller  : 'TestPreviewController',
+                        templateUrl : 'views/test_preview.html'
+                    },
+                    'footer@': ''
+                }
+                })
 
 			.state('app.test-login', {
 				url:'test/login/',

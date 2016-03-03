@@ -84,6 +84,9 @@ ul.sidemenu > li{
     outline: none;
     vertical-align: initial;
 }
-/*.border-bottom{
-	border-bottom: 1.5px solid gray;
-}*/
+.pointer{
+	cursor: pointer;
+}
+.black-text{
+	color: black;
+}
