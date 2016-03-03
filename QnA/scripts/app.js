@@ -31,6 +31,16 @@ appmodule.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
                 }
                 })
             
+            .state('app.all-quiz', {
+                url:'all/quiz/',
+                views :{
+                    'content@': {
+                        controller  : 'CreateQuizController',
+                        templateUrl : 'views/all_quizzes.html'
+                    }
+                }
+                })
+
             .state('app.register-user', {
                 url:'register/',
                 views :{
@@ -40,7 +50,6 @@ appmodule.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
                     }
                 }
                 })
-
 		// $locationProvider.html5Mode(true);
 		$urlRouterProvider.otherwise('/');
 	});

@@ -98,12 +98,23 @@ appmodule
         }
     }])
 
-.controller('UserDataController',['$scope', 'testUserDataFactory','$controller', '$window', function($scope, testUserDataFactory,$controller, $window) {
+
+.controller('UserDataController',['$scope','$state', 'testUserDataFactory','$controller', '$window', function($scope, $state, testUserDataFactory, $controller, $window) {
         	$scope.data = {name: '', email: '', quiz: $window.opener.data.quiz, quiz_name: $window.opener.data.quizName};
-        	$scope.postUserDetails = function() {
-            	testUserDataFactory.createSubCategory($scope.data);
-        	};
+            $scope.postUserDetails = function(){testUserDataFactory.createSubCategory().save($scope.data).$promise.then(
+                function(response){
+                    $scope.isFormInvalid = false;
+                    // $scope.alertType = "success";
+                    $state.go('app.test-preview', {obj:{'user_name':response.user_name}});                     
+                },
+                function(response) {
+                    $scope.isFormInvalid = true;
+                    $scope.alertType = "danger";
+                    $scope.alertMsg = "Unable to create the user - please try again.";
+                    $scope.errors = response.data;
+                });}
 		}])
+
 
 .controller('TestPreviewHeaderController', ['$scope', '$controller', '$window', '$state', '$cookies', function($scope, $controller, $window, $state, $cookies) {
             $controller('CookiesController', {$scope : $scope});

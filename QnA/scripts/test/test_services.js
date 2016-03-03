@@ -14,5 +14,20 @@ appmodule
 		            .error(function logoutErrorFn(data, status, headers, config) {
 		            	console.error('Cannot logout!!!');
 		          })
+
         };
+        // this.createSubCategory = function(data){
+        // 		var config = {
+	       //          headers : {
+	       //          }
+	       //      };
+        // 		return $http.post(baseURL+'user/data/',data, config)
+		      //       .success(function(data, status, headers, config) {
+		      //       	return data;
+		      //     })
+		      //       .error(function logoutErrorFn(data, status, headers, config) {
+		      //       	console.error('Cannot logout!!!');
+		      //       	return data;
+		      //     })
+        // };
     }])
