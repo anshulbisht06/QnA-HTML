@@ -1,8 +1,7 @@
 /* global $ */
 
 appmodule
-    .constant('baseURL',baseURL)
-    .service('SubCategoryFactory', ['$resource', 'baseURL', function($resource, baseURL) {
+    .service('SubCategoryFactory', ['$resource', function($resource) {
         this.createSubCategory = function(){
                 return $resource(baseURL+"quiz/subcategory/create/", null,
                     {'save':   {method:'POST', 

@@ -1,13 +1,7 @@
 /* global $ */
 
 appmodule
-    .constant('baseURL',baseURL)
-    .service('indexFactory', function() { 
-        // this.introductionCarousel = ['images/bg.png', 'images/wedding.png', 'images/corporate-party.png'];
-    })
-
-
-    .service('UserRegisterFactory',['$resource', function($resource, baseURL) { 
+    .service('UserRegisterFactory',['$resource', function($resource) { 
         this.createUser = function(){
             return $resource(baseURL+"register/", null,
                     {'save':   
@@ -21,7 +15,7 @@ appmodule
     }])
 
 
-    .service('QuizFactory', ['$resource', 'baseURL', function($resource, baseURL) { 
+    .service('QuizFactory', ['$resource', 'baseURL', function($resource) { 
         this.createQuiz = function(){
                 return $resource(baseURL+"quiz/create/", null,
                     {'save':   {method:'POST'}
