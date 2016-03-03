@@ -1,7 +1,7 @@
 /* global $ */
 
 appmodule
-	.controller('CreateQuizController', ['$scope', '$controller', '$state', '$cookies', 'QuestionsFactory','QuizFactory', 'CategoryFactory', function($scope, $controller, $state, $cookies, QuestionsFactory, QuizFactory, CategoryFactory) {
+	.controller('CreateQuizController', ['$scope', '$controller', '$state', 'QuestionsFactory','QuizFactory', 'CategoryFactory', function($scope, $controller, $state, QuestionsFactory, QuizFactory, CategoryFactory) {
 	        // pagination
 	        $scope.curPage = 0;
 	        $scope.pageSize = 9;
@@ -39,7 +39,7 @@ appmodule
 	        }
 	    }])
 
-	.controller('ViewUpdateQuizController', ['$scope', '$controller', '$cookies', '$state', '$stateParams', 'QuizFactory', function($scope, $controller, $cookies, $state, $stateParams, QuizFactory) {
+	.controller('ViewUpdateQuizController', ['$scope', '$controller', '$state', '$stateParams', 'QuizFactory', function($scope, $controller, $state, $stateParams, QuizFactory) {
 	            $controller('CookiesController', {$scope : $scope});
 	            QuizFactory.getQuiz($scope.user, $stateParams.quizid).get()
 	            .$promise.then(

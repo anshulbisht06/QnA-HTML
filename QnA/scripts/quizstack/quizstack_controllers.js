@@ -1,7 +1,7 @@
 /* global $ */
 
 appmodule
-	.controller('AddQuizStackController', ['$scope', '$window', '$state', '$controller', '$cookies', '$stateParams', '$compile', 'QuizFactory', 'QuizStackFactory', 'SubCategoryFactory', 'QuestionsFactory', function($scope, $window, $state, $controller, $cookies, $stateParams, $compile, QuizFactory, QuizStackFactory, SubCategoryFactory, QuestionsFactory) {
+	.controller('AddQuizStackController', ['$scope', '$window', '$state', '$controller', '$stateParams', '$compile', 'QuizFactory', 'QuizStackFactory', 'SubCategoryFactory', 'QuestionsFactory', function($scope, $window, $state, $controller, $stateParams, $compile, QuizFactory, QuizStackFactory, SubCategoryFactory, QuestionsFactory) {
             $controller('CookiesController', {$scope : $scope});
             var total_duration = 0;
             SubCategoryFactory.getAllSubcategories($scope.user, 'all').query(
@@ -168,11 +168,11 @@ appmodule
             }
 
             
-            $scope.getUserDetails = function(){
-                // console.log($scope.quizName)
-                $window.data = { 'quiz': $stateParams.quizid , 'quizName': $scope.quizName, 'quizStacks' : $scope.existingStack, 'details' : {} };
-                $window.open($state.href('app.test-login', {parameter: "parameter"}), "Test Window", "width=1280,height=890,resizable=0");
-            }
+            // $scope.getUserDetails = function(){
+            //     // console.log($scope.quizName)
+            //     $window.data = { 'quiz': $stateParams.quizid , 'quizName': $scope.quizName, 'quizStacks' : $scope.existingStack, 'details' : {} };
+            //     $window.open($state.href('app.test-login', {parameter: "parameter"}), "Test Window", "width=1280,height=890,resizable=0");
+            // }
 
             $scope.openTestWindow = function(){
                 data = { 'quiz': $stateParams.quizid , 'quizName': $scope.quizName, 'quizStacks' : $scope.existingStack, 'details' : {} };    
@@ -186,6 +186,6 @@ appmodule
                     data['details'][$scope.existingStack[i].section_name]['questions'] += parseInt($scope.existingStack[i].no_questions);
                 }
                 $window.data = data;
-                $window.open($state.href('app.test-preview', {parameter: "parameter"}), "Test Window", "width=1280,height=890,resizable=0");
+                $window.open($state.href('app.test-login', {parameter: "parameter"}), "Test Window", "width=1280,height=890,resizable=0");
             }
         }]);

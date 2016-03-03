@@ -1,16 +1,15 @@
 /* global $ */
 
 appmodule
-    .controller('TestPreviewController', ['$scope', '$controller', '$window', '$state', '$cookies', '$interval', 'TestPreviewFactory', function($scope, $controller, $window, $state, $cookies, $interval, TestPreviewFactory) {
+    .controller('TestPreviewController', ['$scope', '$controller', '$window', '$interval', 'TestPreviewFactory', function($scope, $controller, $window, $interval, TestPreviewFactory) {
         $controller('CookiesController', {$scope : $scope});
         $scope.allQuestions = {};
         $scope.getQuestionsBasedOnSection = function(sectionName, quizid){
-            TestPreviewFactory.getQuestionsBasedOnSection($cookies.get('token'), quizid, sectionName).query(
+            TestPreviewFactory.getQuestionsBasedOnSection(quizid, sectionName).query(
                 function(response){
                     $scope.total_questions = response.total_questions;
                     $scope.answersModel = {};
                     var questionsAdded = TestPreviewFactory.addQuestionsForSection(sectionName, response.questions);
-                    console.log(questionsAdded);
                     for(var i=0;i<questionsAdded.length;i++){
                         $scope.answersModel[questionsAdded[i][i+1].id] = null;
                     }
@@ -77,7 +76,7 @@ appmodule
                 $scope.quiz = $window.opener.data['quiz'];
                 $scope.sectionNames = Object.keys($window.opener.data['details']).sort();
                 $scope.selectedSection = $scope.sectionNames[0];
-                $scope.addQuestions($scope.sectionNames[0]);
+                $scope.addQuestions($scope.selectedSection);
                 // for(var i=0;i<sectionNames.length;i++){
                 //     angular.element(document.querySelector('#sectionnames')).append('<option value='+sectionNames[i]+'>'+sectionNames[i]+'</option>');
                 // }
@@ -100,7 +99,7 @@ appmodule
 
 
 .controller('UserDataController',['$scope','$state', 'testUserDataFactory','$controller', '$window', function($scope, $state, testUserDataFactory, $controller, $window) {
-        	$scope.data = {name: '', email: '', quiz: $window.opener.data.quiz, quiz_name: $window.opener.data.quizName};
+        	$scope.data = {name: '', email: '', quiz: $window.opener.data.quiz, quiz_name: $window.opener.data.quizName };
             $scope.postUserDetails = function(){testUserDataFactory.saveTestUser().save($scope.data).$promise.then(
                 function(response){
                     $scope.isFormInvalid = false;
@@ -109,13 +108,13 @@ appmodule
                 function(response) {
                     $scope.isFormInvalid = true;
                     $scope.alertType = "danger";
-                    $scope.alertMsg = "Unable to create the user - please try again.";
+                    $scope.alertMsg = "Unable to find the user - please try again.";
                     $scope.errors = response.data;
                 });}
 		}])
 
 
-.controller('TestPreviewHeaderController', ['$scope', '$controller', '$window', '$state', '$cookies', function($scope, $controller, $window, $state, $cookies) {
+.controller('TestPreviewHeaderController', ['$scope', '$controller', '$window', function($scope, $controller, $window) {
             $controller('CookiesController', {$scope : $scope});
             // console.log($window.opener.data.quiz)
             if(isNotEmpty($window.opener.data)){

@@ -1,7 +1,7 @@
 /* global $ */
 
 appmodule
-	.controller('QuestionsController', ['$scope', '$controller', '$cookies', '$state', '$http', 'QuestionsFactory', function($scope, $controller, $cookies, $state, $http, QuestionsFactory) {
+	.controller('QuestionsController', ['$scope', '$controller', '$state', '$http', 'QuestionsFactory', function($scope, $controller, $state, $http, QuestionsFactory) {
         $controller('CookiesController', {$scope : $scope});
         QuestionsFactory.getAllQuestions($scope.user).query(
             function(response) {
@@ -143,7 +143,7 @@ appmodule
     }])
 
 
-    .controller('CreateQuestionController', ['$scope', '$controller', '$cookies', '$state', '$http', 'QuizFactory', 'CategoryFactory', 'SubCategoryFactory', 'QuestionsFactory', 'Upload', function($scope, $controller, $cookies, $state, $http, QuizFactory, CategoryFactory, SubCategoryFactory, QuestionsFactory, Upload) {
+    .controller('CreateQuestionController', ['$scope', '$controller', '$state', '$http', 'QuizFactory', 'CategoryFactory', 'SubCategoryFactory', 'QuestionsFactory', 'Upload', function($scope, $controller, $state, $http, QuizFactory, CategoryFactory, SubCategoryFactory, QuestionsFactory, Upload) {
         $controller('CookiesController', {$scope : $scope});
         if($scope.user){
         SubCategoryFactory.getAllSubcategories($scope.user, 'all').query(
@@ -252,7 +252,7 @@ appmodule
 
     }])
 
-    .controller('UpdateQuestionController', ['$scope', '$controller', '$cookies', '$state', '$stateParams', 'QuestionsFactory', 'Upload', function($scope, $controller, $cookies, $state, $stateParams, QuestionsFactory, Upload) {
+    .controller('UpdateQuestionController', ['$scope', '$controller', '$state', '$stateParams', 'QuestionsFactory', 'Upload', function($scope, $controller, $state, $stateParams, QuestionsFactory, Upload) {
         $controller('CookiesController', {$scope : $scope});
         $scope.que_type = $stateParams.questionParams.split(':')[1];
 
@@ -292,7 +292,7 @@ appmodule
     }])
 
 
-    .controller('UpdateAnswersController', ['$scope', '$controller', '$cookies', '$state', '$stateParams', 'QuestionsFactory', function($scope, $controller, $cookies, $state, $stateParams, QuestionsFactory) {
+    .controller('UpdateAnswersController', ['$scope', '$controller', '$state', '$stateParams', 'QuestionsFactory', function($scope, $controller, $state, $stateParams, QuestionsFactory) {
         $controller('CookiesController', {$scope : $scope});
         $scope.que_type = $stateParams.questionParams.split(':')[1];
         QuestionsFactory.getAnswers($scope.user, $stateParams.questionParams.split(':')[0], $stateParams.questionParams.split(':')[1]).get()

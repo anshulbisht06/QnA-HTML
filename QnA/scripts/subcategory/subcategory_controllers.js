@@ -1,7 +1,7 @@
 /* global $ */
 
 appmodule
-	.controller('CreateSubCategoryController', ['$scope','$state', '$controller', '$cookies', 'CategoryFactory', 'SubCategoryFactory','$stateParams', function($scope, $state, $controller, $cookies, CategoryFactory, SubCategoryFactory, $stateParams) {
+	.controller('CreateSubCategoryController', ['$scope','$state', '$controller', 'CategoryFactory', 'SubCategoryFactory','$stateParams', function($scope, $state, $controller, CategoryFactory, SubCategoryFactory, $stateParams) {
         $controller('CookiesController', {$scope : $scope});
         CategoryFactory.getAllCategories($scope.user, "all").query(
         function(response){

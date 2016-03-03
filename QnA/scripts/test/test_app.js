@@ -30,7 +30,8 @@ appmodule.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 						templateUrl : 'views/test/user_data_form.html'
 					},
 					'footer@': ''
-				}
+				},
+				params: {obj: null},
 				})
 		// $locationProvider.html5Mode(true);
 		$urlRouterProvider.otherwise('/');

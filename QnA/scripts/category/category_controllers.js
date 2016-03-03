@@ -1,7 +1,7 @@
 /* global $ */
 
 appmodule
-	.controller('CreateCategoryController', ['$scope','$state', '$controller', '$cookies', 'CategoryFactory', 'QuizFactory','$stateParams', function($scope, $state, $controller, $cookies, CategoryFactory, QuizFactory, $stateParams) {
+	.controller('CreateCategoryController', ['$scope','$state', '$controller', 'CategoryFactory', 'QuizFactory','$stateParams', function($scope, $state, $controller, CategoryFactory, QuizFactory, $stateParams) {
         $controller('CookiesController', {$scope : $scope});
         if($scope.user){
             QuizFactory.getAllQuiz($scope.user, "all").query(

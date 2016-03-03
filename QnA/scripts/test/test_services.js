@@ -1,23 +1,23 @@
 /* global $ */
 
 appmodule
-.constant('baseURL',baseURL)
-.service('testUserDataFactory', ['$resource', 'baseURL', function($resource, baseURL) {
+	.service('testUserDataFactory', ['$resource', function($resource) {
 		this.saveTestUser = function(){
-            return $resource(baseURL+"user/data/", null,
-                    {'save':   
-                    { method:'POST', 
-                    } 
-                    },
-                    { stripTrailingSlashes: false }
-                    );
-        };
-        
-    }])
+	        return $resource(baseURL+"user/data/", null,
+	                {'save':   
+	                { method:'POST', 
+	                } 
+	                },
+	                { stripTrailingSlashes: false }
+	                );
+	    };
+	    
+	}])
 
 	.service('TestPreviewFactory', ['$resource', function($resource) {
         var allQuestions = {}
         this.getQuestionsBasedOnSection = function(quizid, sectionName){
+        	console.log(quizid, sectionName);
             return $resource(baseURL+"stack/get/questions/"+quizid+"/", { sectionName: sectionName},
                 {
                     query: {
