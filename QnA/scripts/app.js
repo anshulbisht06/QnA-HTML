@@ -9,7 +9,6 @@ appmodule.factory('APIInterceptor', function($cookies){
 			    	config.headers.authorization = 'JWT '+$cookies.get('token');
 			     	return config;
 			    },
-
 			    requestError: function(config) {
 			       	return config;
 			    },
@@ -22,7 +21,7 @@ appmodule.factory('APIInterceptor', function($cookies){
 			      	return res;
 			    }
 		  }
-
+		  
 });
 
 appmodule.config(function($stateProvider, $urlRouterProvider, $httpProvider) {

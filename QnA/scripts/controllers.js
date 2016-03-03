@@ -1,5 +1,6 @@
 /* global $ */
 angular.module('QnA')
+
     .controller('CookiesController', ['$scope', '$rootScope', '$cookies', '$state', function($scope, $rootScope, $cookies, $state) {
         $rootScope.user = $cookies.get('user');
         $rootScope.username = $cookies.get('username');
@@ -32,7 +33,6 @@ angular.module('QnA')
             $state.go('app.login-user');
           })
             .error(function logoutErrorFn(data, status, headers, config) {
-            console.error('Cannot logout!!!');
           })
         }
     }])
@@ -369,7 +369,6 @@ angular.module('QnA')
 
         }
         $scope.renameCategory = function(){
-            // console.log($scope.categoryRenameForm);
             CategoryFactory.renameCategory().update($scope.categoryRenameForm);
         } 
     }])
@@ -463,7 +462,6 @@ angular.module('QnA')
             if(sub_cat_info===undefined){
                 $scope.noSubCategoryPresent = true;
             }else{
-                console.log(que_type, sub_cat_info);
             $http.post(baseURL+"quiz/question/download/xls/", {que_type:que_type,
                 sub_cat_info:sub_cat_info}, { responseType: 'arraybuffer' })
               .success(function(data) {
@@ -790,7 +788,6 @@ angular.module('QnA')
             $scope.openTestWindow = function(){
                 data = { 'quiz': $stateParams.quizid , 'quizName': $scope.quizName, 'quizStacks' : $scope.existingStack, 'details' : {} };    
                 l = [];
-                console.log($scope.existingStack);
                 for(var i=0;i<$scope.existingStack.length;i++){
                     if(l.indexOf($scope.existingStack[i].section_name)==-1){
                         data['details'][$scope.existingStack[i].section_name] = { 'duration': 0, 'questions' : 0};
