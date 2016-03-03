@@ -45,11 +45,8 @@ appmodule
                     $scope.alertMsg = "You are successfully registered. Please login.";
                 },
                 function(response) {
-                    console.log('error ............ >>>>????')
                     $scope.isFormInvalid = true;
-                    console.log('...............',response);
                     $scope.errors = response.data;
-                    console.log($scope.errors);
                 });
         }
     }])     

@@ -1,4 +1,4 @@
-appmodule.factory('APIInterceptor', function($cookies){
+appmodule.factory('APIInterceptor', [ '$cookies', '$q', function($cookies, $q){
 	return {	
 		    request: function(config) {
 		    	if($cookies.get('token')){
@@ -18,11 +18,11 @@ appmodule.factory('APIInterceptor', function($cookies){
 		    },
 
 		    responseError: function(res) {
-		      	return res;
+		      	return $q.reject(res);
 		    }
 			  }
 
-});
+}]);
 
 appmodule.config(function($httpProvider) {
   		$httpProvider.interceptors.push('APIInterceptor');
