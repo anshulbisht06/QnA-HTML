@@ -1,6 +1,20 @@
 /* global $ */
 
 appmodule
+.constant('baseURL',baseURL)
+.service('testUserDataFactory', ['$resource', 'baseURL', function($resource, baseURL) {
+		this.saveTestUser = function(){
+            return $resource(baseURL+"user/data/", null,
+                    {'save':   
+                    { method:'POST', 
+                    } 
+                    },
+                    { stripTrailingSlashes: false }
+                    );
+        };
+        
+    }])
+
 	.service('TestPreviewFactory', ['$resource', function($resource) {
         var allQuestions = {}
         this.getQuestionsBasedOnSection = function(quizid, sectionName){

@@ -41,16 +41,21 @@ appmodule
                 function(response){
                     $scope.isFormInvalid = false;
                     $scope.userRegisterForm.$setPristine();
+                    $scope.alertType = "success";
+                    $scope.alertMsg = "You are successfully registered. Please login.";
                 },
                 function(response) {
+                    console.log('error ............ >>>>????')
                     $scope.isFormInvalid = true;
+                    console.log('...............',response);
                     $scope.errors = response.data;
+                    console.log($scope.errors);
                 });
         }
     }])     
 
 
-    .controller("LoginController",[ '$scope', '$rootScope', '$http', '$state', '$cookies', 'baseURL', function ($scope, $rootScope, $http, $state, $cookies, baseURL) {
+    .controller("LoginController",[ '$scope', '$rootScope', '$http', '$state', '$cookies', function ($scope, $rootScope, $http, $state, $cookies) {
         $rootScope.user = undefined;
         $rootScope.username = undefined;
         $rootScope.token = undefined;

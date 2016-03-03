@@ -1,14 +1,14 @@
 /* global $ */
 
 appmodule.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
-  		$httpProvider.interceptors.push('APIInterceptor');
+  		// $httpProvider.interceptors.push('APIInterceptor');
         $stateProvider	        
             .state('app.test-preview', {
                 url:'test/preview/',
                 views :{
                     'header@': {
                         controller  : 'TestPreviewHeaderController',
-                        templateUrl : 'views/test_preview_header.html'
+                        templateUrl : 'views/test/test_preview_header.html'
                     },
                     'content@': {
                         controller  : 'TestPreviewController',

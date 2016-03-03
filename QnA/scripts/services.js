@@ -6,7 +6,6 @@ appmodule
             return $resource(baseURL+"register/", null,
                     {'save':   
                     { method:'POST', 
-                    // headers: {'Authorization': 'JWT ' + token} 
                     } 
                     },
                     { stripTrailingSlashes: false }
@@ -15,7 +14,7 @@ appmodule
     }])
 
 
-    .service('QuizFactory', ['$resource', 'baseURL', function($resource) { 
+    .service('QuizFactory', ['$resource', function($resource) { 
         this.createQuiz = function(){
                 return $resource(baseURL+"quiz/create/", null,
                     {'save':   {method:'POST'}
