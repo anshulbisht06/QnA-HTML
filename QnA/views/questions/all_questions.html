@@ -1,0 +1,151 @@
+<div class="container-fluid">
+<div ng-include src="'views/alert_msg.html'"></div>
+	<div class="row" style="margin-right: 0">
+	<div class="row">
+		<div class="dropdown">
+		  <button class="btn btn-primary btn-md right dropdown-toggle" style="margin-right: 140px;" type="button" data-toggle="dropdown">Create Question
+		  <span class="caret"></span></button>
+		  <ul class="dropdown-menu pull-right">
+		    <li><a ui-sref="app.create-mcq-question">MCQ</a></li>
+		    <li><a ui-sref="app.create-objective-question">Objective</a></li>
+		  </ul>
+		</div>
+	</div>
+	<div class="row">
+		<h2 class="text-center hidden-xs">Your questions</h2>
+		<h4 class="text-center visible-xs">Your questions</h4>
+	</div>
+	<div class="row">
+		<div class="col-lg-1 col-md-1 col-sm-1"></div>
+		<div class="col-lg-3 col-md-3 col-sm-3">
+<!-- 			<div class="panel panel-info">
+				<div class="row sidemenurow" style="margin: auto;" ng-if="quizNotSelected">
+					<ul style="list-style-type: none;" class="sidemenu" ng-if="allQuizzes">
+						<li ng-if="allQuizzes" ng-repeat="quiz in allQuizzes"><span title="Go inside" class="glyphicon glyphicon-expand left" ng-if="quiz.categories" ng-click="quizSelected(quiz.id, quiz.title , quiz.categories)"></span><span ng-click="filterQuiz(quiz.id)">&nbsp;&nbsp;{{quiz.title|capitalize}}</span>
+						</li>
+					</ul>
+				</div>
+				<div class="row" style="margin: auto;" ng-if="categoryNotSelected && !quizNotSelected">
+				<p style="margin-top:10px;margin-left: 5px;color:blue;"><span  title="Go back" class="glyphicon glyphicon-arrow-left back" ng-click="quizDeselected()"></span> &nbsp;{{ selectedQuizTitle|capitalize }}</p>
+					<ul style="list-style-type: none;" class="sidemenu">
+						<li ng-if="categorieslist" ng-repeat="category in categorieslist"><span class="glyphicon glyphicon-expand left" ng-if="quiz.subcategories.length!=0" ng-click="categorySelected(category.id, category.category, category.subcategories)" title="Go inside" ></span><span ng-click="filterCategory(selectedQuizId, category.id)">&nbsp;&nbsp;{{category.category|capitalize}}</span>
+							<span class="dropdown right" ng-if="quiz.subcategories.length!=0">
+							  <span class="glyphicon glyphicon-chevron-down" data-toggle="dropdown"></span>
+							  <ul class="dropdown-menu">
+							    <li><a ng-click="renameField('category',category.category)">Rename</a></li>
+							  </ul>
+							</span>
+						</li>
+					</ul>
+				</div>
+				<div class="row" style="margin: auto;" ng-if="subcategoryNotSelected && !categoryNotSelected && !quizNotSelected">
+				<p style="margin-top:10px;margin-left: 5px;color:blue;"><span title="Go back" class="glyphicon glyphicon-arrow-left back" ng-click="categoryDeselected()"></span> &nbsp;{{ selectedCategoryName|capitalize }}</p>
+					<ul style="list-style-type: none;" class="sidemenu">
+						<li ng-if="subcategorieslist" ng-repeat="subcategory in subcategorieslist"><span class="glyphicon glyphicon-minus left"></span><span  ng-click="filterSubCategory(selectedQuizId, selectedCategoryId, subcategory.id)">&nbsp;&nbsp;{{subcategory.subcategory|capitalize}}</span>
+							<span class="dropdown right">
+							  <span class="glyphicon glyphicon-chevron-down" data-toggle="dropdown"></span>
+							  <ul class="dropdown-menu">
+							    <li><a ng-click="renameField('subcategory',subcategory.id)">Rename</a></li>
+							  </ul>
+							</span>
+						</li>
+					</ul>
+				</div>
+			</div> -->
+		</div>
+ 		<div class="col-lg-7 col-md-7 col-sm-7">
+			<div class="row">
+				<ul class="nav nav-pills nav-justified right">
+				  <li ng-class="{active : isTabSelected(1)}"><a ng-click="selectTab(1)">Total <span class="badge">{{ questionsLevelInfo[3] }}</span></a></li>
+				  <li ng-class="{active : isTabSelected(2)}"><a ng-click="selectTab(2)">Easy <span class="badge">{{ questionsLevelInfo[0] }}</span></a></li>
+				  <li ng-class="{active : isTabSelected(3)}"><a ng-click="selectTab(3)">Medium <span class="badge">{{ questionsLevelInfo[1] }}</span></a></li>
+				  <li ng-class="{active : isTabSelected(4)}"><a ng-click="selectTab(4)">Hard <span class="badge">{{ questionsLevelInfo[2] }}</span></a></li>
+				</ul>
+			</div>
+<!-- 			<div class="row">
+			<br>
+				<div class="col-lg-4 col-md-4 col-sm-4">
+					<input type="search" class="form-control" ng-model="filterByQuiz" placeholder="Search by quiz">
+				</div>
+				<div class="col-lg-4 col-md-4 col-sm-4">
+					<input type="search" class="form-control" ng-model="filterByCategory" placeholder="Search by category">
+				</div>
+				<div class="col-lg-4 col-md-4 col-sm-4">
+					<input type="search" class="form-control" ng-model="filterBySubCategory" placeholder="Search by sub-category">
+				</div>
+			</div> -->
+			<hr>
+			<div class="row">
+				  <ul class="list-group">
+				  	<li class="list-group-item" ng-if="questions" ng-mouseenter="hoverOnQuestion(question.id)" ng-mouseleave="hoverOutQuestion(question.id)" ng-repeat="question in questions.questions | filter:filterLevel:true" id="Q{{question.id}}">
+				  		<p>
+					  	<div class="row">
+						  	<div class="col-lg-1 col-md-1 col-sm-1">
+						  	</div>
+						  	<div class="col-lg-11 col-md-11 col-sm-11">
+							  	<div class="row">
+						  			<p class="left">Q<small>{{$index + 1}}</small>.&nbsp;&nbsp;<span ng-if="question.que_type==='objective'">{{ question.content | insertBlank }}</span><span ng-if="question.que_type==='mcq'">{{ question.content }}</span></p>
+							  	</div><br>
+							  	<div class="row">
+							  	    <div class="btn-group" data-toggle="buttons">
+						  	    		<div class="row options" ng-repeat="option in question.options">
+							                <label class="btn btn-default" ng-class="{'active':option.correct}">
+								                {{$index + 1}}
+							                </label>
+						                	{{ option.content }}
+						                </div>
+					                </div>
+							  	</div>
+							  	<div class="row text-left">
+							  		<div class="col-lg-6 col-md-6 col-sm-6">
+							  			<h4><span class="label label-default">{{ subcategory.subcategory }}</span></h4>
+							  		</div>
+							  		<div class="col-lg-1 col-md-1 col-sm-1">
+							  			<h4><span class="label label-default">{{ question.level }}</span></h4>
+							  		</div>
+							  		<div class="col-lg-5 col-md-5 col-sm-5 text-right" ng-if="isHoveredOver[question.id]">
+							  			<ul class="list-inline">
+										  <li><a ui-sref="app.update-question({questionParams : '{{ question.id }}:{{ question.que_type }}' })" title="Edit the question"><span class="glyphicon glyphicon-pencil"></span></a></li>
+										  <li><a ui-sref="app.update-answers({questionParams : '{{ question.id }}:{{ question.que_type }}' })" title="Edit the answers"><span class="glyphicon glyphicon-list"></span></a></li>	
+										  <li><a ng-click="deleteQuestion(question.id)"><span class="glyphicon glyphicon-remove"></span></a></li>
+										</ul>
+							  		</div>
+							  	</div>
+						  	</div>
+					  	</div>
+					  	</p>
+				  </li>
+				  </ul>
+			</div>
+			<div class="row text-center" ng-if="!questions">
+				<h3>No questions available. First select a quiz/category/subcategory.</h3>
+			</div>
+		</div> 
+	</div>
+	<div id="renameModal" class="modal fade" role="dialog">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	        <h4 class="modal-title">Rename <span id="fieldType"></span> - <span style="color:red;" id="oldValue"></span></h4>
+	      </div>
+	      <div class="modal-body">
+	        <form name="renameCategoryForm" ng-submit="renameCategory()" novalidate>
+	        	<div class="form-group" id="oldCategoryField">
+	        	</div>
+	        	<div class="form-group">
+	        	<input class="form-control" name="category_name" placeholder="Type new category name here..." ng-model="categoryRenameForm.category_name" required>
+	        	</div>
+	        	<div class="form-group">
+	        	<button type="submit" class="btn btn-primary btn-md">Rename</button>
+	        	</div>
+	        </form>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	</div>
+</div>

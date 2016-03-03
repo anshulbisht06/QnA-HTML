@@ -1,0 +1,69 @@
+<div class="container-fluid">
+<div ng-include src="'views/alert_msg.html'"></div>
+<div ng-include src="'views/progress_bar_display.html'"></div>
+<div class="jumbotron">
+    <div class="row">
+    </div>
+    <div class="row" ng-if="!unableToGetQuestion">
+	    <div class="row">
+			<h2 class="text-center hidden-xs">Update question.</h2>
+			<h4 class="text-center visible-xs">Update question.</h4>
+		</div>
+		<div class="row">
+			<div class="col-lg-2 col-md-2 col-sm-2"></div>
+			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+				<hr>
+				<h4 class="left">Category : <span class="label label-default">{{ question.category }}</span></h4>
+				<h4 class="right">SubCategory : <span class="label label-default">{{ question.sub_category }}</span></h4><br><br><br>
+			<form role="form" name="questionUpdateForm" ng-submit="putQuestion()" enctype="multipart/form-data" novalidate>
+				<div class="form-group">
+			    	<input type="hidden" name="que_type" id="que_type" ng-model="updateQuestionForm.que_type" value="{{ question.que_type }}">
+					<div class="row" ng-if="question.figure">
+						<img src="http://localhost:8000{{ question.figure }}" class="img-thumbnail" alt="Figure unavailable" width="300" height="200">
+					</div>
+				  	<label for="figure"><span ng-if="question.figure">Change this</span><span ng-if="!question.figure">Add a</span> figure</label>
+				  	<input type="file" name="figure" id="figure" ngf-select ng-model="updateQuestionForm.figure" ngf-pattern="'image/*'"
+					    ngf-accept="'image/*'" ngf-max-size="5MB" ngf-min-height="100" 
+					    ngf-resize="{width: 100, height: 100}">
+				  </div><br>
+				  <div ng-if="que_type==='mcq'" class="form-group" ng-class="{'has-error': errors.content || questionUpdateForm.content.$touched && questionUpdateForm.content.$error.required }">
+				  	<label for="content">Enter the question content</label>
+			    	<textarea name="content" id="content" rows="4" class="form-control" ng-model="updateQuestionForm.content" required></textarea>
+			   		<span ng-if="errors.content" class="help-block">{{ errors.content[0] }}</span>
+			   		<span ng-if="questionUpdateForm.content.$touched && questionUpdateForm.content.$error.required" class="help-block">Question content is required.</span>
+				  </div>
+				  <div ng-if="que_type==='objective'" class="form-group" ng-class="{'has-error': errors.content[0] }">
+				  	<div class="form-group" ng-class="{'has-error': errors.content[0] || questionUpdateForm.content.$touched && questionUpdateForm.content.$error.required }">
+				  	<div class="right"><button type="button" class="btn btn-md btn-danger" id="insertblankbutton" onclick="insertBlank('#content')">Insert Blank</button></div><br>
+				  	<label for="content">Enter the question content</label>
+			    	<input type="text" name="content" id="content" class="form-control" ng-model="updateQuestionForm.content" required>
+			   		<span ng-if="errors.content[0]" class="help-block">{{ errors.content[0] }}</span>
+			   		<span ng-if="questionUpdateForm.content.$touched && questionUpdateForm.content.$error.required" class="help-block">Question content is required.</span>
+				  </div>
+				  </div>
+				  <br>
+				  <div class="form-group">
+				  	<label for="content">Enter the explanation of question</label>
+			    	<textarea name="explanation" id="explanation" rows="4" class="form-control" ng-model="updateQuestionForm.explanation"></textarea>
+				  </div><br>
+				  <div class="form-group">
+				  	<label for="level">Level of Question</label>
+					<select class="form-control" id="level" name="level" ng-model="updateQuestionForm.level">
+						<option value="easy">Easy</option>
+						<option value="medium">Medium</option>
+						<option value="hard">Hard</option>
+					</select>
+				  </div><br>
+				  <div class="form-group">
+				  	<button type="submit" class="btn btn-primary btn-block" ng-disabled="questionUpdateForm.$invalid">Update Question</button>
+				  </div>
+			</form>
+			<div class="col-lg-2 col-md-2 col-sm-2"></div>
+		</div>
+		</div>
+	</div>
+	<div class="row" ng-if="unableToGetQuestion">
+		Unable to retrieve the question.
+	</div>
+</div>
+</div>

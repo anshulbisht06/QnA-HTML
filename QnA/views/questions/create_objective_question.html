@@ -1,0 +1,101 @@
+<div class="container-fluid">
+<div ng-include src="'views/alert_msg.html'"></div>
+<div ng-include src="'views/progress_bar_display.html'"></div>
+<div class="jumbotron">
+    <div class="row">
+    </div>
+    <div class="row">	    
+		<div class="row ">
+			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 verticalLine">
+			<div class="row">
+				<h2 class="text-center hidden-xs">Add Objective question(s).</h2>
+				<h4 class="text-center visible-xs">Add Objective question(s).</h4>
+			</div>
+			<hr>
+			  	<div class="form-group text-center" ng-if="errors.errors">
+  				  	<p>{{errors.errors}}</p>
+  				</div>
+				<form role="form" name="objectiveQuestionCreateForm" ng-submit="postObjectiveQuestion()" enctype="multipart/form-data" novalidate>
+				  <div class="form-group" ng-if="!unableToGetsubCategories" ng-class="{'has-error': errors.sub_category || objectiveQuestionCreateForm.sub_category.$touched && objectiveQuestionCreateForm.sub_category.$error.required }">
+				  <label for="subcategory">Select a sub-category into which the question will be added</label>
+					<select class="form-control" id="sub_category" name="sub_category" ng-model="createObjectiveQuestionForm.sub_category" required>
+						<option value="" disabled>Select sub-category here</option>
+					    <option ng-repeat="sc in subCategories" value="{{ sc.id }}">{{ sc.sub_category_name }}</option>
+					</select>
+			   		<span ng-if="errors.sub_category" class="help-block">{{ errors.sub_category[0] }}</span>
+			   		<span ng-if="objectiveQuestionCreateForm.sub_category.$touched && objectiveQuestionCreateForm.sub_category.$error.required" class="help-block">Sub-category is required.</span>
+				  </div>
+  				  <div class="form-group" ng-if="unableToGetsubCategories">
+  				  	<span>Unable to fetch subcategories.</span>
+  				  </div>
+				  <br>
+				  <div class="form-group">
+				  	<input type="file" name="figure" id="figure" ngf-select ng-model="figure" ngf-pattern="'image/*'"
+					    ngf-accept="'image/*'" ngf-max-size="5MB" ngf-min-height="100" 
+					    ngf-resize="{width: 100, height: 100}" ng-change="changeImage()" style="display: inline;">
+					<span class="glyphicon glyphicon-remove red-text" ng-if="isImageChanged" ng-click="removeImage()" style="cursor: pointer;"></span>
+				  </div><br>
+				  <div class="form-group" ng-class="{'has-error': errors.content[0] || objectiveQuestionCreateForm.content.$touched && objectiveQuestionCreateForm.content.$error.required }">
+				  	<div class="right"><button type="button" class="btn btn-md btn-danger" id="insertblankbutton" ng-click="insertBlank()">Insert Blank</button></div><br>
+				  	<label for="content">Enter the question content</label>
+			    	<input type="text" name="content" id="content" class="form-control" ng-model="createObjectiveQuestionForm.content" autocomplete="off" required>
+			   		<span ng-if="errors.content[0]" class="help-block">{{ errors.content[0] }}</span>
+			   		<span ng-if="objectiveQuestionCreateForm.content.$touched && objectiveQuestionCreateForm.content.$error.required" class="help-block">Question content is required.</span>
+				  </div><br>
+				  <div class="form-group" ng-class="{'has-error': errors.correct || objectiveQuestionCreateForm.correct.$touched && objectiveQuestionCreateForm.correct.$error.required }">
+				  	<label for="content">Enter the correct answer</label>
+			    	<textarea name="correct" id="correct" rows="4" class="form-control" ng-model="createObjectiveQuestionForm.correct" required></textarea>
+			    	<span ng-if="errors.correct" class="help-block">{{ errors.correct[0] }}</span>
+			   		<span ng-if="objectiveQuestionCreateForm.correct.$touched && objectiveQuestionCreateForm.correct.$error.required" class="help-block">Correct answer is required.</span>
+				  </div><br>
+				  <div class="form-group">
+				  	<label for="content">Enter the explanation of question</label>
+			    	<textarea name="explanation" id="explanation" rows="4" class="form-control" ng-model="createObjectiveQuestionForm.explanation"></textarea>
+				  </div><br>
+				  <div class="form-group">
+				  	<label for="level">Level of Question</label>
+					<select class="form-control" id="level" name="level" ng-model="createObjectiveQuestionForm.level">
+						<option value="easy">Easy</option>
+						<option value="medium">Medium</option>
+						<option value="hard">Hard</option>
+					</select>
+				  </div><br>
+				  <br>
+				  <button type="submit" class="btn btn-primary btn-block" ng-disabled="objectiveQuestionCreateForm.$invalid">Create Question</button>
+				</form>
+			</div>
+			<div class="col-lg-4 col-md-4 col-sm-4 ">
+				<div class="row">
+					<h2 class="text-center hidden-xs">Add question in bulk.</h2>
+					<h4 class="text-center visible-xs">Add questions in bulk.</h4>
+				</div>
+				<hr><br>
+				Step1:<p> Select a sub-category here </p>
+				<div  ng-class="{'has-error': noSubCategoryPresent}">
+					<select class="form-control" id="sub_category1" name="sub_category" ng-model="sub_cat_info" ng-class="{'has-error':noSubCategoryPresent}">
+						<option value="" disabled>Select sub-category here</option>
+					    <option ng-repeat="sc in subCategories" value="{{ sc.id }}>>{{ sc.sub_category_name }}">
+					    {{ sc.sub_category_name }}</option>
+					</select>
+					<span ng-if="noSubCategoryPresent" class="red-text">Select a sub-category first.</span>
+				</div>
+				<br>
+				<br>
+				Step2: <p>Download XLS file and fill this file.</p>
+				<button class="btn btn-lg glyphicon glyphicon-download" 
+					ng-click="downloadDemoXls('objective', sub_cat_info)">Download</button>	
+				<br>
+				<br>
+				Step3: <p>Upload the XLS file and wait.</p>
+				 <div>
+				 	<div ng-class="{'has-error': noFileUploaded}">
+			         <input type="file" name="myFile" id="myFile" ngf-select ng-model="myFile" ngf-max-size="20MB">
+			         <span ng-if="noFileUploaded" class="red-text">No file has been uploaded.<br></span>
+			        </div><br>
+			         <button class="btn btn-lg glyphicon glyphicon-upload" ng-click="uploadFile('objective')">Upload</button>
+			      </div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
