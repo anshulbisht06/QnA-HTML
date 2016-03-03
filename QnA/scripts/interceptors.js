@@ -1,7 +1,12 @@
 appmodule.factory('APIInterceptor', function($cookies){
-	return {
+	return {	
 			    request: function(config) {
-			    	config.headers.authorization = 'JWT '+$cookies.get('token');
+			    	if($cookies.get('token')){
+			    		config.headers.authorization = 'JWT '+$cookies.get('token');
+			    	}
+			    	else{
+			    		console.log('Please login first');	
+			    	}
 			     	return config;
 			    },
 

@@ -1,7 +1,6 @@
 var baseURL= 'http://localhost:8000/';
 var appmodule = angular.module('QnA', ['ui.router', 'ngResource', 'ngCookies', 'ngFileUpload']);
 appmodule.factory('APIInterceptor', function($cookies){
-
 	return {
 			    request: function(config) {
 			    	if($cookies.get('token')){

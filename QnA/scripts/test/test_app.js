@@ -8,7 +8,7 @@ appmodule.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
                 views :{
                     'header@': {
                         controller  : 'TestPreviewHeaderController',
-                        templateUrl : 'views/test_preview_header.html'
+                        templateUrl : 'views/test/test_preview_header.html'
                     },
                     'content@': {
                         controller  : 'TestPreviewController',
