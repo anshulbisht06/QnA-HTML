@@ -1,8 +1,7 @@
 /* global $ */
 
 appmodule.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
-  		$httpProvider.interceptors.push('APIInterceptor');
-
+  		// $httpProvider.interceptors.push('APIInterceptor');
         $stateProvider	        
             // route for the home page
             .state('app', {

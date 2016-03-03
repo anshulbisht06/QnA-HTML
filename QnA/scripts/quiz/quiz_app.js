@@ -1,7 +1,7 @@
 /* global $ */
 
 appmodule.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
-  		$httpProvider.interceptors.push('APIInterceptor');
+  		// $httpProvider.interceptors.push('APIInterceptor');
         $stateProvider	        
             .state('app.create-quiz', {
                 url:'create/quiz/',

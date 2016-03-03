@@ -101,10 +101,9 @@ appmodule
 
 .controller('UserDataController',['$scope','$state', 'testUserDataFactory','$controller', '$window', function($scope, $state, testUserDataFactory, $controller, $window) {
         	$scope.data = {name: '', email: '', quiz: $window.opener.data.quiz, quiz_name: $window.opener.data.quizName};
-            $scope.postUserDetails = function(){testUserDataFactory.createSubCategory().save($scope.data).$promise.then(
+            $scope.postUserDetails = function(){testUserDataFactory.saveTestUser().save($scope.data).$promise.then(
                 function(response){
                     $scope.isFormInvalid = false;
-                    // $scope.alertType = "success";
                     $state.go('app.test-preview', {obj:{'user_name':response.user_name}});                     
                 },
                 function(response) {

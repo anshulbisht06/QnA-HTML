@@ -1,8 +1,7 @@
 /* global $ */
 
 appmodule
-    .constant('baseURL',baseURL)
-    .service('QuizFactory', ['$resource', 'baseURL', function($resource, baseURL) { 
+    .service('QuizFactory', ['$resource', function($resource) { 
         this.createQuiz = function(){
                 return $resource(baseURL+"quiz/create/", null,
                     {'save':   {method:'POST'}
