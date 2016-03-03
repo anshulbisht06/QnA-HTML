@@ -8,7 +8,7 @@
 	<div class="col-lg-8 col-md-8 col-sm-8">
 		<div class="row" ng-if="!editorEnabled" style="margin: auto;">
 			<div class="row text-center">
-				<h2><b>{{ quiz.title|capitalize }}</b>&nbsp;&nbsp;<span class="glyphicon glyphicon-pencil right" title="Click to edit quiz details" ng-click="enableEditor()" style="font-size: 18px;color:blue;"></span></h2>
+				<h2><b>{{ quiz.title|capitalize }}</b>&nbsp;&nbsp;<span class="glyphicon glyphicon-pencil right pointer" title="Click to edit quiz details" ng-click="enableEditor()" style="font-size: 18px;color:blue;"></span></h2>
 			</div><br>
 			<div class="row">
 				<label for="description">Desciption</label>
@@ -57,7 +57,7 @@
 			</div><br>
 		</div>
 		<div class="row" ng-if="editorEnabled">
-			<span class="glyphicon glyphicon-remove right" onclick="window.location.reload()" title="Cancel editing quiz details." style="font-size: 18px;color:red;"></span>
+			<span class="glyphicon glyphicon-remove right pointer" onclick="window.location.reload()" title="Cancel editing quiz details." style="font-size: 18px;color:red;"></span>
 			<form role="form" name="quizUpdateForm" ng-submit="putQuiz()" novalidate>			  
 			  <div class="form-group" ng-class="{'has-error': errors.title || quizUpdateForm.title.$touched && quizUpdateForm.title.$error.required  }">
 			    <label for="title">Title <span class="red-text">*</span></label>

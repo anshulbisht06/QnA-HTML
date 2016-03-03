@@ -20,9 +20,7 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                         templateUrl : 'views/footer.html'
                     }
                 },
-
-            })
-            
+            })            
             .state('app.login-user', {
                 url:'login/',
                 views :{
@@ -132,8 +130,17 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                     }
                 }
                 })
-            .state('app.view-quiz', {
+            .state('app.update-quiz', {
                 url:'quiz/:quizid',
+                views :{
+                    'content@': {
+                        controller  : 'ViewUpdateQuizController',
+                        templateUrl : 'views/view_update_quiz.html'
+                    }
+                }
+                })
+            .state('app.view-quiz', {
+                url:'quiz/:quizid/addstack/',
                 views :{
                     'content@': {
                         controller  : 'AddQuizStackController',
