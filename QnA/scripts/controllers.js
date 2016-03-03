@@ -811,15 +811,25 @@ angular.module('QnA')
                         for(var i=0;i<questionsAdded.length;i++){
                             $scope.answersModel[questionsAdded[i][i+1].id] = null;
                         }
-                        console.log($scope.answersModel);
                         $scope.changeQuestion(1);
                     },
                     function(response){
                         alert('Problem in getting questions from server-side.');
                 });
             }
+            $scope.changeSection = function(){
+                if($scope.sectionNames.indexOf($scope.selectedSection)<$scope.sectionNames.length-1){
+                    $scope.selectedSection = $scope.sectionNames[$scope.sectionNames.indexOf($scope.selectedSection)+1];
+                    $scope.addQuestions($scope.selectedSection);
+                    if($scope.sectionNames.indexOf($scope.selectedSection)===$scope.sectionNames.length-1){
+                        $scope.hideNextSection = true;
+                    }
+                }
+                else{
+                    $scope.hideNextSection = true;
+                }
+            }
             $scope.addQuestions = function(sectionName){
-                console.log(sectionName);
                 $scope.getQuestionsBasedOnSection(sectionName, $scope.quiz);
             }
             $scope.getQuestionsForThisSection = function(sectionName){

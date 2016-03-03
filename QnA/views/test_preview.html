@@ -49,7 +49,8 @@
 				</div>				
 			</div>
 			<div class="col-lg-2 col-md-2 col-sm-2">
-				<button class="btn btn-info btn-md right" ng-click="changeSection()">Next Section</button>
+				<button ng-if="!hideNextSection" class="btn btn-info btn-md right" ng-click="changeSection()">Next Section</button>
+				<button ng-if="hideNextSection" class="btn btn-primary btn-md right">Submit Test</button>
 			</div>
 		</div>
 		<div class="row">
