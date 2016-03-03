@@ -1,22 +1,5 @@
 /* global $ */
 angular.module('QnA')
-    .directive('onlyNum', function() {
-      return function(scope, element, attrs) {
-
-         var keyCode = [8,9,37,39,48,49,50,51,52,53,54,55,56,57,96,97,98,99,100,101,102,103,104,105,110];
-          element.bind("keydown", function(event) {
-            // console.log($.inArray(event.which,keyCode));
-            if($.inArray(event.which,keyCode) == -1) {
-                scope.$apply(function(){
-                    scope.$eval(attrs.onlyNum);
-                    event.preventDefault();
-                });
-                event.preventDefault();
-            }
-        });
-     };
-  })
-
     .controller('CookiesController', ['$scope', '$rootScope', '$cookies', '$state', function($scope, $rootScope, $cookies, $state) {
         $rootScope.user = $cookies.get('user');
         $rootScope.username = $cookies.get('username');
@@ -796,8 +779,16 @@ angular.module('QnA')
             $scope.go = function(){
                 console.log(QuizStackFactory.showStack());
             }
+
+            
+            $scope.getUserDetails = function(){
+                // console.log($scope.quizName)
+                $window.data = { 'quiz': $stateParams.quizid , 'quizName': $scope.quizName, 'quizStacks' : $scope.existingStack, 'details' : {} };
+                $window.open($state.href('app.test-login', {parameter: "parameter"}), "Test Window", "width=1280,height=890,resizable=0");
+            }
+
             $scope.openTestWindow = function(){
-                data = { 'quiz': $stateParams.quizid , 'quizName': $scope.quizName, 'quizStacks' : $scope.existingStack, 'details' : {} };
+                data = { 'quiz': $stateParams.quizid , 'quizName': $scope.quizName, 'quizStacks' : $scope.existingStack, 'details' : {} };    
                 l = [];
                 console.log($scope.existingStack);
                 for(var i=0;i<$scope.existingStack.length;i++){
@@ -809,90 +800,11 @@ angular.module('QnA')
                     data['details'][$scope.existingStack[i].section_name]['questions'] += parseInt($scope.existingStack[i].no_questions);
                 }
                 $window.data = data;
-                $window.open($state.href('app.test-preview', {parameter: "parameter"}), "Test Window", "width=1280,height=890,resizable=0");
+                $window.open($state.href('app.test-login', {parameter: "parameter"}), "Test Window", "width=1280,height=890,resizable=0");
+                // $window.open($state.href('app.test-preview', {parameter: "parameter"}), "Test Window", "width=1280,height=890,resizable=0");
             }
         }])
-        .controller('TestPreviewController', ['$scope', '$controller', '$window', '$state', '$cookies', 'TestPreviewFactory', function($scope, $controller, $window, $state, $cookies, TestPreviewFactory) {
-            $controller('CookiesController', {$scope : $scope});
-            $scope.allQuestions = {};
-            $scope.getQuestionsBasedOnSection = function(sectionName, quizid){
-                TestPreviewFactory.getQuestionsBasedOnSection(quizid, sectionName).query(
-                    function(response){
-                        $scope.total_questions = response.total_questions;
-                        $scope.answersModel = {};
-                        TestPreviewFactory.addQuestionsForSection(sectionName, response.questions);
-                    },
-                    function(response){
-                        alert('Problem in getting questions from server-side.');
-                });
-            }
-            $scope.addQuestions = function(sectionName){
-                $scope.getQuestionsBasedOnSection($scope.sectionNames[0], $scope.quiz);
-            }
-            $scope.getQuestionsForThisSection = function(sectionName){
-                console.log(TestPreviewFactory.getQuestionsForASection(sectionName));
-            }
-            $scope.showAllQuestions = function(){
-                console.log(TestPreviewFactory.showAllQuestionsAdded());
-            }
-            $scope.changeQuestion = function(count){
-                // var question = TestPreviewFactory.getAQuestion($scope.selectedSection, count);
-                $scope.currentCount = count;
-                $scope.currentQuestion = TestPreviewFactory.getAQuestion($scope.selectedSection, count);
-                if(isMCQ($scope.currentQuestion.que_type)){
-                    $scope.currentOptions = $scope.currentQuestion.options;
-                }else{
-                    $scope.currentOptions = [];
-                }
-                console.log('----', $scope.currentOptions);
-            }
-            $scope.saveAnswer = function(count, answerId){
-                if(isMCQ($scope.currentQuestion.que_type))
-                {
-                    console.log($scope.currentQuestion.content);
-                    // if($scope.answersModel[$scope.currentQuestion.id]===answerId){
-
-                    // }else{
-                    //     $scope.answersModel[$scope.currentQuestion.id] = answerId;
-                    //     console.log($scope.answersModel);
-                    //     TestPreviewFactory.saveOrChangeAnswer($scope.selectedSection, count, answerId, newAnswer, oldAnswer);
-                    // }
-                }
-                else{
-                    console.log($scope.currentQuestion.content);
-                }
-            }
-            try{
-                if(isNotEmpty($window.opener.data)){
-                    $scope.quiz = $window.opener.data['quiz'];
-                    $scope.sectionNames = Object.keys($window.opener.data['details']).sort();
-                    $scope.selectedSection = $scope.sectionNames[0];
-                    $scope.addQuestions($scope.sectionNames[0]);
-                    // for(var i=0;i<sectionNames.length;i++){
-                    //     angular.element(document.querySelector('#sectionnames')).append('<option value='+sectionNames[i]+'>'+sectionNames[i]+'</option>');
-                    // }
-                    $scope.totalDuration = findTotalDuration($window.opener.data['quizStacks']);
-                    $scope.dataPresent = true;
-                }else{
-                    $scope.dataPresent = false;
-                }
-            }catch(e){
-                console.log(e);
-                $scope.dataPresent = false;
-            }
-        }])
-        .controller('TestPreviewHeaderController', ['$scope', '$controller', '$window', '$state', '$cookies', function($scope, $controller, $window, $state, $cookies) {
-            $controller('CookiesController', {$scope : $scope});
-            if(isNotEmpty($window.opener.data)){
-            $scope.quizName = $window.opener.data['quizName'];
-            $scope.closePreviewWindow = function(){
-                $window.close();
-            }
-            $scope.dataPresent = true;      
-            }else{
-                $scope.dataPresent = false;
-            }    
-        }]);
+        
 
     
 

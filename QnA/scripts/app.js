@@ -189,6 +189,21 @@ appmodule.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 				}
 				})
 
+			.state('app.test-login', {
+				url:'test/login/',
+				views :{
+					'header@': {
+						controller  : 'TestPreviewHeaderController',
+						templateUrl : 'views/testpreviewheader.html'
+					},
+					'content@': {
+						controller  : 'UserDataController',
+						templateUrl : 'views/test/user_data_form.html'
+					},
+					'footer@': ''
+				}
+				})
+
 		// $locationProvider.html5Mode(true);
 		$urlRouterProvider.otherwise('/');
 	});

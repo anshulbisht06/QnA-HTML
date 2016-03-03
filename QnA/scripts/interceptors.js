@@ -1,24 +1,23 @@
-function testInterceptor() {
-  return {
-    request: function(config) {
-    	console.log(config);
-    	config.headers.authorization = 
-     	return config;
-    },
+var appmodule = angular.module('QnA');
 
-    requestError: function(config) {
-    	console.log('Interceptor');
-       	return config;
-    },
+appmodule.factory('APIInterceptor', function($cookies){
+	return {
+			    request: function(config) {
+			    	config.headers.authorization = 'JWT '+$cookies.get('token');
+			     	return config;
+			    },
 
-    response: function(res) {
-      	console.log('Interceptor');
-      	return res;
-    },
+			    requestError: function(config) {
+			       	return config;
+			    },
 
-    responseError: function(res) {
-      	console.log('Interceptor');
-      	return res;
-    }
-  }
-};
+			    response: function(res) {
+			      	return res;
+			    },
+
+			    responseError: function(res) {
+			      	return res;
+			    }
+		  }
+
+});
