@@ -57,6 +57,16 @@ appmodule.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
                 }
                 })
             
+            .state('app.all-quiz', {
+                url:'all/quiz/',
+                views :{
+                    'content@': {
+                        controller  : 'CreateQuizController',
+                        templateUrl : 'views/all_quizzes.html'
+                    }
+                }
+                })
+
             .state('app.register-user', {
                 url:'register/',
                 views :{
@@ -183,7 +193,7 @@ appmodule.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 				views :{
 					'header@': {
 						controller  : 'TestPreviewHeaderController',
-						templateUrl : 'views/testpreviewheader.html'
+						templateUrl : 'views/test_preview_header.html'
 					},
 					'content@': {
 						controller  : 'UserDataController',
