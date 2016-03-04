@@ -25,5 +25,5 @@ appmodule.factory('APIInterceptor', [ '$cookies', '$q', function($cookies, $q){
 }]);
 
 appmodule.config(function($httpProvider) {
-  		$httpProvider.interceptors.push('APIInterceptor');
-	});
+  	$httpProvider.interceptors.push('APIInterceptor');
+});

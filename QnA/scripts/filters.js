@@ -93,4 +93,14 @@ angular.module('QnA').filter('levelFull', function() {
         }
         return { percentage: (count*100)/totalKeys, count: count.toString() };
     }
+})
+.filter('slice', function() {
+  return function(array, start, end) {
+    return array.slice(start, end);
+  };
+})
+.filter('floor', function() {
+    return function(input) {
+        return Math.floor(input);
+    };
 });

@@ -22,7 +22,8 @@ appmodule
             var response = SubCategoryFactory.createSubCategory().save($scope.createSubCategoryform).$promise.then(
                 function(response){
                     $scope.alertType = "success";
-                    $scope.alertMsg = "Your sub-category named " + $scope.createSubCategoryform.sub_category_name + " has been created.";   
+                    $scope.alertMsg = "Your sub-category named " + $scope.createSubCategoryform.sub_category_name + " has been created."; 
+                    $scope.createSubCategoryform.sub_category_name = '';  
                 },
                 function(response) {
                     $scope.alertType = "danger";

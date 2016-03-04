@@ -44,3 +44,8 @@ function isMCQ(value){
         return false;
     }
 }
+function toggleWarningModal(action, bodyText, okButtonText){
+    $('#warningModalBody').html(bodyText);
+    $('#warningModalOKButton').html(okButtonText);
+    $('#warningModal').modal(action);
+}

@@ -16,6 +16,7 @@ appmodule
 
 	.service('TestPreviewFactory', ['$resource', function($resource) {
         var allQuestions = {}
+        var data = {};
         this.getQuestionsBasedOnSection = function(quizid, sectionName){
         	console.log(quizid, sectionName);
             return $resource(baseURL+"stack/get/questions/"+quizid+"/", { sectionName: sectionName},
@@ -36,6 +37,7 @@ appmodule
         this.getQuestionsForASection = function(sectionName){
             return allQuestions[sectionName];
         }
+        // Just for testing
         this.showAllQuestionsAdded = function(){
             return allQuestions;
         }
@@ -51,5 +53,10 @@ appmodule
                 data[i].isSelected = false;
             }
            }
+        }
+
+        // Save section-wise questions
+        this.saveSectionQuestion = function(sectionName, answers){
+            data[sectionName] = answers;
         }
         }]);

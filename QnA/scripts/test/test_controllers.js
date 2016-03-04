@@ -19,27 +19,47 @@ appmodule
                     alert('Problem in getting questions from server-side.');
             });
         }
-        $scope.changeSection = function(){
-            if($scope.sectionNames.indexOf($scope.selectedSection)<$scope.sectionNames.length-1){
-                $scope.selectedSection = $scope.sectionNames[$scope.sectionNames.indexOf($scope.selectedSection)+1];
+        $scope.changeSectionRequest = function(action){
+            if(action==='requestInitiated'){
+                toggleWarningModal('show', 'Do you really want to move to next section.<br><br><b>You cannot revisit this section again</b>.', 'Yes I am sure.');
+            }
+            else if(action==='requestCancelled'){
+                toggleWarningModal('hide', '', '');
+                console.log($scope.currentSection,'66');
+                $scope.selectedSection = $scope.currentSection;
+            }
+        }
+        $scope.changeSection = function(currentSection){
+            $scope.nextSection = $scope.selectedSection;
+            if($scope.sectionNames.indexOf($scope.selectedSection)<$scope.sectionNames.length){
+                TestPreviewFactory.saveSectionQuestion($scope.nextSection, $scope.answersModel);
+                if($scope.currentSection === $scope.nextSection){
+                    $scope.selectedSection = $scope.sectionNames[$scope.sectionNames.indexOf($scope.selectedSection)+1];
+                }else{
+                    $scope.selectedSection = $scope.sectionNames[$scope.sectionNames.indexOf($scope.nextSection)];
+                }
+                $scope.sectionNames.splice($scope.sectionNames.indexOf($scope.currentSection), 1);
                 $scope.addQuestions($scope.selectedSection);
                 if($scope.sectionNames.indexOf($scope.selectedSection)===$scope.sectionNames.length-1){
-                    $scope.hideNextSection = true;
+                    $scope.hideNextSectionButton = true;
                 }
+                $scope.currentSection = $scope.selectedSection;                
             }
             else{
-                $scope.hideNextSection = true;
+                $scope.hideNextSectionButton = true;
             }
         }
         $scope.addQuestions = function(sectionName){
+            $scope.sliceFactor = 0;
             $scope.getQuestionsBasedOnSection(sectionName, $scope.quiz);
         }
         $scope.getQuestionsForThisSection = function(sectionName){
             console.log(TestPreviewFactory.getQuestionsForASection(sectionName));
         }
         $scope.show = function(){
-            console.log($scope.answersModel);
+            console.log(TestPreviewFactory.showAllQuestionsAdded());
         }
+
         $scope.changeQuestion = function(count){
             if(count>=1 && count<=$scope.total_questions.length)
             {
@@ -71,11 +91,22 @@ appmodule
             else{
             }
         }
+        $scope.decreaseSlicing = function(){
+            $scope.sliceFactor -= 1;
+        }
+        $scope.increaseSlicing = function(){
+            $scope.sliceFactor += 1;
+        }
         try{
             if(isNotEmpty($window.opener.data)){
                 $scope.quiz = $window.opener.data['quiz'];
                 $scope.sectionNames = Object.keys($window.opener.data['details']).sort();
+                console.log($scope.sectionNames);
+                if($scope.sectionNames.length<=1){
+                    $scope.hideNextSectionButton = true;
+                }
                 $scope.selectedSection = $scope.sectionNames[0];
+                $scope.currentSection = $scope.selectedSection;
                 $scope.addQuestions($scope.selectedSection);
                 // for(var i=0;i<sectionNames.length;i++){
                 //     angular.element(document.querySelector('#sectionnames')).append('<option value='+sectionNames[i]+'>'+sectionNames[i]+'</option>');
