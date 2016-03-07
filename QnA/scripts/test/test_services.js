@@ -59,6 +59,10 @@ appmodule
             data[sectionName] = answers;
         }
 
+        this.addQuizData = function(quizid){
+            data['quiz'] = quizid;
+        }
+
         // Send the answers to server on normal submission
         this.postTest = function(testUser){
             return $resource(baseURL+"save/test/", { 'test_user': testUser},

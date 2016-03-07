@@ -80,14 +80,14 @@
 			<div class="col-lg-6 col-md-6 col-sm-6">
 				<div class="row" ng-if="currentOptions.length!=0" ng-repeat="option in currentOptions">
 					<label>
-						<input type="radio" name="{{currentQuestion.id}}" value="{{option.id}}" ng-click="saveAnswer(currentCount, option.id)" ng-model="answersModel[currentQuestion.id]">
+						<input type="radio" name="{{currentQuestion.id}}" value="{{option.id}}" ng-click="saveAnswer(currentCount, option.id)" ng-model="answersModel[currentQuestion.id].value">
 						{{option.content}}
 					</label><br>
 				</div>
 				<div class="row" ng-if="currentOptions.length===0">
 					<div class = "input-group">
 				        <span class="input-group-addon"><b>Answer</b></span>
-				        <input type="text" class="form-control" placeholder = "Enter your answer here..." ng-model="answersModel[currentQuestion.id]">
+				        <input type="text" class="form-control" placeholder = "Enter your answer here..." ng-model="answersModel[currentQuestion.id].value">
 				    </div>
 				</div>
 			</div>

@@ -52,11 +52,12 @@ function changeProgressValues(object) {
     var count = [0 ,0, 0];
     var totalKeys = 0;
     for(var key in object){
-        if(object[key]===null)
+        var value = object[key]['status'];
+        if(value==="NV")
             count[1] += 1;
-        else if(object[key]===undefined)
+        else if(value==="NA")
             count[2] += 1;
-        else
+        else if(value==="A")
             count[0] += 1;        
         totalKeys+=1;
     }

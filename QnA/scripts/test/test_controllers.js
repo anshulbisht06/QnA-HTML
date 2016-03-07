@@ -14,7 +14,7 @@ appmodule
                     $scope.answersModel = {};
                     var questionsAdded = TestPreviewFactory.addQuestionsForSection(sectionName, response.questions);
                     for(var i=0;i<questionsAdded.length;i++){
-                        $scope.answersModel[questionsAdded[i][i+1].id] = null;
+                        $scope.answersModel[questionsAdded[i][i+1].id] = { value:null, status:'NV'};
                     }
                     TestPreviewFactory.saveSectionQuestion(sectionName, $scope.answersModel);
                     $scope.changeQuestion(1);
@@ -76,12 +76,6 @@ appmodule
                 // var question = TestPreviewFactory.getAQuestion($scope.selectedSection, count);
                 $scope.currentCount = count;
                 $scope.currentQuestion = TestPreviewFactory.getAQuestion($scope.selectedSection, count);
-                if($scope.answersModel[$scope.currentQuestion.id]!=undefined)
-                {
-                }
-                else{
-                    $scope.answersModel[$scope.currentQuestion.id] = undefined;
-                }
                 if(isMCQ($scope.currentQuestion.que_type)){
                     $scope.currentOptions = $scope.currentQuestion.options;
                 }else{
@@ -93,9 +87,9 @@ appmodule
         $scope.saveAnswer = function(count, answerId){
             if(isMCQ($scope.currentQuestion.que_type))
             {
-                if($scope.answersModel[$scope.currentQuestion.id]===answerId){
+                if($scope.answersModel[$scope.currentQuestion.id].value===answerId){
                 }else{
-                    $scope.answersModel[$scope.currentQuestion.id] = answerId;
+                    $scope.answersModel[$scope.currentQuestion.id].value = answerId;
                     TestPreviewFactory.saveOrChangeAnswer($scope.selectedSection, count, answerId, true);
                 }
             }
@@ -103,6 +97,14 @@ appmodule
             }
             $scope.progressValues = changeProgressValues($scope.answersModel);
         }
+        $scope.$watch(function () {
+           return $scope.answersModel;
+         },                       
+          function(newVal, oldVal) {
+            try{
+                $scope.answersModel[$scope.currentQuestion.id].status = 'A';
+            }catch(err){}
+        }, true);
         function sliceOutQuestions(){
             $scope.sliced_questions = $scope.total_questions.slice($scope.sliceFactor*15, ($scope.sliceFactor+1)*15);
         }
@@ -127,6 +129,7 @@ appmodule
         try{
             if(isNotEmpty($window.opener.data)){
                 $scope.quiz = $window.opener.data['quiz'];
+                TestPreviewFactory.addQuizData($scope.quiz);
                 $scope.sectionNames = Object.keys($window.opener.data['details']).sort();
                 if($scope.sectionNames.length<=1){
                     $scope.hideNextSectionButton = true;
