@@ -51,7 +51,7 @@
 		</div>
 		<div class="col-lg-2 col-md-2 col-sm-2"></div>
 	</div>
-	<div class="col-md-12" ng-show="allQuiz.length" style='text-align:center;margin:1%;'>
+	<div class="col-md-12" ng-show="allQuiz.length > 5" style='text-align:center;margin:1%;'>
 		  <button type="button" class='btn btn-primary' ng-disabled="curPage == 0"
 		 ng-click="curPage=curPage-1">PREV</button>
 		 <span>Page {{curPage + 1}} of {{ numberOfPages() }}</span>

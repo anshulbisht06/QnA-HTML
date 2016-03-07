@@ -5,7 +5,6 @@ appmodule
         this.createSubCategory = function(){
                 return $resource(baseURL+"quiz/subcategory/create/", null,
                     {'save':   {method:'POST', 
-                    // headers: {'Authorization': 'JWT ' + token}
                      }
                     },
                     { stripTrailingSlashes: false }
@@ -16,7 +15,6 @@ appmodule
         return $resource(baseURL+"quiz/subcategory/get/"+userid+"/"+categoryid+"/", null,
             {
                 query: {
-                // headers: {'Authorization': 'JWT ' + token},
                 method : 'GET',
                 isArray : true,
                 }

@@ -6,7 +6,6 @@ appmodule
                 return $resource(baseURL+"quiz/category/create/", null,
                     {'save':   {
                         method:'POST',
-                        // headers: {'Authorization': 'JWT ' + token}
                     }
                 },
                     { stripTrailingSlashes: false }
@@ -17,7 +16,6 @@ appmodule
         return $resource(baseURL+"quiz/category/get/"+userid+"/"+categoryid+"/", null,
         {
             query: {
-            // headers: {'Authorization': 'JWT ' + token},
             method : 'GET',
             isArray : true,
             }
@@ -29,7 +27,6 @@ appmodule
         return $resource(baseURL+"quiz/category/get/"+userid+"/"+quizid+"/"+categoryid+"/", null,
         {
             get: {
-            // headers: {'Authorization': 'JWT ' + token},
             method : 'GET',
             isArray : false,
             }
@@ -41,7 +38,6 @@ appmodule
             return $resource(baseURL+"quiz/category/rename/", null,
                     {'update':   
                     { method:'PUT', 
-                    // headers: {'Authorization': 'JWT ' + token}
                 } 
                     },
                     { stripTrailingSlashes: false }

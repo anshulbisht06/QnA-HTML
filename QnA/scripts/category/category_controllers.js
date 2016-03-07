@@ -24,9 +24,9 @@ appmodule
             $scope.alertType = "info";
             $scope.isCategoryCreated = false;
             $scope.alertMsg = "Please select or create a category first";
-            $scope.createCategoryform = {category : "", quiz : $scope._id};
+            $scope.createCategoryform = {category_name : "", quiz : $scope._id};
         }else{
-            $scope.createCategoryform = {category : "", quiz : ""};
+            $scope.createCategoryform = {category_name : "", quiz : ""};
         }
 
         $scope.postCategory = function() { 
@@ -36,7 +36,7 @@ appmodule
                     $scope.alertType = "success";
                     $scope.isCategoryCreated = true;
                     $scope.alertMsg = "Your category named " + $scope.createCategoryform.category + " has been created. Now please create a sub-category of it.";
-                    $scope.createCategoryform = {category:""};
+                    $scope.createCategoryform = {category_name:""};
                     $scope.categoryCreateForm.$setPristine();
                     $state.go('app.create-subcategory', {obj:{'categoryid':response.id, 'categoryname':response.category}});                     
                 },
@@ -46,7 +46,7 @@ appmodule
                     $scope.isCategoryCreated = false;
                     $scope.alertMsg = "Unable to create the category - " + $scope.createCategoryform.category + ". See below error.";
                     $scope.errors = response.data;
-                    $scope.createCategoryform = {category : "", quiz : [$scope._id]};
+                    $scope.createCategoryform = {category_name : "", quiz : [$scope._id]};
                 });
         }
     }]);
