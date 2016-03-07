@@ -15,7 +15,8 @@ appmodule.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
                         templateUrl : 'views/test/test_preview.html'
                     },
                     'footer@': ''
-                }
+                },
+				params: {obj: null},
                 })
 
 			.state('app.test-login', {

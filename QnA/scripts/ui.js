@@ -46,7 +46,6 @@ function isMCQ(value){
 }
 function toggleWarningModal(action, bodyText, okButtonText){
     $('#warningModalBody').html(bodyText);
-    $('#warningModalOKButton').html(okButtonText);
     $('#warningModal').modal(action);
 }
 function changeProgressValues(object) {

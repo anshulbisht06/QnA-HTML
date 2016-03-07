@@ -7,9 +7,13 @@
       <div class="modal-body">
         <p id="warningModalBody"></p>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-warning" data-dismiss="modal" id="warningModalOKButton" ng-click="changeSection(currentSection)"></button>
-        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="changeSectionRequest('requestCancelled')">Cancel</button>
+      <div class="modal-footer" id="warningModalFooter" ng-if="action==='sectionRequestInitiated' || action==='sectionRequestCancelled'">
+        <button type="button" class="btn btn-warning" data-dismiss="modal" id="warningModalOKButton" ng-click="changeSection(currentSection)">Yes I am sure.</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="openWarningModal('sectionRequestCancelled')">Cancel</button>
+      </div>
+      <div class="modal-footer" id="warningModalFooter" ng-if="action==='submitRequestInitiated' || action==='submitRequestCancelled'">
+        <button type="button" class="btn btn-warning" data-dismiss="modal" id="warningModalOKButton" ng-click="submitTest()">Yes I am sure.</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="openWarningModal('submitRequestCancelled')">Cancel</button>
       </div>
     </div>
   </div>

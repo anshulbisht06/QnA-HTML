@@ -10,15 +10,13 @@ appmodule
 	                },
 	                { stripTrailingSlashes: false }
 	                );
-	    };
-	    
+	    };	    
 	}])
 
 	.service('TestPreviewFactory', ['$resource', function($resource) {
         var allQuestions = {}
         var data = {};
         this.getQuestionsBasedOnSection = function(quizid, sectionName){
-        	console.log(quizid, sectionName);
             return $resource(baseURL+"stack/get/questions/"+quizid+"/", { sectionName: sectionName},
                 {
                     query: {
@@ -37,9 +35,9 @@ appmodule
         this.getQuestionsForASection = function(sectionName){
             return allQuestions[sectionName];
         }
-        // Just for testing
-        this.showAllQuestionsAdded = function(){
-            return allQuestions;
+        // Show all questions answered with section name as key
+        this.showAllQuestionsAnswered = function(){
+            return data;
         }
         this.getAQuestion = function(sectionName, count){
             return allQuestions[sectionName][count-1][count];
@@ -57,6 +55,22 @@ appmodule
 
         // Save section-wise questions
         this.saveSectionQuestion = function(sectionName, answers){
+            console.log(sectionName);
             data[sectionName] = answers;
+        }
+
+        // Send the answers to server on normal submission
+        this.postTest = function(testUser){
+            return $resource(baseURL+"save/test/", { 'test_user': testUser},
+                {'save':   
+                { method:'POST', 
+                } 
+                },
+                { stripTrailingSlashes: false }
+                );
+        };  
+
+        this.getAQuestion = function(sectionName, count){
+            return allQuestions[sectionName][count-1][count];
         }
         }]);

@@ -3,7 +3,7 @@
 	<div class="row" ng-show="dataPresent">
 		<div class="alert alert-info">
 		   	<strong>Time : {{ totalDuration | secondsToDateTime | date:'HH:mm:ss' }}</strong><button ng-click="show()">Just For Check</button>
-		  	<button class="btn btn-primary btn-md right">Submit Test</button>
+		  	<button class="btn btn-primary btn-md right" ng-click="openWarningModal('submitRequestInitiated')">Submit Test</button>
 		</div>
 		<div class="row">
 			<div class="col-lg-4 col-md-4 col-sm-4">
@@ -11,7 +11,7 @@
 					<label for="sectionnames">Section Name</label>
 				</div>
 				<div class="col-lg-8 col-md-8 col-sm-8">
-					<select class="form-control" id="sectionnames" name="sectionnames" ng-model="selectedSection" ng-change="changeSectionRequest('requestInitiated')">
+					<select class="form-control" id="sectionnames" name="sectionnames" ng-model="selectedSection" ng-change="openWarningModal('sectionRequestInitiated')">
 						<option value="" disabled>Select a section</option>
 				    	<option ng-repeat="section in sectionNames" value="{{ section }}">{{ section }}</option>
 					</select>
@@ -51,7 +51,7 @@
 				</div>				
 			</div>
 			<div class="col-lg-2 col-md-2 col-sm-2">
-				<button ng-if="!hideNextSectionButton" class="btn btn-info btn-md right" ng-click="changeSectionRequest('requestInitiated')">Next Section</button>
+				<button ng-if="!hideNextSectionButton" class="btn btn-info btn-md right" ng-click="openWarningModal('sectionRequestInitiated')">Next Section</button>
 			</div>
 		</div>
 		<div class="row">
