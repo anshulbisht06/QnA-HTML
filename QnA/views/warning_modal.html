@@ -1,0 +1,16 @@
+<div id="warningModal" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="warningModalTitle"></h4>
+      </div>
+      <div class="modal-body">
+        <p id="warningModalBody"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-dismiss="modal" id="warningModalOKButton" ng-click="changeSection(currentSection)"></button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="changeSectionRequest('requestCancelled')">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -49,3 +49,17 @@ function toggleWarningModal(action, bodyText, okButtonText){
     $('#warningModalOKButton').html(okButtonText);
     $('#warningModal').modal(action);
 }
+function changeProgressValues(object) {
+    var count = [0 ,0, 0];
+    var totalKeys = 0;
+    for(var key in object){
+        if(object[key]===null)
+            count[1] += 1;
+        else if(object[key]===undefined)
+            count[2] += 1;
+        else
+            count[0] += 1;        
+        totalKeys+=1;
+    }
+    return [{ percentage: (count[0]*100)/totalKeys, count: count[0] }, { percentage: (count[1]*100)/totalKeys, count: count[1] }, { percentage: (count[2]*100)/totalKeys, count: count[2] }];
+};

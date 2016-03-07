@@ -8,6 +8,9 @@ appmodule
             TestPreviewFactory.getQuestionsBasedOnSection(quizid, sectionName).query(
                 function(response){
                     $scope.total_questions = response.total_questions;
+                    $scope.sliced_questions = $scope.total_questions.slice(0,15);
+                    $scope.sliceFactor = 0;
+                    $scope.slicingLimit=Math.floor($scope.total_questions.length/15);
                     $scope.answersModel = {};
                     var questionsAdded = TestPreviewFactory.addQuestionsForSection(sectionName, response.questions);
                     for(var i=0;i<questionsAdded.length;i++){
@@ -21,11 +24,10 @@ appmodule
         }
         $scope.changeSectionRequest = function(action){
             if(action==='requestInitiated'){
-                toggleWarningModal('show', 'Do you really want to move to next section.<br><br><b>You cannot revisit this section again</b>.', 'Yes I am sure.');
+                toggleWarningModal('show', 'Do you really want to move to next section.<br><br><b>You cannot revisit this section again.</b>', 'Yes I am sure.');
             }
             else if(action==='requestCancelled'){
                 toggleWarningModal('hide', '', '');
-                console.log($scope.currentSection,'66');
                 $scope.selectedSection = $scope.currentSection;
             }
         }
@@ -59,7 +61,20 @@ appmodule
         $scope.show = function(){
             console.log(TestPreviewFactory.showAllQuestionsAdded());
         }
-
+        function changeProgressValues(object) {
+            var count = [0 ,0, 0];
+            var totalKeys = 0;
+            for(var key in object){
+                if(object[key]===null)
+                    count[1] += 1;
+                else if(object[key]===undefined)
+                    count[2] += 1;
+                else
+                    count[0] += 1;        
+                totalKeys+=1;
+            }
+            return [{ percentage: (count[0]*100)/totalKeys, count: count[0] }, { percentage: (count[1]*100)/totalKeys, count: count[1] }, { percentage: (count[2]*100)/totalKeys, count: count[2] }];
+        };
         $scope.changeQuestion = function(count){
             if(count>=1 && count<=$scope.total_questions.length)
             {
@@ -78,6 +93,7 @@ appmodule
                     $scope.currentOptions = [];
                 }
             }
+            $scope.progressValues = changeProgressValues($scope.answersModel);
         }
         $scope.saveAnswer = function(count, answerId){
             if(isMCQ($scope.currentQuestion.que_type))
@@ -90,13 +106,21 @@ appmodule
             }
             else{
             }
+            $scope.progressValues = changeProgressValues($scope.answersModel);
+        }
+        function sliceOutOuestions(){
+            console.log($scope.sliceFactor);
+            $scope.sliced_questions = $scope.total_questions.slice($scope.sliceFactor*15, ($scope.sliceFactor+1)*15);
         }
         $scope.decreaseSlicing = function(){
             $scope.sliceFactor -= 1;
+            sliceOutOuestions();
         }
         $scope.increaseSlicing = function(){
             $scope.sliceFactor += 1;
+            sliceOutOuestions();
         }
+
         try{
             if(isNotEmpty($window.opener.data)){
                 $scope.quiz = $window.opener.data['quiz'];

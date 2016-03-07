@@ -24,8 +24,8 @@
 					<div class="col-lg-3 col-md-3 col-sm-3">
 						<label for="notVisitedQuestionsCountBar">#Not Visited
 							<div class="progress">
-							  <div ng-init='{{value=(answersModel|notVisitedQuestionsCount)}}' id="notVisitedQuestionsCountBar" class="progress-bar progress-bar-danger black-text" role="progressbar" style="width:{{value.percentage}}%">
-							    {{value.count}}
+							  <div id="notVisitedQuestionsCountBar" class="progress-bar progress-bar-danger black-text" role="progressbar" style="width:{{progressValues[1].percentage}}%">
+							    {{progressValues[1].count}}
 							  </div>
 							</div>
 						</label>
@@ -33,8 +33,8 @@
 					<div class="col-lg-4 col-md-4 col-sm-4">
 						<label for="notAttemptedQuestionsCountBar">#Not Attempted
 							<div class="progress">
-							  <div ng-init='{{value=(answersModel|notAttemptedQuestionsCount)}}' id="notAttemptedQuestionsCountBar" class="progress-bar progress-bar-warning black-text" role="progressbar" style="width:{{value.percentage}}%">
-							    {{value.count}}
+							  <div id="notAttemptedQuestionsCountBar" class="progress-bar progress-bar-warning black-text" role="progressbar" style="width:{{progressValues[2].percentage}}%">
+							    {{progressValues[2].count}}
 							  </div>
 							 </div>
 						</label>
@@ -42,8 +42,8 @@
 					<div class="col-lg-3 col-md-3 col-sm-3">
 						<label for="attemptedQuestionsCountBar">#Attempted
 							<div class="progress">
-							  <div  ng-init='{{value=(answersModel|attemptedQuestionsCount)}}' id="attemptedQuestionsCountBar" class="progress-bar progress-bar-success black-text" role="progressbar" style="width:{{value.percentage}}%">
-							    {{value.count}}
+							  <div id="attemptedQuestionsCountBar" class="progress-bar progress-bar-success black-text" role="progressbar" style="width:{{progressValues[0].percentage}}%">
+							    {{progressValues[0].count}}
 							  </div>
 							</div>
 						</label>
@@ -57,14 +57,14 @@
 		<div class="row">
 			<div class="col-lg-8 col-md-8 col-sm-8">
 				<ul class="pagination pagination-sm">
-				  <li ng-repeat="count in total_questions| slice:sliceFactor*15:(sliceFactor+1)*15" ng-click="changeQuestion(count)"><a href="javascript:void(0);">{{count}}</a></li>
+				  <li ng-repeat="count in sliced_questions" ng-click="changeQuestion(count)"><a href="javascript:void(0);">{{count}}</a></li>
 				</ul>
 			</div>
-			<div class="col-lg-4 col-md-4 col-sm-4" ng-init="{{limit=total_questions.length/15|floor}}">
+			<div class="col-lg-4 col-md-4 col-sm-4">
 				<ul class="pagination pagination-sm">
-				   <li ng-if="sliceFactor>1"><a href="javascript:void(0)" ng-click="decreaseSlicing()">&laquo;</a></li>
-				   <li><a href="javascript:void(0)"><span id="previous">{{sliceFactor*15+1}}</span> of <span ng-if="sliceFactor<=limit-1" id="next">{{(sliceFactor+1)*15}}</span><span ng-if="sliceFactor+1>limit" id="next">{{total_questions.length}}</span></a></li>
-				   <li ng-if="sliceFactor+1<=limit"><a href="javascript:void(0)" ng-click="increaseSlicing()">&raquo;</a></li>
+				   <li ng-if="sliceFactor>0"><a href="javascript:void(0)" ng-click="decreaseSlicing()">&laquo;</a></li>
+				   <li><a href="javascript:void(0)"><span id="previous">{{sliceFactor*15+1}}</span> of <span ng-if="sliceFactor<=slicingLimit-1" id="next">{{(sliceFactor+1)*15}}</span><span ng-if="sliceFactor+1>slicingLimit" id="next">{{total_questions.length}}</span></a></li>
+				   <li ng-if="sliceFactor+1<=slicingLimit"><a href="javascript:void(0)" ng-click="increaseSlicing()">&raquo;</a></li>
 				</ul>
 				</div>
 			</div>
