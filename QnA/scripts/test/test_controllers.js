@@ -141,6 +141,7 @@ appmodule
                 }
                 $scope.progressValues = changeProgressValues($scope.progressValuesModel);
                 TestPreviewFactory.saveProgressValues($scope.selectedSection, $scope.progressValuesModel);
+                $scope.submitTest();
             }catch(err){}
         }, true);
         function sliceOutQuestions(){
@@ -179,12 +180,6 @@ appmodule
                 //     angular.element(document.querySelector('#sectionnames')).append('<option value='+sectionNames[i]+'>'+sectionNames[i]+'</option>');
                 // }
                 $scope.totalDuration = findTotalDuration($window.opener.data['quizStacks']);
-                $interval(function(){
-                    $scope.totalDuration -= 1;
-                    if($scope.totalDuration===0){
-                        alert('Time Over');
-                    }
-                },1000, $scope.totalDuration);
                 $scope.dataPresent = true;
             }else{
                 $scope.dataPresent = false;

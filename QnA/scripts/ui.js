@@ -1,4 +1,3 @@
-
 $(document).click(function (event) {
     var navbar = $(".navbar-collapse");               
     if (navbar.hasClass("in") === true && !$(event.target).hasClass("navbar-toggle")) {      
