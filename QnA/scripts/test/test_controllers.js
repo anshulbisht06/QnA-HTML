@@ -18,10 +18,11 @@ appmodule
                     $scope.progressValuesModel = {};
                     var questionsAdded = TestPreviewFactory.addQuestionsForSection(sectionName, response.questions);
                     for(var i=0;i<questionsAdded.length;i++){
-                        $scope.answersModel[questionsAdded[i][i+1].id] = { value:null, status:'NV'};
+                        $scope.answersModel[questionsAdded[i][i+1].id] = { value:null };
                         $scope.progressValuesModel[questionsAdded[i][i+1].id] = { status:'NV'};
                     }
                     TestPreviewFactory.saveSectionQuestion(sectionName, $scope.answersModel);
+                    TestPreviewFactory.saveProgressValues(sectionName, $scope.progressValuesModel);
                     $scope.changeQuestion(1);
                 },
                 function(response){
@@ -90,6 +91,7 @@ appmodule
             if($scope.progressValuesModel[$scope.currentQuestion.id].status==='NV'){
                 $scope.progressValuesModel[$scope.currentQuestion.id].status = 'NA';
                 $scope.progressValues = changeProgressValues($scope.progressValuesModel);
+                TestPreviewFactory.saveProgressValues($scope.selectedSection, $scope.progressValuesModel);
             }
         }
         $scope.saveAnswer = function(count, answerId){
@@ -138,6 +140,7 @@ appmodule
                     }   
                 }
                 $scope.progressValues = changeProgressValues($scope.progressValuesModel);
+                TestPreviewFactory.saveProgressValues($scope.selectedSection, $scope.progressValuesModel);
             }catch(err){}
         }, true);
         function sliceOutQuestions(){
@@ -187,7 +190,6 @@ appmodule
                 $scope.dataPresent = false;
             }
         }catch(e){
-            console.log(e);
             $scope.dataPresent = false;
         }
         $scope.$on('$locationChangeStart', function( event ) {

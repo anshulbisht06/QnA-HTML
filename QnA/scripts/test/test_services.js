@@ -15,6 +15,7 @@ appmodule
 
 	.service('TestPreviewFactory', ['$resource', function($resource) {
         var allQuestions = {}
+        var progressData = {}
         var data = {};
         this.getQuestionsBasedOnSection = function(quizid, sectionName){
             return $resource(baseURL+"stack/get/questions/"+quizid+"/", { sectionName: sectionName},
@@ -35,9 +36,11 @@ appmodule
         this.getQuestionsForASection = function(sectionName){
             return allQuestions[sectionName];
         }
-        // Show all questions answered with section name as key
-        this.showAllQuestionsAnswered = function(){
-            return data;
+        this.saveProgressValues = function(sectionName, data){
+            progressData[sectionName] = data;
+        }
+        this.getProgressValues = function(){
+            return progressData;
         }
         this.getAQuestion = function(sectionName, count){
             return allQuestions[sectionName][count-1][count];
@@ -51,6 +54,11 @@ appmodule
                 data[i].isSelected = false;
             }
            }
+        }
+        // Show all questions answered with section name as key
+        this.showAllQuestionsAnswered = function(){
+            data['progressValues'] = this.getProgressValues();
+            return data;
         }
 
         // Save section-wise questions
