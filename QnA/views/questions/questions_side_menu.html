@@ -9,8 +9,9 @@
 			  		</div>
 			  	</li>
 		</ul>
-		<div style='max-height: 650px;;overflow-y: auto;'> 
-		<hr>
+
+		<hr style="margin-top: 5%;">
+		<div style='max-height: 650px;margin-top: -4%;overflow-y: auto;'> 
 		<ul class="sidemenu" id="categoriesList" ng-if="categoryNotSelected">
 			<li ng-repeat="cat in allCategories" ng-click='selectCategory(cat.id, cat.category_name)' id="cat{{cat.id}}" data-toggle="tooltip" title="Go inside">
 				<span class="glyphicon glyphicon-menu-right pointer" style="margin-right: 5px;"></span>
@@ -18,9 +19,10 @@
 			</li>
 		</ul>
 		<h4 ng-if="!categoryNotSelected">
-			<span class="glyphicon glyphicon-menu-left" ng-click="deselectCategory()" data-toggle="tooltip" title="Go back"></span>
-			<span class="left"><b>{{selectedCategoryName|capitalize}}</b></span>
-			<br>
+			<div>
+			<button class="glyphicon glyphicon-menu-left btn" style="margin: 5px;" ng-click="deselectCategory()" data-toggle="tooltip" title="Go back"></button>
+			<span class="col-md-offset-1"><b>{{selectedCategoryName|capitalize}}</b></span>
+			</div>
 		</h4>
 		<ul class="sidemenu" id="subCategoriesList" ng-if="!unableToGetAllSubCategories">
 			<li ng-repeat="sc in allSubCategories" ng-click='loadQuestions("subcategory", sc.id)' id="sc{{sc.id}}">

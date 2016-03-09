@@ -99,7 +99,6 @@ appmodule
             function(response){
                 console.log(response)
             });
-
         }
         }
 
