@@ -1,0 +1,49 @@
+<div class="panel panel-info">	
+	<div class="row sidemenurow" style="margin:auto;">
+		<ul style="list-style-type: none;" class="sidemenu">
+				<li>
+				<button class="btn btn-primary" data-toggle="collapse" data-target="#demo"> Actions <span class="glyphicon glyphicon-menu-right"></span></button>
+					<div id="demo" class="collapse" style="margin-top: 10px;">
+						<button class="btn btn-info btn-sm" data-toggle="modal" data-target="#createCategoryModal" ng-if="categoryNotSelected" style="margin-bottom: 10px;">Add Sub-Cat</button>
+						<button class="btn btn-info btn-sm" style="margin-bottom: 10px;" data-toggle="modal" data-target="#createSubCategoryModal" ng-if="subCategoryNotSelected">Add Category</button>
+			  		</div>
+			  	</li>
+		</ul>
+		<div style='max-height: 650px;;overflow-y: auto;'> 
+		<hr>
+		<ul class="sidemenu" id="categoriesList" ng-if="categoryNotSelected">
+			<li ng-repeat="cat in allCategories" ng-click='selectCategory(cat.id, cat.category_name)' id="cat{{cat.id}}" data-toggle="tooltip" title="Go inside">
+				<span class="glyphicon glyphicon-menu-right pointer" style="margin-right: 5px;"></span>
+				<button class="btn">{{cat.category_name|capitalize}}</button>
+			</li>
+		</ul>
+		<h4 ng-if="!categoryNotSelected">
+			<span class="glyphicon glyphicon-menu-left" ng-click="deselectCategory()" data-toggle="tooltip" title="Go back"></span>
+			<span class="left"><b>{{selectedCategoryName|capitalize}}</b></span>
+			<br>
+		</h4>
+		<ul class="sidemenu" id="subCategoriesList" ng-if="!unableToGetAllSubCategories">
+			<li ng-repeat="sc in allSubCategories" ng-click='loadQuestions("subcategory", sc.id)' id="sc{{sc.id}}">
+				<span class="glyphicon glyphicon-certificate" style="margin-right: 5px;"></span>
+				<button class="btn">{{sc.sub_category_name|capitalize}}</button>
+			</li>
+		</ul>
+		<ul class="sidemenu" id="subCategoriesList" ng-if="allSubCategories.length===0">
+			<li>
+				<a href="javascript:void(0);">No sub-category present.</a>
+			</li>
+		</ul>
+		<ul class="sidemenu" id="subCategoriesList" ng-if="unableToGetAllSubCategories">
+			<li>
+				<a href="javascript:void(0);">Unable to get sub-catgories.</a>
+			</li>
+		</ul>
+		</div>
+	</div>
+</div>
+<script>
+function change_cat_id(cat_id){
+	console.log($(this).data("id"));
+	$('#sub_category_id').val(cat_id);
+}
+</script>

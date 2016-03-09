@@ -3,7 +3,7 @@
 	<div class="row" ng-show="dataPresent">
 		<div class="alert alert-info">
 		   	<strong>Time : {{ totalDuration | secondsToDateTime | date:'HH:mm:ss' }}</strong><button ng-click="show()">Just For Check</button>
-		  	<button class="btn btn-primary btn-md right" ng-click="openWarningModal('submitRequestInitiated')">Submit Test</button>
+		  	<button class="btn btn-primary btn-md right" ng-click="openWarningModal('submitTestRequestInitiated')">Submit Test</button>
 		</div>
 		<div class="row">
 			<div class="col-lg-4 col-md-4 col-sm-4">
@@ -11,7 +11,7 @@
 					<label for="sectionnames">Section Name</label>
 				</div>
 				<div class="col-lg-8 col-md-8 col-sm-8">
-					<select class="form-control" id="sectionnames" name="sectionnames" ng-model="selectedSection" ng-change="openWarningModal('sectionRequestInitiated')">
+					<select class="form-control" id="sectionnames" name="sectionnames" ng-model="selectedSection" ng-change="openWarningModal('sectionChangeRequestInitiated')">
 						<option value="" disabled>Select a section</option>
 				    	<option ng-repeat="section in sectionNames" value="{{ section }}">{{ section }}</option>
 					</select>
@@ -51,7 +51,7 @@
 				</div>				
 			</div>
 			<div class="col-lg-2 col-md-2 col-sm-2">
-				<button ng-if="!hideNextSectionButton" class="btn btn-info btn-md right" ng-click="openWarningModal('sectionRequestInitiated')">Next Section</button>
+				<button ng-if="!hideNextSectionButton" class="btn btn-info btn-md right" ng-click="openWarningModal('sectionChangeRequestInitiated')">Next Section</button>
 			</div>
 		</div>
 		<div class="row">
@@ -76,6 +76,11 @@
 			<div class="col-lg-6 col-md-6 col-sm-6">
 				<span ng-if="currentQuestion.que_type==='mcq'">{{currentQuestion.content}}</span>
 				<span ng-if="currentQuestion.que_type==='objective'">{{currentQuestion.content | insertBlank}}</span>
+				<br>
+				<br>
+				<div class="row question-image" ng-if="currentQuestion.figure">
+					<img src="{{serverURL}}{{currentQuestion.figure}}" class="img-thumbnail" alt="Question Image is unavailable" width="300" height="200">
+				</div>
 			</div>
 			<div class="col-lg-6 col-md-6 col-sm-6">
 				<div class="row" ng-if="currentOptions.length!=0" ng-repeat="option in currentOptions">
@@ -87,7 +92,7 @@
 				<div class="row" ng-if="currentOptions.length===0">
 					<div class = "input-group">
 				        <span class="input-group-addon"><b>Answer</b></span>
-				        <input type="text" class="form-control" placeholder = "Enter your answer here..." ng-model="answersModel[currentQuestion.id].value">
+				        <input type="text" class="form-control" placeholder="Enter your answer here..." ng-model="answersModel[currentQuestion.id].value">
 				    </div>
 				</div>
 			</div>

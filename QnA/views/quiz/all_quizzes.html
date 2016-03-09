@@ -1,3 +1,163 @@
+<div id="quizCreateModal" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+      	<button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Create Quiz</h4>
+      </div>
+      <div class="modal-body" id="quizCreateModalBody">
+        <div class="row">
+			<div class="col-lg-1 col-md-1 col-sm-10"></div>
+			<div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+				<form role="form" name="quizCreateForm" ng-submit="postQuiz()" novalidate>
+				  <div class="form-group" ng-class="{'has-error': errors.title || quizCreateForm.title.$touched && quizCreateForm.title.$error.required  }">
+				    <label for="title">Title <span class="red-text">*</span></label>
+				    <input type="text" maxlength="60" class="form-control" id="title" name="title" ng-model="createQuizForm.title" required>
+				    <br/>
+				    <span ng-if="errors.title" class="help-block">{{ errors.title[0] }}</span>
+				    <span ng-if="quizCreateForm.title.$touched && quizCreateForm.title.$error.required" class="help-block">Quiz title is required.</span>
+				  </div>		
+				  	 
+				  <div class="row">
+					<div class="col-lg-6 col-md-6 col-sm-6">
+					  <div class="checkbox">
+					    <label for="no_of_attempt">No. of Attempts</label>
+					    <select class="form-control" id="no_of_attempt" name="no_of_attempt" ng-model="createQuizForm.no_of_attempt">
+					      	<option value="1">1</option>
+					      	<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+					      	<option value="5">5</option>
+				      </select>
+					  </div>
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-6">
+					  <div class="form-group" ng-class="{'has-error': quizCreateForm.pass_mark.$touched && quizCreateForm.pass_mark.$error.required }">
+					    <label for="pass_mark">Passing marks <span class="red-text">*</span></label><br>
+					    <input type="number" name="pass_mark" max='90' min='10' id="pass_mark" class="form-control" ng-model="createQuizForm.pass_mark" required>
+					    <span ng-if="errors.pass_mark" class="help-block">{{ errors.pass_mark[0] }}</span>
+					    <span ng-if="quizCreateForm.pass_mark.$touched && quizCreateForm.pass_mark.$error.required" class="help-block">Passing marks is required.</span>
+					  </div>
+					</div>
+				  </div>
+
+				  <div class="row">
+					<div class="col-lg-6 col-md-6 col-sm-6">
+					  <div class="form-group">
+					  	<label for="success_text">Message if user passes</label>
+					    <textarea name="success_text" id="success_text" rows="2" class="form-control" ng-model="createQuizForm.success_text"></textarea>
+					  </div>
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-6">
+					  <div class="form-group">
+					  	<label for="fail_text">Message if user fails</label>
+					    <textarea name="fail_text" id="fail_text" rows="2" class="form-control" ng-model="createQuizForm.fail_text"></textarea>
+					  </div>
+					</div>
+				  </div>
+				  <div class="row">
+				  	<button type="submit" class="btn btn-primary btn-block" ng-disabled="quizCreateForm.$invalid">Create Quiz</button>
+				  </div>
+			</form>
+		</div>
+		<div class="col-lg-1 col-md-1 col-sm-1"></div>
+	</div>
+      </div>
+      <div class="modal-footer" id="quizCreateModalFooter">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="quizDeleteModal" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+      	<button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Delete Quiz</h4>
+      </div>
+      <div class="modal-body" id="quizDeleteModalBody">
+      	<div class="row" ng-if="quizToBeDeletedID && quizToBeDeletedTitle">
+      		<p><h4>Do you really want to delete quiz - <b>{{quizToBeDeletedTitle}}</b>?</h4></p>
+      	</div>
+      </div>
+      <div ng-if="quizToBeDeletedID && quizToBeDeletedTitle" class="modal-footer" id="quizDeleteModalFooter">
+  		<button type="button" class="btn btn-danger" ng-click="deleteQuiz('deleteQuizRequestAccepted', quizToBeDeletedID, quizToBeDeletedTitle)">Delete It</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="deleteQuiz('deleteQuizRequestCancelled', quizToBeDeletedID, quizToBeDeletedTitle)">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="quizUpdateModal" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+      	<button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Update Quiz</h4>
+      </div>
+      <div class="modal-body" id="quizUpdateModalBody">
+      	<div class="row" ng-if="quizToBeUpdated">
+			<div class="col-lg-1 col-md-1 col-sm-10"></div>
+			<div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+				<form role="form" name="quizUpdateForm" ng-submit="postQuiz()" novalidate>
+				  <div class="form-group" ng-class="{'has-error': errors.title || quizUpdateForm.title.$touched && quizUpdateForm.title.$error.required  }">
+				    <label for="title">Title <span class="red-text">*</span></label>
+				    <input type="text" maxlength="60" class="form-control" id="title" name="title" ng-model="updateQuizForm.title" value="" required>
+				    <br/>
+				    <span ng-if="errors.title" class="help-block">{{ errors.title[0] }}</span>
+				    <span ng-if="quizUpdateForm.title.$touched && quizUpdateForm.title.$error.required" class="help-block">Quiz title is required.</span>
+				  </div>		
+				  	 
+				  <div class="row">
+					<div class="col-lg-6 col-md-6 col-sm-6">
+					    <label for="no_of_attempt">No. of Attempts</label>
+					    <select class="form-control" id="no_of_attempt" name="no_of_attempt" ng-model="updateQuizForm.no_of_attempt">
+					      	<option value="1">1</option>
+					      	<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+					      	<option value="5">5</option>
+				      </select>
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-6">
+					  <div class="form-group" ng-class="{'has-error': quizUpdateForm.pass_mark.$touched && quizUpdateForm.pass_mark.$error.required }">
+					    <label for="pass_mark">Passing marks <span class="red-text">*</span></label><br>
+					    <input type="number" name="pass_mark" max='90' min='10' id="pass_mark" class="form-control" ng-model="updateQuizForm.pass_mark" required>
+					    <span ng-if="errors.pass_mark" class="help-block">{{ errors.pass_mark[0] }}</span>
+					    <span ng-if="quizUpdateForm.pass_mark.$touched && quizUpdateForm.pass_mark.$error.required" class="help-block">Passing marks is required.</span>
+					  </div>
+					</div>
+				  </div>
+
+				  <div class="row">
+					<div class="col-lg-6 col-md-6 col-sm-6">
+					  <div class="form-group">
+					  	<label for="success_text">Message if user passes</label>
+					    <textarea name="success_text" id="success_text" rows="2" class="form-control" ng-model="updateQuizForm.success_text"></textarea>
+					  </div>
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-6">
+					  <div class="form-group">
+					  	<label for="fail_text">Message if user fails</label>
+					    <textarea name="fail_text" id="fail_text" rows="2" class="form-control" ng-model="updateQuizForm.fail_text"></textarea>
+					  </div>
+					</div>
+				  </div>
+			</form>
+		</div>
+		<div class="col-lg-1 col-md-1 col-sm-1"></div>
+	</div>
+      </div>
+      <div ng-if="quizToBeUpdated" class="modal-footer" id="quizUpdateModalFooter">
+  		<button type="button" class="btn btn-success" ng-click="putQuiz('updateQuizRequestAccepted', quizToBeUpdated)">Update</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="putQuiz('updateQuizRequestCancelled', quizToBeUpdated)">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container-fluid">
 <div ng-include src="'views/alert_msg.html'"></div>
 <div class="jumbotron" ng-controller="CreateCategoryController">    
@@ -7,7 +167,7 @@
 	    		<h4 class="text-center"> Total Quiz: {{allQuiz.length}} </h4>
 	    	</div>
 	    	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-	    		<a ui-sref="app.create-quiz" class="btn btn-primary right"><span class="glyphicon glyphicon-plus"></span>&nbsp;AddQuiz</a>
+	    	<button type="button" class="btn btn-primary btn-lg right" data-toggle="modal" data-target="#quizCreateModal"><span class="glyphicon glyphicon-plus"></span>&nbsp;Add Quiz</button>
 			</div>
 		</div>
 	</div><hr>
@@ -19,7 +179,7 @@
 		 ng-disabled="curPage >= allQuiz.length/pageSize - 1"
 		 ng-click="curPage = curPage+1">NEXT </button>
 	</div> -->
-	<div class="row">
+	<div class="row" ng-if="allQuiz.length!=0">
 		<div class="col-lg-2 col-md-2 col-sm-2"></div>
 		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
 			<div class="col-lg-4 col-md-4 col-sm-4" ng-repeat='quiz in allQuiz | pagination: curPage * pageSize | limitTo: pageSize'>
@@ -29,15 +189,15 @@
 						  <span data-toggle="dropdown" class="glyphicon glyphicon-option-vertical pointer"></span>
 						  <ul class="dropdown-menu">
 						    <li><a ui-sref="app.view-quiz({quizid : '{{ quiz.id }}' })">View added stacks</a></li>
-						    <li><a ui-sref="app.update-quiz({quizid : '{{ quiz.id }}' })">Update details</a></li>
+						    <li><a href="javascript:void(0)" ng-click="putQuiz('updateQuizRequestInitiated', quiz)">Update details</a></li>
+						    <li><a href="javascript:void(0)" ng-click="deleteQuiz('deleteQuizRequestInitiated', quiz.id, quiz.title)">Delete Quiz</a></li>
 						    <!-- <li><a href="" ng-click="getCategories(quiz.id, quiz.title)">View Categories</a></li> -->
 						  </ul>
 						</div>
 			      </div>
 			      <div class="panel-body">
 			      	<div class="row text-center">
-						<h5 class="help-block">Questions: {{quiz.max_questions}}</h5>
-						<h5 class="help-block">URL: {{quiz.url}}</h5>
+						<h5 class="help-block">Key: {{quiz.quiz_key}}</h5>
 						<h5 class="help-block">Passing Marks: {{quiz.pass_mark}}</h5>
 					</div>
 					<div class="row">
@@ -51,7 +211,11 @@
 		</div>
 		<div class="col-lg-2 col-md-2 col-sm-2"></div>
 	</div>
-	<div class="col-md-12" ng-show="allQuiz.length > 5" style='text-align:center;margin:1%;'>
+	<div class="row text-center" ng-if="allQuiz.length===0">
+		<h4><b>No quiz created so far.</b></h4>
+	</div>
+	<div class="col-md-12" ng-if="allQuiz.length>5" style='text-align:center;margin:1%;'>
+
 		  <button type="button" class='btn btn-primary' ng-disabled="curPage == 0"
 		 ng-click="curPage=curPage-1">PREV</button>
 		 <span>Page {{curPage + 1}} of {{ numberOfPages() }}</span>

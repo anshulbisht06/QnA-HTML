@@ -33,10 +33,18 @@ appmodule
                     { stripTrailingSlashes: false }
                     );
         }
-        this.updateQuiz = function(userid, questionid){
-            return $resource(baseURL+"quiz/update/"+userid+"/"+questionid+"/", null,
+        this.updateQuiz = function(userid, quizid){
+            return $resource(baseURL+"quiz/update/"+userid+"/"+quizid+"/", null,
                     {'update':   
                     { method:'PUT'/*, headers: {'Authorization': 'JWT ' + token}*/} 
+                    },
+                    { stripTrailingSlashes: false }
+                    );
+        }
+        this.deleteQuiz = function(userid, quizid){
+            return $resource(baseURL+"quiz/delete/"+userid+"/"+quizid+"/", null,
+                    {'delete':   
+                    { method:'DELETE'/*, headers: {'Authorization': 'JWT ' + token}*/} 
                     },
                     { stripTrailingSlashes: false }
                     );

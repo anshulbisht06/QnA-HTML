@@ -3,17 +3,21 @@
 appmodule
 	.controller('QuestionsController', ['$scope', '$controller', '$state', '$http', 'QuestionsFactory','CategoryFactory', 'SubCategoryFactory', function($scope, $controller, $state, $http, QuestionsFactory, CategoryFactory, SubCategoryFactory)  {
         $controller('CookiesController', {$scope : $scope});
+        $scope.categoryNotSelected = true;
+        $scope.subCategoryNotSelected = true;
+        $scope.createCategoryform = { category_name: "", user: $scope.user };
+        $scope.createSubCategoryform = { sub_category_name : "", category : $scope.selectedCategoryId, user : $scope.user };
 
-        QuestionsFactory.getAllQuestions($scope.user).query(
-            function(response) {
-                $scope.questions = response;
-                if($scope.questions){
-                $scope.questionsLevelInfo = $scope.questions.questions_level_info;
-                }
-            },
-            function(response) {
-                $scope.errors = response.data;
-            });
+        // QuestionsFactory.getAllQuestions($scope.user).query(
+        //     function(response) {
+        //         $scope.questions = response;
+        //         if($scope.questions){
+        //         $scope.questionsLevelInfo = $scope.questions.questions_level_info;
+        //         }
+        //     },
+        //     function(response) {
+        //         $scope.errors = response.data;
+        //     });
 
         $scope.tab = 1;
         $scope.filterLevel = false;
@@ -85,9 +89,9 @@ appmodule
             $scope.errors = "Unable to get your categories.";
         });
 
-        $scope.SubCategoryQue = function(sub_category_id) { 
-            console.log(sub_category_id);
-            SubCategoryFactory.getQuestionUnderSubCategory($scope.user,sub_category_id,false).query(
+        $scope.loadQuestions = function(choice, id) { 
+            if(choice === 'subcategory'){
+            SubCategoryFactory.getQuestionUnderSubCategory($scope.user, id,false).query(
             function(response){
                 $scope.questions = response;
                 $scope.questionsLevelInfo = $scope.questions.questions_level_info;
@@ -95,22 +99,33 @@ appmodule
             function(response){
                 console.log(response)
             });
+
+        }
         }
 
-        $scope.categorySelected = function(selectedCategoryId){
-            // $scope.quizNotSelected = false;
-            // $scope.categoryNotSelected = false;
-
+        $scope.selectCategory = function(selectedCategoryId, selectedCategoryName){
+            $scope.categoryNotSelected = false;
+            $scope.createSubCategoryform = { sub_category_name : "", category : selectedCategoryId, user : $scope.user };
             $scope.selectedCategoryId = selectedCategoryId;
-            // $scope.selectedCategoryName = selectedCategoryName;
-            // $scope.subcategoryNotSelected = true;
-            // $scope.subcategorieslist = selectedSubCategories;
+
+            $scope.mainSubcategories = $scope.allSubCategories;
+            $scope.selectedCategoryName  = selectedCategoryName;
+            SubCategoryFactory.getAllSubcategories($scope.user, selectedCategoryId, false).query(
+                function(response){
+                    $scope.allSubCategories = response;
+                },
+                function(response){
+                    $scope.unableToGetAllSubCategories = true;
+                });
         }
 
-        $scope.categoryDeselected = function(){
-            $scope.quizNotSelected = false;
+        $scope.deselectCategory = function(){
             $scope.categoryNotSelected = true;
-            delete $scope.subcategorieslist;
+            delete $scope.selectedCategoryId;
+            delete $scope.selectedCategoryName;
+            $scope.allSubCategories = $scope.mainSubcategories;
+            delete $scope.mainSubcategories;
+            $scope.createSubCategoryform = { sub_category_name : "", category : "", user : $scope.user };
         }
 
         $scope.filterQuiz = function(quizid){
@@ -128,7 +143,7 @@ appmodule
             });
         }
         
-        SubCategoryFactory.getAllSubcategories($scope.user, "all").query(
+        SubCategoryFactory.getAllSubcategories($scope.user, "all", false).query(
         function(response){
             $scope.allSubCategories = response;
         },
@@ -143,31 +158,31 @@ appmodule
                 function(response){
                     $scope.isFormInvalid = false;
                     $scope.alertType = "success";
-                    $scope.isCategoryCreated = true;
                     $scope.alertMsg = "Your category named " + $scope.createCategoryform.category_name + " has been created. Now please create a sub-category of it.";
-                    $scope.allCategories.push({'id':response.id, 'category_name':response.category_name, 'user':$scope.user});                        
-                    $scope.$apply();
-                    // $state.go('app.questions', {obj:{'categoryid':response.id, 'categoryname':response.category}});
+                    $scope.allCategories.push({ 'id':response.id, 'category_name':response.category_name });                        
+                    // $scope.$apply();
+                    angular.element(document.querySelector('#createCategoryModal')).modal('hide');
+                    $scope.createCategoryform = { category_name : "", user : $scope.user };
                 },
                 function(response) {
                     $scope.isFormInvalid = true;
                     $scope.alertType = "danger";
-                    $scope.isCategoryCreated = false;
-                    $scope.alertMsg = "Unable to create the category - " + $scope.createCategoryform.category_name + ". See below error.";
-                    $scope.errors = response.data;
-                    $scope.createCategoryform = {category_name : "", quiz : [$scope._id]};
+
+                    $scope.alertMsg = "Unable to create the category - " + $scope.createCategoryform.category_name;
+                    alert(response.data);
                 });
         }
 
-        $scope.createSubCategoryform = { sub_category_name : "", category : $scope.selectedCategoryId, user : $scope.user };
-        $scope.postSubCategory = function() {
-            
+        $scope.postSubCategory = function() {    
             var response = SubCategoryFactory.createSubCategory().save($scope.createSubCategoryform).$promise.then(
                 function(response){
                     $scope.alertType = "success";
-                    $scope.alertMsg = "Your sub-category named " + $scope.createSubCategoryform.sub_category_name + " has been created."; 
-                    // $scope.createSubCategoryform.sub_category_name = '';
-                    $state.go('app.questions');  
+                    $scope.alertMsg = "Your sub-category named " + $scope.createSubCategoryform.sub_category_name + " has been created.";
+                    $scope.allSubCategories.push({ 'id':response.id, 'sub_category_name':response.sub_category_name });                        
+                    // $scope.$apply();
+                    angular.element(document.querySelector('#createSubCategoryModal')).modal('hide');
+                    $scope.createSubCategoryform = { sub_category_name : "", category : "", user : $scope.user };
+                    // $state.go('app.questions');  
                 },
                 function(response) {
                     $scope.alertType = "danger";
@@ -224,7 +239,7 @@ appmodule
     .controller('CreateQuestionController', ['$scope', '$controller', '$state', '$http', 'QuizFactory', 'CategoryFactory', 'SubCategoryFactory', 'QuestionsFactory', 'Upload', function($scope, $controller, $state, $http, QuizFactory, CategoryFactory, SubCategoryFactory, QuestionsFactory, Upload) {
         $controller('CookiesController', {$scope : $scope});
         if($scope.user){
-        SubCategoryFactory.getAllSubcategories($scope.user, 'all').query(
+        SubCategoryFactory.getAllSubcategories($scope.user, 'all', true).query(
             function(response) {
                 $scope.subCategories = response;
             },
@@ -234,7 +249,7 @@ appmodule
             });
         }
         $scope.upload = function(postUrl, data, figure){
-            $('#progressBarModal').modal('show');
+            // $('#progressBarModal').modal('show');
             $scope.error = false;
             Upload.upload({
                     url: baseURL+postUrl,
@@ -245,9 +260,10 @@ appmodule
                 }, function (response) {
                     $scope.error = true;
                 }, function(event) {
-                    var percentage = parseInt(100.0 * event.loaded / event.total).toString();
-                    $('#progress-bar').css('width', percentage+'%');
-                    $('#percentage').html(percentage);
+                    // var percentage = parseInt(100.0 * event.loaded / event.total).toString();
+                    // $('#progress-bar').css('width', percentage+'%');
+                    // $('#percentage').html(percentage);
+                    alert('Question created succesfully!');
                 });
         }
         $scope.changeImage = function(){
@@ -332,6 +348,7 @@ appmodule
 
     .controller('UpdateQuestionController', ['$scope', '$controller', '$state', '$stateParams', 'QuestionsFactory', 'Upload', function($scope, $controller, $state, $stateParams, QuestionsFactory, Upload) {
         $controller('CookiesController', {$scope : $scope});
+        $scope.serverURL = 'http://localhost:8000';
         $scope.que_type = $stateParams.questionParams.split(':')[1];
 
         QuestionsFactory.getQuestion($scope.user, $stateParams.questionParams.split(':')[0]).get()
@@ -347,20 +364,16 @@ appmodule
                 }
             );
         $scope.upload = function(postUrl, data){
-            $('#progressBarModal').modal('show');
             $scope.error = false;
             Upload.upload({
                     url: baseURL+postUrl,
                     method : 'PUT',
                     data: { data: data },
-                    // headers: {'Authorization': 'JWT ' + $cookies.get('token')},
                 }).then(function(response) {
                 }, function (response) {
                     $scope.error = true;
                 }, function(event) {
-                    var percentage = parseInt(100.0 * event.loaded / event.total).toString();
-                    $('#progress-bar').css('width', percentage+'%');
-                    $('#percentage').html(percentage);
+                    alert('Question created succesfully!');
                 });
         }
 
