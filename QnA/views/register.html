@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid" ng-cloak>
 <div class="jumbotron">
     <div class="row" style="margin-top: -30px;">
     </div>
@@ -14,7 +14,7 @@
 			      <input type="text" class="form-control input-lg" name="first_name" id="first_name" ng-minlength="4"  ng-model="registerUserForm.first_name" placeholder="Name" required>
 			      <span ng-show="isFormInvalid" class="help-block">{{ errors.first_name[0] }}</span>
 			      <span ng-show="userRegisterForm.first_name.$touched && userRegisterForm.first_name.$error.required" class="help-block">Name is required.</span>
-			      <span ng-show="userRegisterForm.first_name.$touched && userRegisterForm.first_name.$error.minlength" class="help-block">Name must be least 8 characters long.</span>
+			      <span ng-show="userRegisterForm.first_name.$touched && userRegisterForm.first_name.$error.minlength" class="help-block">Name must be least 4 characters long.</span>
 				</div><br>
 			    <div class="form-group" ng-class="{'has-error': errors.username[0] || userRegisterForm.username.$touched && userRegisterForm.username.$error.required || userRegisterForm.username.$touched && userRegisterForm.username.$error.minlength }">
 			      	<input type="text" class="form-control input-lg" name="username" id="username" ng-model="registerUserForm.username" placeholder="Username" ng-minlength="4" required>

@@ -9,11 +9,11 @@ appmodule
         }
     }])
 
-    .controller('IndexController', ['$scope', '$rootScope', '$cookies', '$controller', function($scope, $rootScope, $cookies, $controller) {
+    .controller('IndexController', ['$scope', '$rootScope', '$controller', function($scope, $rootScope, $controller) {
         $controller('CookiesController', {$scope : $scope});
     }])
 
-    .controller('LogoutController', ['$scope', '$http', '$state','$cookies', 'baseURL', function($scope, $http, $state, $cookies, baseURL) {
+    .controller('LogoutController', ['$scope', '$http', '$state','$cookies', function($scope, $http, $state, $cookies) {
         var config = {
                 headers : {
                     'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;',
@@ -47,7 +47,6 @@ appmodule
                 function(response) {
                     $scope.isFormInvalid = true;
                     $scope.errors = response.data;
-                    console.log($scope.errors);
                 });
         }
     }])     

@@ -15,7 +15,8 @@ appmodule.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
                         templateUrl : 'views/test/test_preview.html'
                     },
                     'footer@': ''
-                }
+                },
+				params: {obj: null},
                 })
 
 			.state('app.test-login', {
@@ -30,7 +31,8 @@ appmodule.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 						templateUrl : 'views/test/user_data_form.html'
 					},
 					'footer@': ''
-				}
+				},
+				params: {obj: null},
 				})
 		// $locationProvider.html5Mode(true);
 		$urlRouterProvider.otherwise('/');

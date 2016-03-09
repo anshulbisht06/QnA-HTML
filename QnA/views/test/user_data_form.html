@@ -12,13 +12,13 @@
 					<span ng-show="isFormInvalid" style='color:red;'>{{ errors }}</span>				  	  
 				</div>
 			    <div class="form-group" ng-class="{ 'has-error' : loginForm.name.$touched && loginForm.name.$error.required || isFormInvalid }">
-			      <input type="text" class="form-control input-lg" name="name" ng-model="data.name" placeholder="User Name" required>
-				  	<span ng-show="loginForm.name.$touched && loginForm.name.$error.required">User Name is required.</span>
+			      <input type="text" class="form-control input-lg" name="name" ng-model="data.name" placeholder="Username" required>
+				  	<span ng-show="loginForm.name.$touched && loginForm.name.$error.required">Username is required.</span>
 				</div>
 			    
 			    <div class="form-group" ng-class="{ 'has-error' : loginForm.email.$touched && loginForm.email.$error.required || isFormInvalid }">
 			        <input type="email" name='email' ng-model="data.email" class="form-control input-lg" placeholder="Email" required>
-					<span ng-show="loginForm.email.$touched && loginForm.email.$error.required">User Name is required.</span>
+					<span ng-show="loginForm.email.$touched && loginForm.email.$error.required">Email is required.</span>
 			    </div>
 			    <div class="form-group">
 			        <button class="btn btn-primary btn-lg btn-block" ng-disabled='loginForm.$invalid'>Submit</button>

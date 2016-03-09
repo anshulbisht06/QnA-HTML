@@ -22,6 +22,20 @@ appmodule
             { stripTrailingSlashes: false }
             )
         };
+
+        this.getQuestionUnderSubCategory = function(userId, subCategoryId, questionFormat){
+                return $resource(baseURL+"quiz/questions/get/"+userId+"/subcategory/"+subCategoryId+'/', 
+                    { 'questionFormat': false, 'subCategoryId' : subCategoryId},
+                {
+                    query: {
+                    method : 'GET',
+                    // isArray : true,
+                    }
+                },
+                { stripTrailingSlashes: false }
+                );
+        };
+
     }]);
 
 

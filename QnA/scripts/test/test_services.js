@@ -1,22 +1,21 @@
 /* global $ */
 
 appmodule
-.constant('baseURL',baseURL)
-.service('testUserDataFactory', ['$resource', 'baseURL', function($resource, baseURL) {
+	.service('testUserDataFactory', ['$resource', function($resource) {
 		this.saveTestUser = function(){
-            return $resource(baseURL+"user/data/", null,
-                    {'save':   
-                    { method:'POST', 
-                    } 
-                    },
-                    { stripTrailingSlashes: false }
-                    );
-        };
-        
-    }])
+	        return $resource(baseURL+"user/data/", null,
+	                {'save':   
+	                { method:'POST', 
+	                } 
+	                },
+	                { stripTrailingSlashes: false }
+	                );
+	    };	    
+	}])
 
 	.service('TestPreviewFactory', ['$resource', function($resource) {
         var allQuestions = {}
+        var data = {};
         this.getQuestionsBasedOnSection = function(quizid, sectionName){
             return $resource(baseURL+"stack/get/questions/"+quizid+"/", { sectionName: sectionName},
                 {
@@ -36,8 +35,9 @@ appmodule
         this.getQuestionsForASection = function(sectionName){
             return allQuestions[sectionName];
         }
-        this.showAllQuestionsAdded = function(){
-            return allQuestions;
+        // Show all questions answered with section name as key
+        this.showAllQuestionsAnswered = function(){
+            return data;
         }
         this.getAQuestion = function(sectionName, count){
             return allQuestions[sectionName][count-1][count];
@@ -51,5 +51,30 @@ appmodule
                 data[i].isSelected = false;
             }
            }
+        }
+
+        // Save section-wise questions
+        this.saveSectionQuestion = function(sectionName, answers){
+            console.log(sectionName);
+            data[sectionName] = answers;
+        }
+
+        this.addQuizData = function(quizid){
+            data['quiz'] = quizid;
+        }
+
+        // Send the answers to server on normal submission
+        this.postTest = function(testUser){
+            return $resource(baseURL+"save/test/", { 'test_user': testUser},
+                {'save':   
+                { method:'POST', 
+                } 
+                },
+                { stripTrailingSlashes: false }
+                );
+        };  
+
+        this.getAQuestion = function(sectionName, count){
+            return allQuestions[sectionName][count-1][count];
         }
         }]);

@@ -1,7 +1,7 @@
 /* global $ */
 
 appmodule
-	.controller('CreateCategoryController', ['$scope','$state', '$controller', '$cookies', 'CategoryFactory', 'QuizFactory','$stateParams', function($scope, $state, $controller, $cookies, CategoryFactory, QuizFactory, $stateParams) {
+	.controller('CreateCategoryController', ['$scope','$state', '$controller', 'CategoryFactory', 'QuizFactory','$stateParams', function($scope, $state, $controller, CategoryFactory, QuizFactory, $stateParams) {
         $controller('CookiesController', {$scope : $scope});
         if($scope.user){
             QuizFactory.getAllQuiz($scope.user, "all").query(
@@ -24,12 +24,12 @@ appmodule
             $scope.alertType = "info";
             $scope.isCategoryCreated = false;
             $scope.alertMsg = "Please select or create a category first";
-            $scope.createCategoryform = {category_name : "", quiz : $scope._id};
+            $scope.createCategoryform = {category_name : "","user":$scope.user, quiz : $scope._id};
         }else{
-            $scope.createCategoryform = {category_name : "", quiz : ""};
+            $scope.createCategoryform = {category_name : "","user":$scope.user};
         }
 
-        $scope.postCategory = function() { 
+        $scope.postCategory_ = function() { 
             CategoryFactory.createCategory().save($scope.createCategoryform).$promise.then(
                 function(response){
                     $scope.isFormInvalid = false;
@@ -37,8 +37,8 @@ appmodule
                     $scope.isCategoryCreated = true;
                     $scope.alertMsg = "Your category named " + $scope.createCategoryform.category + " has been created. Now please create a sub-category of it.";
                     $scope.createCategoryform = {category_name:""};
-                    $scope.categoryCreateForm.$setPristine();
-                    $state.go('app.create-subcategory', {obj:{'categoryid':response.id, 'categoryname':response.category}});                     
+                    // $scope.createCategoryform.$setPristine();
+                    $state.go('app.questions', {obj:{'categoryid':response.id, 'categoryname':response.category}});                     
                 },
                 function(response) {
                     $scope.isFormInvalid = true;

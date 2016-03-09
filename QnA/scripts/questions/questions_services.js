@@ -59,7 +59,6 @@ appmodule
                 return $resource(baseURL+"quiz/questions/get/"+userId+"/", { 'questionFormat': questionFormat, 'subCategoryId' : subCategoryId},
                 {
                     query: {
-                    // headers: {'Authorization': 'JWT ' + token},
                     method : 'GET',
                     isArray : true,
                     }
