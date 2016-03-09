@@ -89,25 +89,28 @@ appmodule
             $scope.errors = "Unable to get your categories.";
         });
 
-        $scope.loadQuestions = function(choice, sub_category_id) { 
+        $scope.loadQuestions = function(choice, id) { 
             if(choice === 'subcategory'){
-            SubCategoryFactory.getQuestionUnderSubCategory($scope.user,sub_category_id,false).query(
-                function(response){
-                    $scope.questions = response;
-                },
-                function(response){
-                    console.log(response)
-                });
-            }
+            SubCategoryFactory.getQuestionUnderSubCategory($scope.user, id,false).query(
+            function(response){
+                $scope.questions = response;
+                $scope.questionsLevelInfo = $scope.questions.questions_level_info;
+            },
+            function(response){
+                console.log(response)
+            });
+
+        }
         }
 
         $scope.selectCategory = function(selectedCategoryId, selectedCategoryName){
             $scope.categoryNotSelected = false;
             $scope.createSubCategoryform = { sub_category_name : "", category : selectedCategoryId, user : $scope.user };
             $scope.selectedCategoryId = selectedCategoryId;
+
             $scope.mainSubcategories = $scope.allSubCategories;
             $scope.selectedCategoryName  = selectedCategoryName;
-            SubCategoryFactory.getAllSubcategories($scope.user, selectedCategoryId).query(
+            SubCategoryFactory.getAllSubcategories($scope.user, selectedCategoryId, false).query(
                 function(response){
                     $scope.allSubCategories = response;
                 },
@@ -149,7 +152,7 @@ appmodule
             $scope.errors = "Unable to get your SubCategories.";
         });
 
-        
+        $scope.createCategoryform = {category_name : "",user : $scope.user};
         $scope.postCategory = function() { 
             CategoryFactory.createCategory().save($scope.createCategoryform).$promise.then(
                 function(response){
@@ -164,6 +167,7 @@ appmodule
                 function(response) {
                     $scope.isFormInvalid = true;
                     $scope.alertType = "danger";
+
                     $scope.alertMsg = "Unable to create the category - " + $scope.createCategoryform.category_name;
                     alert(response.data);
                 });
@@ -360,20 +364,15 @@ appmodule
                 }
             );
         $scope.upload = function(postUrl, data){
-            // $('#progressBarModal').modal('show');
             $scope.error = false;
             Upload.upload({
                     url: baseURL+postUrl,
                     method : 'PUT',
                     data: { data: data },
-                    // headers: {'Authorization': 'JWT ' + $cookies.get('token')},
                 }).then(function(response) {
                 }, function (response) {
                     $scope.error = true;
                 }, function(event) {
-                    // var percentage = parseInt(100.0 * event.loaded / event.total).toString();
-                    // $('#progress-bar').css('width', percentage+'%');
-                    // $('#percentage').html(percentage);
                     alert('Question created succesfully!');
                 });
         }

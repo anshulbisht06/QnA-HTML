@@ -12,12 +12,15 @@
 		</div>
 	</div>
 	<div class="row">
-		<h2 class="text-center hidden-xs">Your questions</h2>
-		<h4 class="text-center visible-xs">Your questions</h4>
+		<h2 class="text-center hidden-xs">Your Questions</h2>
+		<h4 class="text-center visible-xs">Your Questions</h4>
 	</div>
 	<div class="row">
 		<div class="col-lg-1 col-md-1 col-sm-1"></div>		
 		<div class="col-lg-3 col-md-3 col-sm-3">
+			<div ng-include src="'views/modals/create_category.html'"></div>
+			<div ng-include src="'views/modals/create_subcategory_modal.html'"></div>
+
 			<div ng-include src="'views/questions/questions_side_menu.html'"></div>
 		</div>
  		<div class="col-lg-7 col-md-7 col-sm-7">
@@ -31,8 +34,7 @@
 			</div>
 			<hr>
 			<div class="row">
-			{{questions}}
-				  <!-- <ul class="list-group">
+				  <ul class="list-group">
 				  	<li class="list-group-item" ng-if="questions.questions" ng-mouseenter="hoverOnQuestion(question.id)" ng-mouseleave="hoverOutQuestion(question.id)" ng-repeat="question in questions.questions | filter:filterLevel:true" id="Q{{question.id}}">
 				  		<p>
 					  	<div class="row">
@@ -72,14 +74,18 @@
 					  	</div>
 					  	</p>
 				  </li>
-				  </ul> -->
+				  </ul>
 			</div>
-			<div class="row text-center" ng-if="!questions">
-				<h3>No questions available. First select a sub-category.</h3>
+			<div class="row text-center" ng-if="!questions.questions.length > 0">
+				<h3>__ <span style="color:red;">:(</span> ______ <span style="color:red;">Question(s) Not Available.</span> _______ <span style="color:red;">:(</span> __
+					<br>
+					<br>
+					<span style="color:green;">Create Some Question(s) First.</span>	
+				</h3>
 			</div>
 		</div> 
 	</div>
-	<!-- <div id="renameModal" class="modal fade" role="dialog">
+	<div id="renameModal" class="modal fade" role="dialog">
 	  <div class="modal-dialog">
 	    <div class="modal-content">
 	      <div class="modal-header">
@@ -103,6 +109,6 @@
 	      </div>
 	    </div>
 	  </div>
-	</div> -->
+	</div>
 	</div>
 </div>
