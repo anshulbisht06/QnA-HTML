@@ -11,8 +11,8 @@ appmodule
                     );
         };
 
-        this.getAllSubcategories = function(userid, categoryid){
-        return $resource(baseURL+"quiz/subcategory/get/"+userid+"/"+categoryid+"/", null,
+        this.getAllSubcategories = function(user_id, category_id, all_subcategories){
+        return $resource(baseURL+"quiz/subcategory/get/"+user_id+"/"+category_id+"/", { all_subcategories: all_subcategories },
             {
                 query: {
                 method : 'GET',

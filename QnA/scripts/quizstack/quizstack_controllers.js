@@ -4,7 +4,7 @@ appmodule
 	.controller('AddQuizStackController', ['$scope', '$window', '$state', '$controller', '$stateParams', '$compile', 'QuizFactory', 'QuizStackFactory', 'SubCategoryFactory', 'QuestionsFactory', function($scope, $window, $state, $controller, $stateParams, $compile, QuizFactory, QuizStackFactory, SubCategoryFactory, QuestionsFactory) {
             $controller('CookiesController', {$scope : $scope});
             var total_duration = 0;
-            SubCategoryFactory.getAllSubcategories($scope.user, 'all').query(
+            SubCategoryFactory.getAllSubcategories($scope.user, 'all', true).query(
             function(response) {
                 $scope.subCategories = response;
             },

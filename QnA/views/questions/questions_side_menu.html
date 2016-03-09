@@ -1,5 +1,5 @@
 <div class="panel panel-info">	
-	<div class="row sidemenurow" style="margin:auto;">
+	<div class="row" style="margin:auto;">
 		<ul style="list-style-type: none;" class="sidemenu">
 				<li>
 				<button class="btn btn-primary" data-toggle="collapse" data-target="#demo"> Actions <span class="glyphicon glyphicon-menu-right"></span></button>
@@ -10,8 +10,9 @@
 			  	</li>
 		</ul>
 
-		<hr style="margin-top: 5%;">
-		<div style='max-height: 650px;margin-top: -4%;overflow-y: auto;'> 
+		<hr <hr style="margin-top: 5%">
+		<div style='max-height: 750px;;overflow-y: auto;'> 
+		
 		<ul class="sidemenu" id="categoriesList" ng-if="categoryNotSelected">
 			<li ng-repeat="cat in allCategories" ng-click='selectCategory(cat.id, cat.category_name)' id="cat{{cat.id}}" data-toggle="tooltip" title="Go inside">
 				<span class="glyphicon glyphicon-menu-right pointer" style="margin-right: 5px;"></span>
