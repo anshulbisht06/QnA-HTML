@@ -1,75 +1,24 @@
 
 <div class="panel panel-info">
 	
-	<!-- {{allSubCategories}} -->
-	<div class="row sidemenurow" style="margin:auto;">
-		<a href="javascript:void(0);" style='float:right' class="btn btn-info btn-lg" data-toggle="modal" data-target="#create_cat">Add Category</a>
-		
-		<!-- Modal -->
-	
-		<div id="create_cat" class="modal fade" role="dialog">
-		  <div class="modal-dialog">
-
-		    <!-- Modal content-->
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <button type="button" class="close" data-dismiss="modal">&times;</button>
-		        <h4 class="modal-title">Create Category</h4>
-		      </div>
-  				<form role="form" name="categoryCreateForm" ng-submit="postCategory()" novalidate>
-					<div class="col-lg-6 col-md-6 col-sm-6">
-						  <div class="form-group" ng-class="{'has-error': isFormInvalid || categoryCreateForm.category.$touched && categoryCreateForm.category.$error.required}">
-						  	<label for="category">Name of category</label>
-						    <input type="text" maxlength="250" class="form-control" id="category" name="category" ng-model="createCategoryform.category_name" required>
-						    <span ng-if="errors.category" class="help-block">{{ errors.category[0] }}</span>
-				    		<span ng-if="categoryCreateForm.category.$touched && categoryCreateForm.category.$error.required" class="help-block">Category name is required.</span>
-						  </div>
-						  <button type="submit" class="btn btn-primary btn-md" ng-disabled="categoryCreateForm.$invalid">Create</button>
-					</div>
-					<div class="col-lg-2 col-md-2 col-sm-2"></div>
-				</form>
-		      <div class="modal-footer">
-		      </div>
-		    </div>
-		  </div>
-		</div>
-		<!--  Modal end here -->
-		<!-- CreateCategoryController ends here -->
-		
-		<!-- CreateSubCategoryController controller start  here -->
-		<a href="javascript:void(0);" class="btn btn-info btn-lg" data-toggle="modal" data-target="#create_sub_cat">Add Sub-Cat</a>
-		<div id="create_sub_cat" class="modal fade" role="dialog">
-		  <div class="modal-dialog">
-		    <!-- Modal content-->
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <button type="button" ng-click='categorySelected()' class="close" data-dismiss="modal">&times;</button>
-		        <h4 class="modal-title">Create SubCategory</h4>
-		      </div>
-  				<form role="form" name="subcategoryCreateForm" ng-submit="postSubCategory()" novalidate>
-					<div class="col-lg-6 col-md-6 col-sm-6">
-						  <div class="form-group" ng-class="{'has-error': errors.sub_category_name || subcategoryCreateForm.sub_category_name.$touched && subcategoryCreateForm.sub_category_name.$error.required}">
-						  	<label for="sub_category_name">Name of sub-category</label>
-						    <input type="text" maxlength="250" class="form-control" id="sub_category_name" name="sub_category_name" ng-model="createSubCategoryform.sub_category_name" required>
-						    <!-- <input type="text" maxlength="250" class="form-control" id="sub_category_id" name="sub_category_id" ng-model="sub_category_id"> -->
-						    <span ng-if="errors.sub_category_name" class="help-block">Sub-category name is required.</span>
-				    		<span ng-if="subcategoryCreateForm.sub_category_name.$touched && subcategoryCreateForm.sub_category_name.$error.required" class="help-block">Sub-category is required.</span>
-						  </div>
-						  <button type="submit" class="btn btn-primary btn-md" ng-disabled="subcategoryCreateForm.$invalid">Create Sub-Category</button>
-					</div>
-					<div class="col-lg-2 col-md-2 col-sm-2"></div>
-				</form>
-		      <div class="modal-footer">
-		      </div>
-		    </div>
-		  </div>
-		</div>
-		<!--  Modal end here -->
-
+	<div class="row sidemenurow" style="margin:auto;">		
 		<ul style="list-style-type: none;" class="sidemenu">
-			{{selectedCategoryId}}
+				<li>
+				<button class="btn btn-primary" data-toggle="collapse" data-target="#demo"> Actions <span class="glyphicon glyphicon-menu-right"></span></button>
+					<div id="demo" class="collapse" style="margin-top: 10px;">
+						<button class="btn btn-info btn-sm" data-toggle="modal" style="margin-bottom: 10px;" data-target="#create_sub_cat">Add Sub-Cat</button>
+						<button class="btn btn-info btn-sm" style="margin-bottom: 10px;" data-toggle="modal" data-target="#create_cat">Add Category</button>
+			  		</div>
+			  	</li>
+		</ul>
+
+		<div style='max-height: 650px;;overflow-y: auto;'> 
+		<hr>	
+		<ul style="list-style-type: none;" class="sidemenu">
 				<li ng-repeat="cat in allCategories" >
-				<a href="javascript:void(0);" class="btn" data-toggle="collapse" data-target="#demo{{cat.id}}">{{cat.category_name|capitalize}}</a>
+				<button class="btn" data-toggle="collapse" data-target="#demo{{cat.id}}"><span class="glyphicon glyphicon-menu-right"></span>
+					{{cat.category_name|capitalize}}
+				</button>
 					<div id="demo{{cat.id}}" class="collapse">
 						<p>Create SubCategory</p>
 						<a ng-click='categorySelected(cat.id)' class="btn btn-info btn-sm" data-toggle="modal" data-target="#create_sub_cat">Add Sub-Cat</a>
@@ -79,45 +28,11 @@
 
 		<ul style="list-style-type: none;" class="sidemenu">
 			<li ng-repeat="sub_cat in allSubCategories">
-				<a ng-click='SubCategoryQue(sub_cat.id)'>{{sub_cat.sub_category_name|capitalize}}</a>
+				<button class='btn' ng-click='SubCategoryQue(sub_cat.id)'>{{sub_cat.sub_category_name|capitalize}}</button>
 			</li>
 		</ul>
-		<!-- CreateSubCategoryController ends here -->
+		</div>
 	</div>
-
-	<!-- <div class="row sidemenurow" style="margin: auto;" ng-if="quizNotSelected">
-		<ul style="list-style-type: none;" class="sidemenu" ng-if="allQuizzes">
-			<li ng-if="allQuizzes" ng-repeat="quiz in allQuizzes"><span title="Go inside" class="glyphicon glyphicon-expand left" ng-if="quiz.categories" ng-click="quizSelected(quiz.id, quiz.title , quiz.categories)"></span><span ng-click="filterQuiz(quiz.id)">&nbsp;&nbsp;{{quiz.title|capitalize}}</span>
-			</li>
-		</ul>
-	</div> -->
-
-	<!-- <div class="row" style="margin: auto;" ng-if="categoryNotSelected && !quizNotSelected">
-	<p style="margin-top:10px;margin-left: 5px;color:blue;"><span  title="Go back" class="glyphicon glyphicon-arrow-left back" ng-click="quizDeselected()"></span> &nbsp;{{ selectedQuizTitle|capitalize }}</p>
-		<ul style="list-style-type: none;" class="sidemenu">
-			<li ng-if="categorieslist" ng-repeat="category in categorieslist"><span class="glyphicon glyphicon-expand left" ng-if="quiz.subcategories.length!=0" ng-click="categorySelected(category.id, category.category, category.subcategories)" title="Go inside" ></span><span ng-click="filterCategory(selectedQuizId, category.id)">&nbsp;&nbsp;{{category.category|capitalize}}</span>
-				<span class="dropdown right" ng-if="quiz.subcategories.length!=0">
-				  <span class="glyphicon glyphicon-chevron-down" data-toggle="dropdown"></span>
-				  <ul class="dropdown-menu">
-				    <li><a ng-click="renameField('category',category.category)">Rename</a></li>
-				  </ul>
-				</span>
-			</li>
-		</ul>
-	</div> -->
-	<!-- <div class="row" style="margin: auto;" ng-if="subcategoryNotSelected && !categoryNotSelected && !quizNotSelected">
-	<p style="margin-top:10px;margin-left: 5px;color:blue;"><span title="Go back" class="glyphicon glyphicon-arrow-left back" ng-click="categoryDeselected()"></span> &nbsp;{{ selectedCategoryName|capitalize }}</p>
-		<ul style="list-style-type: none;" class="sidemenu">
-			<li ng-if="subcategorieslist" ng-repeat="subcategory in subcategorieslist"><span class="glyphicon glyphicon-minus left"></span><span  ng-click="filterSubCategory(selectedQuizId, selectedCategoryId, subcategory.id)">&nbsp;&nbsp;{{subcategory.subcategory|capitalize}}</span>
-				<span class="dropdown right">
-				  <span class="glyphicon glyphicon-chevron-down" data-toggle="dropdown"></span>
-				  <ul class="dropdown-menu">
-				    <li><a ng-click="renameField('subcategory',subcategory.id)">Rename</a></li>
-				  </ul>
-				</span>
-			</li>
-		</ul>
-	</div> -->
 </div>
 <script>
 function change_cat_id(cat_id){

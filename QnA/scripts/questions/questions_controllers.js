@@ -89,8 +89,8 @@ appmodule
             console.log(sub_category_id);
             SubCategoryFactory.getQuestionUnderSubCategory($scope.user,sub_category_id,false).query(
             function(response){
-                console.log(response)
                 $scope.questions = response;
+                $scope.questionsLevelInfo = $scope.questions.questions_level_info;
             },
             function(response){
                 console.log(response)
@@ -102,7 +102,6 @@ appmodule
             // $scope.categoryNotSelected = false;
 
             $scope.selectedCategoryId = selectedCategoryId;
-            console.log(selectedCategoryId);
             // $scope.selectedCategoryName = selectedCategoryName;
             // $scope.subcategoryNotSelected = true;
             // $scope.subcategorieslist = selectedSubCategories;
@@ -138,24 +137,23 @@ appmodule
             $scope.errors = "Unable to get your SubCategories.";
         });
 
-        
+        $scope.createCategoryform = {category_name : "",user : $scope.user};
         $scope.postCategory = function() { 
-            $scope.createCategoryform = {category_name : "","user":$scope.user};
             CategoryFactory.createCategory().save($scope.createCategoryform).$promise.then(
                 function(response){
                     $scope.isFormInvalid = false;
                     $scope.alertType = "success";
                     $scope.isCategoryCreated = true;
-                    $scope.alertMsg = "Your category named " + $scope.createCategoryform.category + " has been created. Now please create a sub-category of it.";
+                    $scope.alertMsg = "Your category named " + $scope.createCategoryform.category_name + " has been created. Now please create a sub-category of it.";
                     $scope.allCategories.push({'id':response.id, 'category_name':response.category_name, 'user':$scope.user});                        
                     $scope.$apply();
-                    $state.go('app.questions', {obj:{'categoryid':response.id, 'categoryname':response.category}});
+                    // $state.go('app.questions', {obj:{'categoryid':response.id, 'categoryname':response.category}});
                 },
                 function(response) {
                     $scope.isFormInvalid = true;
                     $scope.alertType = "danger";
                     $scope.isCategoryCreated = false;
-                    $scope.alertMsg = "Unable to create the category - " + $scope.createCategoryform.category + ". See below error.";
+                    $scope.alertMsg = "Unable to create the category - " + $scope.createCategoryform.category_name + ". See below error.";
                     $scope.errors = response.data;
                     $scope.createCategoryform = {category_name : "", quiz : [$scope._id]};
                 });
