@@ -191,14 +191,13 @@ appmodule
             $scope.dataPresent = false;
         }
         $scope.$on('$locationChangeStart', function( event ) {
-                var answer = confirm("Do you want to start the test?");
-                console.log(answer);
-                if(answer){
-                    event.preventDefault();
-                }else{
-                    $window.close();
-                }
-            }); 
+            var answer = confirm("Do you want to start the test?");
+            if(answer){
+                event.preventDefault();
+            }else{
+                $window.close();
+            }
+        });
     }])
 
 

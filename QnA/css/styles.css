@@ -40,7 +40,12 @@ white-space: pre-line;
 a{
 	text-decoration: none;
 }
-
+.sidemenurow
+{
+	max-height: 650px;
+	overflow-y: auto;
+	margin: auto;
+}
 ul.sidemenu{
 	cursor: pointer;
 	list-style-type: none;
