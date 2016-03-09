@@ -140,7 +140,7 @@ appmodule
             });
         }
         
-        SubCategoryFactory.getAllSubcategories($scope.user, "all").query(
+        SubCategoryFactory.getAllSubcategories($scope.user, "all", false).query(
         function(response){
             $scope.allSubCategories = response;
         },
@@ -235,7 +235,7 @@ appmodule
     .controller('CreateQuestionController', ['$scope', '$controller', '$state', '$http', 'QuizFactory', 'CategoryFactory', 'SubCategoryFactory', 'QuestionsFactory', 'Upload', function($scope, $controller, $state, $http, QuizFactory, CategoryFactory, SubCategoryFactory, QuestionsFactory, Upload) {
         $controller('CookiesController', {$scope : $scope});
         if($scope.user){
-        SubCategoryFactory.getAllSubcategories($scope.user, 'all').query(
+        SubCategoryFactory.getAllSubcategories($scope.user, 'all', true).query(
             function(response) {
                 $scope.subCategories = response;
             },

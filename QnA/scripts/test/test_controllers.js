@@ -17,7 +17,6 @@ appmodule
                     firstItemVisited = false;
                     $scope.progressValuesModel = {};
                     var questionsAdded = TestPreviewFactory.addQuestionsForSection(sectionName, response.questions);
-                    console.log(questionsAdded,'---');
                     for(var i=0;i<questionsAdded.length;i++){
                         $scope.answersModel[questionsAdded[i][i+1].id] = { value:null, status:'NV'};
                         $scope.progressValuesModel[questionsAdded[i][i+1].id] = { status:'NV'};
@@ -111,7 +110,14 @@ appmodule
          },                       
           function(newVal, oldVal) {
             try{ 
-                if($scope.currentCount === 1){
+                if($scope.currentCount > 1 || $scope.currentQuestion.que_type === 'mcq'){
+                    if($scope.progressValuesModel[$scope.currentQuestion.id].status === 'NV'){
+                        $scope.progressValuesModel[$scope.currentQuestion.id].status = 'NA';
+                    }
+                    else if($scope.progressValuesModel[$scope.currentQuestion.id].status === 'NA'){
+                        $scope.progressValuesModel[$scope.currentQuestion.id].status = 'A';
+                    }
+                }else if($scope.currentCount === 1){
                     if($scope.currentQuestion.que_type === 'objective'){
                         if(!firstItemVisited){
                             firstItemVisited = true;
@@ -130,13 +136,6 @@ appmodule
                             }
                         }
                     }   
-                }else if($scope.currentCount > 1 || $scope.currentQuestion.que_type === 'mcq'){
-                    if($scope.progressValuesModel[$scope.currentQuestion.id].status === 'NV'){
-                        $scope.progressValuesModel[$scope.currentQuestion.id].status = 'NA';
-                    }
-                    else if($scope.progressValuesModel[$scope.currentQuestion.id].status === 'NA'){
-                        $scope.progressValuesModel[$scope.currentQuestion.id].status = 'A';
-                    }
                 }
                 $scope.progressValues = changeProgressValues($scope.progressValuesModel);
             }catch(err){}
@@ -191,6 +190,15 @@ appmodule
             console.log(e);
             $scope.dataPresent = false;
         }
+        $scope.$on('$locationChangeStart', function( event ) {
+                var answer = confirm("Do you want to start the test?");
+                console.log(answer);
+                if(answer){
+                    event.preventDefault();
+                }else{
+                    $window.close();
+                }
+            }); 
     }])
 
 
@@ -222,5 +230,5 @@ appmodule
             }
             else{
                 $scope.dataPresent = false;
-            }    
+            }   
         }]);
