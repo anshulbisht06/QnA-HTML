@@ -40,8 +40,10 @@ white-space: pre-line;
 a{
 	text-decoration: none;
 }
+
 ul.sidemenu{
 	cursor: pointer;
+	list-style-type: none;
 }
 ul.sidemenu > li{
 	margin-top: 20px;

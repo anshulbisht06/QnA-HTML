@@ -1,18 +1,24 @@
 /* global $ */
 
 appmodule
-	.controller('QuestionsController', ['$scope', '$controller', '$state', '$http', 'QuestionsFactory', function($scope, $controller, $state, $http, QuestionsFactory) {
+	.controller('QuestionsController', ['$scope', '$controller', '$state', '$http', 'QuestionsFactory','CategoryFactory', 'SubCategoryFactory', function($scope, $controller, $state, $http, QuestionsFactory, CategoryFactory, SubCategoryFactory)  {
         $controller('CookiesController', {$scope : $scope});
-        QuestionsFactory.getAllQuestions($scope.user).query(
-            function(response) {
-                $scope.questions = response;
-                if($scope.questions){
-                $scope.questionsLevelInfo = $scope.questions.questions_level_info;
-                }
-            },
-            function(response) {
-                $scope.errors = response.data;
-            });
+        $scope.categoryNotSelected = true;
+        $scope.subCategoryNotSelected = true;
+        $scope.createCategoryform = { category_name: "", user: $scope.user };
+        $scope.createSubCategoryform = { sub_category_name : "", category : $scope.selectedCategoryId, user : $scope.user };
+
+        // QuestionsFactory.getAllQuestions($scope.user).query(
+        //     function(response) {
+        //         $scope.questions = response;
+        //         if($scope.questions){
+        //         $scope.questionsLevelInfo = $scope.questions.questions_level_info;
+        //         }
+        //     },
+        //     function(response) {
+        //         $scope.errors = response.data;
+        //     });
+
         $scope.tab = 1;
         $scope.filterLevel = false;
         $scope.selectTab = function(setTab) {
@@ -72,19 +78,53 @@ appmodule
             $scope.categoryNotSelected = true;
             delete $scope.categorieslist;
         }
-        $scope.categorySelected = function(selectedCategoryId, selectedCategoryName, selectedSubCategories){
-            $scope.quizNotSelected = false;
+
+        CategoryFactory.getAllCategories($scope.user, "all").query(
+        function(response){
+            // console.log(response);
+            $scope.allCategories = response;
+        },
+        function(response){
+            $scope.unableToGetAllCategories = true;
+            $scope.errors = "Unable to get your categories.";
+        });
+
+        $scope.loadQuestions = function(choice, sub_category_id) { 
+            if(choice === 'subcategory'){
+            SubCategoryFactory.getQuestionUnderSubCategory($scope.user,sub_category_id,false).query(
+                function(response){
+                    $scope.questions = response;
+                },
+                function(response){
+                    console.log(response)
+                });
+            }
+        }
+
+        $scope.selectCategory = function(selectedCategoryId, selectedCategoryName){
             $scope.categoryNotSelected = false;
+            $scope.createSubCategoryform = { sub_category_name : "", category : selectedCategoryId, user : $scope.user };
             $scope.selectedCategoryId = selectedCategoryId;
-            $scope.selectedCategoryName = selectedCategoryName;
-            $scope.subcategoryNotSelected = true;
-            $scope.subcategorieslist = selectedSubCategories;
+            $scope.mainSubcategories = $scope.allSubCategories;
+            $scope.selectedCategoryName  = selectedCategoryName;
+            SubCategoryFactory.getAllSubcategories($scope.user, selectedCategoryId).query(
+                function(response){
+                    $scope.allSubCategories = response;
+                },
+                function(response){
+                    $scope.unableToGetAllSubCategories = true;
+                });
         }
-        $scope.categoryDeselected = function(){
-            $scope.quizNotSelected = false;
+
+        $scope.deselectCategory = function(){
             $scope.categoryNotSelected = true;
-            delete $scope.subcategorieslist;
+            delete $scope.selectedCategoryId;
+            delete $scope.selectedCategoryName;
+            $scope.allSubCategories = $scope.mainSubcategories;
+            delete $scope.mainSubcategories;
+            $scope.createSubCategoryform = { sub_category_name : "", category : "", user : $scope.user };
         }
+
         $scope.filterQuiz = function(quizid){
             // $scope.filterByQuiz = selectedQuiz;
             QuestionsFactory.getQuestionUnderQuiz($scope.user, quizid).query(
@@ -99,7 +139,55 @@ appmodule
                 $scope.errors = response.data;
             });
         }
+        
+        SubCategoryFactory.getAllSubcategories($scope.user, "all").query(
+        function(response){
+            $scope.allSubCategories = response;
+        },
+        function(response){
+            $scope.unableToGetAllSubCategories = true;
+            $scope.errors = "Unable to get your SubCategories.";
+        });
 
+        
+        $scope.postCategory = function() { 
+            CategoryFactory.createCategory().save($scope.createCategoryform).$promise.then(
+                function(response){
+                    $scope.isFormInvalid = false;
+                    $scope.alertType = "success";
+                    $scope.alertMsg = "Your category named " + $scope.createCategoryform.category_name + " has been created. Now please create a sub-category of it.";
+                    $scope.allCategories.push({ 'id':response.id, 'category_name':response.category_name });                        
+                    // $scope.$apply();
+                    angular.element(document.querySelector('#createCategoryModal')).modal('hide');
+                    $scope.createCategoryform = { category_name : "", user : $scope.user };
+                },
+                function(response) {
+                    $scope.isFormInvalid = true;
+                    $scope.alertType = "danger";
+                    $scope.alertMsg = "Unable to create the category - " + $scope.createCategoryform.category_name;
+                    alert(response.data);
+                });
+        }
+
+        $scope.postSubCategory = function() {    
+            var response = SubCategoryFactory.createSubCategory().save($scope.createSubCategoryform).$promise.then(
+                function(response){
+                    $scope.alertType = "success";
+                    $scope.alertMsg = "Your sub-category named " + $scope.createSubCategoryform.sub_category_name + " has been created.";
+                    $scope.allSubCategories.push({ 'id':response.id, 'sub_category_name':response.sub_category_name });                        
+                    // $scope.$apply();
+                    angular.element(document.querySelector('#createSubCategoryModal')).modal('hide');
+                    $scope.createSubCategoryform = { sub_category_name : "", category : "", user : $scope.user };
+                    // $state.go('app.questions');  
+                },
+                function(response) {
+                    $scope.alertType = "danger";
+                    $scope.alertMsg = "Unable to create the sub-category for " + $scope.createSubCategoryform.sub_category_name + ". See below error.";
+                    $scope.errors = response.data;
+                });
+        }
+
+        
         $scope.filterCategory = function(quizid, categoryid){
             // $scope.filterByCategory = selectedCategory;
             QuestionsFactory.getQuestionUnderCategory($scope.user, quizid, categoryid).query(
@@ -114,6 +202,7 @@ appmodule
                 $scope.errors = response.data;
             });
         }
+
         $scope.filterSubCategory = function(subcategoryid){
             // $scope.filterBySubCategory = selectedSubCategory;
             QuestionsFactory.getQuestionUnderSubCategory($scope.user, subcategoryid, false).query(

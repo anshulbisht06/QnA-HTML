@@ -214,7 +214,8 @@
 	<div class="row text-center" ng-if="allQuiz.length===0">
 		<h4><b>No quiz created so far.</b></h4>
 	</div>
-	<div class="col-md-12" ng-if="allQuiz.length" style='text-align:center;margin:1%;'>
+	<div class="col-md-12" ng-if="allQuiz.length>5" style='text-align:center;margin:1%;'>
+
 		  <button type="button" class='btn btn-primary' ng-disabled="curPage == 0"
 		 ng-click="curPage=curPage-1">PREV</button>
 		 <span>Page {{curPage + 1}} of {{ numberOfPages() }}</span>

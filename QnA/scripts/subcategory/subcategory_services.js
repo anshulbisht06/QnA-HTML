@@ -5,7 +5,6 @@ appmodule
         this.createSubCategory = function(){
                 return $resource(baseURL+"quiz/subcategory/create/", null,
                     {'save':   {method:'POST', 
-                    // headers: {'Authorization': 'JWT ' + token}
                      }
                     },
                     { stripTrailingSlashes: false }
@@ -16,7 +15,6 @@ appmodule
         return $resource(baseURL+"quiz/subcategory/get/"+userid+"/"+categoryid+"/", null,
             {
                 query: {
-                // headers: {'Authorization': 'JWT ' + token},
                 method : 'GET',
                 isArray : true,
                 }
@@ -24,6 +22,20 @@ appmodule
             { stripTrailingSlashes: false }
             )
         };
+
+        this.getQuestionUnderSubCategory = function(userId, subCategoryId, questionFormat){
+                return $resource(baseURL+"quiz/questions/get/"+userId+"/subcategory/"+subCategoryId+'/', 
+                    { 'questionFormat': false, 'subCategoryId' : subCategoryId},
+                {
+                    query: {
+                    method : 'GET',
+                    // isArray : true,
+                    }
+                },
+                { stripTrailingSlashes: false }
+                );
+        };
+
     }]);
 
 

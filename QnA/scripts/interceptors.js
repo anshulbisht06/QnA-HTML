@@ -1,3 +1,4 @@
+
 appmodule.factory('APIInterceptor', [ '$cookies', '$q', function($cookies, $q){
 	return {	
 		    request: function(config) {
@@ -5,7 +6,7 @@ appmodule.factory('APIInterceptor', [ '$cookies', '$q', function($cookies, $q){
 		    		config.headers.authorization = 'JWT '+$cookies.get('token');
 		    	}
 		    	else{
-		    		console.log('Please login first');	
+		    		// console.log('Please login first');	
 		    	}
 		     	return config;
 		    },
@@ -15,6 +16,7 @@ appmodule.factory('APIInterceptor', [ '$cookies', '$q', function($cookies, $q){
 
 		    response: function(res) {
 		      	return res;
+		      	// return $q.reject(res);
 		    },
 
 		    responseError: function(res) {

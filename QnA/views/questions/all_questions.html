@@ -16,42 +16,9 @@
 		<h4 class="text-center visible-xs">Your questions</h4>
 	</div>
 	<div class="row">
-		<div class="col-lg-1 col-md-1 col-sm-1"></div>
+		<div class="col-lg-1 col-md-1 col-sm-1"></div>		
 		<div class="col-lg-3 col-md-3 col-sm-3">
-<!-- 			<div class="panel panel-info">
-				<div class="row sidemenurow" style="margin: auto;" ng-if="quizNotSelected">
-					<ul style="list-style-type: none;" class="sidemenu" ng-if="allQuizzes">
-						<li ng-if="allQuizzes" ng-repeat="quiz in allQuizzes"><span title="Go inside" class="glyphicon glyphicon-expand left" ng-if="quiz.categories" ng-click="quizSelected(quiz.id, quiz.title , quiz.categories)"></span><span ng-click="filterQuiz(quiz.id)">&nbsp;&nbsp;{{quiz.title|capitalize}}</span>
-						</li>
-					</ul>
-				</div>
-				<div class="row" style="margin: auto;" ng-if="categoryNotSelected && !quizNotSelected">
-				<p style="margin-top:10px;margin-left: 5px;color:blue;"><span  title="Go back" class="glyphicon glyphicon-arrow-left back" ng-click="quizDeselected()"></span> &nbsp;{{ selectedQuizTitle|capitalize }}</p>
-					<ul style="list-style-type: none;" class="sidemenu">
-						<li ng-if="categorieslist" ng-repeat="category in categorieslist"><span class="glyphicon glyphicon-expand left" ng-if="quiz.subcategories.length!=0" ng-click="categorySelected(category.id, category.category, category.subcategories)" title="Go inside" ></span><span ng-click="filterCategory(selectedQuizId, category.id)">&nbsp;&nbsp;{{category.category|capitalize}}</span>
-							<span class="dropdown right" ng-if="quiz.subcategories.length!=0">
-							  <span class="glyphicon glyphicon-chevron-down" data-toggle="dropdown"></span>
-							  <ul class="dropdown-menu">
-							    <li><a ng-click="renameField('category',category.category)">Rename</a></li>
-							  </ul>
-							</span>
-						</li>
-					</ul>
-				</div>
-				<div class="row" style="margin: auto;" ng-if="subcategoryNotSelected && !categoryNotSelected && !quizNotSelected">
-				<p style="margin-top:10px;margin-left: 5px;color:blue;"><span title="Go back" class="glyphicon glyphicon-arrow-left back" ng-click="categoryDeselected()"></span> &nbsp;{{ selectedCategoryName|capitalize }}</p>
-					<ul style="list-style-type: none;" class="sidemenu">
-						<li ng-if="subcategorieslist" ng-repeat="subcategory in subcategorieslist"><span class="glyphicon glyphicon-minus left"></span><span  ng-click="filterSubCategory(selectedQuizId, selectedCategoryId, subcategory.id)">&nbsp;&nbsp;{{subcategory.subcategory|capitalize}}</span>
-							<span class="dropdown right">
-							  <span class="glyphicon glyphicon-chevron-down" data-toggle="dropdown"></span>
-							  <ul class="dropdown-menu">
-							    <li><a ng-click="renameField('subcategory',subcategory.id)">Rename</a></li>
-							  </ul>
-							</span>
-						</li>
-					</ul>
-				</div>
-			</div> -->
+			<div ng-include src="'views/questions/questions_side_menu.html'"></div>
 		</div>
  		<div class="col-lg-7 col-md-7 col-sm-7">
 			<div class="row">
@@ -62,22 +29,11 @@
 				  <li ng-class="{active : isTabSelected(4)}"><a ng-click="selectTab(4)">Hard <span class="badge">{{ questionsLevelInfo[2] }}</span></a></li>
 				</ul>
 			</div>
-<!-- 			<div class="row">
-			<br>
-				<div class="col-lg-4 col-md-4 col-sm-4">
-					<input type="search" class="form-control" ng-model="filterByQuiz" placeholder="Search by quiz">
-				</div>
-				<div class="col-lg-4 col-md-4 col-sm-4">
-					<input type="search" class="form-control" ng-model="filterByCategory" placeholder="Search by category">
-				</div>
-				<div class="col-lg-4 col-md-4 col-sm-4">
-					<input type="search" class="form-control" ng-model="filterBySubCategory" placeholder="Search by sub-category">
-				</div>
-			</div> -->
 			<hr>
 			<div class="row">
-				  <ul class="list-group">
-				  	<li class="list-group-item" ng-if="questions" ng-mouseenter="hoverOnQuestion(question.id)" ng-mouseleave="hoverOutQuestion(question.id)" ng-repeat="question in questions.questions | filter:filterLevel:true" id="Q{{question.id}}">
+			{{questions}}
+				  <!-- <ul class="list-group">
+				  	<li class="list-group-item" ng-if="questions.questions" ng-mouseenter="hoverOnQuestion(question.id)" ng-mouseleave="hoverOutQuestion(question.id)" ng-repeat="question in questions.questions | filter:filterLevel:true" id="Q{{question.id}}">
 				  		<p>
 					  	<div class="row">
 						  	<div class="col-lg-1 col-md-1 col-sm-1">
@@ -85,7 +41,8 @@
 						  	<div class="col-lg-11 col-md-11 col-sm-11">
 							  	<div class="row">
 						  			<p class="left">Q<small>{{$index + 1}}</small>.&nbsp;&nbsp;<span ng-if="question.que_type==='objective'">{{ question.content | insertBlank }}</span><span ng-if="question.que_type==='mcq'">{{ question.content }}</span></p>
-							  	</div><br>
+							  	</div>
+							  	<br>
 							  	<div class="row">
 							  	    <div class="btn-group" data-toggle="buttons">
 						  	    		<div class="row options" ng-repeat="option in question.options">
@@ -115,14 +72,14 @@
 					  	</div>
 					  	</p>
 				  </li>
-				  </ul>
+				  </ul> -->
 			</div>
 			<div class="row text-center" ng-if="!questions">
-				<h3>No questions available. First select a quiz/category/subcategory.</h3>
+				<h3>No questions available. First select a sub-category.</h3>
 			</div>
 		</div> 
 	</div>
-	<div id="renameModal" class="modal fade" role="dialog">
+	<!-- <div id="renameModal" class="modal fade" role="dialog">
 	  <div class="modal-dialog">
 	    <div class="modal-content">
 	      <div class="modal-header">
@@ -146,6 +103,6 @@
 	      </div>
 	    </div>
 	  </div>
-	</div>
+	</div> -->
 	</div>
 </div>

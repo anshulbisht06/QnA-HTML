@@ -28,7 +28,7 @@
 				<div class="col-lg-6 col-md-6 col-sm-6">
 					  <div class="form-group" ng-class="{'has-error': isFormInvalid || categoryCreateForm.category.$touched && categoryCreateForm.category.$error.required}">
 					  	<label for="category">Name of category</label>
-					    <input type="text" maxlength="250" class="form-control" id="category" name="category" ng-model="createCategoryform.category" required>
+					    <input type="text" maxlength="250" class="form-control" id="category" name="category" ng-model="createCategoryform.category_name" required>
 					    <span ng-if="errors.category" class="help-block">{{ errors.category[0] }}</span>
 			    		<span ng-if="categoryCreateForm.category.$touched && categoryCreateForm.category.$error.required" class="help-block">Category name is required.</span>
 					  </div>
