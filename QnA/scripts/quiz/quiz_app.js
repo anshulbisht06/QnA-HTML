@@ -17,7 +17,7 @@ appmodule.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
                 url:'quiz/all/',
                 views :{
                     'content@': {
-                        controller  : 'CreateQuizController',
+                        controller  : 'QuizController',
                         templateUrl : 'views/quiz/all_quizzes.html'
                     }
                 }

@@ -90,3 +90,20 @@ ul.sidemenu > li{
 .black-text{
 	color: black;
 }
+.green-text{
+	color: green;
+}
+.blue-text{
+	color: blue;
+}
+.next-step-arrow{
+	position: relative;
+	top: 60px;
+}
+.next-step-arrow-xs{
+	position: relative;
+	top: 10px;
+}
+/*.question-image:hover{
+	transform: scale3d(2,2,2);
+}*/

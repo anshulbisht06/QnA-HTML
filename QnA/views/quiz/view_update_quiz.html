@@ -10,13 +10,13 @@
 			<div class="row text-center">
 				<h2><b>{{ quiz.title|capitalize }}</b>&nbsp;&nbsp;<span class="glyphicon glyphicon-pencil right pointer" title="Click to edit quiz details" ng-click="enableEditor()" style="font-size: 18px;color:blue;"></span></h2>
 			</div><br>
-			<div class="row">
+			<!-- <div class="row">
 				<label for="description">Desciption</label>
 				<p>{{ quiz.description|capitalize }}</p>
-			</div>
+			</div> -->
 			<br>
 			<div class="row">
-				<label for="description">Named URL</label>
+				<label for="url">Named URL</label>
 				<p>{{ quiz.url|capitalize }}</p>
 			</div><br>
 			<div class="row">
@@ -24,25 +24,20 @@
 				<p ng-if="quiz.random_order==true">Yes</p>
 				<p ng-if="quiz.random_order==false">No</p>
 			</div><br>
-			<div class="row">
+			<!-- <div class="row">
 				<label for="description">Maximum questions this quiz can have ?</label>
 				<p>{{ quiz.max_questions }}</p>
-			</div><br>
-			<div class="row">
+			</div><br> -->
+			<!-- <div class="row">
 				<label for="description">Display the answers at the end of test ? Correct answer is NOT shown after question.</label>
 				<p ng-if="quiz.answers_at_end==true">Yes</p>
 				<p ng-if="quiz.answers_at_end==false">No</p>
-			</div><br>
-			<div class="row">
+			</div><br> -->
+			<!-- <div class="row">
 				<label for="description">Store result of each attempt by the user ? Necessary for marking.</label>
 				<p ng-if="quiz.exam_paper==true">Yes</p>
 				<p ng-if="quiz.exam_paper==false">No</p>
-			</div><br>
-			<div class="row">
-				<label for="description">Is this quiz has only one attempt ?</label>
-				<p ng-if="quiz.single_attempt==true">Yes</p>
-				<p ng-if="quiz.single_attempt==false">No</p>
-			</div><br>
+			</div><br> -->
 			<div class="row">
 				<label for="description">Passing marks for this quiz ?</label>
 				<p>{{ quiz.pass_mark }}</p>

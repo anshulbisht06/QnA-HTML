@@ -55,7 +55,6 @@ appmodule
 
         // Save section-wise questions
         this.saveSectionQuestion = function(sectionName, answers){
-            console.log(sectionName);
             data[sectionName] = answers;
         }
 

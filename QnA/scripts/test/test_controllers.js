@@ -4,6 +4,8 @@ appmodule
     .controller('TestPreviewController', ['$scope', '$controller', '$window', '$interval', '$stateParams', 'TestPreviewFactory', function($scope, $controller, $window, $interval, $stateParams, TestPreviewFactory) {
         $controller('CookiesController', {$scope : $scope});
         $scope.allQuestions = {};
+        var firstItemVisited= false;
+        $scope.serverURL = 'http://localhost:8000';
         $scope.getQuestionsBasedOnSection = function(sectionName, quizid){
             TestPreviewFactory.getQuestionsBasedOnSection(quizid, sectionName).query(
                 function(response){
@@ -12,9 +14,13 @@ appmodule
                     $scope.sliceFactor = 0;
                     $scope.slicingLimit=Math.floor($scope.total_questions.length/15);
                     $scope.answersModel = {};
+                    firstItemVisited = false;
+                    $scope.progressValuesModel = {};
                     var questionsAdded = TestPreviewFactory.addQuestionsForSection(sectionName, response.questions);
+                    console.log(questionsAdded,'---');
                     for(var i=0;i<questionsAdded.length;i++){
                         $scope.answersModel[questionsAdded[i][i+1].id] = { value:null, status:'NV'};
+                        $scope.progressValuesModel[questionsAdded[i][i+1].id] = { status:'NV'};
                     }
                     TestPreviewFactory.saveSectionQuestion(sectionName, $scope.answersModel);
                     $scope.changeQuestion(1);
@@ -26,17 +32,17 @@ appmodule
         $scope.openWarningModal = function(action){
             $scope.action = action;
             switch(action){
-                case "sectionRequestInitiated":
+                case "sectionChangeRequestInitiated":
                     toggleWarningModal('show', 'Do you really want to move to next section.<br><br><b>You cannot revisit this section again.</b>', 'Yes I am sure.');
                     break;
-                case "sectionRequestCancelled":
+                case "sectionChangeRequestCancelled":
                     toggleWarningModal('hide', '', '');
                     $scope.selectedSection = $scope.currentSection;
                     break;
-                case "submitRequestInitiated":
+                case "submitTestRequestInitiated":
                     toggleWarningModal('show', '<b>Are you sure you want to submit the answers?</b>', 'Yes I am sure.');
                     break;
-                case "submitRequestCancelled":
+                case "submitTestRequestCancelled":
                     toggleWarningModal('hide', '', '');
                     break;
             }
@@ -82,7 +88,10 @@ appmodule
                     $scope.currentOptions = [];
                 }
             }
-            $scope.progressValues = changeProgressValues($scope.answersModel);
+            if($scope.progressValuesModel[$scope.currentQuestion.id].status==='NV'){
+                $scope.progressValuesModel[$scope.currentQuestion.id].status = 'NA';
+                $scope.progressValues = changeProgressValues($scope.progressValuesModel);
+            }
         }
         $scope.saveAnswer = function(count, answerId){
             if(isMCQ($scope.currentQuestion.que_type))
@@ -95,14 +104,41 @@ appmodule
             }
             else{
             }
-            $scope.progressValues = changeProgressValues($scope.answersModel);
         }
-        $scope.$watch(function () {
+        // Watch for a change in answersModel
+        $scope.$watch(function() {
            return $scope.answersModel;
          },                       
           function(newVal, oldVal) {
-            try{
-                $scope.answersModel[$scope.currentQuestion.id].status = 'A';
+            try{ 
+                if($scope.currentCount === 1){
+                    if($scope.currentQuestion.que_type === 'objective'){
+                        if(!firstItemVisited){
+                            firstItemVisited = true;
+                        }else{
+                            if($scope.progressValuesModel[$scope.currentQuestion.id].status === 'NA'){
+                            $scope.progressValuesModel[$scope.currentQuestion.id].status = 'A';
+                            }
+                        }
+                    }
+                    if($scope.currentQuestion.que_type === 'mcq'){
+                        if(!firstItemVisited){
+                            firstItemVisited = true;
+                        }else{
+                            if($scope.progressValuesModel[$scope.currentQuestion.id].status === 'NA'){
+                            $scope.progressValuesModel[$scope.currentQuestion.id].status = 'A';
+                            }
+                        }
+                    }   
+                }else if($scope.currentCount > 1 || $scope.currentQuestion.que_type === 'mcq'){
+                    if($scope.progressValuesModel[$scope.currentQuestion.id].status === 'NV'){
+                        $scope.progressValuesModel[$scope.currentQuestion.id].status = 'NA';
+                    }
+                    else if($scope.progressValuesModel[$scope.currentQuestion.id].status === 'NA'){
+                        $scope.progressValuesModel[$scope.currentQuestion.id].status = 'A';
+                    }
+                }
+                $scope.progressValues = changeProgressValues($scope.progressValuesModel);
             }catch(err){}
         }, true);
         function sliceOutQuestions(){

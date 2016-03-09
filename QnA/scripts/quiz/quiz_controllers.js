@@ -1,31 +1,88 @@
 /* global $ */
 
 appmodule
-	.controller('CreateQuizController', ['$scope', '$controller', '$state', 'QuestionsFactory','QuizFactory', 'CategoryFactory', function($scope, $controller, $state, QuestionsFactory, QuizFactory, CategoryFactory) {
+	.controller('QuizController', ['$scope', '$controller', '$state', 'QuestionsFactory','QuizFactory', 'CategoryFactory', function($scope, $controller, $state, QuestionsFactory, QuizFactory, CategoryFactory) {
 	        // pagination
 	        $scope.curPage = 0;
 	        $scope.pageSize = 9;
 	        $controller('CookiesController', {$scope : $scope});
-
-	        $scope.createQuizForm = {title:"",description:"",url:"",category:"",random_order:false,answers_at_end:false,single_attempt:false,exam_paper:false,max_questions:"",pass_mark:"",success_text:"",fail_text:""};
+	        $scope.createQuizForm = {title:"", no_of_attempt:"1", url:"http://localhost:5000/authenticate/", pass_mark:"", user:$scope.user, success_text:"", fail_text:""};
 	        $scope.postQuiz = function() {
 	            $scope.createQuizForm.user = $scope.user;
 	            QuizFactory.createQuiz().save($scope.createQuizForm).$promise.then(
 	                function(response){
-	                    $scope.isFormInvalid = false;
-	                    $scope.alertType = "success";
-	                    $scope.alertMsg = "Your quiz named " + $scope.createQuizForm.title + " has been created.";
-	                    $scope.createQuizForm = {title:"",description:"",url:"",category:"",random_order:false,answers_at_end:false,single_attempt:false,exam_paper:false,max_questions:"",pass_mark:"",success_text:"",fail_text:""};
+	                    // $scope.createQuizForm = {title:"", no_of_attempt:"1", url:"http://localhost:5000/authenticate/", pass_mark:"", user:$scope.user, success_text:"", fail_text:""};
 	                    $scope.quizCreateForm.$setPristine();
-	                    $state.go('app.create-category',{obj:{'id':response.id, 'name':response.title}});                     
+	                    window.location.reload();                     
 	                },
 	                function(response) {
-	                    $scope.isFormInvalid = true;
-	                    $scope.alertType = "danger";
-	                    $scope.alertMsg = "Unable to create the quiz. See below errors.";
-	                    $scope.errors = response.data;
+	                    if(response.data.hasOwnProperty('non_field_errors')){
+	                    	$scope.errors = { 'title' : ['This title is used by some other user. Select some other title.'] };
+	                    }else{
+	                    	$scope.errors = response.data;
+	                    }
 	                }); 
 	        }
+
+	        $scope.deleteQuiz = function(action, quizId, quizTitle){
+	        	if(action==='deleteQuizRequestInitiated'){
+	        		$scope.quizToBeDeletedID = quizId;
+	        		$scope.quizToBeDeletedTitle = quizTitle;
+	        		angular.element(document.querySelector('#quizDeleteModal')).modal('show');
+	        	}
+	        	else if(action==='deleteQuizRequestAccepted'){
+	        		QuizFactory.deleteQuiz($scope.user, quizId).delete().$promise.then(
+		                function(response){
+		                    window.location.reload();                   
+		                },
+		                function(response) {
+		                    $scope.alertType = "danger";
+		                    $scope.alertMsg = "Unable to delete the quiz.";
+		                    alert(response.data.errors);
+		                });
+	        	}
+	        	else if(action==='deleteQuizRequestCancelled'){
+	        		angular.element(document.querySelector('#quizDeleteModal')).modal('hide');
+	        		$scope.quizToBeDeletedID = null;
+	        		$scope.quizToBeDeletedTitle = null;
+	        	}else{
+	        		angular.element(document.querySelector('#quizDeleteModal')).modal('hide');
+	        		$scope.quizToBeDeletedID = null;
+	        		$scope.quizToBeDeletedTitle = null;
+	        	}
+	        }
+
+	        $scope.putQuiz = function(action, quiz){
+	        	if(action==='updateQuizRequestInitiated'){
+	        		$scope.quizToBeUpdated = quiz;
+	        		$scope.updateQuizForm = { title:quiz.title, user: $scope.user, url:quiz.url, success_text:quiz.success_text, fail_text:quiz.fail_text, pass_mark:quiz.pass_mark, no_of_attempt:quiz.no_of_attempt.toString() };
+	        		angular.element(document.querySelector('#quizUpdateModal')).modal('show');
+	        	}
+	        	else if(action==='updateQuizRequestAccepted'){
+	        		QuizFactory.updateQuiz($scope.user, quiz.id).update($scope.updateQuizForm).$promise.then(
+	                function(response){
+	                    alert("Quiz "+quiz.title.toUpperCase()+" has been updated.");
+	                    window.location.reload();
+	                },
+	                function(response) {
+	                    if(response.data.hasOwnProperty('non_field_errors')){
+	                    	$scope.errors = { 'title' : ['This title is used by some other user. Select some other title.'] };
+	                    }else{
+	                    	$scope.errors = response.data;
+	                    }
+	                }); 
+	        	}
+	        	else if(action==='updateQuizRequestCancelled'){
+	        		angular.element(document.querySelector('#quizUpdateModal')).modal('hide');
+	        		$scope.quizToBeUpdated = null;
+	        		$scope.quizToBeUpdated = null;
+	        	}else{
+	        		angular.element(document.querySelector('#quizUpdateModal')).modal('hide');
+	        		$scope.quizToBeUpdated = null;
+	        		$scope.quizToBeUpdated = null;
+	        	}
+	        }
+
 	        $scope.getCategories = function(quizid, quiztitle){
 	            CategoryFactory.getAllCategories($scope.user, parseInt(quizid)).query(
 	            function(response){
@@ -37,36 +94,36 @@ appmodule
 	                $scope.unableToGetAllCategories = "Unable to get your categories.";
 	        });
 	        }
-	    }])
+	    }]);
 
-	.controller('ViewUpdateQuizController', ['$scope', '$controller', '$state', '$stateParams', 'QuizFactory', function($scope, $controller, $state, $stateParams, QuizFactory) {
-	            $controller('CookiesController', {$scope : $scope});
-	            QuizFactory.getQuiz($scope.user, $stateParams.quizid).get()
-	            .$promise.then(
-	                function(response){
-	                    $scope.quiz = response;
-	                },
-	                function(response) {
-	                    $scope.unableToGetQuiz = response.data;
-	                }
-	            );
-	            $scope.editorEnabled = false;  
-	            $scope.enableEditor = function() {
-	                $scope.editorEnabled = true;
-	            };
+	// .controller('ViewUpdateQuizController', ['$scope', '$controller', '$state', '$stateParams', 'QuizFactory', function($scope, $controller, $state, $stateParams, QuizFactory) {
+	//             $controller('CookiesController', {$scope : $scope});
+	//             QuizFactory.getQuiz($scope.user, $stateParams.quizid).get()
+	//             .$promise.then(
+	//                 function(response){
+	//                     $scope.quiz = response;
+	//                 },
+	//                 function(response) {
+	//                     $scope.unableToGetQuiz = response.data;
+	//                 }
+	//             );
+	//             $scope.editorEnabled = false;  
+	//             $scope.enableEditor = function() {
+	//                 $scope.editorEnabled = true;
+	//             };
 
-	            $scope.putQuiz = function() {
-	                QuizFactory.updateQuiz($scope.user, $stateParams.quizid).update($scope.quiz).$promise.then(
-	                function(response){
-	                    $scope.alertType = "success";
-	                    $scope.alertMsg = "Your quiz details has been updated.";
-	                    $scope.editorEnabled = false;
-	                },
-	                function(response) {
-	                    $scope.alertType = "danger";
-	                    $scope.alertMsg = "Unable to update the quiz details. See below errors.";
-	                    $scope.errors = response.data;
-	                    $scope.editorEnabled = true;
-	                });
-	            }
-	        }])
+	//             $scope.putQuiz = function() {
+	//                 QuizFactory.updateQuiz($scope.user, $stateParams.quizid).update($scope.quiz).$promise.then(
+	//                 function(response){
+	                    // $scope.alertType = "success";
+	                    // $scope.alertMsg = "Your quiz details has been updated.";
+	//                     $scope.editorEnabled = false;
+	//                 },
+	//                 function(response) {
+	//                     $scope.alertType = "danger";
+	//                     $scope.alertMsg = "Unable to update the quiz details. See below errors.";
+	//                     $scope.errors = response.data;
+	//                     $scope.editorEnabled = true;
+	//                 });
+	//             }
+	//         }])

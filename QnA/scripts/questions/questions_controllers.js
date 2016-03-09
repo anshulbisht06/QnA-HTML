@@ -156,7 +156,7 @@ appmodule
             });
         }
         $scope.upload = function(postUrl, data, figure){
-            $('#progressBarModal').modal('show');
+            // $('#progressBarModal').modal('show');
             $scope.error = false;
             Upload.upload({
                     url: baseURL+postUrl,
@@ -167,9 +167,10 @@ appmodule
                 }, function (response) {
                     $scope.error = true;
                 }, function(event) {
-                    var percentage = parseInt(100.0 * event.loaded / event.total).toString();
-                    $('#progress-bar').css('width', percentage+'%');
-                    $('#percentage').html(percentage);
+                    // var percentage = parseInt(100.0 * event.loaded / event.total).toString();
+                    // $('#progress-bar').css('width', percentage+'%');
+                    // $('#percentage').html(percentage);
+                    alert('Question created succesfully!');
                 });
         }
         $scope.changeImage = function(){
@@ -254,6 +255,7 @@ appmodule
 
     .controller('UpdateQuestionController', ['$scope', '$controller', '$state', '$stateParams', 'QuestionsFactory', 'Upload', function($scope, $controller, $state, $stateParams, QuestionsFactory, Upload) {
         $controller('CookiesController', {$scope : $scope});
+        $scope.serverURL = 'http://localhost:8000';
         $scope.que_type = $stateParams.questionParams.split(':')[1];
 
         QuestionsFactory.getQuestion($scope.user, $stateParams.questionParams.split(':')[0]).get()
@@ -269,7 +271,7 @@ appmodule
                 }
             );
         $scope.upload = function(postUrl, data){
-            $('#progressBarModal').modal('show');
+            // $('#progressBarModal').modal('show');
             $scope.error = false;
             Upload.upload({
                     url: baseURL+postUrl,
@@ -280,9 +282,10 @@ appmodule
                 }, function (response) {
                     $scope.error = true;
                 }, function(event) {
-                    var percentage = parseInt(100.0 * event.loaded / event.total).toString();
-                    $('#progress-bar').css('width', percentage+'%');
-                    $('#percentage').html(percentage);
+                    // var percentage = parseInt(100.0 * event.loaded / event.total).toString();
+                    // $('#progress-bar').css('width', percentage+'%');
+                    // $('#percentage').html(percentage);
+                    alert('Question created succesfully!');
                 });
         }
 
