@@ -12,10 +12,6 @@
 		</div>
 	</div>
 	<div class="row">
-		<h2 class="text-center hidden-xs">Your Questions</h2>
-		<h4 class="text-center visible-xs">Your Questions</h4>
-	</div>
-	<div class="row">
 		<div class="col-lg-1 col-md-1 col-sm-1"></div>		
 		<div class="col-lg-3 col-md-3 col-sm-3">
 			<div ng-include src="'views/modals/create_category.html'"></div>
@@ -24,6 +20,8 @@
 			<div ng-include src="'views/questions/questions_side_menu.html'"></div>
 		</div>
  		<div class="col-lg-7 col-md-7 col-sm-7">
+ 			<h2 class="text-center hidden-xs">Your Questions</h2>
+		    <h4 class="text-center visible-xs">Your Questions</h4>
 			<div class="row">
 				<ul class="nav nav-pills nav-justified right">
 				  <li ng-class="{active : isTabSelected(1)}"><a ng-click="selectTab(1)">Total <span class="badge">{{ questionsLevelInfo[3] }}</span></a></li>
@@ -35,7 +33,7 @@
 			<hr>
 			<div class="row">
 				  <ul class="list-group">
-				  	<li class="list-group-item" ng-if="questions.questions" ng-mouseenter="hoverOnQuestion(question.id)" ng-mouseleave="hoverOutQuestion(question.id)" ng-repeat="question in questions.questions | filter:filterLevel:true" id="Q{{question.id}}">
+				  	<li class="list-group-item" ng-if="questions.questions" ng-mouseenter="hoverOnQuestion(question.id)" ng-mouseleave="hoverOutQuestion(question.id)" ng-repeat="question in questions.questions | filter:filterLevel:true | pagination: curPage * pageSize | limitTo: pageSize" id="Q{{question.id}}">
 				  		<p>
 					  	<div class="row">
 						  	<div class="col-lg-1 col-md-1 col-sm-1">
@@ -76,12 +74,21 @@
 				  </li>
 				  </ul>
 			</div>
-			<div class="row text-center" ng-if="!questions.questions.length > 0">
+			<div class="row text-center" ng-if="(questions.questions | filter:filterLevel:true).length < 1">
 				<h3>__ <span style="color:red;">:(</span> ______ <span style="color:red;">Question(s) Not Available.</span> _______ <span style="color:red;">:(</span> __
 					<br>
 					<br>
 					<span style="color:green;">Create Some Question(s) First.</span>	
 				</h3>
+			</div>
+			<div class="col-md-12" ng-show="(questions.questions | filter:filterLevel:true).length > 5" style='text-align:center;margin:1%;'>
+				  <button type="button" class='btn btn-primary' ng-disabled="curPage == 0"
+				 ng-click="curPage=curPage-1">PREV</button>
+
+				 <span>Page {{curPage + 1}} of {{ numberOfPages() }}</span>
+				 <button type="button" class='btn btn-primary'
+				 ng-disabled="curPage >= (questions.questions | filter:filterLevel:true).length/pageSize - 1"
+				 ng-click="curPage = curPage+1">NEXT </button>
 			</div>
 		</div> 
 	</div>

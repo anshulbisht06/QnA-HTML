@@ -17,7 +17,6 @@ appmodule
         var config = {
                 headers : {
                     'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;',
-                    // 'Authorization' : 'JWT '+$cookies.get('token')
                 }
             }
         var data = {};

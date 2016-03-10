@@ -16,6 +16,7 @@ appmodule
             .$promise.then(
                 function(response){
                     $scope.quizName = response['title'];
+                    $scope.quizKey = response['quiz_key'];
                 },
                 function(response) {
                     $scope.unableToGetQuizName = true;
@@ -166,7 +167,6 @@ appmodule
             $scope.go = function(){
                 console.log(QuizStackFactory.showStack());
             }
-
             
             // $scope.getUserDetails = function(){
             //     // console.log($scope.quizName)

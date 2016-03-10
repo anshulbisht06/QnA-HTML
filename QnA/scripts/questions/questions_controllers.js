@@ -4,6 +4,10 @@ appmodule
 	.controller('QuestionsController', ['$scope', '$controller', '$state', '$http', 'QuestionsFactory','CategoryFactory', 'SubCategoryFactory', function($scope, $controller, $state, $http, QuestionsFactory, CategoryFactory, SubCategoryFactory)  {
         $controller('CookiesController', {$scope : $scope});
         $scope.categoryNotSelected = true;
+        
+        $scope.curPage = 0;
+        $scope.pageSize = 9;
+
         $scope.subCategoryNotSelected = true;
         $scope.createCategoryform = { category_name: "", user: $scope.user };
         $scope.createSubCategoryform = { sub_category_name : "", category : $scope.selectedCategoryId, user : $scope.user };
@@ -52,14 +56,9 @@ appmodule
         $scope.deleteQuestion = function(questionid){
             QuestionsFactory.deleteQuestion($scope.user, questionid).delete().$promise.then(
                 function(response){
-                    // $scope.alertType = "success";
-                    // $scope.alertMsg = "The question has been delete.";
-                    // $('#Q'+questionid).hide();
                     window.location.reload();                   
                 },
                 function(response) {
-                    // $scope.alertType = "danger";
-                    // $scope.alertMsg = "Unable to delete the question. See below errors.";
                     $scope.errors = response.data;
                 });
         }
@@ -81,7 +80,6 @@ appmodule
 
         CategoryFactory.getAllCategories($scope.user, "all").query(
         function(response){
-            // console.log(response);
             $scope.allCategories = response;
         },
         function(response){
@@ -95,13 +93,19 @@ appmodule
             function(response){
                 $scope.questions = response;
                 $scope.questionsLevelInfo = $scope.questions.questions_level_info;
+
+                $scope.numberOfPages = function(){
+                    console.log(response.questions.length/$scope.pageSize);
+                    return Math.ceil(response.questions.length / $scope.pageSize);
+                };
+
             },
             function(response){
                 console.log(response)
             });
-
         }
         }
+        
 
         $scope.selectCategory = function(selectedCategoryId, selectedCategoryName){
             $scope.categoryNotSelected = false;

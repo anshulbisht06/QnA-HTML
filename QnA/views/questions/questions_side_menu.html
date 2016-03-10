@@ -1,30 +1,30 @@
 <div class="panel panel-info">	
-	<div class="row sidemenurow">
+	<div class="row" style="margin:auto;">
 		<ul style="list-style-type: none;" class="sidemenu">
-			<li>
+				<li>
 				<button class="btn btn-primary" data-toggle="collapse" data-target="#demo"> Actions <span class="glyphicon glyphicon-menu-right"></span></button>
 					<div id="demo" class="collapse" style="margin-top: 10px;">
-						<button class="btn btn-info btn-sm" data-toggle="modal" data-target="#createCategoryModal" ng-if="categoryNotSelected" style="margin-bottom: 10px;">Add Category</button>
-						<button class="btn btn-info btn-sm" style="margin-bottom: 10px;" data-toggle="modal" data-target="#createSubCategoryModal" ng-if="subCategoryNotSelected">Add Sub-Category</button>
+						<button class="btn btn-info btn-sm" data-toggle="modal" data-target="#createCategoryModal" ng-if="categoryNotSelected" style="margin-bottom: 10px;">Add Sub-Cat</button>
+						<button class="btn btn-info btn-sm" style="margin-bottom: 10px;" data-toggle="modal" data-target="#createSubCategoryModal" ng-if="subCategoryNotSelected">Add Category</button>
 			  		</div>
-			  </li>
+			  	</li>
 		</ul>
-		<hr>
+
+		<hr <hr style="margin-top: 5%">
+		<div style='max-height: 750px;;overflow-y: auto;'> 
+		
 		<ul class="sidemenu" id="categoriesList" ng-if="categoryNotSelected">
-			<li ng-repeat="cat in allCategories" ng-click='selectCategory(cat.id, cat.category_name)' id="cat{{cat.id}}" title="Go inside">
+			<li ng-repeat="cat in allCategories" ng-click='selectCategory(cat.id, cat.category_name)' id="cat{{cat.id}}" data-toggle="tooltip" title="Go inside">
 				<span class="glyphicon glyphicon-menu-right pointer" style="margin-right: 5px;"></span>
 				<button class="btn">{{cat.category_name|capitalize}}</button>
 			</li>
 		</ul>
-		<div class="row" ng-if="!categoryNotSelected">
-			<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-				<h4><span class="glyphicon glyphicon-menu-left pointer" ng-click="deselectCategory()" title="Go back"></span></h4>
+		<h4 ng-if="!categoryNotSelected">
+			<div>
+			<button class="glyphicon glyphicon-menu-left btn" style="margin: 5px;" ng-click="deselectCategory()" data-toggle="tooltip" title="Go back"></button>
+			<span class="col-md-offset-1"><b>{{selectedCategoryName|capitalize}}</b></span>
 			</div>
-			<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
-				<h4><span><b>{{selectedCategoryName|capitalize}}</b></span></h4>
-			</div>
-			<br>
-		</div>
+		</h4>
 		<ul class="sidemenu" id="subCategoriesList" ng-if="!unableToGetAllSubCategories">
 			<li ng-repeat="sc in allSubCategories" ng-click='loadQuestions("subcategory", sc.id)' id="sc{{sc.id}}">
 				<span class="glyphicon glyphicon-certificate" style="margin-right: 5px;"></span>
@@ -41,6 +41,7 @@
 				<a href="javascript:void(0);">Unable to get sub-catgories.</a>
 			</li>
 		</ul>
+		</div>
 	</div>
 </div>
 <script>
