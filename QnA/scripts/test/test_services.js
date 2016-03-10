@@ -42,6 +42,9 @@ appmodule
         this.getProgressValues = function(){
             return progressData;
         }
+        this.getProgressValuesSectionWise = function(sectionName){
+            return progressData[sectionName];
+        }
         this.getAQuestion = function(sectionName, count){
             return allQuestions[sectionName][count-1][count];
         }
@@ -55,13 +58,14 @@ appmodule
             }
            }
         }
-        // Show all questions answered with section name as key
-        this.showAllQuestionsAnswered = function(){
-            data['progressValues'] = this.getProgressValues();
-            return data;
+        // Save all questions answered with section name as key including progress values
+        this.saveQuestionsAnsweredSectionWise = function(sectionName, progressValues){
+            result = {};
+            result[sectionName] = { answers : data[sectionName], progressValues : progressValues }; 
+            return result[sectionName];
         }
 
-        // Save section-wise questions
+        // Save section-wise questions-answers
         this.saveSectionQuestion = function(sectionName, answers){
             data[sectionName] = answers;
         }
@@ -70,16 +74,16 @@ appmodule
             data['quiz'] = quizid;
         }
 
-        // Send the answers to server on normal submission
-        this.postTest = function(testUser){
-            return $resource(baseURL+"save/test/", { 'test_user': testUser},
+        // Send the answers to server on answering the question
+        this.postTestDetails = function(isSaveToDB, testUser, quizId, sectionName){
+            return $resource(baseURL+"save/test/", { 'is_save_to_db': isSaveToDB  ,'test_user': testUser, 'quiz_id': quizId, 'section_name': sectionName },
                 {'save':   
                 { method:'POST', 
                 } 
                 },
                 { stripTrailingSlashes: false }
                 );
-        };  
+        };
 
         this.getAQuestion = function(sectionName, count){
             return allQuestions[sectionName][count-1][count];

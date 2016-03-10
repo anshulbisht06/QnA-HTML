@@ -48,6 +48,7 @@ appmodule
             }
         }
         $scope.changeSection = function(currentSection){
+            $scope.submitTestDetails(true, currentSection);
             $scope.nextSection = $scope.selectedSection;
             if($scope.sectionNames.indexOf($scope.selectedSection)<$scope.sectionNames.length){
                 if($scope.currentSection === $scope.nextSection){
@@ -74,7 +75,7 @@ appmodule
             console.log(TestPreviewFactory.getQuestionsForASection(sectionName));
         }
         $scope.show = function(){
-            console.log(TestPreviewFactory.showAllQuestionsAnswered());
+            console.log(TestPreviewFactory.saveQuestionsAnsweredSectionWise());
         }
         $scope.changeQuestion = function(count){
             if(count>=1 && count<=$scope.total_questions.length)
@@ -112,7 +113,7 @@ appmodule
          },                       
           function(newVal, oldVal) {
             try{ 
-                if($scope.currentCount > 1 || $scope.currentQuestion.que_type === 'mcq'){
+                if($scope.currentCount > 1 || ($scope.currentCount > 1 && $scope.currentQuestion.que_type === 'mcq')){
                     if($scope.progressValuesModel[$scope.currentQuestion.id].status === 'NV'){
                         $scope.progressValuesModel[$scope.currentQuestion.id].status = 'NA';
                     }
@@ -141,7 +142,7 @@ appmodule
                 }
                 $scope.progressValues = changeProgressValues($scope.progressValuesModel);
                 TestPreviewFactory.saveProgressValues($scope.selectedSection, $scope.progressValuesModel);
-                $scope.submitTest();
+                $scope.submitTestDetails(false, $scope.selectedSection);
             }catch(err){}
         }, true);
         function sliceOutQuestions(){
@@ -155,8 +156,13 @@ appmodule
             $scope.sliceFactor += 1;
             sliceOutQuestions();
         }
-        $scope.submitTest = function(){
-            TestPreviewFactory.postTest($stateParams.obj.test_user).save(TestPreviewFactory.showAllQuestionsAnswered()).$promise.then(
+
+        $scope.submitTestDetails = function(isSaveToDB, currentSection){
+            var data = TestPreviewFactory.saveQuestionsAnsweredSectionWise($scope.selectedSection, TestPreviewFactory.getProgressValuesSectionWise($scope.selectedSection));
+            // if(isSaveToDB){
+            //     data['sections'] = Object.keys($window.opener.data['details']).sort();
+            // }
+            TestPreviewFactory.postTestDetails(isSaveToDB, $stateParams.obj.test_user, $scope.quiz, currentSection).save(data).$promise.then(
                 function(response){
                     console.log('success');                    
                 },
@@ -180,6 +186,12 @@ appmodule
                 //     angular.element(document.querySelector('#sectionnames')).append('<option value='+sectionNames[i]+'>'+sectionNames[i]+'</option>');
                 // }
                 $scope.totalDuration = findTotalDuration($window.opener.data['quizStacks']);
+                $interval(function(){
+                    $scope.totalDuration -= 1;
+                    if($scope.totalDuration===0){
+                        alert('Time Over');
+                    }
+                },1000, $scope.totalDuration);
                 $scope.dataPresent = true;
             }else{
                 $scope.dataPresent = false;
