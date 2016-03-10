@@ -12,10 +12,6 @@
 		</div>
 	</div>
 	<div class="row">
-		<h2 class="text-center hidden-xs">Your Questions</h2>
-		<h4 class="text-center visible-xs">Your Questions</h4>
-	</div>
-	<div class="row">
 		<div class="col-lg-1 col-md-1 col-sm-1"></div>		
 		<div class="col-lg-3 col-md-3 col-sm-3">
 			<div ng-include src="'views/modals/create_category.html'"></div>
@@ -24,9 +20,10 @@
 			<div ng-include src="'views/questions/questions_side_menu.html'"></div>
 		</div>
  		<div class="col-lg-7 col-md-7 col-sm-7">
+ 			<h2 class="text-center hidden-xs">Your Questions</h2>
+		    <h4 class="text-center visible-xs">Your Questions</h4>
 			<div class="row">
 				<ul class="nav nav-pills nav-justified right">
-				  {{ (questions.questions | filter:filterLevel:true).length }}
 				  <li ng-class="{active : isTabSelected(1)}"><a ng-click="selectTab(1)">Total <span class="badge">{{ questionsLevelInfo[3] }}</span></a></li>
 				  <li ng-class="{active : isTabSelected(2)}"><a ng-click="selectTab(2)">Easy <span class="badge">{{ questionsLevelInfo[0] }}</span></a></li>
 				  <li ng-class="{active : isTabSelected(3)}"><a ng-click="selectTab(3)">Medium <span class="badge">{{ questionsLevelInfo[1] }}</span></a></li>
