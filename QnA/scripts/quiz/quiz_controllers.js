@@ -14,7 +14,7 @@ appmodule
 	            $scope.createQuizForm.user = $scope.user;
 	            QuizFactory.createQuiz().save($scope.createQuizForm).$promise.then(
 	                function(response){
-	                    $scope.quizCreateForm.$setPristine();
+	                    // $scope.createQuizForm.$setPristine();
 	                    window.location.reload();                     
 	                },
 	                function(response) {

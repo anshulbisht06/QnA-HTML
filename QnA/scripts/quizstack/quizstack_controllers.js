@@ -186,6 +186,6 @@ appmodule
                     data['details'][$scope.existingStack[i].section_name]['questions'] += parseInt($scope.existingStack[i].no_questions);
                 }
                 $window.data = data;
-                $window.open($state.href('app.test-login', {parameter: "parameter"}), "Test Window", "width=1280,height=890,resizable=0");
+                $window.open($state.href('app.test-preview', {parameter: data}), "Test Window", "width=1280,height=890,resizable=0");
             }
         }]);

@@ -201,20 +201,20 @@ appmodule
     }])
 
 
-.controller('UserDataController',['$scope','$state', 'testUserDataFactory','$controller', '$window', function($scope, $state, testUserDataFactory, $controller, $window) {
-        	$scope.data = {name: '', email: '', quiz: $window.opener.data.quiz, quiz_name: $window.opener.data.quizName, 'test_key': 'f86d61d474de2b13499c' };
-            $scope.postUserDetails = function(){testUserDataFactory.saveTestUser().save($scope.data).$promise.then(
-                function(response){
-                    $scope.isFormInvalid = false;
-                    $state.go('app.test-preview', {obj:{'name':response.user_name , 'email':response.email, 'test_key': response.test_key, 'test_user': response.test_user}});                     
-                },
-                function(response) {
-                    $scope.isFormInvalid = true;
-                    $scope.alertType = "danger";
-                    $scope.alertMsg = "Unable to find the user - please try again.";
-                    $scope.errors = response.data;
-                });}
-		}])
+// .controller('UserDataController',['$scope','$state', 'testUserDataFactory','$controller', '$window', function($scope, $state, testUserDataFactory, $controller, $window) {
+//         	$scope.data = {name: '', email: '', quiz: $window.opener.data.quiz, quiz_name: $window.opener.data.quizName, 'test_key': 'f86d61d474de2b13499c' };
+//             $scope.postUserDetails = function(){testUserDataFactory.saveTestUser().save($scope.data).$promise.then(
+//                 function(response){
+//                     $scope.isFormInvalid = false;
+//                     $state.go('app.test-preview', {obj:{'name':response.user_name , 'email':response.email, 'test_key': response.test_key, 'test_user': response.test_user}});                     
+//                 },
+//                 function(response) {
+//                     $scope.isFormInvalid = true;
+//                     $scope.alertType = "danger";
+//                     $scope.alertMsg = "Unable to find the user - please try again.";
+//                     $scope.errors = response.data;
+//                 });}
+// 		}])
 
 
 .controller('TestPreviewHeaderController', ['$scope', '$controller', '$window', function($scope, $controller, $window) {
