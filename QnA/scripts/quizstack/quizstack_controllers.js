@@ -3,6 +3,14 @@
 appmodule
 	.controller('AddQuizStackController', ['$scope', '$window', '$state', '$controller', '$stateParams', '$compile', 'QuizFactory', 'QuizStackFactory', 'SubCategoryFactory', 'QuestionsFactory', function($scope, $window, $state, $controller, $stateParams, $compile, QuizFactory, QuizStackFactory, SubCategoryFactory, QuestionsFactory) {
             $controller('CookiesController', {$scope : $scope});
+
+            $scope.go = function ( path ) {
+                $('#sub_cat_not_hv_que').modal('hide');
+                $('body').removeClass('modal-open');
+                $('.modal-backdrop').remove();
+                $state.go( path );
+            };
+
             var total_duration = 0;
             SubCategoryFactory.getAllSubcategories($scope.user, 'all', true).query(
             function(response) {
@@ -72,7 +80,13 @@ appmodule
                 $scope.finalStack = [];
                 QuestionsFactory.getQuestionUnderSubCategory($scope.user, subCategoryId, true).query(
                     function(response) {
+                        if(response[0].no_questions == 0){
+                            $("#sub_cat_not_hv_que").modal("show");
+                            return false;   
+                        }
+
                         $scope.selectedSubCategory = response[0];
+
                         s = {}
                         s[$scope.count] = {
                                 'quiz' : $stateParams.quizid,
@@ -88,6 +102,7 @@ appmodule
                                 'question_order' : $scope.selectSubCategory['question_order'],
 
                             }
+
                         QuizStackFactory.addToFinalStack(s);
                         QuizStackFactory.addSelectedLevelQuestions($scope.selectedSubCategory['questions_level_info']);
                         initialnoOfQuestionIndex = $scope.selectedSubCategory['questions_level_info'].findIndex(val=>val>0);
@@ -106,7 +121,7 @@ appmodule
                                     '<td style="width:130px;"><input type="number" min="1" max="180" class="form-control" id="duration'+$scope.count+'" ondblclick="makeEditable(this)" onblur="makeUneditable(this); name="duration" value="'+$scope.selectedSubCategory['duration']+'" readonly></td>'+
                                     '<td style="width:130px;"><select class="form-control" name="istimed" id="istimed'+$scope.count+'"><option value="yes">yes</option><option value="no">no</option></select></td>'+
                                     '<td style="width:130px;"><input type="number" min="1" max="100" class="form-control" ondblclick="makeEditable(this)" onblur="makeUneditable(this)" name="correct_grade" id="correct_grade'+$scope.count+'" value="'+$scope.selectedSubCategory['correct_grade']+'" readonly></td>'+
-                                    '<td style="width:130px;"><input type="number" min="-100" max="100" class="form-control" ondblclick="makeEditable(this)"onblur="makeUneditable(this)" name="incorrect_grade" id="incorrect_grade'+$scope.count+'" value="'+$scope.selectedSubCategory['incorrect_grade']+'" readonly></td>'+
+                                    '<td style="width:130px;"><input type="number" min="-100" max="100" class="form-control" ondblclick="makeEditable(this)" onblur="makeUneditable(this)" name="incorrect_grade" id="incorrect_grade'+$scope.count+'" value="'+$scope.selectedSubCategory['incorrect_grade']+'" readonly></td>'+
                                     '<td style="width:130px;"><select class="form-control" name="question_order" id="question_order'+$scope.count+'"><option value="random">random</option><option value="content">content</option></select></td>'+
                                     '<td style="width:60px;"><a href="javascript:void(0);"><span class="glyphicon glyphicon-remove-circle removefromstackbutton" ng-click="removeFromStack('+$scope.count+')" title="Click to remove it."></span></a></td>'+
                                     '<td style="width:60px;"><a href="javascript:void(0);"><span class="glyphicon glyphicon-ok-circle addtostackbutton" ng-click="addToStackAndSave('+$scope.count+')" title="Click to save it."></span></a></td>'+
@@ -163,9 +178,6 @@ appmodule
                     $scope.alertMsg = "Unable to delete the quiz stack. See below errors.";
                     alert(response.data.errors);
                 });
-            }
-            $scope.go = function(){
-                console.log(QuizStackFactory.showStack());
             }
             
             // $scope.getUserDetails = function(){

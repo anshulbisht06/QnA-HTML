@@ -1,16 +1,21 @@
-<div class="container-fluid">
+<div class="container-fluid  panel panel-default" style="margin: 20px;">
 <div ng-include src="'views/alert_msg.html'"></div>
-<div class="row text-center"><h4><b>{{quizName|capitalize}}</b></h4></div>
+<div ng-include src="'views/modals/sub_cat_not_hv_ques.html'"></div>
+<div class="row text-center panel-heading">
+	<h4><b>{{quizName|capitalize}}</b></h4>
+</div>
 <div class="row"><br><br></div>
-<div class="row" ng-if="subCategories.length!=0">
+<div class="row panel-body"  ng-if="subCategories.length!=0">
 	<div class="col-lg-1 col-md-1 col-sm-1"></div>
 	<div class="col-lg-10 col-md-10 col-sm-10">
 		<div class="row">
 			<div class="col-lg-5 col-md-5 col-sm-5">
 				<div class="input-group">
-			        	<select class="form-control" id="subcategoryname" name="subcategoryname" ng-model="selectedSubCategoryDropdown" ng-change="selectSubCategory(selectedSubCategoryDropdown)">
+			        	<select class="form-control" id="subcategoryname" name="subcategoryname" ng-model="selectedSubCategoryDropdown" 
+			        		ng-change="selectSubCategory(selectedSubCategoryDropdown)">
 			        		<option value="" disabled>Select sub-category here...</option>
-			        		<option ng-repeat="subcategory in subCategories" value="{{ subcategory.id }}" id="subcategory{{ subcategory.id }}">{{ subcategory.sub_category_name }}</option>
+			        		<option ng-repeat="subcategory in subCategories" value="{{ subcategory.id }}" id="subcategory{{ subcategory.id }}">
+			        		{{subcategory.sub_category_name}}</option>
 			        	</select>
 		      	</div>
 	      	</div>
@@ -23,7 +28,7 @@
 	      	</div>
 	      	<div>
 		      	<div class="col-lg-1 col-md-1 col-sm-1">
-		      		<button type="button" class="btn btn-primary" ng-click="openTestWindow(quizKey)">
+		      		<button ng-disabled='existingStack.length < 0' type="button" class="btn btn-primary" ng-click="openTestWindow(quizKey)">
 		      			Preview
 		      		</button>
 		      	</div>
@@ -36,7 +41,6 @@
 				      </div>
 				      <div class="modal-body col-md-12">
 				      		<div class="col-md-12" ng-repeat="data in all_que_data.data|orderBy:['section_name']">
-				      			<!-- {{data}} -->
 				      			<h3>{{data.section_name}}</h3>
 				      			<h4>Total Questions: {{data.total_questions}}, Total Time: {{data.time_duration|time }} minutes</h4>
 				      			<div ng-repeat='cont in data.question_stack'>
@@ -58,7 +62,6 @@
 				        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 				      </div>
 				    </div>
-
 				  </div>
 				</div>
 			</div>
@@ -90,10 +93,8 @@
 			        <th></th>
 			      </tr>
 			    </thead>
-			    <tbody id="selectedQuestionsRow">
-			    </tbody>
-			    <tbody id="existingQuestionsRow">
-			    </tbody>
+			    <tbody id="selectedQuestionsRow"></tbody>
+			    <tbody id="existingQuestionsRow"></tbody>
 			  </table>
 		  </div>
 		</div>
@@ -102,7 +103,7 @@
 </div>
 <br>
 </div>
-<div class="row" ng-if="subCategories.length===0">
+<div class="row panel-body" ng-if="existingStack.length == 0 ">
 	<div class="row">
 		<div class="alert alert-warning text-center" id="noSubCategoryNotification">
 		  	<h4><strong>You haven't added any questions yet. Follow the below steps -</strong></h4>
@@ -113,7 +114,7 @@
 		<div class="col-lg-1 col-md-1 col-sm-1">
 		</div>
 		<div class="col-lg-3 col-md-3 col-sm-3">
-			<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+			<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12  panel panel-default">
 				<p><h4><b>First Step</b></h4></p><br>
 				<p><span class="glyphicon glyphicon-ok green-text"></span>&nbsp;&nbsp;Create a sub-category.</p>
 				<hr>
@@ -123,11 +124,11 @@
 				<h2><br><br><span class="glyphicon glyphicon-arrow-down blue-text next-step-arrow-xs text-center"></span></h2><br>
 			</div>
 			<div class="col-lg-2 col-md-2 col-sm-2 hidden-xs">
-				<h2><span class="glyphicon glyphicon-arrow-right blue-text next-step-arrow"></span></h2>
+				<h2><span class="glyphicon glyphicon-arrow-right red-text next-step-arrow"></span></h2>
 			</div>
 		</div>
 		<div class="col-lg-4 col-md-4 col-sm-4">
-			<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+			<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12  panel panel-default">
 				<p><h4><b>Second Step</b></h4></p><br>
 				<p><span class="glyphicon glyphicon-ok green-text"></span>&nbsp;&nbsp;Create a Question.</p>
 				<hr>
@@ -137,15 +138,15 @@
 				<h2><br><br><span class="glyphicon glyphicon-arrow-down blue-text next-step-arrow text-center"></span></h2>
 			</div>
 			<div class="col-lg-2 col-md-2 col-sm-2 hidden-xs">
-				<h2><span class="glyphicon glyphicon-arrow-right blue-text next-step-arrow-xs"></span></h2><br>
+				<h2><span class="glyphicon glyphicon-arrow-right red-text next-step-arrow"></span></h2><br>
 			</div>
 		</div>
 		<div class="col-lg-3 col-md-3 col-sm-3">
-			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12  panel panel-default">
 				<p><h4><b>Third Step</b></h4></p><br>
 				<p><span class="glyphicon glyphicon-ok green-text"></span>&nbsp;&nbsp;Load sub-categories inside your Quiz Stack.</p>
 				<hr>
-				<h5 class="help-block">Finally reload this page and you will be asked to select sub-category among all sub-categories you have created. Selecting a sub-category will load all questions inside it into your quiz stack. You can filter out questions according to their type (MCQ/Objetcive) or level (easy/medium/hard). Then click on the <span class="glyphicon glyphicon-ok-circle green-text"></span> to save the questions. You can also delete the previously existing questions from your quiz stack. You can also preview your question store in a local test environment.</h5>
+				<h5 class="help-block help-text">Finally reload this page and you will be asked to select sub-category among all sub-categories you have created. Selecting a sub-category will load all questions inside it into your quiz stack. You can filter out questions according to their type (MCQ/Objetcive) or level (easy/medium/hard). Then click on the <span class="glyphicon glyphicon-ok-circle green-text"></span> to save the questions. You can also delete the previously existing questions from your quiz stack. You can also preview your question store in a local test environment.</h5>
 			</div>
 		</div>
 		<div class="col-lg-1 col-md-1 col-sm-1">

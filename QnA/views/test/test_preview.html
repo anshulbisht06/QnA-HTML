@@ -97,9 +97,11 @@
 				</div>
 			</div>
 		</div>
-		<div class="row">
-			<button ng-if="currentCount>0 && currentCount<total_questions.length" class="btn btn-info btn-md right" ng-click="changeQuestion(currentCount+1)">Next Question</button>
-			<button ng-if="currentCount>1" class="btn btn-info btn-md left" ng-click="changeQuestion(currentCount-1)">Previous Question</button>
+		<div class="row center">
+			<div>
+				<button ng-disabled="!currentCount>0 && !currentCount<total_questions.length" class="btn btn-info btn-md" ng-click="changeQuestion(currentCount+1)">Next</button>
+				<button ng-disabled="!currentCount>1" class="btn btn-info btn-md" ng-click="changeQuestion(currentCount-1)">Previous</button>
+			</div>
 		</div>
 	</div>
 	<div class="container" ng-show="!dataPresent"><h3>No questions present.</h3></div>
