@@ -28,7 +28,6 @@ function isNotEmpty(object){
    	for(var i in object){ return true;}
   	return false;
 }
-
 // in seconds
 function findTotalDuration(list){
     var total = 0;

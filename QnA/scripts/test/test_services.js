@@ -33,6 +33,9 @@ appmodule
             allQuestions[sectionName] = data;
             return data;
         }
+        this.getAnswersForSection = function(sectionName){
+            return data[sectionName];
+        }
         this.getQuestionsForASection = function(sectionName){
             return allQuestions[sectionName];
         }
@@ -59,9 +62,12 @@ appmodule
            }
         }
         // Save all questions answered with section name as key including progress values
-        this.saveQuestionsAnsweredSectionWise = function(sectionName, progressValues){
+        this.saveQuestionsAnsweredSectionWise = function(sectionName, answers, progressValues){
             result = {};
-            result[sectionName] = { answers : data[sectionName], progressValues : progressValues }; 
+            result[sectionName] = { answers : {} };
+            for(var question_id in progressValues){
+                result[sectionName]['answers'][question_id] = { status: progressValues[question_id]['status']  , value: answers[question_id]['value']};
+            }
             return result[sectionName];
         }
 

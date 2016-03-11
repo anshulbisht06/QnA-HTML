@@ -19,7 +19,7 @@ appmodule
                     var questionsAdded = TestPreviewFactory.addQuestionsForSection(sectionName, response.questions);
                     for(var i=0;i<questionsAdded.length;i++){
                         $scope.answersModel[questionsAdded[i][i+1].id] = { value:null };
-                        $scope.progressValuesModel[questionsAdded[i][i+1].id] = { status:'NV'};
+                        $scope.progressValuesModel[questionsAdded[i][i+1].id] = { status:'NV' };
                     }
                     TestPreviewFactory.saveSectionQuestion(sectionName, $scope.answersModel);
                     TestPreviewFactory.saveProgressValues(sectionName, $scope.progressValuesModel);
@@ -157,8 +157,12 @@ appmodule
             sliceOutQuestions();
         }
 
+        function submitEachQuestion(){
+            
+        }
+
         $scope.submitTestDetails = function(isSaveToDB, currentSection){
-            var data = TestPreviewFactory.saveQuestionsAnsweredSectionWise($scope.selectedSection, TestPreviewFactory.getProgressValuesSectionWise($scope.selectedSection));
+            var data = TestPreviewFactory.saveQuestionsAnsweredSectionWise($scope.selectedSection, TestPreviewFactory.getAnswersForSection(currentSection), TestPreviewFactory.getProgressValuesSectionWise(currentSection));
             // if(isSaveToDB){
             //     data['sections'] = Object.keys($window.opener.data['details']).sort();
             // }
