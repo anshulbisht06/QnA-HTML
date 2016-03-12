@@ -146,7 +146,7 @@ appmodule
                 function(response) {
                     $scope.alertType = "danger";
                     $scope.alertMsg = "Unable to update the quiz stack.";
-                    alert(response.data);
+                    alert(response.data.errors);
                 });
             }
             $scope.removeFromStack = function(count){

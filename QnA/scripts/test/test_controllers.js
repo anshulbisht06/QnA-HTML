@@ -219,7 +219,7 @@ appmodule
             $scope.postUserDetails = function(){testUserDataFactory.saveTestUser().save($scope.data).$promise.then(
                 function(response){
                     $scope.isFormInvalid = false;
-                    $state.go('app.test-preview', {obj:{'name':response.user_name , 'email':response.email, 'test_key': response.test_key, 'test_user': response.test_user}});                     
+                    $state.go('app.test-preview', {obj:{'name':response.user_name , 'email':response.email, 'test_key': response.test_key, 'test_user': 'response.test_user'}});                     
                 },
                 function(response) {
                     $scope.isFormInvalid = true;
