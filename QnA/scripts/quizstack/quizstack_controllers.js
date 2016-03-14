@@ -163,6 +163,7 @@ appmodule
                     $scope.alertMsg = "Unable to update the quiz stack.";
                     alert(response.data.errors);
                 });
+                setTimeout(closeAlert, 5000);
             }
             $scope.removeFromStack = function(count){
                 QuizStackFactory.removeFromStack(count);
@@ -178,6 +179,7 @@ appmodule
                     $scope.alertMsg = "Unable to delete the quiz stack. See below errors.";
                     alert(response.data.errors);
                 });
+                setTimeout(closeAlert, 5000);
             }
             
             // $scope.getUserDetails = function(){

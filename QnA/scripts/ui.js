@@ -4,6 +4,13 @@ $(document).click(function (event) {
         navbar.collapse('hide');
     }
 });
+
+function closeAlert(){
+    $("#notification").fadeTo(0, 500).slideUp(500, function(){
+        $("#notification").alert('close');
+    });    
+}
+
 function makeEditable(element){
 	element.readOnly = false;
 }
