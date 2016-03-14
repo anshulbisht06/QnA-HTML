@@ -1,18 +1,6 @@
 /* global $ */
 
 appmodule
-	.service('testUserDataFactory', ['$resource', function($resource) {
-		this.saveTestUser = function(){
-	        return $resource(baseURL+"user/data/", null,
-	                {'save':   
-	                { method:'POST', 
-	                } 
-	                },
-	                { stripTrailingSlashes: false }
-	                );
-	    };	    
-	}])
-
 	.service('TestPreviewFactory', ['$resource', function($resource) {
         var allQuestions = {}
         var progressData = {}
