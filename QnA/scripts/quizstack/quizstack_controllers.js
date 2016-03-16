@@ -142,7 +142,7 @@ appmodule
                     return;
                 }
                 r[count]['que_type'] = document.querySelector("#que_type"+count).value;
-                r[count]['section_name'] = document.querySelector("#section_name"+count).value;
+                r[count]['section_name'] = 'Section#'+document.querySelector("#section_name"+count).value;
                 r[count]['no_questions']  = document.querySelector("#levelwiseqs"+count+" select").value;
                 r[count]['duration']  = document.querySelector("#duration"+count).value;
                 if(document.querySelector("#istimed"+count).value==='yes')
