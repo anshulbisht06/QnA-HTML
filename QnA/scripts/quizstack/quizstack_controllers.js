@@ -113,7 +113,7 @@ appmodule
                         }
                         levelHtml += '</select>';
                         html = '<tr id="newstackrow'+$scope.count+'">'+
-                                    '<td style="width:130px;"><input type="text" class="form-control" ondblclick="makeEditable(this)" onblur="makeUneditable(this)" name="section_name"  id="section_name'+$scope.count+'" value="'+$scope.selectedSubCategory['section_name']+'" readonly></td>'+
+                                    '<td style="width:130px;"><input type="number" min="1" class="form-control" ondblclick="makeEditable(this)" onblur="makeUneditable(this)" name="section_name"  id="section_name'+$scope.count+'" value="'+$scope.selectedSubCategory['section_name']+'" readonly></td>'+
                                     '<td style="width:200px;">'+$scope.selectedSubCategory['subcategory']+'</td>'+
                                     '<td style="width:130px;">'+levelHtml+'</td>'+
                                     '<td style="width:130px;"><select class="form-control" id="que_type'+$scope.count+'" name="que_type"><option value="mcq">mcq</option><option value="objective">objective</option></select></td>'+
@@ -161,8 +161,9 @@ appmodule
                 function(response) {
                     $scope.alertType = "danger";
                     $scope.alertMsg = "Unable to update the quiz stack.";
-                    alert(response.data);
+                    alert(response.data.errors);
                 });
+                setTimeout(closeAlert, 5000);
             }
             $scope.removeFromStack = function(count){
                 QuizStackFactory.removeFromStack(count);
@@ -178,6 +179,7 @@ appmodule
                     $scope.alertMsg = "Unable to delete the quiz stack. See below errors.";
                     alert(response.data.errors);
                 });
+                setTimeout(closeAlert, 5000);
             }
             
             // $scope.getUserDetails = function(){
@@ -185,7 +187,6 @@ appmodule
             //     $window.data = { 'quiz': $stateParams.quizid , 'quizName': $scope.quizName, 'quizStacks' : $scope.existingStack, 'details' : {} };
             //     $window.open($state.href('app.test-login', {parameter: "parameter"}), "Test Window", "width=1280,height=890,resizable=0");
             // }
-
             $scope.openTestWindow = function(){
                 data = { 'quiz': $stateParams.quizid , 'quizName': $scope.quizName, 'quizStacks' : $scope.existingStack, 'details' : {} };    
                 l = [];

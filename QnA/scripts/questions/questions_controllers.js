@@ -175,6 +175,7 @@ appmodule
                     $scope.alertMsg = "Unable to create the category - " + $scope.createCategoryform.category_name;
                     alert(response.data);
                 });
+                setTimeout(closeAlert, 5000);
         }
 
         $scope.postSubCategory = function() {    
@@ -193,6 +194,7 @@ appmodule
                     $scope.alertMsg = "Unable to create the sub-category for " + $scope.createSubCategoryform.sub_category_name + ". See below error.";
                     $scope.errors = response.data;
                 });
+                setTimeout(closeAlert, 5000);
         }
 
         
@@ -424,5 +426,6 @@ appmodule
                     $scope.alertMsg = "Unable to update the answers. See below errors.";
                     $scope.errors = response.data;
                 });
+            setTimeout(closeAlert, 5000);
         }
     }]);

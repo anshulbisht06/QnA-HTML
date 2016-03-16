@@ -44,9 +44,13 @@ appmodule
                     $scope.alertMsg = "You are successfully registered. Please login.";
                 },
                 function(response) {
+                    $scope.alertType = "danger";
+                    $scope.alertMsg = "Unable to register. See below errors.";
                     $scope.isFormInvalid = true;
                     $scope.errors = response.data;
                 });
+                setTimeout(closeAlert, 5000);
+
         }
     }])     
 
@@ -102,6 +106,7 @@ appmodule
                 $scope.alertType = "danger";
                 $scope.alertMsg = "Unable to login. See the errors below.";
                 $scope.errors = data.errors? data.errors:'';
+                setTimeout(closeAlert, 5000);
             });
         };
     }]);

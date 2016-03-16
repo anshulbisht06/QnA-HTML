@@ -18,10 +18,11 @@ appmodule
                     $scope.progressValuesModel = {};
                     var questionsAdded = TestPreviewFactory.addQuestionsForSection(sectionName, response.questions);
                     for(var i=0;i<questionsAdded.length;i++){
-                        $scope.answersModel[questionsAdded[i][i+1].id] = { value:null, status:'NV'};
-                        $scope.progressValuesModel[questionsAdded[i][i+1].id] = { status:'NV'};
+                        $scope.answersModel[questionsAdded[i][i+1].id] = { value:null };
+                        $scope.progressValuesModel[questionsAdded[i][i+1].id] = { status:'NV' };
                     }
                     TestPreviewFactory.saveSectionQuestion(sectionName, $scope.answersModel);
+                    TestPreviewFactory.saveProgressValues(sectionName, $scope.progressValuesModel);
                     $scope.changeQuestion(1);
                 },
                 function(response){
@@ -73,7 +74,7 @@ appmodule
             console.log(TestPreviewFactory.getQuestionsForASection(sectionName));
         }
         $scope.show = function(){
-            console.log(TestPreviewFactory.showAllQuestionsAnswered());
+            console.log(TestPreviewFactory.saveQuestionsAnsweredSectionWise());
         }
         $scope.changeQuestion = function(count){
             if(count>=1 && count<=$scope.total_questions.length)
@@ -90,6 +91,7 @@ appmodule
             if($scope.progressValuesModel[$scope.currentQuestion.id].status==='NV'){
                 $scope.progressValuesModel[$scope.currentQuestion.id].status = 'NA';
                 $scope.progressValues = changeProgressValues($scope.progressValuesModel);
+                TestPreviewFactory.saveProgressValues($scope.selectedSection, $scope.progressValuesModel);
             }
         }
         $scope.saveAnswer = function(count, answerId){
@@ -110,7 +112,7 @@ appmodule
          },                       
           function(newVal, oldVal) {
             try{ 
-                if($scope.currentCount > 1 || $scope.currentQuestion.que_type === 'mcq'){
+                if($scope.currentCount > 1 || ($scope.currentCount > 1 && $scope.currentQuestion.que_type === 'mcq')){
                     if($scope.progressValuesModel[$scope.currentQuestion.id].status === 'NV'){
                         $scope.progressValuesModel[$scope.currentQuestion.id].status = 'NA';
                     }
@@ -138,6 +140,7 @@ appmodule
                     }   
                 }
                 $scope.progressValues = changeProgressValues($scope.progressValuesModel);
+                TestPreviewFactory.saveProgressValues($scope.selectedSection, $scope.progressValuesModel);
             }catch(err){}
         }, true);
         function sliceOutQuestions(){
@@ -150,15 +153,6 @@ appmodule
         $scope.increaseSlicing = function(){
             $scope.sliceFactor += 1;
             sliceOutQuestions();
-        }
-        $scope.submitTest = function(){
-            TestPreviewFactory.postTest($stateParams.obj.test_user).save(TestPreviewFactory.showAllQuestionsAnswered()).$promise.then(
-                function(response){
-                    console.log('success');                    
-                },
-                function(response) {
-                    console.log('failed');
-                });
         }
 
         try{
@@ -187,35 +181,9 @@ appmodule
                 $scope.dataPresent = false;
             }
         }catch(e){
-            console.log(e);
             $scope.dataPresent = false;
         }
-        $scope.$on('$locationChangeStart', function( event ) {
-            var answer = confirm("Do you want to start the test?");
-            if(answer){
-                event.preventDefault();
-            }else{
-                $window.close();
-            }
-        });
     }])
-
-
-// .controller('UserDataController',['$scope','$state', 'testUserDataFactory','$controller', '$window', function($scope, $state, testUserDataFactory, $controller, $window) {
-//         	$scope.data = {name: '', email: '', quiz: $window.opener.data.quiz, quiz_name: $window.opener.data.quizName, 'test_key': 'f86d61d474de2b13499c' };
-//             $scope.postUserDetails = function(){testUserDataFactory.saveTestUser().save($scope.data).$promise.then(
-//                 function(response){
-//                     $scope.isFormInvalid = false;
-//                     $state.go('app.test-preview', {obj:{'name':response.user_name , 'email':response.email, 'test_key': response.test_key, 'test_user': response.test_user}});                     
-//                 },
-//                 function(response) {
-//                     $scope.isFormInvalid = true;
-//                     $scope.alertType = "danger";
-//                     $scope.alertMsg = "Unable to find the user - please try again.";
-//                     $scope.errors = response.data;
-//                 });}
-// 		}])
-
 
 .controller('TestPreviewHeaderController', ['$scope', '$controller', '$window', function($scope, $controller, $window) {
             $controller('CookiesController', {$scope : $scope});
