@@ -6,7 +6,7 @@ appmodule
         $scope.categoryNotSelected = true;
         
         $scope.curPage = 0;
-        $scope.pageSize = 9;
+        $scope.pageSize = 10;
 
         $scope.subCategoryNotSelected = true;
         $scope.createCategoryform = { category_name: "", user: $scope.user };
@@ -89,15 +89,11 @@ appmodule
 
         $scope.loadQuestions = function(choice, id) { 
             if(choice === 'subcategory'){
-            SubCategoryFactory.getQuestionUnderSubCategory($scope.user, id,false).query(
+            SubCategoryFactory.getQuestionUnderSubCategory($scope.user, id, false).query(
             function(response){
                 $scope.questions = response;
                 $scope.questionsLevelInfo = $scope.questions.questions_level_info;
-
-                $scope.numberOfPages = function(){
-                    console.log(response.questions.length/$scope.pageSize);
-                    return Math.ceil(response.questions.length / $scope.pageSize);
-                };
+                $scope.numberOfPages = Math.ceil(response.questions.length/$scope.pageSize);
 
             },
             function(response){
@@ -105,7 +101,7 @@ appmodule
             });
         }
         }
-        
+
 
         $scope.selectCategory = function(selectedCategoryId, selectedCategoryName){
             $scope.categoryNotSelected = false;
@@ -171,7 +167,6 @@ appmodule
                 function(response) {
                     $scope.isFormInvalid = true;
                     $scope.alertType = "danger";
-
                     $scope.alertMsg = "Unable to create the category - " + $scope.createCategoryform.category_name;
                     alert(response.data);
                 });
@@ -186,13 +181,18 @@ appmodule
                     $scope.allSubCategories.push({ 'id':response.id, 'sub_category_name':response.sub_category_name });                        
                     // $scope.$apply();
                     angular.element(document.querySelector('#createSubCategoryModal')).modal('hide');
-                    $scope.createSubCategoryform = { sub_category_name : "", category : "", user : $scope.user };
+                    $scope.createSubCategoryform = { sub_category_name : "", category : $scope.selectedCategoryId, user : $scope.user };
                     // $state.go('app.questions');  
                 },
                 function(response) {
                     $scope.alertType = "danger";
-                    $scope.alertMsg = "Unable to create the sub-category for " + $scope.createSubCategoryform.sub_category_name + ". See below error.";
-                    $scope.errors = response.data;
+                    $scope.alertMsg = "Unable to create the sub-category - " + $scope.createSubCategoryform.sub_category_name + ".";
+                    if(response.data['non_field_errors']){
+                        alert("The sub-category already exists.");
+                    }else{
+                        alert(response.data);
+                    }
+                    angular.element(document.querySelector('#createSubCategoryModal')).modal('hide');
                 });
                 setTimeout(closeAlert, 5000);
         }
@@ -379,7 +379,8 @@ appmodule
                 }, function (response) {
                     $scope.error = true;
                 }, function(event) {
-                    alert('Question created succesfully!');
+                    alert('Question updated succesfully!');
+                    $state.go('app.questions');
                 });
         }
 
@@ -419,6 +420,7 @@ appmodule
         $scope.putAnswers = function() {
             QuestionsFactory.updateAnswers($scope.user, $stateParams.questionParams.split(':')[0], $stateParams.questionParams.split(':')[1]).update($scope.updateAnswersForm).$promise.then(
                 function(response){
+                    alert('Answer updated succesfully!');
                     $state.go('app.questions');                     
                 },
                 function(response) {

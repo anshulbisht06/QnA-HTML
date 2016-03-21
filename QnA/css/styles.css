@@ -111,6 +111,9 @@ ul.sidemenu > li{
 	position: relative;
 	top: 10px;
 }
+.light-blue-border{
+	border-color: #bce8f1;
+}
 /*.question-image:hover{
 	transform: scale3d(2,2,2);
 }*/

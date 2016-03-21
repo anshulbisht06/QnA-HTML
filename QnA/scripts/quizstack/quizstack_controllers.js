@@ -4,11 +4,11 @@ appmodule
 	.controller('AddQuizStackController', ['$scope', '$window', '$state', '$controller', '$stateParams', '$compile', 'QuizFactory', 'QuizStackFactory', 'SubCategoryFactory', 'QuestionsFactory', function($scope, $window, $state, $controller, $stateParams, $compile, QuizFactory, QuizStackFactory, SubCategoryFactory, QuestionsFactory) {
             $controller('CookiesController', {$scope : $scope});
 
-            $scope.go = function ( path ) {
-                $('#sub_cat_not_hv_que').modal('hide');
-                $('body').removeClass('modal-open');
-                $('.modal-backdrop').remove();
-                $state.go( path );
+            $scope.go = function(path) {
+                angular.element(document.querySelector('#sub_cat_not_hv_que')).modal('hide');
+                angular.element(document.querySelector('body')).removeClass('modal-open');
+                angular.element(document.querySelector('.modal-backdrop')).remove();
+                $state.go(path);
             };
 
             var total_duration = 0;
@@ -81,12 +81,10 @@ appmodule
                 QuestionsFactory.getQuestionUnderSubCategory($scope.user, subCategoryId, true).query(
                     function(response) {
                         if(response[0].no_questions == 0){
-                            $("#sub_cat_not_hv_que").modal("show");
+                            angular.element(document.querySelector('#sub_cat_not_hv_que')).modal("show");
                             return false;   
                         }
-
                         $scope.selectedSubCategory = response[0];
-
                         s = {}
                         s[$scope.count] = {
                                 'quiz' : $stateParams.quizid,
@@ -100,7 +98,6 @@ appmodule
                                 'correct_grade' : $scope.selectSubCategory['correct_grade'],
                                 'incorrect_grade' : $scope.selectSubCategory['incorrect_grade'],
                                 'question_order' : $scope.selectSubCategory['question_order'],
-
                             }
 
                         QuizStackFactory.addToFinalStack(s);

@@ -2,7 +2,7 @@
   <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div class="modal-header">
-      	<button type="button" class="close" data-dismiss="modal">&times;</button>
+      	<button type="button" class="close red-text" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Create Quiz</h4>
       </div>
       <div class="modal-body" id="quizCreateModalBody">
@@ -20,8 +20,8 @@
 				  	 
 				  <div class="row">
 					<div class="col-lg-6 col-md-6 col-sm-6">
+					<label for="no_of_attempt">No. of Attempts</label>
 					  <div class="checkbox">
-					    <label for="no_of_attempt">No. of Attempts</label>
 					    <select class="form-control" id="no_of_attempt" name="no_of_attempt" ng-model="createQuizForm.no_of_attempt">
 					      	<option value="1">1</option>
 					      	<option value="2">2</option>
@@ -64,9 +64,16 @@
 					</div>
 				  </div>
 
-				  <div class="col-lg-6 col-md-6 col-sm-6" ng-if='adv_sett_switch'>
+				  <div class="row" ng-if='adv_sett_switch'>
 					  <div class="form-group">
-					    <input type="checkbox" name='user_picturing' ng-model="createQuizForm.user_picturing" />&nbsp;Take Test User Picture.
+					  	<label for="user_picturing">
+					    	<input type="checkbox" name='user_picturing' id="user_picturing" ng-model="createQuizForm.user_picturing">&nbsp;Take Test User Picture.
+					    </label>
+					  </div>
+					  <div class="form-group">
+					  	<label for="show_result_on_completion">
+					    	<input type="checkbox" name='show_result_on_completion' id="show_result_on_completion" ng-model="createQuizForm.show_result_on_completion">&nbsp;Show result on test completion
+					    </label>
 					  </div>
 				  </div>
 
