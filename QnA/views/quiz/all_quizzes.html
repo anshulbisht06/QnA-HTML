@@ -1,27 +1,10 @@
 <!-- Get a create quiz modal -->
 <div ng-include src="'views/modals/create_quiz_modal.html'"></div>
 <div ng-include src="'views/modals/update_quiz_modal.html'"></div>
+<div ng-include src="'views/modals/warn_delete_quiz.html'"></div>
 <!-- End Here ... -->
 
-<div id="quizDeleteModal" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
-  <div class="modal-dialog modal-md">
-    <div class="modal-content">
-      <div class="modal-header">
-      	<button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Delete Quiz</h4>
-      </div>
-      <div class="modal-body" id="quizDeleteModalBody">
-      	<div class="row" ng-if="quizToBeDeletedID && quizToBeDeletedTitle">
-      		<p><h4>Do you really want to delete quiz - <b>{{quizToBeDeletedTitle}}</b>?</h4></p>
-      	</div>
-      </div>
-      <div ng-if="quizToBeDeletedID && quizToBeDeletedTitle" class="modal-footer" id="quizDeleteModalFooter">
-  		<button type="button" class="btn btn-danger" ng-click="deleteQuiz('deleteQuizRequestAccepted', quizToBeDeletedID, quizToBeDeletedTitle)">Delete It</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="deleteQuiz('deleteQuizRequestCancelled', quizToBeDeletedID, quizToBeDeletedTitle)">Cancel</button>
-      </div>
-    </div>
-  </div>
-</div>
+
 <div class="container-fluid">
 <div ng-include src="'views/alert_msg.html'"></div>
 <div class="jumbotron" ng-controller="CreateCategoryController">    
@@ -34,15 +17,8 @@
 	    	<button type="button" class="btn btn-primary btn-lg right" data-toggle="modal" data-target="#quizCreateModal"><span class="glyphicon glyphicon-plus"></span>&nbsp;Add Quiz</button>
 			</div>
 		</div>
-	</div><hr>
-	<!-- <div class="col-md-12" ng-show="allQuiz.length" style='text-align:center;margin:1%;'>
-		  <button type="button" class='btn btn-primary' ng-disabled="curPage == 0"
-		 ng-click="curPage=curPage-1">PREV</button>
-		 <span>Page {{curPage + 1}} of {{ numberOfPages() }}</span>
-		 <button type="button" class='btn btn-primary'
-		 ng-disabled="curPage >= allQuiz.length/pageSize - 1"
-		 ng-click="curPage = curPage+1">NEXT </button>
-	</div> -->
+	</div>
+	<hr>
 	<div class="row" ng-if="allQuiz.length!=0">
 		<div class="col-lg-2 col-md-2 col-sm-2"></div>
 		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
@@ -53,10 +29,8 @@
 						  <span data-toggle="dropdown" class="glyphicon glyphicon-option-vertical pointer"></span>
 						  <ul class="dropdown-menu">
 						    <li><a ui-sref="app.view-quiz({quizid : '{{ quiz.id }}' })">View Question Stacks</a></li>
-						    <!-- <li><a ui-sref="app.view-quiz({quizid : '{{ quiz.id }}' })">Advance Settings</a></li> -->
 						    <li><a href="javascript:void(0)" ng-click="putQuiz('updateQuizRequestInitiated', quiz)">Update details</a></li>
 						    <li><a href="javascript:void(0)" ng-click="deleteQuiz('deleteQuizRequestInitiated', quiz.id, quiz.title)">Delete Quiz</a></li>
-						    <!-- <li><a href="" ng-click="getCategories(quiz.id, quiz.title)">View Categories</a></li> -->
 						  </ul>
 						</div>
 			      </div>
@@ -69,7 +43,6 @@
 					</div>
 			      </div>
 			      <div>
-					<button class="btn btn-block btn-primary" ng-click=''>Review Test</button>
 				  </div>
 			    </div>
 			</div>
@@ -89,27 +62,6 @@
 		 ng-click="curPage = curPage+1">NEXT </button>
 	</div>
 </div>
-<!-- <div id="categoriesModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title" id="quiztitle">Categories inside <span style="color:blue;">{{ quiztitle | capitalize }}</span></h4>
-      </div>
-      <div class="modal-body">
-        <p ng-if="!unableToGetAllCategories">
-        <span ng-repeat="category in allCategories" style="font-size: 18px;color:black;"><span class="label label-info">{{ category.category_name | capitalize }}</span>&nbsp;&nbsp;</span>
-        </p>
-        <p ng-if="!unableToGetAllCategories">
-        <span>{{ unableToGetAllCategories }}</span>
-        </p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" id="categoriesModalClose">Close</button>
-      </div>
-    </div>
-  </div>
-</div> -->
 </div>
 
 
