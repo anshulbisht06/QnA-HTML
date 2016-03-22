@@ -23,7 +23,7 @@
 	      	</div>
 	      	<div class="col-lg-3 col-md-3 col-sm-3">
 	      		<div class="input-group">
-	      			<span class="input-group-addon">Duration:  <span style='color:black;' ng-if="total_duration">{{total_duration | secondsToDateTime | date:'HH:mm:ss' }}</span></span>
+	      			<span class="input-group-addon">Duration:  <span style='color:black;' ng-if="total_duration">{{total_duration*60 | secondsToDateTime | date:'HH:mm:ss' }}</span></span>
 	      		</div>
 	      	</div>
 	      	<div>

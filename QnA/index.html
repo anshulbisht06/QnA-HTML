@@ -25,6 +25,17 @@
   <div ui-view="header"></div>
 </header>
 <main>
+<div id="connectionLostModal" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+        <p>The connection to the server has been lost. Trying to connect in <span id="time">10</span> seconds.</p>        
+      <div class="modal-footer">
+<!--         <button class="btn btn-md btn-primary">Check Again</button>
+ -->      </div>
+    </div>
+  </div>
+</div>
   <div ui-view="content">
     <div class="row">
       <h1 class="text-center hidden-xs">Welcome to Qna - Online assessment engine for e-learners.</h1>

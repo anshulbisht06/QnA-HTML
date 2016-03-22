@@ -263,13 +263,15 @@ appmodule
                     // headers: {'Authorization': 'JWT ' + $cookies.get('token')},
                     resumeChunkSize: '1MB',
                 }).then(function(response) {
+                    alert('Question created succesfully!');
+                    window.location.reload();
                 }, function (response) {
-                    $scope.error = true;
+                    // $scope.error = true;
+                    alert(response.data.errors);
                 }, function(event) {
                     // var percentage = parseInt(100.0 * event.loaded / event.total).toString();
                     // $('#progress-bar').css('width', percentage+'%');
                     // $('#percentage').html(percentage);
-                    alert('Question created succesfully!');
                 });
         }
         $scope.changeImage = function(){
@@ -376,11 +378,12 @@ appmodule
                     method : 'PUT',
                     data: { data: data },
                 }).then(function(response) {
-                }, function (response) {
-                    $scope.error = true;
-                }, function(event) {
                     alert('Question updated succesfully!');
-                    $state.go('app.questions');
+                    window.location.reload();
+                }, function (response) {
+                    // $scope.error = true;
+                    alert(response.data.errors);
+                }, function(event) {
                 });
         }
 

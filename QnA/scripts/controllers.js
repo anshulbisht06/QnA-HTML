@@ -1,12 +1,14 @@
 /* global $ */
 appmodule
     .controller('CookiesController', ['$scope', '$rootScope', '$cookies', '$state', function($scope, $rootScope, $cookies, $state) {
-        $rootScope.user = $cookies.get('user');
-        $rootScope.username = $cookies.get('username');
-        $rootScope.token = $cookies.get('token');
-        if($rootScope.token === undefined){    
-            $state.go('app.login-user');
-        }
+        try{
+            $rootScope.user = $cookies.get('user');
+            $rootScope.username = $cookies.get('username');
+            $rootScope.token = $cookies.get('token');
+            if($rootScope.token === undefined){    
+                $state.go('app.login-user');
+            }
+        }catch(err){}
     }])
 
     .controller('IndexController', ['$scope', '$rootScope', '$controller', function($scope, $rootScope, $controller) {
