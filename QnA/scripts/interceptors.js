@@ -38,7 +38,7 @@ appmodule.factory('APIInterceptor', [ '$cookies', '$q', '$interval', function($c
 		                        alert('You are now connected to server');
 		                      },
 		                      error : function(xhr,errmsg,err) {
-		                      	// intial = intial + 5;
+		                      	intial = intial + 5;
 		                      	time = intial;
 		                        angular.element(document.querySelector('#time')).text(time);
 			                }
