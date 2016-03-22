@@ -88,13 +88,14 @@ appmodule
         });
 
         $scope.loadQuestions = function(choice, id) { 
+            $("#loader1").css('display', 'block');
             if(choice === 'subcategory'){
             SubCategoryFactory.getQuestionUnderSubCategory($scope.user, id, false).query(
             function(response){
                 $scope.questions = response;
                 $scope.questionsLevelInfo = $scope.questions.questions_level_info;
                 $scope.numberOfPages = Math.ceil(response.questions.length/$scope.pageSize);
-
+                $("#loader1").css('display', 'none');
             },
             function(response){
                 console.log(response)

@@ -1,7 +1,8 @@
 
-appmodule.factory('APIInterceptor', [ '$cookies', '$q', '$interval', function($cookies, $q, $interval, $scope){
+appmodule.factory('APIInterceptor', [ '$cookies', '$q', '$interval', function($cookies, $q, $interval){
 	return {	
 		    request: function(config) {
+		    	$("#loader").css('display', 'block');
 		    	if($cookies.get('token')){
 		    		config.headers.authorization = 'JWT '+$cookies.get('token');
 		    	}
@@ -15,11 +16,13 @@ appmodule.factory('APIInterceptor', [ '$cookies', '$q', '$interval', function($c
 		    },
 
 		    response: function(res) {
+		    	$("#loader").css('display', 'none');
 		      	return res;
 		      	// return $q.reject(res);
 		    },
 
 		    responseError: function(res) {
+		    	$("#loader").css('display', 'none');
 		    	if(res.status <= 0) {
 		    		var intial = 10;
 		    		var time = intial;
@@ -27,17 +30,17 @@ appmodule.factory('APIInterceptor', [ '$cookies', '$q', '$interval', function($c
                     $interval(function(){
 	                    if(time === 0){
 	                    	$.ajax({
-			                      url : baseURL+"ping/",
-			                      data : {},
-			                      type : "GET",
-			                      success : function(data) {
-			                        angular.element(document.querySelector('#connectionLostModal')).modal('hide');
-			                        alert('You are now connected to server');
-			                      },
-			                      error : function(xhr,errmsg,err) {
-			                      	// intial = intial + 5;
-			                      	time = intial;
-			                        angular.element(document.querySelector('#time')).text(time);
+		                      url : baseURL+"ping/",
+		                      data : {},
+		                      type : "GET",
+		                      success : function(data) {
+		                        angular.element(document.querySelector('#connectionLostModal')).modal('hide');
+		                        alert('You are now connected to server');
+		                      },
+		                      error : function(xhr,errmsg,err) {
+		                      	// intial = intial + 5;
+		                      	time = intial;
+		                        angular.element(document.querySelector('#time')).text(time);
 			                }
 			            });
 	                    }else{

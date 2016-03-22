@@ -1,6 +1,33 @@
 .form-control ,.navbar, .btn, .alert, .input-group, .input-group-addon{
 	border-radius: 0;
 }
+#loader{
+display : none;
+position : fixed;
+z-index: 100;
+background-image : url('../images/loader.svg');
+background-color:#666;
+background-size: 100px 100px;
+opacity : 0.80;
+background-repeat : no-repeat;
+background-position : center;
+left : 0;
+bottom : 0;
+right : 0;
+top : 0;
+}
+#loader1{
+display : none;
+width: 100px;
+height: 100px;
+position : relative;
+z-index: 100;
+opacity : 0.80;
+left : 0;
+bottom : 0;
+right : 0;
+top : 0;
+}
 header{
 	margin-bottom: 75px;
 }

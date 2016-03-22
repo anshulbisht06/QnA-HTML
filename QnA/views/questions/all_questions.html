@@ -31,6 +31,9 @@
 				</ul>
 			</div>
 			<hr>
+			<div class="row center">
+				<img src="../images/loader1.svg" id="loader1">
+			</div>
 			<div class="row" ng-if="tab!=1">
 				<ul class="list-group">
 				  	<li class="list-group-item light-blue-border" ng-if="questions.questions" ng-mouseenter="hoverOnQuestion(question.id)" ng-mouseleave="hoverOutQuestion(question.id)" ng-repeat="question in questions.questions | filter:filterLevel:true | pagination: curPage * pageSize | limitTo: pageSize" id="Q{{question.id}}">
