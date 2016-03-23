@@ -1,12 +1,33 @@
 /* global $ */
+
+
+// appmodule.run(function($rootScope){
+//     $rootScope
+//     .$on('$stateChangeStart', 
+//         function(event, toState, toParams, fromState, fromParams){ 
+//             $("#loader").css('display', 'block');
+//     });
+
+//     $rootScope
+//     .$on('$stateChangeSuccess',
+//         function(event, toState, toParams, fromState, fromParams){ 
+//             $("#loader").css('display', 'none');
+//     });
+//     // $rootScope.$on('$viewContentLoading', 
+//     //     function(event, viewConfig){ 
+//     // });
+// });
+
 appmodule
     .controller('CookiesController', ['$scope', '$rootScope', '$cookies', '$state', function($scope, $rootScope, $cookies, $state) {
-        $rootScope.user = $cookies.get('user');
-        $rootScope.username = $cookies.get('username');
-        $rootScope.token = $cookies.get('token');
-        if($rootScope.token === undefined){    
-            $state.go('app.login-user');
-        }
+        try{
+            $rootScope.user = $cookies.get('user');
+            $rootScope.username = $cookies.get('username');
+            $rootScope.token = $cookies.get('token');
+            if($rootScope.token === undefined){    
+                $state.go('app.login-user');
+            }
+        }catch(err){}
     }])
 
     .controller('IndexController', ['$scope', '$rootScope', '$controller', function($scope, $rootScope, $controller) {
@@ -61,6 +82,7 @@ appmodule
         $rootScope.token = undefined;
 
         $scope.postLogin = function () {
+            $('#loader').css('display','block');
 
            // use $.param jQuery function to serialize data from JSON 
             var data = $.param({
@@ -98,7 +120,6 @@ appmodule
                 // $scope.alertType = "success";
                 // $scope.alertMsg = "Successfully login.";
                 // $route.reload();
-
                 $state.go('app.all-quiz');
             })
             .error(function (data, status, header, config) {

@@ -2,7 +2,7 @@
   <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div class="modal-header">
-      	<button type="button" class="close" data-dismiss="modal">&times;</button>
+      	<button type="button" class="close red-text" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Update Quiz</h4>
       </div>
       <div class="modal-body" id="quizUpdateModalBody">
@@ -57,14 +57,21 @@
 				  <div class="row">
 					<div class="col-lg-8 col-md-8 col-sm-8">
 					  <div class="form-group">
-					    <a href="javascript:void(0);" id="settings_btn" ng-model="adv_sett_switch" class="btn" ng-click='adv_sett_switch = (adv_sett_switch==true?false:true)'><span class="glyphicon glyphicon-cog"></span> Advance Setting(s)</a>
+					    <a href="javascript:void(0);" id="settings_btn" ng-model="adv_sett_switch" class="btn" ng-click='adv_sett_switch = (adv_sett_switch==true?false:true)'><span class="glyphicon glyphicon-cog"></span> Advance Settings</a>
 					  </div>
 					</div>
 				  </div>
 
-				  <div class="col-lg-6 col-md-6 col-sm-6" ng-if='adv_sett_switch'>
+				  <div class="row" ng-if='adv_sett_switch'>
 					  <div class="form-group">
-					    <input type="checkbox" name='user_picturing' ng-model="updateQuizForm.user_picturing" />&nbsp;Take Test User Picture.
+					  	<label for="user_picturing">
+					    	<input type="checkbox" name='user_picturing' id="user_picturing" ng-model="updateQuizForm.user_picturing">&nbsp;Take Test User Picture.
+					    </label>
+					  </div>
+					  <div class="form-group">
+					  	<label for="show_result_on_completion">
+					    	<input type="checkbox" name='show_result_on_completion' id="show_result_on_completion" ng-model="updateQuizForm.show_result_on_completion">&nbsp;Show result on test completion
+					    </label>
 					  </div>
 				  </div>
 				  

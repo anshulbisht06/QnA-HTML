@@ -20,7 +20,7 @@
 			<div ng-include src="'views/questions/questions_side_menu.html'"></div>
 		</div>
  		<div class="col-lg-7 col-md-7 col-sm-7">
- 			<h2 class="text-center hidden-xs">Your Questions</h2>
+ 			<h3 class="text-center hidden-xs">Your Questions</h3>
 		    <h4 class="text-center visible-xs">Your Questions</h4>
 			<div class="row">
 				<ul class="nav nav-pills nav-justified right">
@@ -31,16 +31,19 @@
 				</ul>
 			</div>
 			<hr>
-			<div class="row">
-				  <ul class="list-group">
-				  	<li class="list-group-item" ng-if="questions.questions" ng-mouseenter="hoverOnQuestion(question.id)" ng-mouseleave="hoverOutQuestion(question.id)" ng-repeat="question in questions.questions | filter:filterLevel:true | pagination: curPage * pageSize | limitTo: pageSize" id="Q{{question.id}}">
+			<div class="row center">
+				<img src="../images/loader1.svg" id="loader1">
+			</div>
+			<div class="row" ng-if="tab!=1">
+				<ul class="list-group">
+				  	<li class="list-group-item light-blue-border" ng-if="questions.questions" ng-mouseenter="hoverOnQuestion(question.id)" ng-mouseleave="hoverOutQuestion(question.id)" ng-repeat="question in questions.questions | filter:filterLevel:true | pagination: curPage * pageSize | limitTo: pageSize" id="Q{{question.id}}">
 				  		<p>
 					  	<div class="row">
 						  	<div class="col-lg-1 col-md-1 col-sm-1">
 						  	</div>
 						  	<div class="col-lg-11 col-md-11 col-sm-11">
 							  	<div class="row">
-						  			<p class="left">Q<small>{{$index + 1}}</small>.&nbsp;&nbsp;<span ng-if="question.que_type==='objective'">{{ question.content | insertBlank }}</span><span ng-if="question.que_type==='mcq'">{{ question.content }}</span></p>
+						  			<p class="left">Q<small>{{$index + pageSize*curPage + 1}}</small>.&nbsp;&nbsp;<span ng-if="question.que_type==='objective'">{{ question.content | insertBlank }}</span><span ng-if="question.que_type==='mcq'">{{ question.content }}</span></p>
 							  	</div>
 							  	<br>
 							  	<div class="row">
@@ -72,24 +75,76 @@
 					  	</div>
 					  	</p>
 				  </li>
-				  </ul>
+				</ul>
+			 	<div class="col-md-12 text-center" ng-show="(questions.questions | filter:filterLevel:true).length > 10">
+					  <button type="button" class='btn btn-primary' ng-disabled="curPage == 0"
+					 ng-click="curPage=curPage-1">PREV</button>
+
+					 <span>Page {{curPage + 1}} of {{ numberOfPages }}</span>
+					 <button type="button" class='btn btn-primary'
+					 ng-disabled="curPage >= (questions.questions | filter:filterLevel:true).length/pageSize - 1"
+					 ng-click="curPage = curPage+1">NEXT </button>
+				</div>
 			</div>
-			<div class="row text-center" ng-if="(questions.questions | filter:filterLevel:true).length < 1">
+			<div class="row" ng-if="tab===1">
+				<ul class="list-group">
+					<li class="list-group-item light-blue-border" ng-if="questions.questions && tab===1" ng-mouseenter="hoverOnQuestion(question.id)" ng-mouseleave="hoverOutQuestion(question.id)" ng-repeat="question in questions.questions | pagination: curPage * pageSize | limitTo: pageSize" id="Q{{question.id}}">
+					  		<p>
+						  	<div class="row">
+							  	<div class="col-lg-1 col-md-1 col-sm-1">
+							  	</div>
+							  	<div class="col-lg-11 col-md-11 col-sm-11">
+								  	<div class="row">
+							  			<p class="left">Q<small>{{$index + pageSize*curPage + 1}}</small>.&nbsp;&nbsp;<span ng-if="question.que_type==='objective'">{{ question.content | insertBlank }}</span><span ng-if="question.que_type==='mcq'">{{ question.content }}</span></p>
+								  	</div>
+								  	<br>
+								  	<div class="row">
+								  	    <div class="btn-group" data-toggle="buttons">
+							  	    		<div class="row options" ng-repeat="option in question.options">
+								                <label class="btn btn-default" ng-class="{'active':option.correct}">
+									                {{$index + 1}}
+								                </label>
+							                	{{ option.content }}
+							                </div>
+						                </div>
+								  	</div>
+								  	<div class="row text-left">
+								  		<div class="col-lg-6 col-md-6 col-sm-6">
+								  			<h4><span class="label label-default">{{ subcategory.subcategory.sub_category_name }}</span></h4>
+								  		</div>
+								  		<div class="col-lg-1 col-md-1 col-sm-1">
+								  			<h4><span class="label label-default">{{ question.level }}</span></h4>
+								  		</div>
+								  		<div class="col-lg-5 col-md-5 col-sm-5 text-right" ng-if="isHoveredOver[question.id]">
+								  			<ul class="list-inline">
+											  <li><a ui-sref="app.update-question({questionParams : '{{ question.id }}:{{ question.que_type }}' })" title="Edit the question"><span class="glyphicon glyphicon-pencil"></span></a></li>
+											  <li><a ui-sref="app.update-answers({questionParams : '{{ question.id }}:{{ question.que_type }}' })" title="Edit the answers"><span class="glyphicon glyphicon-list"></span></a></li>	
+											  <li><a ng-click="deleteQuestion(question.id)"><span class="glyphicon glyphicon-remove"></span></a></li>
+											</ul>
+								  		</div>
+								  	</div>
+							  	</div>
+						  	</div>
+						  	</p>
+					  </li>
+				</ul>
+			  	<div class="col-md-12 text-center" ng-show="questions.questions.length > 10">
+				  <button type="button" class='btn btn-primary' ng-disabled="curPage == 0"
+				 ng-click="curPage=curPage-1">PREV</button>
+
+				 <span>Page {{curPage + 1}} of {{ numberOfPages }}</span>
+				 <button type="button" class='btn btn-primary'
+				 ng-disabled="curPage >= questions.questions.length/pageSize - 1"
+				 ng-click="curPage = curPage+1">NEXT </button>
+				</div>
+			</div>
+			<!-- <div ng-if="tab!=1" class="row text-center" ng-if="(questions.questions | filter:filterLevel:true).length < 1">
 				<h3>__ <span style="color:red;">:(</span> ______ <span style="color:red;">Question(s) Not Available.</span> _______ <span style="color:red;">:(</span> __
 					<br>
 					<br>
 					<span style="color:green;">Create Some Question(s) First.</span>	
 				</h3>
-			</div>
-			<div class="col-md-12" ng-show="(questions.questions | filter:filterLevel:true).length > 5" style='text-align:center;margin:1%;'>
-				  <button type="button" class='btn btn-primary' ng-disabled="curPage == 0"
-				 ng-click="curPage=curPage-1">PREV</button>
-
-				 <span>Page {{curPage + 1}} of {{ numberOfPages() }}</span>
-				 <button type="button" class='btn btn-primary'
-				 ng-disabled="curPage >= (questions.questions | filter:filterLevel:true).length/pageSize - 1"
-				 ng-click="curPage = curPage+1">NEXT </button>
-			</div>
+			</div> -->
 		</div> 
 	</div>
 	<div id="renameModal" class="modal fade" role="dialog">

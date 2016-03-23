@@ -35,9 +35,11 @@
 						</div>
 			      </div>
 			      <div class="panel-body">
-			      	<div class="row text-center">
+			      	<div class="row text-center" style="padding: 3px 3px 3px 3px;">
 						<h5 class="help-block">Key: {{quiz.quiz_key}}</h5>
-						<h5 class="help-block">Passing Marks: {{quiz.pass_mark}}</h5>
+						<h5 class="help-block">#Sections: {{quiz.total_sections}}</h5>
+						<h5 class="help-block">#Qs: {{quiz.total_questions}}</h5>
+						<h5 class="help-block">Duration: {{quiz.total_duration | secondsToDateTime | date:'HH:mm:ss'}}</h5>
 					</div>
 					<div class="row">
 					</div>
