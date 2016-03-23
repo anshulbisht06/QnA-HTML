@@ -1,0 +1,19 @@
+<div id="quizDeleteModal" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+      	<button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title" style="color: blue;">Delete Quiz</h4>
+      </div>
+      <div class="modal-body" id="quizDeleteModalBody">
+      	<div class="row col-md-offset-2" ng-if="quizToBeDeletedID && quizToBeDeletedTitle">
+      		<p><h4>Do you really want to delete quiz - <b>{{quizToBeDeletedTitle}}</b>?</h4></p>
+      	</div>
+      </div>
+      <div ng-if="quizToBeDeletedID && quizToBeDeletedTitle" class="modal-footer" id="quizDeleteModalFooter">
+        <button type="button" class="btn btn-info" data-dismiss="modal" ng-click="deleteQuiz('deleteQuizRequestCancelled', quizToBeDeletedID, quizToBeDeletedTitle)">Cancel</button>
+        <button type="button" class="btn btn-danger" ng-click="deleteQuiz('deleteQuizRequestAccepted', quizToBeDeletedID, quizToBeDeletedTitle)">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>

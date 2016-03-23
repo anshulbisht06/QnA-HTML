@@ -1,0 +1,68 @@
+<!-- Get a create quiz modal -->
+<div ng-include src="'views/modals/create_quiz_modal.html'"></div>
+<div ng-include src="'views/modals/update_quiz_modal.html'"></div>
+<div ng-include src="'views/modals/warn_delete_quiz.html'"></div>
+<!-- End Here ... -->
+
+
+<div class="container-fluid">
+<div ng-include src="'views/alert_msg.html'"></div>
+<div class="jumbotron" ng-controller="CreateCategoryController">    
+    <div class="row">
+    	<div class="col-md-12">
+	    	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+	    		<h4 class="text-center"> Total Quiz: {{allQuiz.length}} </h4>
+	    	</div>
+	    	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+	    	<button type="button" class="btn btn-primary btn-lg right" data-toggle="modal" data-target="#quizCreateModal"><span class="glyphicon glyphicon-plus"></span>&nbsp;Add Quiz</button>
+			</div>
+		</div>
+	</div>
+	<hr>
+	<div class="row" ng-if="allQuiz.length!=0">
+		<div class="col-lg-2 col-md-2 col-sm-2"></div>
+		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+			<div class="col-lg-4 col-md-4 col-sm-4" ng-repeat='quiz in allQuiz | pagination: curPage * pageSize | limitTo: pageSize'>
+				<div class="panel panel-info">
+			      <div class="panel-heading"><a ui-sref="app.view-quiz({ quizid : '{{ quiz.id }}'})">{{quiz.title | capitalize}}</a>
+			      		<div class="dropdown right">
+						  <span data-toggle="dropdown" class="glyphicon glyphicon-option-vertical pointer"></span>
+						  <ul class="dropdown-menu">
+						    <li><a ui-sref="app.view-quiz({quizid : '{{ quiz.id }}' })">View Question Stacks</a></li>
+						    <li><a href="javascript:void(0)" ng-click="putQuiz('updateQuizRequestInitiated', quiz)">Update details</a></li>
+						    <li><a href="javascript:void(0)" ng-click="deleteQuiz('deleteQuizRequestInitiated', quiz.id, quiz.title)">Delete Quiz</a></li>
+						  </ul>
+						</div>
+			      </div>
+			      <div class="panel-body">
+			      	<div class="row text-center">
+						<h5 class="help-block">Key: {{quiz.quiz_key}}</h5>
+						<h5 class="help-block">Passing Marks: {{quiz.pass_mark}}</h5>
+					</div>
+					<div class="row">
+					</div>
+			      </div>
+			      <div>
+				  </div>
+			    </div>
+			</div>
+		</div>
+		<div class="col-lg-2 col-md-2 col-sm-2"></div>
+	</div>
+	<div class="row text-center" ng-if="allQuiz.length===0">
+		<h4><b>No quiz created so far.</b></h4>
+	</div>
+	<div class="col-md-12" ng-if="allQuiz.length>5" style='text-align:center;margin:1%;'>
+
+		  <button type="button" class='btn btn-primary' ng-disabled="curPage == 0"
+		 ng-click="curPage=curPage-1">PREV</button>
+		 <span>Page {{curPage + 1}} of {{ numberOfPages() }}</span>
+		 <button type="button" class='btn btn-primary'
+		 ng-disabled="curPage >= allQuiz.length/pageSize - 1"
+		 ng-click="curPage = curPage+1">NEXT </button>
+	</div>
+</div>
+</div>
+
+
+

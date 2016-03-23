@@ -1,4 +1,5 @@
-<div class="container-fluid">
+<div class="container-fluid" ng-cloak>
+<div ng-include src="'views/alert_msg.html'"></div>
 <div class="jumbotron">
     <div class="row" style="margin-top: -30px;">
     </div>
@@ -14,7 +15,7 @@
 			      <input type="text" class="form-control input-lg" name="first_name" id="first_name" ng-minlength="4"  ng-model="registerUserForm.first_name" placeholder="Name" required>
 			      <span ng-show="isFormInvalid" class="help-block">{{ errors.first_name[0] }}</span>
 			      <span ng-show="userRegisterForm.first_name.$touched && userRegisterForm.first_name.$error.required" class="help-block">Name is required.</span>
-			      <span ng-show="userRegisterForm.first_name.$touched && userRegisterForm.first_name.$error.minlength" class="help-block">Name must be least 8 characters long.</span>
+			      <span ng-show="userRegisterForm.first_name.$touched && userRegisterForm.first_name.$error.minlength" class="help-block">Name must be least 4 characters long.</span>
 				</div><br>
 			    <div class="form-group" ng-class="{'has-error': errors.username[0] || userRegisterForm.username.$touched && userRegisterForm.username.$error.required || userRegisterForm.username.$touched && userRegisterForm.username.$error.minlength }">
 			      	<input type="text" class="form-control input-lg" name="username" id="username" ng-model="registerUserForm.username" placeholder="Username" ng-minlength="4" required>
@@ -37,8 +38,7 @@
 			        <button type="submit" class="btn btn-primary btn-lg btn-block" ng-disabled ='userRegisterForm.$invalid'>Register</button>
 			    </div>
 			    <div class="form-group text-center">
-			        <h3 class="hidden-xs"><a ui-sref="app.login-user">Have an already existing account then login here</a></h3>
-			        <h4 class="visible-xs"><a ui-sref="app.login-user">Have an already existing account then login here</a></h4>
+			        <h5><a ui-sref="app.login-user">Have an already existing account then login here.</a></h5>
 			    </div>
 			</form>
         </div>

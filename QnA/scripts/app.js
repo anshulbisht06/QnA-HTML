@@ -1,7 +1,7 @@
 /* global $ */
-var appmodule = angular.module('QnA', ['ui.router', 'ngResource', 'ngCookies']);
 
-appmodule.config(function($stateProvider, $urlRouterProvider) {
+appmodule.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
+  		// $httpProvider.interceptors.push('APIInterceptor');
         $stateProvider	        
             // route for the home page
             .state('app', {
@@ -18,9 +18,8 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                         templateUrl : 'views/footer.html'
                     }
                 },
-
             })
-            
+
             .state('app.login-user', {
                 url:'login/',
                 views :{
@@ -30,7 +29,7 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                     }
                 }
                 })
-            
+
             .state('app.register-user', {
                 url:'register/',
                 views :{
@@ -40,70 +39,6 @@ appmodule.config(function($stateProvider, $urlRouterProvider) {
                     }
                 }
                 })
-
-            .state('app.create-quiz', {
-                url:'create/quiz/',
-                views :{
-                	'content@': {
-                        controller  : 'CreateQuizController',
-                        templateUrl : 'views/createquiz.html'
-                    }
-                }
-                })
-
-            .state('app.all-quiz', {
-                url:'my/quizies/',
-                views :{
-                    'content@': {
-                        controller  : 'CreateQuizController',
-                        templateUrl : 'views/my_tests.html'
-                    }
-                }
-                })
-
-            .state('app.create-category', {
-                url:'create/category/',
-                views :{
-                    'content@': {
-                        controller  : 'CreateCategoryController',
-                        templateUrl : 'views/createcategory.html'
-                    }
-                },
-                params: {
-                        obj: null
-                    }
-                })
-            .state('app.create-subcategory', {
-                url:'create/subcategory/',
-                views :{
-                    'content@': {
-                        controller  : 'CreateSubCategoryController',
-                        templateUrl : 'views/createsubcategory.html'
-                    }
-                },
-                params: {
-                        obj: null
-                    }
-                })
-            .state('app.questions', {
-                url:'questions/all/',
-                views :{
-                    'content@': {
-                        controller  : 'QuestionsController',
-                        templateUrl : 'views/allquestions.html'
-                    }
-                }
-                })
-            .state('app.create-question', {
-                url:'create/question/',
-                views :{
-                    'content@': {
-                        controller  : 'CreateQuestionController',
-                        templateUrl : 'views/createquestion.html'
-                    }
-                }
-                });
-
-        // $locationProvider.html5Mode(true);   
-        $urlRouterProvider.otherwise('/');
-    });
+		// $locationProvider.html5Mode(true);
+		$urlRouterProvider.otherwise('/');
+	});

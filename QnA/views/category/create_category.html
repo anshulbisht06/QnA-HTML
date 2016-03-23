@@ -1,5 +1,5 @@
 <div class="container-fluid">
-<div ng-include src="'views/alertmsg.html'"></div>
+<div ng-include src="'views/alert_msg.html'"></div>
 <div class="jumbotron">
     <div class="row">
     </div>
@@ -19,7 +19,7 @@
 				        <option ng-repeat="q in allQuiz track by $index" value="{{ q.id }}">{{ q.title }}</option>
 				      </select>
 					   <span ng-if="errors.quiz" class="help-block">Please select a quiz.</span>
-				      <span ng-if="categoryCreateForm.quiz.$touched && categoryCreateForm.quiz.$error.required" class="help-block">Category name is required.</span>
+				      <span ng-if="categoryCreateForm.quiz.$touched && categoryCreateForm.quiz.$error.required" class="help-block">Quiz is required.</span>
 					</div>
 					<div class="list-group" ng-if="unableToGetAllQuiz">
 						<p>{{ errors }}</p>
@@ -28,7 +28,7 @@
 				<div class="col-lg-6 col-md-6 col-sm-6">
 					  <div class="form-group" ng-class="{'has-error': isFormInvalid || categoryCreateForm.category.$touched && categoryCreateForm.category.$error.required}">
 					  	<label for="category">Name of category</label>
-					    <input type="text" maxlength="250" class="form-control" id="category" name="category" ng-model="createCategoryform.category" required>
+					    <input type="text" maxlength="250" class="form-control" id="category" name="category" ng-model="createCategoryform.category_name" required>
 					    <span ng-if="errors.category" class="help-block">{{ errors.category[0] }}</span>
 			    		<span ng-if="categoryCreateForm.category.$touched && categoryCreateForm.category.$error.required" class="help-block">Category name is required.</span>
 					  </div>

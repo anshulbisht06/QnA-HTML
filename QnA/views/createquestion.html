@@ -3,26 +3,27 @@
 <div class="jumbotron">
     <div class="row">
     </div>
-    <div class="row" ng-hide="isCategoryCreated">
-	    <div class="row">
-			<h2 class="text-center hidden-xs">Add a question here.</h2>
-			<h4 class="text-center visible-xs">Add a question here.</h4>
-		</div>
-		<div class="row">
-			<div class="col-lg-2 col-md-2 col-sm-2"></div>
-			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+    <div class="row">
+	    
+		<div class="row ">
+			
+			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 verticalLine">
+			<div class="row">
+				<h2 class="text-center hidden-xs">Add a question here.</h2>
+				<h4 class="text-center visible-xs">Add a question here.</h4>
+			</div>
 			<hr>
 				<form role="form" name="questionCreateForm" ng-submit="postQuestion()" enctype="multipart/form-data" novalidate>
-				  <div class="form-group" ng-if="!unableToGetAllSubCategories" ng-class="{'has-error': errors.sub_category || questionCreateForm.sub_category.$touched && questionCreateForm.sub_category.$error.required }">
+				  <div class="form-group" ng-if="!unableToGetsubCategories" ng-class="{'has-error': errors.sub_category || questionCreateForm.sub_category.$touched && questionCreateForm.sub_category.$error.required }">
 				  <label for="subcategory">Select a sub-category into which the question will be added</label>
 					<select class="form-control" id="sub_category" name="sub_category" ng-model="createQuestionForm.sub_category" required>
 						<option value="" disabled>Select sub-category here</option>
-					    <option ng-repeat="sc in allSubCategories" value="{{ sc.id }}">{{ sc.sub_category_name }}</option>
+					    <option ng-repeat="sc in subCategories" value="{{ sc.id }}">{{ sc.sub_category_name }}</option>
 					</select>
 			   		<span ng-if="errors.sub_category" class="help-block">{{ errors.sub_category[0] }}</span>
 			   		<span ng-if="questionCreateForm.sub_category.$touched && questionCreateForm.sub_category.$error.required" class="help-block">Sub-category is required.</span>
 				  </div>
-  				  <div class="form-group" ng-if="unableToGetAllSubCategories">
+  				  <div class="form-group" ng-if="unableToGetsubCategories">
   				  	<p>{{ errors }}</p>
   				  </div>
 				  <br>
@@ -42,9 +43,9 @@
 				  <div class="form-group">
 				  	<label for="level">Level of Question</label>
 					<select class="form-control" id="level" name="level" ng-model="createQuestionForm.level">
-						<option value="E">Easy</option>
-						<option value="M">Medium</option>
-						<option value="H">Hard</option>
+						<option value="easy">Easy</option>
+						<option value="medium">Medium</option>
+						<option value="hard">Hard</option>
 					</select>
 				  </div><br>
 				  <div class="form-group">
@@ -53,8 +54,8 @@
 						<option value="random">Random</option>
 						<option value="content">Content</option>
 					</select>
-				  </div><br>
-
+				  </div>
+				  <br>
 				  	<div class="form-group"  ng-class="{'has-error': errors.optionerrors }">
 					  	<div class="row">
 				   		<span ng-if="errors.optionerrors" class="help-block">{{ errors.optionerrors }}</span>
@@ -75,12 +76,36 @@
 				  	</div>
 				  	<div class="form-group">
 				  		<button type="button" class="btn btn-primary btn-md" ng-click="addOptions()"><span class="glyphicon glyphicon-plus"></span>&nbsp;Add more options</button>
-
 				  	</div>
 				  <button type="submit" class="btn btn-primary btn-block" ng-disabled="questionCreateForm.$invalid">Create Question</button>
 				</form>
 			</div>
-			<div class="col-lg-2 col-md-2 col-sm-2"></div>
+			<div class="col-lg-4 col-md-4 col-sm-4 " ng-controller='XlsHandlerController'>
+				<div class="row">
+					<h2 class="text-center hidden-xs">Add question in bulk.</h2>
+					<h4 class="text-center visible-xs">Add questions in bulk.</h4>
+				</div>
+				<hr><br>
+				Step1:<p> Select a sub-category here </p>
+				<select class="form-control" id="sub_category1" name="sub_category" ng-model="sub_category_id" ng-class="{'has-error':noSubCategoryPresent}">
+					<option value="" disabled>Select sub-category here</option>
+				    <option ng-repeat="sc in subCategories" value="{{sc.sub_category_name}}">
+				    {{ sc.sub_category_name }}</option>
+				    <span ng-if="noSubCategoryPresent">Select a sub-category first.</span>
+				</select>
+				<br>
+				<br>
+				Step2: <p>Download our questions.xls file and fill this file</p>
+				<button class="btn btn-lg glyphicon glyphicon-download" 
+					ng-click="downloadDemoXls('mcq', sub_category_id)">Download</button>	
+				<br>
+				<br>
+				Step3: <p>Upload your xls file and wait .. .</p>
+				 <div>
+			         <input type = "file" file-model = "myFile" class='btn'/>
+			         <button class="btn btn-lg glyphicon glyphicon-upload" ng-click = "uploadFile()">Upload</button>
+			      </div>
+			</div>
 		</div>
 	</div>
 </div>

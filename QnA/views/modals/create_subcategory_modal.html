@@ -1,0 +1,27 @@
+<div id="createSubCategoryModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" ng-click='categorySelected()' class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Create Sub-Category</h4>
+      </div>
+     	<div class="row">
+			<div class="col-lg-2 col-md-2 col-sm-2"></div>
+			<div class="col-lg-8 col-md-8 col-sm-8">
+				<form role="form" name="subcategoryCreateForm" ng-submit="postSubCategory()" novalidate>
+				  <div class="form-group" ng-class="{'has-error': errors.sub_category_name || subcategoryCreateForm.sub_category_name.$touched && subcategoryCreateForm.sub_category_name.$error.required}">
+				  	<label for="sub_category_name">Name of sub-category</label>
+				    <input type="text" maxlength="250" class="form-control" id="sub_category_name" name="sub_category_name" ng-model="createSubCategoryform.sub_category_name" required>
+				    <span ng-if="errors.sub_category_name" class="help-block">Sub-category name is required.</span>
+		    		<span ng-if="subcategoryCreateForm.sub_category_name.$touched && subcategoryCreateForm.sub_category_name.$error.required" class="help-block">Sub-category is required.</span>
+				  </div>
+				  <button type="submit" class="btn btn-primary btn-md" ng-disabled="subcategoryCreateForm.$invalid">Create Sub-Category</button>
+				 </form><br>
+			</div>
+			<div class="col-lg-2 col-md-2 col-sm-2"></div>
+		</div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
