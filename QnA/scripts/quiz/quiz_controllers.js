@@ -8,7 +8,7 @@ appmodule
 	        $controller('CookiesController', {$scope : $scope});
 
 	        $scope.createQuizForm = {title:"", no_of_attempt:"1", url:"http://localhost:5000/authenticate/", pass_mark:"",
-	        	user:$scope.user, success_text:"", fail_text:"",user_picturing:false};
+	        	user:$scope.user, success_text:"", fail_text:"",user_picturing:false, show_result_on_completion:true};
 	        
 	        $scope.postQuiz = function() {
 	            $scope.createQuizForm.user = $scope.user;
@@ -57,10 +57,9 @@ appmodule
 	        $scope.putQuiz = function(action, quiz){
 	        	if(action==='updateQuizRequestInitiated'){
 	        		$scope.quizToBeUpdated = quiz;
-	        		console.log(quiz.user_picturing);
 	        		$scope.updateQuizForm = { title:quiz.title, user: $scope.user, url:quiz.url, 
 	        			success_text:quiz.success_text, fail_text:quiz.fail_text, pass_mark:quiz.pass_mark, 
-	        			no_of_attempt:quiz.no_of_attempt.toString(), user_picturing:quiz.user_picturing};
+	        			no_of_attempt:quiz.no_of_attempt.toString(), user_picturing:quiz.user_picturing, show_result_on_completion: quiz.show_result_on_completion};
 	        		angular.element(document.querySelector('#quizUpdateModal')).modal('show');
 	        	}
 	        	else if(action==='updateQuizRequestAccepted'){

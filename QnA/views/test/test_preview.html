@@ -3,7 +3,6 @@
 	<div class="row" ng-show="dataPresent">
 		<div class="alert alert-info">
 		   	<strong>Time : {{ totalDuration | secondsToDateTime | date:'HH:mm:ss' }}</strong><button ng-click="show()">Just For Check</button>
-		  	<button class="btn btn-primary btn-md right" ng-click="openWarningModal('submitTestRequestInitiated')">Submit Test</button>
 		</div>
 		<div class="row">
 			<div class="col-lg-4 col-md-4 col-sm-4">
@@ -99,8 +98,8 @@
 		</div>
 		<div class="row center">
 			<div>
-				<button ng-disabled="!currentCount>0 && !currentCount<total_questions.length" class="btn btn-info btn-md" ng-click="changeQuestion(currentCount+1)">Next</button>
 				<button ng-disabled="!currentCount>1" class="btn btn-info btn-md" ng-click="changeQuestion(currentCount-1)">Previous</button>
+				<button ng-disabled="!currentCount>0 && !currentCount<total_questions.length" class="btn btn-info btn-md" ng-click="changeQuestion(currentCount+1)">Next</button>
 			</div>
 		</div>
 	</div>

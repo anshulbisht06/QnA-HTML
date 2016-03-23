@@ -1,20 +1,9 @@
 /* global $ */
 
 appmodule
-	.service('testUserDataFactory', ['$resource', function($resource) {
-		this.saveTestUser = function(){
-	        return $resource(baseURL+"user/data/", null,
-	                {'save':   
-	                { method:'POST', 
-	                } 
-	                },
-	                { stripTrailingSlashes: false }
-	                );
-	    };	    
-	}])
-
 	.service('TestPreviewFactory', ['$resource', function($resource) {
         var allQuestions = {}
+        var progressData = {}
         var data = {};
         this.getQuestionsBasedOnSection = function(quizid, sectionName){
             return $resource(baseURL+"stack/get/questions/"+quizid+"/", { sectionName: sectionName},
@@ -32,12 +21,20 @@ appmodule
             allQuestions[sectionName] = data;
             return data;
         }
+        this.getAnswersForSection = function(sectionName){
+            return data[sectionName];
+        }
         this.getQuestionsForASection = function(sectionName){
             return allQuestions[sectionName];
         }
-        // Show all questions answered with section name as key
-        this.showAllQuestionsAnswered = function(){
-            return data;
+        this.saveProgressValues = function(sectionName, data){
+            progressData[sectionName] = data;
+        }
+        this.getProgressValues = function(){
+            return progressData;
+        }
+        this.getProgressValuesSectionWise = function(sectionName){
+            return progressData[sectionName];
         }
         this.getAQuestion = function(sectionName, count){
             return allQuestions[sectionName][count-1][count];
@@ -52,8 +49,17 @@ appmodule
             }
            }
         }
+        // Save all questions answered with section name as key including progress values
+        this.saveQuestionsAnsweredSectionWise = function(sectionName, answers, progressValues){
+            result = {};
+            result[sectionName] = { answers : {} };
+            for(var question_id in progressValues){
+                result[sectionName]['answers'][question_id] = { status: progressValues[question_id]['status']  , value: answers[question_id]['value']};
+            }
+            return result[sectionName];
+        }
 
-        // Save section-wise questions
+        // Save section-wise questions-answers
         this.saveSectionQuestion = function(sectionName, answers){
             data[sectionName] = answers;
         }
@@ -62,16 +68,16 @@ appmodule
             data['quiz'] = quizid;
         }
 
-        // Send the answers to server on normal submission
-        this.postTest = function(testUser){
-            return $resource(baseURL+"save/test/", { 'test_user': testUser},
+        // Send the answers to server on answering the question
+        this.postTestDetails = function(isSaveToDB, testUser, quizId, sectionName){
+            return $resource(baseURL+"save/test/", { 'is_save_to_db': isSaveToDB  ,'test_user': testUser, 'quiz_id': quizId, 'section_name': sectionName },
                 {'save':   
                 { method:'POST', 
                 } 
                 },
                 { stripTrailingSlashes: false }
                 );
-        };  
+        };
 
         this.getAQuestion = function(sectionName, count){
             return allQuestions[sectionName][count-1][count];

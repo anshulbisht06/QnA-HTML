@@ -4,11 +4,11 @@ appmodule
 	.controller('AddQuizStackController', ['$scope', '$window', '$state', '$controller', '$stateParams', '$compile', 'QuizFactory', 'QuizStackFactory', 'SubCategoryFactory', 'QuestionsFactory', function($scope, $window, $state, $controller, $stateParams, $compile, QuizFactory, QuizStackFactory, SubCategoryFactory, QuestionsFactory) {
             $controller('CookiesController', {$scope : $scope});
 
-            $scope.go = function ( path ) {
-                $('#sub_cat_not_hv_que').modal('hide');
-                $('body').removeClass('modal-open');
-                $('.modal-backdrop').remove();
-                $state.go( path );
+            $scope.go = function(path) {
+                angular.element(document.querySelector('#sub_cat_not_hv_que')).modal('hide');
+                angular.element(document.querySelector('body')).removeClass('modal-open');
+                angular.element(document.querySelector('.modal-backdrop')).remove();
+                $state.go(path);
             };
 
             var total_duration = 0;
@@ -81,12 +81,10 @@ appmodule
                 QuestionsFactory.getQuestionUnderSubCategory($scope.user, subCategoryId, true).query(
                     function(response) {
                         if(response[0].no_questions == 0){
-                            $("#sub_cat_not_hv_que").modal("show");
+                            angular.element(document.querySelector('#sub_cat_not_hv_que')).modal("show");
                             return false;   
                         }
-
                         $scope.selectedSubCategory = response[0];
-
                         s = {}
                         s[$scope.count] = {
                                 'quiz' : $stateParams.quizid,
@@ -100,7 +98,6 @@ appmodule
                                 'correct_grade' : $scope.selectSubCategory['correct_grade'],
                                 'incorrect_grade' : $scope.selectSubCategory['incorrect_grade'],
                                 'question_order' : $scope.selectSubCategory['question_order'],
-
                             }
 
                         QuizStackFactory.addToFinalStack(s);
@@ -113,7 +110,7 @@ appmodule
                         }
                         levelHtml += '</select>';
                         html = '<tr id="newstackrow'+$scope.count+'">'+
-                                    '<td style="width:130px;"><input type="text" class="form-control" ondblclick="makeEditable(this)" onblur="makeUneditable(this)" name="section_name"  id="section_name'+$scope.count+'" value="'+$scope.selectedSubCategory['section_name']+'" readonly></td>'+
+                                    '<td style="width:130px;"><input type="number" min="1" class="form-control" ondblclick="makeEditable(this)" onblur="makeUneditable(this)" name="section_name"  id="section_name'+$scope.count+'" value="'+$scope.selectedSubCategory['section_name']+'" readonly></td>'+
                                     '<td style="width:200px;">'+$scope.selectedSubCategory['subcategory']+'</td>'+
                                     '<td style="width:130px;">'+levelHtml+'</td>'+
                                     '<td style="width:130px;"><select class="form-control" id="que_type'+$scope.count+'" name="que_type"><option value="mcq">mcq</option><option value="objective">objective</option></select></td>'+
@@ -142,7 +139,7 @@ appmodule
                     return;
                 }
                 r[count]['que_type'] = document.querySelector("#que_type"+count).value;
-                r[count]['section_name'] = document.querySelector("#section_name"+count).value;
+                r[count]['section_name'] = 'Section#'+document.querySelector("#section_name"+count).value;
                 r[count]['no_questions']  = document.querySelector("#levelwiseqs"+count+" select").value;
                 r[count]['duration']  = document.querySelector("#duration"+count).value;
                 if(document.querySelector("#istimed"+count).value==='yes')
@@ -161,8 +158,9 @@ appmodule
                 function(response) {
                     $scope.alertType = "danger";
                     $scope.alertMsg = "Unable to update the quiz stack.";
-                    alert(response.data);
+                    alert(response.data.errors);
                 });
+                setTimeout(closeAlert, 5000);
             }
             $scope.removeFromStack = function(count){
                 QuizStackFactory.removeFromStack(count);
@@ -178,6 +176,7 @@ appmodule
                     $scope.alertMsg = "Unable to delete the quiz stack. See below errors.";
                     alert(response.data.errors);
                 });
+                setTimeout(closeAlert, 5000);
             }
             
             // $scope.getUserDetails = function(){
@@ -185,7 +184,6 @@ appmodule
             //     $window.data = { 'quiz': $stateParams.quizid , 'quizName': $scope.quizName, 'quizStacks' : $scope.existingStack, 'details' : {} };
             //     $window.open($state.href('app.test-login', {parameter: "parameter"}), "Test Window", "width=1280,height=890,resizable=0");
             // }
-
             $scope.openTestWindow = function(){
                 data = { 'quiz': $stateParams.quizid , 'quizName': $scope.quizName, 'quizStacks' : $scope.existingStack, 'details' : {} };    
                 l = [];

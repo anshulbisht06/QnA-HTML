@@ -48,5 +48,6 @@ appmodule
                     $scope.errors = response.data;
                     $scope.createCategoryform = {category_name : "", quiz : [$scope._id]};
                 });
+            setTimeout(closeAlert, 5000);
         }
     }]);

@@ -1,10 +1,16 @@
-$('[data-toggle="tooltip"]').tooltip();
 $(document).click(function (event) {
     var navbar = $(".navbar-collapse");               
     if (navbar.hasClass("in") === true && !$(event.target).hasClass("navbar-toggle")) {      
         navbar.collapse('hide');
     }
 });
+
+function closeAlert(){
+    $("#notification").fadeTo(0, 500).slideUp(500, function(){
+        $("#notification").alert('close');
+    });    
+}
+
 function makeEditable(element){
 	element.readOnly = false;
 }
@@ -29,7 +35,6 @@ function isNotEmpty(object){
    	for(var i in object){ return true;}
   	return false;
 }
-
 // in seconds
 function findTotalDuration(list){
     var total = 0;

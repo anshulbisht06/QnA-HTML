@@ -17,7 +17,7 @@ appmodule.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
                     'footer': {
                         templateUrl : 'views/footer.html'
                     }
-                },
+                }
             })
 
             .state('app.login-user', {
