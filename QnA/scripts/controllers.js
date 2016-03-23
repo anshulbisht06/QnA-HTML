@@ -44,17 +44,19 @@ appmodule
         $scope.postLogout = function logout() {
           return $http.post(baseURL+'logout/', data, config)
             .success(function(data, status, headers, config) {
-            $cookies.remove('token');
-            $cookies.remove('username');
-            $cookies.remove('user');
-            $state.go('app.login-user');
+                console.log('error.......');
+                $cookies.remove('token');
+                $cookies.remove('username');
+                $cookies.remove('user');
+                $state.go('app.login-user');
           })
             .error(function logoutErrorFn(data, status, headers, config) {
+
           })
         }
     }])
 
-    .controller('UserRegisterController', ['$scope', 'UserRegisterFactory', function($scope, UserRegisterFactory) {
+    .controller('UserRegisterController', ['$scope','$state', 'UserRegisterFactory', function($scope, $state , UserRegisterFactory) {
         $scope.registerUserForm = {username:"",email:"",password:"",first_name:""};
         $scope.postRegister = function() { 
             UserRegisterFactory.createUser().save($scope.registerUserForm).$promise.then(
@@ -63,6 +65,7 @@ appmodule
                     $scope.userRegisterForm.$setPristine();
                     $scope.alertType = "success";
                     $scope.alertMsg = "You are successfully registered. Please login.";
+                    $state.go('app.login-user');
                 },
                 function(response) {
                     $scope.alertType = "danger";

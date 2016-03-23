@@ -11,7 +11,7 @@
 		  </ul>
 		</div>
 	</div>
-	<div class="row">
+	<div class="row" style="margin: 1%;">
 		<div class="col-lg-1 col-md-1 col-sm-1"></div>		
 		<div class="col-lg-3 col-md-3 col-sm-3">
 			<div ng-include src="'views/modals/create_category.html'"></div>
@@ -19,10 +19,10 @@
 
 			<div ng-include src="'views/questions/questions_side_menu.html'"></div>
 		</div>
- 		<div class="col-lg-7 col-md-7 col-sm-7">
+ 		<div class="col-lg-7 col-md-7 col-sm-7" style="padding:10px 5px 15px 20px;">
  			<h3 class="text-center hidden-xs">Your Questions</h3>
 		    <h4 class="text-center visible-xs">Your Questions</h4>
-			<div class="row">
+			<div class="row col-md-11">
 				<ul class="nav nav-pills nav-justified right">
 				  <li ng-class="{active : isTabSelected(1)}"><a ng-click="selectTab(1)">Total <span class="badge">{{ questionsLevelInfo[3] }}</span></a></li>
 				  <li ng-class="{active : isTabSelected(2)}"><a ng-click="selectTab(2)">Easy <span class="badge">{{ questionsLevelInfo[0] }}</span></a></li>
@@ -30,6 +30,7 @@
 				  <li ng-class="{active : isTabSelected(4)}"><a ng-click="selectTab(4)">Hard <span class="badge">{{ questionsLevelInfo[2] }}</span></a></li>
 				</ul>
 			</div>
+			<br>
 			<hr>
 			<div class="row center">
 				<img src="../images/loader1.svg" id="loader1">
@@ -138,13 +139,13 @@
 				 ng-click="curPage = curPage+1">NEXT </button>
 				</div>
 			</div>
-			<!-- <div ng-if="tab!=1" class="row text-center" ng-if="(questions.questions | filter:filterLevel:true).length < 1">
-				<h3>__ <span style="color:red;">:(</span> ______ <span style="color:red;">Question(s) Not Available.</span> _______ <span style="color:red;">:(</span> __
+			<div class="row text-center" ng-if="(questions.questions | filter:filterLevel:true).length < 1">
+				<h3><span style="color:red;">Question(s) Not Available.</span>
 					<br>
 					<br>
 					<span style="color:green;">Create Some Question(s) First.</span>	
 				</h3>
-			</div> -->
+			</div>
 		</div> 
 	</div>
 	<div id="renameModal" class="modal fade" role="dialog">
