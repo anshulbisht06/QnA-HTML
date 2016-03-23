@@ -7,7 +7,6 @@ appmodule
                 return $resource(baseURL+"quiz/questions/get/"+userid+"/", null,
                 {
                     query: {
-                    // headers: {'Authorization': 'JWT ' + token},
                     method : 'GET',
                     isArray : false,
                     }
@@ -20,7 +19,6 @@ appmodule
                 return $resource(baseURL+"quiz/question/"+userid+"/"+questionid+"/", null,
                 {
                     get: {
-                    // headers: {'Authorization': 'JWT ' + token},
                     method : 'GET',
                     isArray : false,
                     }
@@ -33,7 +31,6 @@ appmodule
                 return $resource(baseURL+"quiz/questions/get/"+userid+"/"+quizid+"/", null,
                 {
                     query: {
-                    // headers: {'Authorization': 'JWT ' + token},
                     method : 'GET',
                     isArray : true,
                     }
@@ -46,7 +43,6 @@ appmodule
                 return $resource(baseURL+"quiz/questions/get/"+userid+"/"+quizid+"/"+categoryid+"/", null,
                 {
                     query: {
-                    // headers: {'Authorization': 'JWT ' + token},
                     method : 'GET',
                     isArray : true,
                     }
@@ -72,7 +68,6 @@ appmodule
                     {'save':   
                     { method:'POST', transformRequest: angular.identity, 
                     headers: {
-                        /*'Authorization': 'JWT ' + token, */
                         'Content-Type': 'multipart/form-data'}
                      } 
                     },
@@ -84,7 +79,6 @@ appmodule
             return $resource(baseURL+"quiz/question/"+userid+"/"+questionid+"/", null,
                     {'update':   
                     { method:'PUT', 
-                    // headers: {'Authorization': 'JWT ' + token},
                      params : {'que_type': que_type}} 
                     },
                     { stripTrailingSlashes: false }
@@ -95,7 +89,6 @@ appmodule
             return $resource(baseURL+"quiz/question/"+userid+"/"+questionid+"/", null,
                     {'delete':   
                     { method:'DELETE', 
-                    // headers: {'Authorization': 'JWT ' + token}
                      } 
                     },
                     { stripTrailingSlashes: false }
@@ -106,7 +99,6 @@ appmodule
                 return $resource(baseURL+"quiz/answers/"+userid+"/"+questionid+"/", null,
                 {
                     get: {
-                    // headers: {'Authorization': 'JWT ' + token},
                     params : {'que_type': que_type},
                     method : 'GET',
                     isArray : false,
@@ -120,7 +112,6 @@ appmodule
             return $resource(baseURL+"quiz/answers/"+userid+"/"+questionid+"/", null,
                     {'update':   
                     { method:'PUT', 
-                    // headers: {'Authorization': 'JWT ' + token},
                      params : {'que_type': que_type}} 
                     },
                     { stripTrailingSlashes: false }

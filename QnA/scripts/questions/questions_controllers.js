@@ -1,7 +1,7 @@
 /* global $ */
 
 appmodule
-	.controller('QuestionsController', ['$scope', '$controller', '$state', '$http', 'QuestionsFactory','CategoryFactory', 'SubCategoryFactory', function($scope, $controller, $state, $http, QuestionsFactory, CategoryFactory, SubCategoryFactory)  {
+	.controller('QuestionsController', ['$scope','$filter','$controller', '$state', '$http', 'QuestionsFactory','CategoryFactory', 'SubCategoryFactory', function($scope,$filter,$controller, $state, $http, QuestionsFactory, CategoryFactory, SubCategoryFactory)  {
         $controller('CookiesController', {$scope : $scope});
         $scope.categoryNotSelected = true;
         
