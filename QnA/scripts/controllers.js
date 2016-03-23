@@ -44,7 +44,6 @@ appmodule
         $scope.postLogout = function logout() {
           return $http.post(baseURL+'logout/', data, config)
             .success(function(data, status, headers, config) {
-                console.log('error.......');
                 $cookies.remove('token');
                 $cookies.remove('username');
                 $cookies.remove('user');
