@@ -2,7 +2,6 @@
 appmodule.factory('APIInterceptor', [ '$cookies', '$q', '$interval', function($cookies, $q, $interval){
 	return {	
 		    request: function(config) {
-		    	$("#loader").css('display', 'block');
 		    	if($cookies.get('token')){
 		    		config.headers.authorization = 'JWT '+$cookies.get('token');
 		    	}
@@ -16,13 +15,11 @@ appmodule.factory('APIInterceptor', [ '$cookies', '$q', '$interval', function($c
 		    },
 
 		    response: function(res) {
-		    	$("#loader").css('display', 'none');
 		      	return res;
 		      	// return $q.reject(res);
 		    },
 
 		    responseError: function(res) {
-		    	$("#loader").css('display', 'none');
 		    	if(res.status <= 0) {
 		    		var intial = 10;
 		    		var time = intial;
