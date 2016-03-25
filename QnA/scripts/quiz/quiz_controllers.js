@@ -26,6 +26,26 @@ appmodule
 	                }); 
 	        }
 
+	        $scope.markPublic = function (quizId) {
+	        	QuizFactory.setQuizPublic($scope.user, quizId).update({}).$promise.then(
+	                function(response){
+	                    var mark = '';
+	                    if (response.allow_public_access){
+	                    	$('#mark'+quizId).css('color','green');
+	                    	mark = 'public';
+	                    }
+	                    else{
+	                    	$('#mark'+quizId).css('color','#cccccc');
+	                    	mark = 'private';
+	                    }
+	                    $scope.alertType = "success";
+                    	$scope.alertMsg = "Your test "+response.title+" Marked as "+mark+".";
+	                },
+	                function(response){
+	                    $scope.errors = response.data;
+	                });
+	        }
+
 	        $scope.deleteQuiz = function(action, quizId, quizTitle){
 	        	if(action==='deleteQuizRequestInitiated'){
 	        		$scope.quizToBeDeletedID = quizId;
