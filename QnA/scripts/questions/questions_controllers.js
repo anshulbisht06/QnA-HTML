@@ -354,7 +354,7 @@ appmodule
 
     .controller('UpdateQuestionController', ['$scope', '$controller', '$state', '$stateParams', 'QuestionsFactory', 'Upload', function($scope, $controller, $state, $stateParams, QuestionsFactory, Upload) {
         $controller('CookiesController', {$scope : $scope});
-        $scope.serverURL = 'http://localhost:8000';
+        $scope.baseURL = baseURL;
         $scope.que_type = $stateParams.questionParams.split(':')[1];
 
         QuestionsFactory.getQuestion($scope.user, $stateParams.questionParams.split(':')[0]).get()
