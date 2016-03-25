@@ -32,11 +32,12 @@
 					  </div>
 					</div>
 					<div class="col-lg-6 col-md-6 col-sm-6">
-					  <div class="form-group" ng-class="{'has-error': quizCreateForm.pass_mark.$touched && quizCreateForm.pass_mark.$error.required }">
-					    <label for="pass_mark">Passing marks <span class="red-text">*</span></label><br>
-					    <input type="number" name="pass_mark" max='90' min='10' id="pass_mark" class="form-control" ng-model="createQuizForm.pass_mark" required>
-					    <span ng-if="errors.pass_mark" class="help-block">{{ errors.pass_mark[0] }}</span>
-					    <span ng-if="quizCreateForm.pass_mark.$touched && quizCreateForm.pass_mark.$error.required" class="help-block">Passing marks is required.</span>
+					  <div class="form-group" ng-class="{'has-error': quizCreateForm.passing_percent.$touched && quizCreateForm.passing_percent.$error.required }">
+					    <label for="passing_percent">Passing percentage <span class="red-text">*</span></label><br>
+					    <input type="number" name="passing_percent" max='90' min='10' id="passing_percent" class="form-control" ng-model="createQuizForm.passing_percent" required>
+					    
+					    <span ng-if="errors.passing_percent" class="help-block">{{ errors.passing_percent[0] }}</span>
+					    <span ng-if="quizCreateForm.passing_percent.$touched && quizCreateForm.passing_percent.$error.required" class="help-block">Passing marks is required.</span>
 					  </div>
 					</div>
 				  </div>

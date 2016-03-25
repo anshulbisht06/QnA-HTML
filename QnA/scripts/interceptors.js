@@ -20,6 +20,7 @@ appmodule.factory('APIInterceptor', [ '$cookies', '$q', '$interval', function($c
 		    },
 
 		    responseError: function(res) {
+		    	$("#loader").css('display', 'none');
 		    	if(res.status <= 0) {
 		    		var intial = 10;
 		    		var time = intial;

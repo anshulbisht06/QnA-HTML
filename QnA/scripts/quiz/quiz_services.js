@@ -36,7 +36,15 @@ appmodule
         this.updateQuiz = function(userid, quizid){
             return $resource(baseURL+"quiz/update/"+userid+"/"+quizid+"/", null,
                     {'update':   
-                    { method:'PUT'/*, headers: {'Authorization': 'JWT ' + token}*/} 
+                    { method:'PUT'} 
+                    },
+                    { stripTrailingSlashes: false }
+                    );
+        }
+        this.setQuizPublic = function(userid, quizid){
+            return $resource(baseURL+"quiz/mark/public/"+userid+"/"+quizid+"/", null,
+                    {'update':   
+                    { method:'PUT'}
                     },
                     { stripTrailingSlashes: false }
                     );
