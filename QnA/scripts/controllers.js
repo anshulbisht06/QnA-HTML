@@ -1,22 +1,22 @@
 /* global $ */
 
 
-// appmodule.run(function($rootScope){
-//     $rootScope
-//     .$on('$stateChangeStart', 
-//         function(event, toState, toParams, fromState, fromParams){ 
-//             $("#loader").css('display', 'block');
-//     });
+appmodule.run(function($rootScope){
+    $rootScope
+    .$on('$stateChangeStart', 
+        function(event, toState, toParams, fromState, fromParams){ 
+            $("#loader").css('display', 'block');
+    });
 
-//     $rootScope
-//     .$on('$stateChangeSuccess',
-//         function(event, toState, toParams, fromState, fromParams){ 
-//             $("#loader").css('display', 'none');
-//     });
-//     // $rootScope.$on('$viewContentLoading', 
-//     //     function(event, viewConfig){ 
-//     // });
-// });
+    $rootScope
+    .$on('$stateChangeSuccess',
+        function(event, toState, toParams, fromState, fromParams){ 
+            $("#loader").css('display', 'none');
+    });
+    // $rootScope.$on('$viewContentLoading', 
+    //     function(event, viewConfig){ 
+    // });
+});
 
 appmodule
     .controller('CookiesController', ['$scope', '$rootScope', '$cookies', '$state', function($scope, $rootScope, $cookies, $state) {
@@ -44,7 +44,6 @@ appmodule
         $scope.postLogout = function logout() {
           return $http.post(baseURL+'logout/', data, config)
             .success(function(data, status, headers, config) {
-                console.log('error.......');
                 $cookies.remove('token');
                 $cookies.remove('username');
                 $cookies.remove('user');
