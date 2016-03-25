@@ -17,7 +17,7 @@
   				</div>
 				<form role="form" name="objectiveQuestionCreateForm" ng-submit="postObjectiveQuestion()" enctype="multipart/form-data" novalidate>
 				  <div class="form-group" ng-if="!unableToGetsubCategories" ng-class="{'has-error': errors.sub_category || objectiveQuestionCreateForm.sub_category.$touched && objectiveQuestionCreateForm.sub_category.$error.required }">
-				  <label for="subcategory">Select a sub-category into which the question will be added</label>
+				  <label for="subcategory">Select a sub-category into which the question will be added<span class="red-text">*</span></label>
 					<select class="form-control" id="sub_category" name="sub_category" ng-model="createObjectiveQuestionForm.sub_category" required>
 						<option value="" disabled>Select sub-category here</option>
 					    <option ng-repeat="sc in subCategories" value="{{ sc.id }}">{{ sc.sub_category_name }}</option>
@@ -37,13 +37,13 @@
 				  </div><br>
 				  <div class="form-group" ng-class="{'has-error': errors.content[0] || objectiveQuestionCreateForm.content.$touched && objectiveQuestionCreateForm.content.$error.required }">
 				  	<div class="right"><button type="button" class="btn btn-md btn-danger" id="insertblankbutton" ng-click="insertBlank()">Insert Blank</button></div><br>
-				  	<label for="content">Enter the question content</label>
+				  	<label for="content">Enter the question content<span class="red-text">*</span></label>
 			    	<input type="text" name="content" id="content" class="form-control" ng-model="createObjectiveQuestionForm.content" autocomplete="off" required>
 			   		<span ng-if="errors.content[0]" class="help-block">{{ errors.content[0] }}</span>
 			   		<span ng-if="objectiveQuestionCreateForm.content.$touched && objectiveQuestionCreateForm.content.$error.required" class="help-block">Question content is required.</span>
 				  </div><br>
 				  <div class="form-group" ng-class="{'has-error': errors.correct || objectiveQuestionCreateForm.correct.$touched && objectiveQuestionCreateForm.correct.$error.required }">
-				  	<label for="content">Enter the correct answer</label>
+				  	<label for="content">Enter the correct answer<span class="red-text">*</span></label>
 			    	<textarea name="correct" id="correct" rows="4" class="form-control" ng-model="createObjectiveQuestionForm.correct" required></textarea>
 			    	<span ng-if="errors.correct" class="help-block">{{ errors.correct[0] }}</span>
 			   		<span ng-if="objectiveQuestionCreateForm.correct.$touched && objectiveQuestionCreateForm.correct.$error.required" class="help-block">Correct answer is required.</span>
@@ -70,7 +70,7 @@
 					<h4 class="text-center visible-xs">Add questions in bulk.</h4>
 				</div>
 				<hr><br>
-				Step1:<p> Select a sub-category here </p>
+				Step1:<p> Select a sub-category here<span class="red-text">*</span> </p>
 				<div  ng-class="{'has-error': noSubCategoryPresent}">
 					<select class="form-control" id="sub_category1" name="sub_category" ng-model="sub_cat_info" ng-class="{'has-error':noSubCategoryPresent}">
 						<option value="" disabled>Select sub-category here</option>

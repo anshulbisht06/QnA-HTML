@@ -141,6 +141,10 @@ ul.sidemenu > li{
 .light-blue-border{
 	border-color: #bce8f1;
 }
+.border-padding-less>tbody>tr>td{
+	padding: 0;
+	border: 0;
+}
 /*.question-image:hover{
 	transform: scale3d(2,2,2);
 }*/
