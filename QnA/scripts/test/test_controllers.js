@@ -5,7 +5,7 @@ appmodule
         $controller('CookiesController', {$scope : $scope});
         $scope.allQuestions = {};
         var firstItemVisited= false;
-        $scope.serverURL = 'http://localhost:8000';
+        $scope.serverURL = serverURL;
         $scope.getQuestionsBasedOnSection = function(sectionName, quizid){
             TestPreviewFactory.getQuestionsBasedOnSection(quizid, sectionName).query(
                 function(response){
