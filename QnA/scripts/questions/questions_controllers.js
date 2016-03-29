@@ -262,7 +262,7 @@ appmodule
                     url: baseURL+postUrl,
                     data: { figure: figure, data: data },
                     // headers: {'Authorization': 'JWT ' + $cookies.get('token')},
-                    resumeChunkSize: '1MB',
+                    resumeChunkSize: '5MB',
                 }).then(function(response) {
                     alert('Question created succesfully!');
                     window.location.reload();
