@@ -85,6 +85,7 @@ appmodule
                             return false;   
                         }
                         $scope.selectedSubCategory = response[0];
+                        console.log(response);
                         s = {}
                         s[$scope.count] = {
                                 'quiz' : $stateParams.quizid,

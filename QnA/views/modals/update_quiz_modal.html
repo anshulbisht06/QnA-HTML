@@ -72,10 +72,20 @@
 					    	<input type="checkbox" name='show_result_on_completion' id="show_result_on_completion" ng-model="updateQuizForm.show_result_on_completion">&nbsp;Show result on test completion
 					    </label>
 					  </div>
-					  <div class="form-group" ng-class="{'has-error': quizUpdateForm.redirect_url.$touched || quizUpdateForm.redirect_url.$error.url  }">
-					  	<label for="redirect_url">Redirect URL</label>
-					    	<input type="url" class="form-control" name='redirect_url' id="redirect_url" ng-model="updateQuizForm.redirect_url">
-					    	<span ng-if="quizUpdateForm.redirect_url.$touched || quizUpdateForm.redirect_url.$error.url" class="help-block">Valid URL is required.</span>
+					  <div class="form-group" ng-class="{'has-error': quizUpdateForm.start_notification_url.$touched && quizUpdateForm.start_notification_url.$error.url  }">
+					  	<label for="redirect_url">Start Notificaton URL</label>
+					    	<input type="url" class="form-control" name='start_notification_url' id="start_notification_url" ng-model="updateQuizForm.start_notification_url">
+					    	<span ng-if="quizUpdateForm.start_notification_url.$touched && quizUpdateForm.start_notification_url.$error.url" class="help-block">Valid URL is required.</span>
+					  </div>
+					  <div class="form-group" ng-class="{'has-error': quizUpdateForm.finish_notification_url.$touched && quizUpdateForm.finish_notification_url.$error.url  }">
+					  	<label for="redirect_url">Finish Notification URL</label>
+					    	<input type="url" class="form-control" name='finish_notification_url' id="finish_notification_url" ng-model="updateQuizForm.finish_notification_url">
+					    	<span ng-if="quizUpdateForm.finish_notification_url.$touched && quizUpdateForm.finish_notification_url.$error.url" class="help-block">Valid URL is required.</span>
+					  </div>
+					  <div class="form-group" ng-class="{'has-error': quizUpdateForm.finish_notification_url.$touched && quizUpdateForm.finish_notification_url.$error.url  }">
+					  	<label for="redirect_url">Grade Notification URL</label>
+					    	<input type="url" class="form-control" name='grade_notification_url' id="grade_notification_url" ng-model="updateQuizForm.grade_notification_url">
+					    	<span ng-if="quizUpdateForm.grade_notification_url.$touched && quizUpdateForm.grade_notification_url.$error.url" class="help-block">Valid URL is required.</span>
 					  </div>
 				  </div>				  
 			</form>
