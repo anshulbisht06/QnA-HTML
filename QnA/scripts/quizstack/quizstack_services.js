@@ -3,13 +3,14 @@
 appmodule
     .service('QuizStackFactory', ['$resource', function($resource) {
             var selectedQuestions = [];
+            var userSelectedQuestions = [];
             this.addSelectedLevelQuestions = function(questionsLevelInfo){
                 selectedQuestions.push(questionsLevelInfo); 
             }
             this.getSelectedLevelQuestions = function(index){
                 return selectedQuestions[index];
             }
-            finalStack = [];
+            var finalStack = [];
             this.addToFinalStack  = function(value){
                 finalStack.push(value);
             }
@@ -62,6 +63,31 @@ appmodule
                     { method:'DELETE', 
                     // headers: {'Authorization': 'JWT ' + token}
                      } 
+                    },
+                    { stripTrailingSlashes: false }
+                    );
+            };
+
+            this.getQuizStackSelectedQuestions = function(quizstackid){
+                return $resource(baseURL+"stack/filter/selectedQs/"+quizstackid+"/", null,
+                    {
+                        query: {
+                        // headers: {'Authorization': 'JWT ' + token},
+                        method : 'GET',
+                        isArray : true,
+                        }
+                    },
+                    { stripTrailingSlashes: false }
+                    );
+            };
+
+            this.postSelectedQuestions = function(quizstackid){
+                return $resource(baseURL+"stack/filter/selectedQs/"+quizstackid+"/", null,
+                    {
+                        save: {
+                        // headers: {'Authorization': 'JWT ' + token},
+                        method : 'POST',
+                        }
                     },
                     { stripTrailingSlashes: false }
                     );

@@ -117,6 +117,19 @@ appmodule
                     { stripTrailingSlashes: false }
                     );
         }
+
+        this.getQuestionsBasedOnLevelAndQuestions = function(userId, subCategoryId, level, noofQuestions){
+            return $resource(baseURL+"quiz/questions/get/"+userId+"/subcategory/"+subCategoryId+"/filters/",
+                { level: level, no_of_questions: noofQuestions  },
+                {
+                    query: {
+                    method : 'GET',
+                    // isArray : true,
+                    }
+                },
+                { stripTrailingSlashes: false }
+                );
+        }
     }]);
 
 

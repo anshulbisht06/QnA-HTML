@@ -96,12 +96,12 @@ ul.sidemenu > li{
     border-radius:0;
 }
 .removefromstackbutton{
-	font-size: 30px;
+	font-size: 20px;
 	color:red;
 }
 .addtostackbutton{
 	cursor: pointer;
-	font-size: 30px;
+	font-size: 20px;
 	color:green;
 }
 .editable{
@@ -144,6 +144,14 @@ ul.sidemenu > li{
 .border-padding-less>tbody>tr>td{
 	padding: 0;
 	border: 0;
+}
+.selectquestionsbutton{
+	cursor: pointer;
+	font-size: 20px;
+	color: blue;
+}
+.bold-text{
+	font-weight: bold;
 }
 /*.question-image:hover{
 	transform: scale3d(2,2,2);

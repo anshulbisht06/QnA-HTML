@@ -12,5 +12,17 @@ appmodule
                         templateUrl : 'views/quizstack/add_quiz_stack.html'
                     }
                 }
+                })
+            .state('app.select-questions', {
+                url:'quizstack/selectQs/:quizstackid',
+                views :{
+                    'content@': {
+                        controller  : 'SelectQuestionsController',
+                        templateUrl : 'views/quizstack/select_questions.html'
+                    }
+                },
+                params: {
+                        obj: null
+                    }
                 });
 	});
