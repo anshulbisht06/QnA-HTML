@@ -1,4 +1,3 @@
-
 appmodule.factory('APIInterceptor', [ '$cookies', '$q', '$interval', function($cookies, $q, $interval){
 	return {	
 		    request: function(config) {
@@ -16,41 +15,32 @@ appmodule.factory('APIInterceptor', [ '$cookies', '$q', '$interval', function($c
 
 		    response: function(res) {
 		      	return res;
-		      	// return $q.reject(res);
 		    },
-
 		    responseError: function(res) {
 		    	$("#loader").css('display', 'none');
-		    	if(res.status <= 0) {
-		    		var intial = 10;
-		    		var time = intial;
-                    angular.element(document.querySelector('#connectionLostModal')).modal('show');
-                    $interval(function(){
-	                    if(time === 0){
-	                    	$.ajax({
-		                      url : baseURL+"ping/",
-		                      data : {},
-		                      type : "GET",
-		                      success : function(data) {
-		                        angular.element(document.querySelector('#connectionLostModal')).modal('hide');
-		                        alert('You are now connected to server');
-		                      },
-		                      error : function(xhr,errmsg,err) {
-		                      	intial = intial + 5;
-		                      	time = intial;
-		                        angular.element(document.querySelector('#time')).text(time);
-			                }
-			            });
-	                    }else{
-		                    angular.element(document.querySelector('#time')).text(time);
-	                	}
-	                	time = time - 1;
-	                },1000);
-	            }
+		    	if(!isTimerOn){  // Very first fail request onTimer not all ...
+		    		isTimerOn = true;
+			    	if(res.status <= 0) {
+			    		// var time = 10;
+			    		var call_count = 1;
+	                    $('#connectionLostModal').modal('show');
+	                    $interval(function(){
+	                    	if(time < 0){
+	                    		return false;
+	                    	}
+		                    else if(time === 0){
+		                    	call_count = call_count+1
+		                    	ping_fn(call_count);
+		                    }else{
+			                    $('#time').text(time);
+		                	}
+		                	time = time - 1;
+		                },1000);
+		            }
+	        }
 		      	return $q.reject(res);
 		    }
 			  }
-
 }]);
 
 appmodule.config(function($httpProvider) {
