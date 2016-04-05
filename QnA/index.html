@@ -27,16 +27,10 @@
   <div ui-view="header"></div>
 </header>
 <main>
-<div id="connectionLostModal" class="modal fade sharp" role="dialog" data-keyboard="false" data-backdrop="static">
-  <div class="modal-dialog" style="background-color: #f9edbe;">
-    <div class="modal-content" style="background-color: #f9edbe;">
-        <div style="text-align: center;">
-            <p id='msg'> 
-              Not connected. Connecting in <span id="time">10</span>…<a href='javascript:void(0);' onclick="ping_fn(0)">Try Now</a>
-            </p> 
-        </div>
-    </div>
-  </div>
+<div id='connectionLostModal' style="text-align: center;display: none;">
+    <p class="col-md-offset-3 col-md-6" style="background-color: #f9edbe;"> 
+        Not connected. Connecting in <span id="time">10</span>…<button onclick="ping_fn(0)">Try Now</button>
+    </p> 
 </div>
   <div ui-view="content">
     <div class="row">

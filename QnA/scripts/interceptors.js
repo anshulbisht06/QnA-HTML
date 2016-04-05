@@ -21,12 +21,12 @@ appmodule.factory('APIInterceptor', [ '$cookies', '$q', '$interval', function($c
 		    	if(!isTimerOn){  // Very first fail request onTimer not all ...
 		    		isTimerOn = true;
 			    	if(res.status <= 0) {
-			    		// var time = 10;
 			    		var call_count = 1;
-	                    $('#connectionLostModal').modal('show');
+	                    $('#connectionLostModal').show();
 	                    $interval(function(){
 	                    	if(time < 0){
 	                    		return false;
+	                    		$('#connectionLostModal').hide();
 	                    	}
 		                    else if(time === 0){
 		                    	call_count = call_count+1
