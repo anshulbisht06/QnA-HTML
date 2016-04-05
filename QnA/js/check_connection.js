@@ -9,14 +9,12 @@ function ping_fn(call_count){
       type : "GET",
       success : function(data) {
         $('#msg').text("Connected ...");
-        // $('#connectionLostModal').modal('hide');
         time = -1;
-        $('#connectionLostModal').modal('hide');
+        $('#connectionLostModal').hide();
         window.location.reload();
       },
       error : function(xhr,errmsg,err) {
         time = time + 5*call_count+1;
-        // $('#time').text(time);
     }
     });
   }
