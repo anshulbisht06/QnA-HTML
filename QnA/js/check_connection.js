@@ -14,6 +14,7 @@ function ping_fn(call_count){
                     $('#msg').text("Connected ...");
                     time = -1;
                     $('#connectionLostModal').hide();
+                    location.reload();
                   },
                   error : function(xhr,errmsg,err) {
                     time = time + 5*call_count+1;
