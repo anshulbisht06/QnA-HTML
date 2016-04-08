@@ -83,7 +83,6 @@
 			        <th>Section No.</th>
 			        <th>Sub-category Name</th>
 			        <th>Level</th>
-			        <th>Q-Type</th>
 			        <th>#Qs</th>
 			        <th>Duration</th>
 			        <th>IsTimed?</th>
@@ -99,9 +98,12 @@
 		  </div>
 		</div>
 	</div>
-	<div class="col-lg-1 col-md-1 col-sm-1"></div>		
+	<div class="col-lg-1 col-md-1 col-sm-1"></div>	
+	<div ng-include src="'views/modals/select_questions_modal.html'"></div>
+	
 </div>
 <br>
+
 </div>
 <div class="row panel-body" ng-if="existingStack.length == 0 ">
 	<div class="row">
