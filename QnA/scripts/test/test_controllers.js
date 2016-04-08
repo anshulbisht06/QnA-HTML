@@ -5,7 +5,7 @@ appmodule
         $controller('CookiesController', {$scope : $scope});
         $scope.allQuestions = {};
         var firstItemVisited= false;
-        $scope.baseURL = baseURL;
+        $scope.baseURL = baseURLImage;
         $scope.getQuestionsBasedOnSection = function(sectionName, quizid){
             TestPreviewFactory.getQuestionsBasedOnSection(quizid, sectionName).query(
                 function(response){
@@ -66,16 +66,12 @@ appmodule
                 $scope.hideNextSectionButton = true;
             }
         }
+
         $scope.addQuestions = function(sectionName){
             $scope.sliceFactor = 0;
             $scope.getQuestionsBasedOnSection(sectionName, $scope.quiz);
         }
-        $scope.getQuestionsForThisSection = function(sectionName){
-            console.log(TestPreviewFactory.getQuestionsForASection(sectionName));
-        }
-        $scope.show = function(){
-            console.log(TestPreviewFactory.saveQuestionsAnsweredSectionWise());
-        }
+
         $scope.changeQuestion = function(count){
             if(count>=1 && count<=$scope.total_questions.length)
             {

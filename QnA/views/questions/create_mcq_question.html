@@ -28,8 +28,7 @@
 				  <br>
 				  <div class="form-group">
 				  	<input type="file" name="figure" id="figure" ngf-select ng-model="figure" ngf-pattern="'image/*'"
-					    ngf-accept="'image/*'" ngf-max-size="5MB" ngf-min-height="100" 
-					    ngf-resize="{width: 100, height: 100}" ng-change="changeImage()" style="display: inline;">
+					    ngf-accept="'image/*'" ngf-max-size="5MB" ng-change="changeImage()" style="display: inline;">
 					<span class="glyphicon glyphicon-remove red-text" ng-if="isImageChanged" ng-click="removeImage()" style="cursor: pointer;"></span>
 				  </div><br>
 				  	<input type="hidden" name="que_type" id="que_type" ng-model="createMCQQuestionForm.que_type" value="mcq">
