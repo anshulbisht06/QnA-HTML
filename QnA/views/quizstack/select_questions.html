@@ -5,8 +5,13 @@
 	<h3 class="bold-text">Select your own questions here</h3>
 </div>
 <div class="row text-center">
-	<input class="form-control left" placeholder="Search based on content..." name="questionContentFilter" ng-model="questionContentFilter" style="width:50%;" >
-	<button class="btn btn-primary btn-large right" ng-click="saveSelectedQuestions()">Save selected</button>
+	<select class="form-control center" id="questionTypeFilter" ng-model="questionTypeFilter" style="width: 30%;">
+		<<option value=''>Filter according to type</option>
+		<option value="mcq">MCQ</option>
+		<option value="objective">Objective</option>
+	</select>
+<!-- 	<input class="form-control center" placeholder="Search based on content..." name="questionContentFilter" ng-model="questionContentFilter" style="width:30%;" >
+ -->	<button class="btn btn-primary btn-large right" ng-click="saveSelectedQuestions()">Save selected</button>
 </div>
 <div class="row" style="margin-top: 20px;">
   <div class="col-lg-1 col-md-1 col-sm-1"></div>
@@ -16,7 +21,7 @@
 	    </div>
 	    <div class="row">
 	      <ul class="list-group">
-	          <li class="list-group-item light-blue-border" ng-if="quizStack.questions" ng-repeat="question in quizStack.questions | filter:questionContentFilter | pagination: curPage * pageSize | limitTo: pageSize" id="Q{{question.id}}">
+	          <li class="list-group-item light-blue-border" ng-if="quizStack.questions" ng-repeat="question in quizStack.questions | filter:{ que_type : questionTypeFilter } | pagination: curPage * pageSize | limitTo: pageSize" id="Q{{question.id}}">
 	            <p>
 	            <div class="row">
 	              <div class="col-lg-1 col-md-1 col-sm-1">
