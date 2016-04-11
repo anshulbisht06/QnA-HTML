@@ -21,71 +21,17 @@
 </header>
 <main>
 
-<div id='connectionLostModal' style="text-align: center;display: none;">
-    <p class="col-md-offset-3 col-md-6" style="background-color: #f9edbe;"> 
-        Not connected. Connecting in <span id="time">10</span> seconds…<button onclick="ping_fn(0)">Try Now</button>
-    </p> 
-</div>
-  <div ui-view="content">
-    <div class="row">
-      <h1 class="text-center hidden-xs">Welcome to Qna - Online assessment engine for e-learners.</h1>
-      <h3 class="text-center visible-xs">Welcome to Qna - Online assessment engine for e-learners.</h3> 
+    <div id='connectionLostModal' style="text-align: center;display: none;">
+        <p class="col-md-offset-3 col-md-6" style="background-color: #f9edbe;"> 
+            Not connected. Connecting in <span id="time">10</span> seconds…<button onclick="ping_fn(0)">Try Now</button>
+        </p> 
     </div>
-    <div class="row">
-      <br><br>      
-    </div>
-      <div class="row col-md-12" style="margin: 10px;">
-    
-    <div class="col-md-3">
-    </div>
-    <div class="col-md-3 sharp">
-        <div class="panel panel-info">
-          <div class="panel-heading text-center"><h3>Create Questions</h3></div>
-          <div class="panel-body" style="height: 200px;">
-            <ul>
-                <li>Create liberary of questions.</li>
-                <li>Select type of questions.</li>
-                <li>Add type of questions to quiz.</li>
-                <li>Set random/static order of questions.</li>
-                <li>Set random/static order of options.</li>
-                <!-- Action for more .. -->
-            </ul>
-            <div class="row">
-                <a ui-sref="app.questions" class="btn btn-info btn-block"><span class="glyphicon"></span> Create Questions</a>
-            </div>
-          </div>
-        </div>
-    </div>
-    
-    <div class="col-md-3">
-        <div class="panel panel-info">
-          <div class="panel-heading text-center"><h3>Create Quiz</h3></div>
-          <div class="panel-body" style="height: 200px;">
-            <ul>
-                <li>Create stack of quiz(s).</li>
-                <li>Public/Private your test access.</li>
-                <li>Share your test with just a key.</li>
-                <li>360 user/test result analysis.</li>
-                <li>Set time limit/auto-submit for student.</li>
-                <!-- Action for more .. -->
-            </ul>
-            <div class="row">
-                <a ui-sref="app.all-quiz" class="btn btn-info btn-block"><span class="glyphicon"></span> Create Quizzes</a>
-            </div>
-          </div>
-        </div>
-    </div>
-
-  </div>    
+  <div ui-view="content"> 
   </div>
-  
-
-
 </main>
 <footer>
   <div ui-view="footer"></div>
 </footer>
-
   <!-- build:js scripts/main.js  -->
     <script src="js/jquery.js"></script>
     <script src="js/bootstrap.js"></script>    
