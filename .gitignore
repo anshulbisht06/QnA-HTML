@@ -1,3 +1,8 @@
 node_modules/
 npm-debug.log
 dist/
+*/server_settings.js
+server_settings.js
+*/settings.js
+settings.js
+
