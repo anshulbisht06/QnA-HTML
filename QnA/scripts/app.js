@@ -18,7 +18,15 @@ appmodule.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
                     }
                 }
             })
-
+            .state('app.home', {
+                url:'home/',
+                views :{
+                    'content@': {
+                        controller  : 'IndexController',
+                        templateUrl : 'views/home.html'
+                    }
+                }
+                })
             .state('app.login-user', {
                 url:'login/',
                 views :{

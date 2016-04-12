@@ -1,3 +1,9 @@
 node_modules/
 npm-debug.log
-QnA/scripts/server_settings.js
+
+dist/
+*/server_settings.js
+server_settings.js
+*/settings.js
+settings.js
+

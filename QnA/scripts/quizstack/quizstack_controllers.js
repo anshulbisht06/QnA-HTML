@@ -214,8 +214,7 @@ appmodule
                 },
                 function(response) {
                     alert(response.data.errors);
-            }); 
-
+        });
         $scope.selectQuestion = function(selectedQuestionId){
             var index = $scope.selectedQuestions.indexOf(selectedQuestionId);
             if(index === -1){

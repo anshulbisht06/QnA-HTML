@@ -1,87 +1,84 @@
-var gulp = require('gulp'),
-    minifycss = require('gulp-minify-css'),
-    jshint = require('gulp-jshint'),
-    stylish = require('jshint-stylish'),
-    uglify = require('gulp-uglify'),
-    usemin = require('gulp-usemin'),
-    imagemin = require('gulp-imagemin'),
-    rename = require('gulp-rename'),
-    concat = require('gulp-concat'),
-    notify = require('gulp-notify'),
-    cache = require('gulp-cache'),
-    changed = require('gulp-changed'),
-    rev = require('gulp-rev'),
-    browserSync = require('browser-sync'),
-    ngannotate = require('gulp-ng-annotate'),
-    del = require('del');
+var Promise = require('es6-promise').Promise;
+var gulp= require('gulp');
+// var sass= require('gulp-sass');
+var browserSync= require('browser-sync').create();
+// var templateCache = require('gulp-angular-templatecache');
+var useref = require('gulp-useref');
+var uglify= require('gulp-uglify');
+var gulpIf= require('gulp-if');
+var cssnano= require('gulp-cssnano');
+var imagemin= require('gulp-imagemin');
+var cache= require('gulp-cache');
+var del= require('del');
+var runSequence= require('run-sequence');
 
-gulp.task('jshint', function() {
-  return gulp.src('QnA/scripts/**/*.js')
-  .pipe(jshint())
-  .pipe(jshint.reporter(stylish));
+// SASS TASK
+/*
+gulp.task('sass', function() {
+	return gulp.src('app/scss/styles.scss')
+		.pipe(sass())
+		.pipe(gulp.dest('app/css'))
+		.pipe(browserSync.reload({
+			stream: true
+		}))
+});
+*/
+
+gulp.task('browserSync', function() {
+	browserSync.init({
+		server: {
+			baseDir: ['./', './QnA'],
+		},
+	})
 });
 
-// Clean
-gulp.task('clean', function() {
-    return del(['dist']);
+gulp.task('useref', function() {
+	return gulp.src('QnA/*.html')
+	.pipe(useref())
+	// .pipe(gulpIf('*.js', uglify()))
+	.pipe(gulpIf('*.css', cssnano()))
+	.pipe(gulp.dest('dist'))
 });
 
-// Default task
-gulp.task('default', ['clean'], function() {
-    gulp.start('usemin', 'imagemin');
+gulp.task('images', function() {
+	return gulp.src('QnA/images/**/*.+(png|jpg|gif|svg)')
+	.pipe(cache(imagemin({
+		interlaced: true
+	})))
+	.pipe(gulp.dest('dist/images'))
 });
 
-
-gulp.task('usemin',['jshint'], function () {
-  return gulp.src('QnA/index.html')
-      .pipe(usemin({
-        css:[minifycss(),rev()],
-        // ngannotate() run before uglify() so as to save angular's scope from uglification/mangling
-        js: [ngannotate(),uglify(),rev()]
-      }))
-      .pipe(gulp.dest('dist/'));
+gulp.task('fonts', function() {
+	return gulp.src('QnA/fonts/**/*')
+	.pipe(gulp.dest('dist/fonts'))
 });
 
-// Images
-gulp.task('imagemin', function() {
-  return del(['dist/images']), gulp.src('QnA/images/**/*')
-    .pipe(cache(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true })))
-    .pipe(gulp.dest('dist/images'))
-    .pipe(notify({ message: 'Images task complete' }));
+gulp.task('views', function() {
+  return gulp.src('QnA/views/**/*')
+  .pipe(gulp.dest('dist/views'))
 });
 
-// gulp.task('copyfonts', ['clean'], function() {
-//    gulp.src('./bower_components/font-awesome/fonts/**/*.{ttf,woff,eof,svg}*')
-//    .pipe(gulp.dest('./dist/fonts'));
-//    gulp.src('./bower_components/bootstrap/dist/fonts/**/*.{ttf,woff,eof,svg}*')
-//    .pipe(gulp.dest('./dist/fonts'));
+// gulp.task('html', function () {
+//   return gulp.src('QnA/views/**/*.html')
+//     .pipe(templateCache())
+//     .pipe(gulp.dest('public'));
 // });
 
-
-// Watch
-gulp.task('watch', ['browser-sync'], function() {
-  // Watch .js files
-  gulp.watch('{QnA/scripts/**/*.js,QnA/styles/**/*.css,QnA/**/*.html}', ['usemin']);
-      // Watch image files
-  gulp.watch('QnA/images/**/*', ['imagemin']);
-
+gulp.task('clean:dist', function() {
+	return del.sync('dist')
 });
 
-gulp.task('browser-sync', ['default'], function () {
-   var files = [
-      'QnA/**/*.html',
-      'QnA/styles/**/*.css',
-      'QnA/images/**/*.png',
-      'QnA/scripts/**/*.js',
-      'dist/**/*'
-   ];
+gulp.task('watch', ['browserSync'], function() {
+	gulp.watch('QnA/css/**/*.css', browserSync.reload);
+	gulp.watch('QnA/*.html', browserSync.reload);
+	gulp.watch('QnA/js/**/*.js', browserSync.reload);
+	gulp.watch('QnA/scripts/**/*.js', browserSync.reload);
+});
 
-   browserSync.init(files, {
-      server: {
-         baseDir: "dist",
-         index: "index.html"
-      }
-   });
-        // Watch any files in dist/, reload on change
-  gulp.watch(['dist/**']).on('change', browserSync.reload);
-    });
+gulp.task('default', function(callback) {
+	runSequence(['browserSync', 'watch'], callback);
+});
+
+gulp.task('build', function(callback) {
+	runSequence('clean:dist', ['useref', 'images', 'fonts', 'views'], callback)
+});
