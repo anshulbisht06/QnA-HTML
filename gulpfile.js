@@ -1,3 +1,4 @@
+var Promise = require('es6-promise').Promise;
 var gulp= require('gulp');
 // var sass= require('gulp-sass');
 var browserSync= require('browser-sync').create();
@@ -52,6 +53,11 @@ gulp.task('fonts', function() {
 	.pipe(gulp.dest('dist/fonts'))
 });
 
+gulp.task('views', function() {
+  return gulp.src('QnA/views/**/*')
+  .pipe(gulp.dest('dist/views'))
+});
+
 // gulp.task('html', function () {
 //   return gulp.src('QnA/views/**/*.html')
 //     .pipe(templateCache())
@@ -74,5 +80,5 @@ gulp.task('default', function(callback) {
 });
 
 gulp.task('build', function(callback) {
-	runSequence('clean:dist', ['useref', 'images', 'fonts'], callback)
+	runSequence('clean:dist', ['useref', 'images', 'fonts', 'views'], callback)
 });
