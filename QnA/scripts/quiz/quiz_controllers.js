@@ -78,7 +78,7 @@ appmodule
 	        	if(action==='updateQuizRequestInitiated'){
 	        		$scope.quizToBeUpdated = quiz;
 	        		$scope.updateQuizForm = { title:quiz.title, user: $scope.user, show_result_on_completion: quiz.show_result_on_completion,
-	        			success_text:quiz.success_text, fail_text:quiz.fail_text, passing_percent:quiz.passing_percent, 
+	        			success_text:quiz.success_text, fail_text:quiz.fail_text, passing_percent:quiz.passing_percent,  allow_public_access:quiz.allow_public_access,
 	        			no_of_attempt:quiz.no_of_attempt.toString(), user_picturing:quiz.user_picturing, start_notification_url:quiz.start_notification_url,
 	        			finish_notification_url:quiz.finish_notification_url, grade_notification_url:quiz.grade_notification_url };
 	        		angular.element(document.querySelector('#quizUpdateModal')).modal('show');
