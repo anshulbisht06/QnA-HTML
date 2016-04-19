@@ -1,11 +1,10 @@
 /* global $ */
 
 
-appmodule.run(function($rootScope,$timeout,ngProgressFactory, ngProgress){
+appmodule.run(function($rootScope,$timeout,ngProgressFactory){
     $rootScope
     .$on('$stateChangeStart', 
         function(event, toState, toParams, fromState, fromParams){ 
-            // $("#loader").css('display', 'block');
             $rootScope.progressbar = ngProgressFactory.createInstance();
             $rootScope.progressbar.start();
             $rootScope.progressbar.setHeight('6px');
@@ -34,7 +33,7 @@ appmodule
         }catch(err){}
     }])
 
-    .controller('IndexController', ['$scope', '$rootScope', '$controller', function($scope, $rootScope, $controller,$timeout, ngProgressFactory, ngProgress) {
+    .controller('IndexController', ['$scope', '$rootScope', '$controller', function($scope, $rootScope, $controller) {
         $controller('CookiesController', {$scope : $scope});
         
     }])
@@ -89,8 +88,6 @@ appmodule
         $rootScope.token = undefined;
 
         $scope.postLogin = function () {
-            $('#loader').css('display','block');
-
            // use $.param jQuery function to serialize data from JSON 
             var data = $.param({
                 username: $scope.username,
