@@ -1,17 +1,21 @@
 /* global $ */
 
 
-appmodule.run(function($rootScope){
+appmodule.run(function($rootScope,$timeout,ngProgressFactory, ngProgress){
     $rootScope
     .$on('$stateChangeStart', 
         function(event, toState, toParams, fromState, fromParams){ 
-            $("#loader").css('display', 'block');
+            // $("#loader").css('display', 'block');
+            $rootScope.progressbar = ngProgressFactory.createInstance();
+            $rootScope.progressbar.start();
+            $rootScope.progressbar.setHeight('6px');
+            $rootScope.progressbar.setColor('#ffc34d');
     });
 
     $rootScope
     .$on('$stateChangeSuccess',
-        function(event, toState, toParams, fromState, fromParams){ 
-            $("#loader").css('display', 'none');
+        function(event, toState, toParams, fromState, fromParams){
+            $timeout($rootScope.progressbar.complete(), 1000); 
     });
     // $rootScope.$on('$viewContentLoading', 
     //     function(event, viewConfig){ 
@@ -30,8 +34,9 @@ appmodule
         }catch(err){}
     }])
 
-    .controller('IndexController', ['$scope', '$rootScope', '$controller', function($scope, $rootScope, $controller) {
+    .controller('IndexController', ['$scope', '$rootScope', '$controller', function($scope, $rootScope, $controller,$timeout, ngProgressFactory, ngProgress) {
         $controller('CookiesController', {$scope : $scope});
+        
     }])
 
     .controller('LogoutController', ['$scope', '$http', '$state','$cookies', function($scope, $http, $state, $cookies) {
