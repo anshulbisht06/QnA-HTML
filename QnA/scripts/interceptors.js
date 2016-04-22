@@ -17,7 +17,6 @@ appmodule.factory('APIInterceptor', [ '$cookies', '$q', '$interval', function($c
 		      	return res;
 		    },
 		    responseError: function(res) {
-		    	$("#loader").css('display', 'none');
 		    	if(!isTimerOn){  // Very first fail request onTimer not all ...
 		    		isTimerOn = true;
 			    	if(res.status <= 0) {
@@ -27,7 +26,7 @@ appmodule.factory('APIInterceptor', [ '$cookies', '$q', '$interval', function($c
 	                    	if(time < 0){
 	                    		return false;
 	                    		$('#connectionLostModal').hide();
-	                    	}
+	                    	} 	
 		                    else if(time === 0){
 		                    	call_count = call_count+1
 		                    	ping_fn(call_count);
