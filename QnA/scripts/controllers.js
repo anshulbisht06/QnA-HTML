@@ -79,59 +79,62 @@ appmodule
 
 
     .controller("LoginController",[ '$scope', '$rootScope', '$http', '$state', '$cookies', function ($scope, $rootScope, $http, $state, $cookies) {
-        $rootScope.user = undefined;
-        $rootScope.username = undefined;
-        $rootScope.token = undefined;
+        if($cookies.get('token')){
+            $state.go('app.home');
+        }else{
+            $rootScope.user = undefined;
+            $rootScope.username = undefined;
+            $rootScope.token = undefined;
 
-        $scope.postLogin = function () {
-            $('#loader').css('display','block');
+            $scope.postLogin = function () {
+                $('#loader').css('display','block');
 
-           // use $.param jQuery function to serialize data from JSON 
-            var data = $.param({
-                username: $scope.username,
-                password: $scope.password
-            });
-            // $window.localStorage.token
-            var config = {
-                headers : {
-                    'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
-                }
-            }
-
-            $http.post(baseURL+'login/', data, config)
-            .success(function (data, status, headers, config) {
-                $scope.postDataResponse = data;
-                var expireDate = new Date();
-
-                if($scope.remember){
-                    expireDate.setDate(expireDate.getDate() + 1);
+               // use $.param jQuery function to serialize data from JSON 
+                var data = $.param({
+                    username: $scope.username,
+                    password: $scope.password
+                });
+                // $window.localStorage.token
+                var config = {
+                    headers : {
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
+                    }
                 }
 
-                options={
-                    path : '/',
-                    secure: true,
-                    expires: expireDate
+                $http.post(baseURL+'login/', data, config)
+                .success(function (data, status, headers, config) {
+                    $scope.postDataResponse = data;
+                    var expireDate = new Date();
 
-                };
+                    if($scope.remember){
+                        expireDate.setDate(expireDate.getDate() + 1);
+                    }
 
-                $cookies.put('token', data.token);
-                $cookies.put('username', data.username);
-                $cookies.put('user', data.userID);
+                    options={
+                        path : '/',
+                        secure: true,
+                        expires: expireDate
+                    };
 
-                $scope.isFormInvalid = false;
-                // $scope.alertType = "success";
-                // $scope.alertMsg = "Successfully login.";
-                // $route.reload();
-                $state.go('app.all-quiz');
-            })
-            .error(function (data, status, header, config) {
-                $scope.isFormInvalid = true;
-                $scope.alertType = "danger";
-                $scope.alertMsg = "Unable to login. See the errors below.";
-                $scope.errors = data.errors? data.errors:'';
-                setTimeout(closeAlert, 5000);
-            });
-        };
+                    $cookies.put('token', data.token);
+                    $cookies.put('username', data.username);
+                    $cookies.put('user', data.userID);
+
+                    $scope.isFormInvalid = false;
+                    // $scope.alertType = "success";
+                    // $scope.alertMsg = "Successfully login.";
+                    // $route.reload();
+                    $state.go('app.all-quiz');
+                })
+                .error(function (data, status, header, config) {
+                    $scope.isFormInvalid = true;
+                    $scope.alertType = "danger";
+                    $scope.alertMsg = "Unable to login. See the errors below.";
+                    $scope.errors = data.errors? data.errors:'';
+                    setTimeout(closeAlert, 5000);
+                });
+            };
+        }
     }]);
         
 
