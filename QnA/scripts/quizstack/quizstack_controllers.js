@@ -46,7 +46,7 @@ appmodule
                         '<td style="width:130px;">'+response[i].correct_grade+'</td>'+
                         '<td style="width:130px;">'+response[i].incorrect_grade+'</td>'+
                         '<td style="width:130px;">'+response[i].question_order+'</td>'+
-                        '<td title="Select your own questions." ui-sref="app.select-questions({quizstackid : '+response[i].id+' })"><span class="glyphicon glyphicon-list-alt selectquestionsbutton"></span></td>'+
+                        // '<td title="Select your own questions." ui-sref="app.select-questions({quizstackid : '+response[i].id+' })"><span class="glyphicon glyphicon-list-alt selectquestionsbutton"></span></td>'+
                         '<td style="width:60px;"><a href="javascript:void(0);"><span class="glyphicon glyphicon-trash removefromstackbutton" ng-click="removeFromStackAndSave('+response[i].quiz+', '+response[i].id+')" title="Click to delete permanently."></span></a></td>'+
                     +'</tr>';
                 angular.element(document.querySelector('#existingQuestionsRow')).append($compile(html)($scope));

@@ -25,13 +25,20 @@ appmodule
             return data[sectionName];
         }
         this.getQuestionsForASection = function(sectionName){
-            return allQuestions[sectionName];
+            try{
+                return allQuestions[sectionName];
+            }catch(error){
+                return false;
+            }
         }
         this.saveProgressValues = function(sectionName, data){
             progressData[sectionName] = data;
         }
         this.getProgressValues = function(){
             return progressData;
+        }
+        this.getProgressValuesQuestionWise = function(sectionName, question_id){
+            return progressData[sectionName][question_id];
         }
         this.getProgressValuesSectionWise = function(sectionName){
             return progressData[sectionName];
@@ -60,7 +67,7 @@ appmodule
         }
 
         // Save section-wise questions-answers
-        this.saveSectionQuestion = function(sectionName, answers){
+        this.saveSectionQuestionAnswers = function(sectionName, answers){
             data[sectionName] = answers;
         }
 
@@ -79,7 +86,4 @@ appmodule
                 );
         };
 
-        this.getAQuestion = function(sectionName, count){
-            return allQuestions[sectionName][count-1][count];
-        }
         }]);

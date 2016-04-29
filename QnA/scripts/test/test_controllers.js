@@ -4,43 +4,62 @@ appmodule
     .controller('TestPreviewController', ['$scope', '$controller', '$window', '$interval', '$stateParams', 'TestPreviewFactory', function($scope, $controller, $window, $interval, $stateParams, TestPreviewFactory) {
         $controller('CookiesController', {$scope : $scope});
         $scope.allQuestions = {};
-        var firstItemVisited= false;
+        var firstQuestionVisited = false;
         $scope.baseURL = baseURLImage;
+        $scope.progressValuesModel = {};
+        $scope.answersModel = {};
+
+        function returnQuestions(sectionName, response, existingQuestions){
+            if(existingQuestions){
+                $scope.total_questions = makeArray(existingQuestions.length);
+            }else if(response){
+                $scope.total_questions = makeArray(response.total_questions);
+                if(response.question_order==="random"){
+                    var questions = response.questions;
+                }else{
+                    var questions = response.questions;
+                }
+                for(var i=0;i<questions.length;i++){
+                    $scope.answersModel[questions[i][i+1].id] = { value:null };
+                    $scope.progressValuesModel[questions[i][i+1].id] = { status:'NV' };
+                }
+                TestPreviewFactory.addQuestionsForSection(sectionName, questions);
+                TestPreviewFactory.saveSectionQuestionAnswers(sectionName, $scope.answersModel);
+                TestPreviewFactory.saveProgressValues(sectionName, $scope.progressValuesModel);
+            }
+            $scope.sliced_questions = $scope.total_questions.slice(0,15);
+            $scope.sliceFactor = 0;
+            $scope.slicingLimit = Math.floor($scope.total_questions.length/15);
+            firstQuestionVisited = false;
+            $scope.changeQuestion(1);
+        }
+
         $scope.getQuestionsBasedOnSection = function(sectionName, quizid){
-            TestPreviewFactory.getQuestionsBasedOnSection(quizid, sectionName).query(
-                function(response){
-                    $scope.total_questions = response.total_questions;
-                    $scope.sliced_questions = $scope.total_questions.slice(0,15);
-                    $scope.sliceFactor = 0;
-                    $scope.slicingLimit=Math.floor($scope.total_questions.length/15);
-                    $scope.answersModel = {};
-                    firstItemVisited = false;
-                    $scope.progressValuesModel = {};
-                    var questionsAdded = TestPreviewFactory.addQuestionsForSection(sectionName, response.questions);
-                    for(var i=0;i<questionsAdded.length;i++){
-                        $scope.answersModel[questionsAdded[i][i+1].id] = { value:null };
-                        $scope.progressValuesModel[questionsAdded[i][i+1].id] = { status:'NV' };
-                    }
-                    TestPreviewFactory.saveSectionQuestion(sectionName, $scope.answersModel);
-                    TestPreviewFactory.saveProgressValues(sectionName, $scope.progressValuesModel);
-                    $scope.changeQuestion(1);
-                },
-                function(response){
-                    alert('Problem in getting questions from server-side.');
-            });
+            var existingQuestions = TestPreviewFactory.getQuestionsForASection(sectionName);
+            if(existingQuestions!=undefined){
+                returnQuestions(sectionName, false, existingQuestions);
+            }else{
+                TestPreviewFactory.getQuestionsBasedOnSection(quizid, sectionName).query(
+                    function(response){
+                        returnQuestions(sectionName, response, false);
+                    },
+                    function(response){
+                        alert('Problem in getting questions from server-side.');
+                });
+            }
         }
         $scope.openWarningModal = function(action){
             $scope.action = action;
             switch(action){
                 case "sectionChangeRequestInitiated":
-                    toggleWarningModal('show', 'Do you really want to move to next section.<br><br><b>You cannot revisit this section again.</b>', 'Yes I am sure.');
+                    toggleWarningModal('show', '<b>Do you really want to change the section?</b>', 'Yes I am sure.');
                     break;
                 case "sectionChangeRequestCancelled":
                     toggleWarningModal('hide', '', '');
                     $scope.selectedSection = $scope.currentSection;
                     break;
                 case "submitTestRequestInitiated":
-                    toggleWarningModal('show', '<b>Are you sure you want to submit the answers?</b>', 'Yes I am sure.');
+                    toggleWarningModal('show', '<b>Are you sure you want to submit the test?</b>', 'Yes I am sure.');
                     break;
                 case "submitTestRequestCancelled":
                     toggleWarningModal('hide', '', '');
@@ -55,7 +74,7 @@ appmodule
                 }else{
                     $scope.selectedSection = $scope.sectionNames[$scope.sectionNames.indexOf($scope.nextSection)];
                 }
-                $scope.sectionNames.splice($scope.sectionNames.indexOf($scope.currentSection), 1);
+                // $scope.sectionNames.splice($scope.sectionNames.indexOf($scope.currentSection), 1);
                 $scope.addQuestions($scope.selectedSection);
                 if($scope.sectionNames.indexOf($scope.selectedSection)===$scope.sectionNames.length-1){
                     $scope.hideNextSectionButton = true;
@@ -83,11 +102,11 @@ appmodule
                 }else{
                     $scope.currentOptions = [];
                 }
-            }
-            if($scope.progressValuesModel[$scope.currentQuestion.id].status==='NV'){
-                $scope.progressValuesModel[$scope.currentQuestion.id].status = 'NA';
-                $scope.progressValues = changeProgressValues($scope.progressValuesModel);
-                TestPreviewFactory.saveProgressValues($scope.selectedSection, $scope.progressValuesModel);
+                if($scope.progressValuesModel[$scope.currentQuestion.id].status==='NV'){
+                    $scope.progressValuesModel[$scope.currentQuestion.id].status = 'NA';
+                    $scope.progressValues = changeProgressValues($scope.progressValuesModel);
+                    TestPreviewFactory.saveProgressValues($scope.selectedSection, $scope.progressValuesModel);
+                }
             }
         }
         $scope.saveAnswer = function(count, answerId){
@@ -117,8 +136,8 @@ appmodule
                     }
                 }else if($scope.currentCount === 1){
                     if($scope.currentQuestion.que_type === 'objective'){
-                        if(!firstItemVisited){
-                            firstItemVisited = true;
+                        if(!firstQuestionVisited){
+                            firstQuestionVisited = true;
                         }else{
                             if($scope.progressValuesModel[$scope.currentQuestion.id].status === 'NA'){
                             $scope.progressValuesModel[$scope.currentQuestion.id].status = 'A';
@@ -126,8 +145,8 @@ appmodule
                         }
                     }
                     if($scope.currentQuestion.que_type === 'mcq'){
-                        if(!firstItemVisited){
-                            firstItemVisited = true;
+                        if(!firstQuestionVisited){
+                            firstQuestionVisited = true;
                         }else{
                             if($scope.progressValuesModel[$scope.currentQuestion.id].status === 'NA'){
                             $scope.progressValuesModel[$scope.currentQuestion.id].status = 'A';

@@ -8,6 +8,7 @@
 		  <ul class="dropdown-menu pull-right">
 		    <li><a ui-sref="app.create-mcq-question">MCQ</a></li>
 		    <li><a ui-sref="app.create-objective-question">Objective</a></li>
+		    <li><a ui-sref="app.create-comprehension">Comprehension</a></li>
 		  </ul>
 		</div>
 	</div>
@@ -44,7 +45,7 @@
 						  	</div>
 						  	<div class="col-lg-11 col-md-11 col-sm-11">
 							  	<div class="row">
-						  			<p class="left">Q<small>{{$index + pageSize*curPage + 1}}</small>.&nbsp;&nbsp;<span ng-if="question.que_type==='objective'">{{ question.content | insertBlank }}</span><span ng-if="question.que_type==='mcq'">{{ question.content }}</span></p>
+						  			<p class="left">Q<small>{{$index + pageSize*curPage + 1}}</small>.&nbsp;&nbsp;<span>{{ question.content | insertBlank }}</span>
 							  	</div>
 							  	<br>
 							  	<div class="row">
@@ -100,7 +101,7 @@
 							  	</div>
 							  	<div class="col-lg-11 col-md-11 col-sm-11">
 								  	<div class="row">
-							  			<p class="left">Q<small>{{$index + pageSize*curPage + 1}}</small>.&nbsp;&nbsp;<span ng-if="question.que_type==='objective'">{{ question.content | insertBlank }}</span><span ng-if="question.que_type==='mcq'">{{ question.content }}</span></p>
+							  			<p class="left">Q<small>{{$index + pageSize*curPage + 1}}</small>.&nbsp;&nbsp;<span>{{ question.content | insertBlank }}</p>
 								  	</div>
 								  	<br>
 								  	<div class="row">

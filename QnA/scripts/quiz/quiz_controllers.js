@@ -5,6 +5,7 @@ appmodule
 	        // pagination
 	        $scope.curPage = 0;
 	        $scope.pageSize = 9;
+	        $scope.testURL = testURL;
 	        $controller('CookiesController', {$scope : $scope});
 
 	        $scope.createQuizForm = {title:"", no_of_attempt:"1", passing_percent:"",

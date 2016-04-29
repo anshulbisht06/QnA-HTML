@@ -3,6 +3,7 @@ $(document).click(function (event) {
     if (navbar.hasClass("in") === true && !$(event.target).hasClass("navbar-toggle")) {      
         navbar.collapse('hide');
     }
+    $('[data-toggle="popover"]').popover(); 
 });
 
 function closeAlert(){
@@ -41,7 +42,7 @@ function findTotalDuration(list){
     for(var i=0;i<list.length;i++){
         total += parseInt(list[i]['duration']);
     }
-    return total*60;
+    return total;
 }
 function isMCQ(value){
     if(value === 'mcq'){
@@ -69,3 +70,23 @@ function changeProgressValues(object) {
     }
     return [{ percentage: (count[0]*100)/totalKeys, count: count[0] }, { percentage: (count[1]*100)/totalKeys, count: count[1] }, { percentage: (count[2]*100)/totalKeys, count: count[2] }];
 };
+
+// function shuffle(array) {
+//   var currentIndex = array.length, temporaryValue, randomIndex;
+//   while (currentIndex!==0) {
+//     randomIndex = Math.floor(Math.random() * currentIndex);
+//     currentIndex -= 1;
+//     temporaryValue = array[currentIndex];
+//     array[currentIndex] = array[randomIndex];
+//     array[randomIndex] = temporaryValue;
+//   }
+//   return array;
+// }
+
+function makeArray(size){
+    var array = [];
+    for(var i=1;i<=size;i++){
+        array.push(i);
+    }
+    return array;
+}
