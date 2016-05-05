@@ -243,7 +243,7 @@ appmodule
     }])
 
 
-    .controller('CreateQuestionController', ['$scope', '$controller', '$state', '$http', 'QuizFactory', 'CategoryFactory', 'SubCategoryFactory', 'QuestionsFactory', 'Upload', function($scope, $controller, $state, $http, QuizFactory, CategoryFactory, SubCategoryFactory, QuestionsFactory, Upload) {
+    .controller('CreateQuestionController', ['$scope', '$controller', '$state', '$http', 'QuizFactory', 'CategoryFactory', 'SubCategoryFactory', 'QuestionsFactory', 'Upload', 'ngProgressFactory', function($scope, $controller, $state, $http, QuizFactory, CategoryFactory, SubCategoryFactory, QuestionsFactory, Upload, ngProgressFactory) {
         $controller('CookiesController', {$scope : $scope});
         if($scope.user){
         SubCategoryFactory.getAllSubcategories($scope.user, 'all', true).query(
@@ -256,23 +256,25 @@ appmodule
             });
         }
         $scope.upload = function(postUrl, data, figure){
-            // $('#progressBarModal').modal('show');
+            $scope.progressbar.start();
+            $scope.progressbar.setHeight('6px');
+            $scope.progressbar.setColor('blue');
             $scope.error = false;
             Upload.upload({
                     url: baseURL+postUrl,
                     data: { figure: figure, data: data },
-                    // headers: {'Authorization': 'JWT ' + $cookies.get('token')},
                     resumeChunkSize: '5MB',
                 }).then(function(response) {
+                    $scope.progressbar.complete(); 
                     alert('Question created succesfully!');
                     window.location.reload();
                 }, function (response) {
                     // $scope.error = true;
-                    alert(response.data.errors);
+                    $scope.progressbar.complete();
+                    alert("Problem in adding questions!");
+                    $scope.errors = response.data;
                 }, function(event) {
-                    // var percentage = parseInt(100.0 * event.loaded / event.total).toString();
-                    // $('#progress-bar').css('width', percentage+'%');
-                    // $('#percentage').html(percentage);
+                    $scope.progressbar.set(parseInt(100.0*event.loaded/event.total));
                 });
         }
         $scope.changeImage = function(){
@@ -286,7 +288,10 @@ appmodule
 
         if($state.current.name === "app.create-mcq-question")
         {
-            $scope.createMCQQuestionForm = {content:"",explanation:"", level:"easy", answer_order:"random", sub_category:"", que_type:"mcq"};
+            $scope.createMCQQuestionForm = {content:"",explanation:"", level:"easy", answer_order:"random", sub_category:"", que_type:"mcq", ideal_time:""};
+            $scope.insertBlank = function(){
+                $scope.createMCQQuestionForm.content += " <<Answer>> ";
+            }
             $scope.postMCQQuestion = function() {
                 $scope.upload("question/mcq/create/", $scope.createMCQQuestionForm, $scope.figure);
             }
@@ -355,16 +360,15 @@ appmodule
 
     }])
 
-    .controller('UpdateQuestionController', ['$scope', '$controller', '$state', '$stateParams', 'QuestionsFactory', 'Upload', function($scope, $controller, $state, $stateParams, QuestionsFactory, Upload) {
+    .controller('UpdateQuestionController', ['$scope', '$controller', '$state', '$stateParams', 'QuestionsFactory', 'Upload', 'ngProgressFactory', function($scope, $controller, $state, $stateParams, QuestionsFactory, Upload, ngProgressFactory) {
         $controller('CookiesController', {$scope : $scope});
-        $scope.serverURL = 'http://localhost:8000';
         $scope.que_type = $stateParams.questionParams.split(':')[1];
 
         QuestionsFactory.getQuestion($scope.user, $stateParams.questionParams.split(':')[0]).get()
             .$promise.then(
                 function(response){
                     $scope.question = response.question;
-                    $scope.updateQuestionForm = {content : $scope.question.content, level : $scope.question.level, explanation : $scope.question.explanation, que_type : $scope.question.que_type };
+                    $scope.updateQuestionForm = {content : $scope.question.content, level : $scope.question.level, explanation : $scope.question.explanation, que_type : $scope.question.que_type, ideal_time: $scope.question.ideal_time };
                     if($scope.que_type==='objective')
                         $scope.updateQuestionForm.content = $scope.question.content.replace(/<>/g,'<<Answer>>');
                 },
@@ -373,18 +377,22 @@ appmodule
                 }
             );
         $scope.upload = function(postUrl, data){
-            $scope.error = false;
+            $scope.progressbar.start();
+            $scope.progressbar.setHeight('6px');
+            $scope.progressbar.setColor('red');
             Upload.upload({
                     url: baseURL+postUrl,
                     method : 'PUT',
                     data: { data: data },
                 }).then(function(response) {
+                    $scope.progressbar.complete(); 
                     alert('Question updated succesfully!');
                     window.location.reload();
                 }, function (response) {
-                    // $scope.error = true;
-                    alert(response.data.errors);
+                    $scope.progressbar.complete(); 
+                    $scope.errors = response.data;
                 }, function(event) {
+                    $scope.progressbar.set(parseInt(100.0*event.loaded/event.total));
                 });
         }
 

@@ -54,6 +54,12 @@
 						<option value="hard">Hard</option>
 					</select>
 				  </div><br>
+				  <div class="form-group" ng-class="{'has-error': errors.ideal_time}">
+				  	<label for="ideal_time">Ideal Time <sub>(upto 300 seconds)</sub></label>
+				  	<input type="number" name="ideal_time" class="form-control" id="ideal_time" min="0" max="300" ng-model="updateQuestionForm.ideal_time">
+				  	<span ng-if="errors.ideal_time" class="help-block">{{ errors.ideal_time[0] }}</span>
+			   		<span ng-if="questionUpdateForm.ideal_time.$touched && questionUpdateForm.ideal_time.$error.required" class="help-block">Ideal time is required.</span>
+				  </div><br>
 				  <div class="form-group">
 				  	<button type="submit" class="btn btn-primary btn-block" ng-disabled="questionUpdateForm.$invalid">Update Question</button>
 				  </div>

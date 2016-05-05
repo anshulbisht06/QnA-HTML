@@ -12,7 +12,7 @@
 				<h4 class="text-center visible-xs">Add Objective question(s).</h4>
 			</div>
 			<hr>
-			  	<div class="form-group text-center" ng-if="errors.errors">
+			  	<div class="form-group text-center red-text" ng-if="errors.errors">
   				  	<p>{{errors.errors}}</p>
   				</div>
 				<form role="form" name="objectiveQuestionCreateForm" ng-submit="postObjectiveQuestion()" enctype="multipart/form-data" novalidate>

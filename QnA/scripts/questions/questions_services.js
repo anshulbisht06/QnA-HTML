@@ -1,7 +1,7 @@
 /* global $ */
 
 appmodule
-    .service('QuestionsFactory', ['$resource', '$http', function($resource, $http) {
+    .service('QuestionsFactory', ['$resource', function($resource) {
         
         this.getAllQuestions = function(userid){
                 return $resource(baseURL+"quiz/questions/get/"+userid+"/", null,

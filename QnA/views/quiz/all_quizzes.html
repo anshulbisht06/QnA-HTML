@@ -67,9 +67,12 @@
 						      <tr>
 						        <td>Duration</td>
 								<td><h5 class="help-block">{{quiz.total_duration | secondsToDateTime | date:'HH:mm:ss'}}</h5></td>
-						      </tr>	
+						      </tr>
 						   </tbody>
 						</table>
+						<div class="row">
+						    <button type="button" class="btn btn-default" data-toggle="popover" data-placement="top" title="" data-content="{{testURL}}{{quiz.quiz_key}}"><span class="glyphicon glyphicon-link black-text bold-text"></span>&nbsp;&nbsp;Test Url</button>
+						</div>
 					</div>
 					<div class="row">
 					</div>
