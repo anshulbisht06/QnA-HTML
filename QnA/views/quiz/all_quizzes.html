@@ -2,6 +2,7 @@
 <div ng-include src="'views/modals/create_quiz_modal.html'"></div>
 <div ng-include src="'views/modals/update_quiz_modal.html'"></div>
 <div ng-include src="'views/modals/warn_delete_quiz.html'"></div>
+<div ng-include src="'views/modals/private_access_to_user_modal.html'"></div>
 <!-- End Here ... -->
 
 
@@ -32,9 +33,18 @@
 						  </a>
 						  <span data-toggle="dropdown" class="glyphicon glyphicon-option-vertical pointer"></span>
 						  <ul class="dropdown-menu">
-						    <li><a ui-sref="app.view-quiz({quizid : '{{ quiz.id }}' })">View Question Stacks</a></li>
-						    <li><a href="javascript:void(0)" ng-click="putQuiz('updateQuizRequestInitiated', quiz)">Update details</a></li>
-						    <li><a href="javascript:void(0)" ng-click="deleteQuiz('deleteQuizRequestInitiated', quiz.id, quiz.title)">Delete Quiz</a></li>
+						    <li>
+						    	<a ui-sref="app.view-quiz({quizid : '{{ quiz.id }}' })">View Question Stacks</a>
+						    </li>
+						    <li id="private_access-{{quiz.id}}">
+						    	<a href="javascript:void(0)" ng-click="quizAccessUsernameMail('updateQuizAccessToPrivate', quiz)">Private Access</a>
+						    </li>
+						    <li>
+						    	<a href="javascript:void(0)" ng-click="putQuiz('updateQuizRequestInitiated', quiz)">Update details</a>
+						    </li>
+						    <li>
+						    	<a href="javascript:void(0)" ng-click="deleteQuiz('deleteQuizRequestInitiated', quiz.id, quiz.title)">Delete Quiz</a>
+						    </li>
 						  </ul>
 						</div>
 			      </div>

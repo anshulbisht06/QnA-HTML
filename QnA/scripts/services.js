@@ -24,7 +24,7 @@ appmodule
                   // headers: {'Content-Type': undefined, 'Authorization': 'JWT ' + token}
                })            
                .success(function(data, status, headers, config){
-                    alert("All questions uploaded successfully!");
+                    alert("All data uploaded successfully!");
                })            
                .error(function(data, status, headers, config){
                     alert("There is some problem with the file.Please fill according to the format.");

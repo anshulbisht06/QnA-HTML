@@ -1,7 +1,7 @@
 /* global $ fd0f00d8 */
 
 appmodule
-	.controller('QuizController', ['$scope', '$controller', '$state', 'QuestionsFactory','QuizFactory', 'CategoryFactory', function($scope, $controller, $state, QuestionsFactory, QuizFactory, CategoryFactory) {
+	.controller('QuizController', ['$scope','$http', '$controller', '$state', 'QuestionsFactory','QuizFactory', 'CategoryFactory','Upload', function($scope, $http, $controller, $state, QuestionsFactory, QuizFactory, CategoryFactory, Upload) {
 	        // pagination
 	        $scope.curPage = 0;
 	        $scope.pageSize = 9;
@@ -26,17 +26,41 @@ appmodule
 	                }); 
 	        }
 
+	        $scope.upload = function(postUrl, quiz_id, file_data){
+	            // $('#progressBarModal').modal('show');
+	            $scope.error = false;
+	            console.log('here too')
+	            Upload.upload({
+	                    url: baseURL+postUrl,
+	                    data: { file_data:file_data,quiz_id: quiz_id },
+	                    // headers: {'Authorization': 'JWT ' + $cookies.get('token')},
+	                    resumeChunkSize: '5MB',
+	                }).then(function(response) {
+	                    alert('Access set  succesfully!');
+	                    window.location.reload();
+	                }, function (response) {
+	                    // $scope.error = true;
+	                    alert(response.data.errors);
+	                }, function(event) {	
+	                    // var percentage = parseInt(100.0 * event.loaded / event.total).toString();
+	                    // $('#progress-bar').css('width', percentage+'%');
+	                    // $('#percentage').html(percentage);
+	                });
+        	}
+
 	        $scope.markPublic = function (quizId) {
 	        	QuizFactory.setQuizPublic($scope.user, quizId).update({}).$promise.then(
 	                function(response){
 	                    var mark = '';
-	                    if (response.allow_public_access){
+	                    if(response.allow_public_access){
 	                    	$('#mark'+quizId).css('color','green');
 	                    	mark = 'public';
+	                    	$('#private_access-'+quizId).hide();
 	                    }
 	                    else{
 	                    	$('#mark'+quizId).css('color','#cccccc');
 	                    	mark = 'private';
+	                    	$('#private_access-'+quizId).show();
 	                    }
 	                    $scope.alertType = "success";
                     	$scope.alertMsg = "Your test "+response.title+" Marked as "+mark+".";
@@ -107,6 +131,61 @@ appmodule
 	        		$scope.quizToBeUpdated = null;
 	        	}
 	        }
+
+	        $scope.quizAccessUsernameMail = function(action, quiz){
+	        	if(action==='updateQuizAccessToPrivate'){
+	        		$scope.quizToBeUpdated = quiz;
+	        		// $scope.updateQuizForm = { title:quiz.title, user: $scope.user, show_result_on_completion: quiz.show_result_on_completion,
+	        		// 	success_text:quiz.success_text, fail_text:quiz.fail_text, passing_percent:quiz.passing_percent,  allow_public_access:quiz.allow_public_access,
+	        		// 	no_of_attempt:quiz.no_of_attempt.toString(), user_picturing:quiz.user_picturing, start_notification_url:quiz.start_notification_url,
+	        		// 	finish_notification_url:quiz.finish_notification_url, grade_notification_url:quiz.grade_notification_url };
+	        		angular.element(document.querySelector('#quizAccessModal')).modal('show');
+	        	}
+	        	else if(action==='updateQuizAccessToPrivate'){
+	        		QuizFactory.updateQuiz($scope.user, quiz.id).update($scope.updateQuizForm).$promise.then(
+	                function(response){
+	                    alert("Quiz "+quiz.title.toUpperCase()+" has been updated.");
+	                    window.location.reload();
+	                },
+	                function(response) {
+	                    if(response.data.hasOwnProperty('non_field_errors')){
+	                    	$scope.errors = { 'title' : ['This title is used by some other user. Select some other title.'] };
+	                    }else{
+	                    	$scope.errors = response.data;
+	                    }
+	                }); 
+	        	}
+	        	else if(action==='updateQuizRequestCancelled'){
+	        		angular.element(document.querySelector('#quizUpdateModal')).modal('hide');
+	        		$scope.quizToBeUpdated = null;
+	        		$scope.quizToBeUpdated = null;
+	        	}else{
+	        		angular.element(document.querySelector('#quizUpdateModal')).modal('hide');
+	        		$scope.quizToBeUpdated = null;
+	        		$scope.quizToBeUpdated = null;
+	        	}
+	        }
+
+	        $scope.downloadTestAccessXls = function(test_id){
+	        	console.log($scope.quizToBeUpdated);
+	            $http.post(baseURL+"quiz/access/download/xls/", {test_id:test_id}, { responseType: 'arraybuffer' })
+	              .success(function(data) {
+
+	                var file = new Blob([data], { type: 'application/xls' });
+	                saveAs(file, $scope.quizToBeUpdated.title+'_access.xls');
+	            });
+        	}
+
+        	$scope.uploadAccessXLSFile = function(quiz_id){
+	            var file = $scope.uploadAccessXLS;
+	           if(file===undefined){
+	            $scope.noFileUploaded = true;
+	        	} else{
+	        		console.log('file upload code ...')
+	            	$scope.upload("quiz/access/upload/xls/", quiz_id, file);                   
+	        	}
+            };
+
 
 	        $scope.getCategories = function(quizid, quiztitle){
 	            CategoryFactory.getAllCategories($scope.user, parseInt(quizid)).query(

@@ -1,0 +1,48 @@
+<div id="quizAccessModal" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close red-text" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">{{quizToBeUpdated.title}}: Private Access Option</h4>
+      </div>
+        <div class="row">
+          <div class="col-lg-2 col-md-2 col-sm-2">
+          </div>
+          <div class="col-lg-8 col-md-8 col-sm-8"> 
+            <form class="form-horizontal" role="form" name="categoryCreateForm" ng-submit="postCategory()" novalidate>
+                <div class="form-group">
+                  <label for="email">Email address:</label>
+                  <input type="email" class="form-control" id="email">
+                </div>
+                <div class="form-group">
+                  <label for="pwd">User name:</label>
+                  <input type="text" class="form-control" id="userName">
+                </div>
+                <div class="form-group">
+                  <button type="submit" class="btn btn-success">Submit</button>
+                </div>
+            </form>
+            <hr>
+            <h3>Upload detail(s) in bulk.</h3>
+            Step 1:
+            <div>
+            <button ng-click="downloadTestAccessXls(quizToBeUpdated.id, quizToBeUpdated.quiz_key)" class="btn btn-info">Download XLS file</button>
+            </div>
+            <p style="color: red;">Note: <i>Download and fill this downloaded file with real data.</i><br><i>Do not modify default header.</i></p>
+            <br>
+            Step 2:<br>
+            <i>Now select this file and upload to server</i>
+            <div ng-controller="QuizController">
+                <input type="file" class="btn" file-model="uploadAccessXLS"/>
+                <button class="btn btn-lg glyphicon glyphicon-upload" ng-click="uploadAccessXLSFile(quizToBeUpdated.id)">Upload</button>
+            </div>
+            <br>
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-2"></div>
+        </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
