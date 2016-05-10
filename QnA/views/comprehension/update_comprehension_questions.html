@@ -1,0 +1,59 @@
+<div class="container-fluid">
+<div class="jumbotron">
+    <div class="row">
+    </div>
+    <div class="row" ng-if="!unableToGetQuestion">
+	    <div class="row">
+			<h2 class="text-center hidden-xs">Update question.</h2>
+			<h4 class="text-center visible-xs">Update question.</h4>
+		</div><hr>
+		<div class="row">
+			<div class="col-lg-2 col-md-2 col-sm-2"></div>
+			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+				<div class="form-group text-center red-text" ng-if="errors.errors">
+  				  	<p>{{errors.errors}}</p>
+  				</div>
+				<form role="form" name="comprehensionQuestionUpdateForm" ng-submit="putComprehensionQuestion()" enctype="multipart/form-data" novalidate>
+					<div class="form-group">
+						<div class="row" ng-if="figure">
+							<img src="{{baseURLImage}}{{ figure }}" class="img-thumbnail" alt="Figure unavailable" width="300" height="200">
+						</div>
+					  	<label for="figure"><span ng-if="figure">Change this</span><span ng-if="!figure">Add a</span> figure</label>
+					  	<input type="file" name="figure" id="figure" ngf-select ng-model="updateComprehensionQuestionForm.figure" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="5MB" ng-change="changeImage()" style="display: inline;">
+						<span class="glyphicon glyphicon-remove red-text" ng-if="isImageChanged" ng-click="removeImage()" style="cursor: pointer;"></span>
+					</div><br>
+				  <div class="form-group" ng-class="{'has-error': errors.content || comprehensionQuestionUpdateForm.content.$touched && comprehensionQuestionUpdateForm.content.$error.required }">
+				  	<div class="right"><button type="button" class="btn btn-md btn-danger" id="insertblankbutton" ng-click="insertBlank()">Insert Blank</button></div><br>
+				  	<label for="content">Enter the question content<span class="red-text">*</span></label>
+			    	<textarea name="content" id="content" rows="4" class="form-control" ng-model="updateComprehensionQuestionForm.content" required></textarea>
+			   		<span ng-if="errors.content" class="help-block">{{ errors.content[0] }}</span>
+			   		<span ng-if="comprehensionQuestionUpdateForm.content.$touched && comprehensionQuestionUpdateForm.content.$error.required" class="help-block">Question content is required.</span>
+				  </div><br>
+				  <div class="form-group">
+				  	<label for="content">Enter the explanation of question</label>
+			    	<textarea name="explanation" id="explanation" rows="4" class="form-control" ng-model="updateComprehensionQuestionForm.explanation"></textarea>
+				  </div><br>
+				  <div class="form-group">
+				  	<label for="level">Level of Question</label>
+					<select class="form-control" id="level" name="level" ng-model="updateComprehensionQuestionForm.level">
+						<option value="easy">Easy</option>
+						<option value="medium">Medium</option>
+						<option value="hard">Hard</option>
+					</select>
+				  </div><br>
+				  <div class="form-group" ng-class="{'has-error': errors.ideal_time}">
+				  	<label for="ideal_time">Ideal Time <sub>(upto 300 seconds)</sub></label>
+				  	<input type="number" name="ideal_time" class="form-control" id="ideal_time" min="0" max="300" ng-model="updateComprehensionQuestionForm.ideal_time">
+				  	<span ng-if="errors.ideal_time" class="help-block">{{ errors.ideal_time[0] }}</span>
+				  </div><br>
+				  <br>
+				  <button type="submit" class="btn btn-primary btn-block" ng-disabled="comprehensionQuestionUpdateForm.$invalid">Create Question</button>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="row red-text text-center" ng-if="unableToGetQuestion">
+		{{unableToGetQuestion}}
+	</div>
+</div>
+</div>

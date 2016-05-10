@@ -1,0 +1,92 @@
+<div class="container-fluid">
+<div class="jumbotron">
+    <div class="row">
+    </div>
+    <div class="row">	  
+    	<div class="row">
+    		<div class="text-center row">
+    			<p class="black-text underline">{{comprehension.heading}}<span class="right label label-default">{{comprehension.sub_category}}</span></p>		
+    		</div>
+    		<div class="row">
+    			<div class="col-lg-1 col-md-1 col-sm-1">
+    			</div>
+    			<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12"> 
+    				<p style="font-size: 15px;">{{comprehension.content}}</p>
+    			</div>	
+    		</div>
+			<div class="row question-image" ng-if="comprehension.figure">
+				<img src="{{baseURL}}{{comprehension.figure}}" class="img-thumbnail" alt="Question Image is unavailable">
+			</div>
+    	</div><hr>
+		<div class="row ">
+			<div class="row text-center  black-text">
+				<p class="hidden-xs">Add question inside this.</p>
+				<p class="visible-xs">Add question inside this.</p>
+			</div><br>
+			<div class="col-lg-2 col-md-2 col-sm-2"></div>
+			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+				<div class="form-group text-center red-text" ng-if="errors.errors">
+  				  	<p>{{errors.errors}}</p>
+  				</div>
+				<form role="form" name="comprehensionQuestionCreateForm" ng-submit="postComprehensionQuestion()" enctype="multipart/form-data" novalidate>
+				  <div class="form-group">
+				  	<label for="figure">Figure</label><br>
+				  	<input type="file" name="figure" id="figure" ngf-select ng-model="figure" ngf-pattern="'image/*'"
+					    ngf-accept="'image/*'" ngf-max-size="5MB" ng-change="changeImage()" style="display: inline;">
+					<span class="glyphicon glyphicon-remove red-text" ng-if="isImageChanged" ng-click="removeImage()" style="cursor: pointer;"></span>
+				  </div><br>
+				  	<input type="hidden" name="que_type" id="que_type" ng-model="createComprehensionQuestionForm.que_type" value="mcq">
+				  <div class="form-group" ng-class="{'has-error': errors.content || comprehensionQuestionCreateForm.content.$touched && comprehensionQuestionCreateForm.content.$error.required }">
+				  	<div class="right"><button type="button" class="btn btn-md btn-danger" id="insertblankbutton" ng-click="insertBlank()">Insert Blank</button></div><br>
+				  	<label for="content">Enter the question content<span class="red-text">*</span></label>
+			    	<textarea name="content" id="content" rows="4" class="form-control" ng-model="createComprehensionQuestionForm.content" required></textarea>
+			   		<span ng-if="errors.content" class="help-block">{{ errors.content[0] }}</span>
+			   		<span ng-if="comprehensionQuestionCreateForm.content.$touched && comprehensionQuestionCreateForm.content.$error.required" class="help-block">Question content is required.</span>
+				  </div><br>
+				  <div class="form-group">
+				  	<label for="content">Enter the explanation of question</label>
+			    	<textarea name="explanation" id="explanation" rows="4" class="form-control" ng-model="createComprehensionQuestionForm.explanation"></textarea>
+				  </div><br>
+				  <div class="form-group">
+				  	<label for="level">Level of Question</label>
+					<select class="form-control" id="level" name="level" ng-model="createComprehensionQuestionForm.level">
+						<option value="easy">Easy</option>
+						<option value="medium">Medium</option>
+						<option value="hard">Hard</option>
+					</select>
+				  </div><br>
+				  <div class="form-group" ng-class="{'has-error': errors.ideal_time}">
+				  	<label for="ideal_time">Ideal Time <sub>(upto 300 seconds)</sub></label>
+				  	<input type="number" name="ideal_time" class="form-control" id="ideal_time" min="0" max="300" ng-model="createComprehensionQuestionForm.ideal_time">
+				  	<span ng-if="errors.ideal_time" class="help-block">{{ errors.ideal_time[0] }}</span>
+				  </div><br>
+				  <br>
+				  	<div class="form-group"  ng-class="{'has-error': errors.optionerrors }">
+					  	<div class="row">
+				   		<span ng-if="errors.optionerrors" class="help-block">{{ errors.optionerrors }}</span>
+				   		</div>
+				  		<div ng-repeat="option in optionss">
+				  			<div class="row">
+				  				<div class="col-md-2">
+				  					<input type="radio" name="correctoption" size="100" ng-model="createComprehensionQuestionForm.correctoption" value="{{option.optionid}}">
+				  				</div>
+				  				<div class="col-md-6">
+					    			<textarea cols="80" rows="3" name="optioncontent-{{option.optionid}}" id="optioncontent-{{option.optionid}}" class="form-control" ng-model="createComprehensionQuestionForm.optioncontent[option.optionid]" placeholder="Content for option - {{$index}}" required>{{ option.content }}</textarea><hr>
+				  				</div>
+				  				<div class="col-md-3">
+				  					<h3><a href="javascript:void"><span class="glyphicon glyphicon-remove-sign" ng-if='option.optionid > 2' ng-click="removeOption(option.optionid)"></span></a></h3>
+				  				</div>
+				  			</div>
+					  </div>
+				  	</div>
+				  	<div class="form-group">
+				  		<button type="button" class="btn btn-primary btn-md" ng-click="addOptions()"><span class="glyphicon glyphicon-plus"></span>&nbsp;Add more options</button>
+				  	</div>
+				  <button type="submit" class="btn btn-primary btn-block" ng-disabled="comprehensionQuestionCreateForm.$invalid">Create Question</button>
+				</form>
+			</div>
+			<div class="col-lg-2 col-md-2 col-sm-2"></div>
+		</div>
+	</div>
+</div>
+</div>

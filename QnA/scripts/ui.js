@@ -90,3 +90,12 @@ function makeArray(size){
     }
     return array;
 }
+
+function findIndexOfObjectInsideList(list, quizId){
+    for(var i=0;i<list.length;i++){
+        if(list[i].id===quizId){
+            return i;
+        }
+    }
+    return -1;
+}
