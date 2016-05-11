@@ -46,19 +46,21 @@
 				  	<label for="content">Enter the explanation of question</label>
 			    	<textarea name="explanation" id="explanation" rows="4" class="form-control" ng-model="createComprehensionForm.explanation"></textarea>
 				  </div><br>
-				  <div class="form-group">
+				  
+				  <!-- <div class="form-group">
 				  	<label for="level">Level of Question</label>
 					<select class="form-control" id="level" name="level" ng-model="createComprehensionForm.level">
 						<option value="easy">Easy</option>
 						<option value="medium">Medium</option>
 						<option value="hard">Hard</option>
 					</select>
-				  </div><br>
-				  <div class="form-group" ng-class="{'has-error': errors.ideal_time}">
+				  </div><br> -->
+
+				 <!--  <div class="form-group" ng-class="{'has-error': errors.ideal_time}">
 				  	<label for="ideal_time">Ideal Time <sub>(upto 300 seconds)</sub></label>
 				  	<input type="number" name="ideal_time" class="form-control" id="ideal_time" min="0" max="300" ng-model="createComprehensionForm.ideal_time">
 				  	<span ng-if="errors.ideal_time" class="help-block">{{ errors.ideal_time[0] }}</span>
-				  </div><br>
+				  </div><br> -->
 				  <br>
 				  <button type="submit" class="btn btn-primary btn-block" ng-disabled="comprehensionCreateForm.$invalid">Create Comprehension</button>
 				</form>

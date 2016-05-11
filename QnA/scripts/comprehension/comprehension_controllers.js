@@ -5,7 +5,7 @@ appmodule
         $controller('CookiesController', {$scope : $scope});
         $scope.createComprehensionForm = { content:"",explanation:"", heading:"", sub_category:"", ideal_time:"", level:"easy", que_type:"comprehension" };
 
-        SubCategoryFactory.getAllSubcategories($scope.user, 'all', false).query(
+        SubCategoryFactory.getAllSubcategories($scope.user, 'all', true).query(
             function(response) {
                 $scope.subCategories = response;
             },
@@ -18,9 +18,12 @@ appmodule
             $scope.progressbar.start();
             $scope.progressbar.setHeight('6px');
             $scope.progressbar.setColor('green');
+            
+            var settings = $.extend({}, data, {figure: figure});
+            
             Upload.upload({
                     url: baseURL+postUrl,
-                    data: { figure: figure, data: data },
+                    data: settings,
                     resumeChunkSize: '5MB',
                 }).then(function(response) {
                     $scope.progressbar.complete();
@@ -50,14 +53,17 @@ appmodule
     .controller('CreateComprehensionQuestionController', ['$scope','$controller', '$stateParams', 'ComprehensionFactory', 'Upload', 'ngProgressFactory', function($scope, $controller, $stateParams, ComprehensionFactory, Upload, ngProgressFactory)  {
         $controller('CookiesController', {$scope : $scope});
         $scope.baseURLImage = baseURLImage;
-
+        
         function upload(postUrl, data, figure){
             $scope.progressbar.start();
             $scope.progressbar.setHeight('6px');
             $scope.progressbar.setColor('red');
+            
+            var settings = $.extend({}, data, {figure: figure});
+            
             Upload.upload({
                     url: baseURL+postUrl,
-                    data: { figure: figure, data: data },
+                    data: settings,
                     resumeChunkSize: '5MB',
                 }).then(function(response) {
                     cleanQuestionForm();
@@ -71,7 +77,6 @@ appmodule
                     $scope.progressbar.set(parseInt(100.0*event.loaded/event.total));
                 });
         }
-
         ComprehensionFactory.getComprehension($stateParams.comprehensionId).get().$promise.then(
             function(response){
                 $scope.comprehension = response;
