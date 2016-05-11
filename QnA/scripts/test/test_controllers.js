@@ -3,25 +3,29 @@
 appmodule
     .controller('TestPreviewController', ['$scope', '$controller', '$window', '$interval', '$stateParams', 'TestPreviewFactory', function($scope, $controller, $window, $interval, $stateParams, TestPreviewFactory) {
         $controller('CookiesController', {$scope : $scope});
-        $scope.allQuestions = {};
         var firstQuestionVisited = false;
         $scope.baseURL = baseURLImage;
         $scope.progressValuesModel = {};
         $scope.answersModel = {};
+        var comprehensionQuestions = 0;
 
         function returnQuestions(sectionName, response, existingQuestions){
             if(existingQuestions){
                 $scope.total_questions = makeArray(existingQuestions.length);
             }else if(response){
-                $scope.total_questions = makeArray(response.total_questions);
-                if(response.question_order==="random"){
-                    var questions = response.questions;
-                }else{
-                    var questions = response.questions;
-                }
+                $scope.total_questions = makeArray(response.questions.length);
+                var questions = response.questions;
                 for(var i=0;i<questions.length;i++){
-                    $scope.answersModel[questions[i][i+1].id] = { value:null };
-                    $scope.progressValuesModel[questions[i][i+1].id] = { status:'NV' };
+                    var q = questions[i][i+1];
+                    $scope.answersModel[q.id] = { value:null };
+                    $scope.progressValuesModel[q.id] = { status: progressTypes[1] };
+                    if(q.que_type === qTypes[2]){
+                        $scope.answersModel[q.id]['comprehension_questions'] = [];
+                        $scope.answersModel[q.id]['heading'] = q.heading;
+                        for(var j=0;j<q.comprehension_questions.length;j++){
+                            $scope.answersModel[q.id]['comprehension_questions'][q.comprehension_questions[j][j+1].id] = { value:null };
+                        }                        
+                    }
                 }
                 TestPreviewFactory.addQuestionsForSection(sectionName, questions);
                 TestPreviewFactory.saveSectionQuestionAnswers(sectionName, $scope.answersModel);
@@ -94,31 +98,63 @@ appmodule
         $scope.changeQuestion = function(count){
             if(count>=1 && count<=$scope.total_questions.length)
             {
-                // var question = TestPreviewFactory.getAQuestion($scope.selectedSection, count);
+                $scope.currentComprehensionQuestion = [];
                 $scope.currentCount = count;
-                $scope.currentQuestion = TestPreviewFactory.getAQuestion($scope.selectedSection, count);
-                if(isMCQ($scope.currentQuestion.que_type)){
-                    $scope.currentOptions = $scope.currentQuestion.options;
-                }else{
-                    $scope.currentOptions = [];
+                if($scope.currentComprehensionQuestionCount!=undefined){
+                    $scope.isComprehension = false;
+                    delete $scope.currentComprehensionQuestion;
+                    delete $scope.currentComprehensionQuestionCount;
+                    delete $scope.comprehensionQuestionsLimit;
+                    comprehensionQuestions = null;
                 }
-                if($scope.progressValuesModel[$scope.currentQuestion.id].status==='NV'){
-                    $scope.progressValuesModel[$scope.currentQuestion.id].status = 'NA';
+                $scope.currentComprehensionQuestion;
+                $scope.currentQuestion = TestPreviewFactory.getAQuestion($scope.selectedSection, count);
+                if($scope.currentQuestion.que_type === qTypes[0]){
+                    $scope.currentOptions = $scope.currentQuestion.options;
+                }else if(($scope.currentQuestion.que_type === qTypes[1])){
+                    $scope.currentOptions = [];
+                }else{
+                    $scope.isComprehension = true;
+                    comprehensionQuestions = $scope.currentQuestion.comprehension_questions;
+                    $scope.comprehensionQuestionsLimit = comprehensionQuestions.length;
+                    $scope.changeComprehensionQuestion(0);
+                }
+                if($scope.progressValuesModel[$scope.currentQuestion.id].status === progressTypes[1]){
+                    $scope.progressValuesModel[$scope.currentQuestion.id].status = progressTypes[0];
                     $scope.progressValues = changeProgressValues($scope.progressValuesModel);
                     TestPreviewFactory.saveProgressValues($scope.selectedSection, $scope.progressValuesModel);
                 }
             }
         }
-        $scope.saveAnswer = function(count, answerId){
-            if(isMCQ($scope.currentQuestion.que_type))
+
+        $scope.changeComprehensionQuestion = function(comprehensionCount){
+            if(comprehensionCount>=0 && comprehensionCount<=comprehensionQuestions.length)
             {
-                if($scope.answersModel[$scope.currentQuestion.id].value===answerId){
-                }else{
-                    $scope.answersModel[$scope.currentQuestion.id].value = answerId;
-                    TestPreviewFactory.saveOrChangeAnswer($scope.selectedSection, count, answerId, true);
-                }
+                $scope.currentComprehensionQuestionCount = comprehensionCount+1;
+                $scope.currentComprehensionQuestion = comprehensionQuestions[comprehensionCount][comprehensionCount+1];
             }
-            else{
+        }
+
+        // $scope.saveAnswer = function(count, answerId){
+        //     if($scope.currentQuestion.que_type === qTypes[0])
+        //     {
+        //         if($scope.answersModel[$scope.currentQuestion.id].value===answerId){
+        //         }else{
+        //             $scope.answersModel[$scope.currentQuestion.id].value = answerId;
+        //             TestPreviewFactory.saveOrChangeAnswer($scope.selectedSection, count, answerId, true);
+        //         }
+        //     }
+        //     else{
+        //     }
+        // }
+
+        function markVisitedFirstQuestion(firstQuestionVisited){
+            if(!firstQuestionVisited){
+                firstQuestionVisited = true;
+            }else{
+                if($scope.progressValuesModel[$scope.currentQuestion.id].status === progressTypes[0]){
+                $scope.progressValuesModel[$scope.currentQuestion.id].status = progressTypes[2];
+                }
             }
         }
         // Watch for a change in answersModel
@@ -127,31 +163,19 @@ appmodule
          },                       
           function(newVal, oldVal) {
             try{ 
-                if($scope.currentCount > 1 || ($scope.currentCount > 1 && $scope.currentQuestion.que_type === 'mcq')){
-                    if($scope.progressValuesModel[$scope.currentQuestion.id].status === 'NV'){
-                        $scope.progressValuesModel[$scope.currentQuestion.id].status = 'NA';
+                if($scope.currentCount > 1 || ($scope.currentCount > 1 && $scope.currentQuestion.que_type === qTypes[0])){
+                    if($scope.progressValuesModel[$scope.currentQuestion.id].status === progressTypes[1]){
+                        $scope.progressValuesModel[$scope.currentQuestion.id].status = progressTypes[0];
                     }
-                    else if($scope.progressValuesModel[$scope.currentQuestion.id].status === 'NA'){
-                        $scope.progressValuesModel[$scope.currentQuestion.id].status = 'A';
+                    else if($scope.progressValuesModel[$scope.currentQuestion.id].status === progressTypes[0]){
+                        $scope.progressValuesModel[$scope.currentQuestion.id].status = progressTypes[2];
                     }
                 }else if($scope.currentCount === 1){
-                    if($scope.currentQuestion.que_type === 'objective'){
-                        if(!firstQuestionVisited){
-                            firstQuestionVisited = true;
-                        }else{
-                            if($scope.progressValuesModel[$scope.currentQuestion.id].status === 'NA'){
-                            $scope.progressValuesModel[$scope.currentQuestion.id].status = 'A';
-                            }
-                        }
+                    if($scope.currentQuestion.que_type === qTypes[1]){
+                        markVisitedFirstQuestion(firstQuestionVisited);
                     }
-                    if($scope.currentQuestion.que_type === 'mcq'){
-                        if(!firstQuestionVisited){
-                            firstQuestionVisited = true;
-                        }else{
-                            if($scope.progressValuesModel[$scope.currentQuestion.id].status === 'NA'){
-                            $scope.progressValuesModel[$scope.currentQuestion.id].status = 'A';
-                            }
-                        }
+                    if($scope.currentQuestion.que_type === qTypes[0]){
+                        markVisitedFirstQuestion(firstQuestionVisited);
                     }   
                 }
                 $scope.progressValues = changeProgressValues($scope.progressValuesModel);
@@ -181,9 +205,6 @@ appmodule
                 $scope.selectedSection = $scope.sectionNames[0];
                 $scope.currentSection = $scope.selectedSection;
                 $scope.addQuestions($scope.selectedSection);
-                // for(var i=0;i<sectionNames.length;i++){
-                //     angular.element(document.querySelector('#sectionnames')).append('<option value='+sectionNames[i]+'>'+sectionNames[i]+'</option>');
-                // }
                 $scope.totalDuration = findTotalDuration($window.opener.data['quizStacks']);
                 $interval(function(){
                     $scope.totalDuration -= 1;

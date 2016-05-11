@@ -3,7 +3,7 @@
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close red-text" data-dismiss="modal">&times;</button>
+        <button type="button" class="close red-text" data-dismiss="modal" ng-click="quizAccessUsernameMail('updateQuizRequestCancelled', quizToBeUpdated)">&times;</button>
         <h4 class="modal-title">{{quizToBeUpdated.title}}: Private Access Option</h4>
       </div>
         <div class="row">
@@ -34,7 +34,10 @@
             Step 2:<br>
             <i>Now select this file and upload to server</i>
             <div ng-controller="QuizController">
-                <input type="file" class="btn" file-model="uploadAccessXLS"/>
+                <div ng-class="{'has-error': noFileUploaded}">
+                <input type="file" name="uploadAccessXLS" id="uploadAccessXLS" ngf-select ng-model="uploadAccessXLS" ngf-max-size="20MB">
+                  <span ng-if="noFileUploaded" class="red-text">No file has been uploaded.<br></span>
+                </div><br>
                 <button class="btn btn-lg glyphicon glyphicon-upload" ng-click="uploadAccessXLSFile(quizToBeUpdated.id)">Upload</button>
             </div>
             <br>

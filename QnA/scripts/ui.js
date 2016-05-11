@@ -15,6 +15,7 @@ function closeAlert(){
 function makeEditable(element){
 	element.readOnly = false;
 }
+
 function makeUneditable(element){
 	element.readOnly = true;
 }
@@ -23,19 +24,23 @@ function makeUneditable(element){
 // 	element.value += ' <<Answer>> ';
 // 	element.focus();
 // }
+
 function upload(file) {
 	console.log(file); 
 }
+
 function sortObject(obj) {
     return Object.keys(obj).sort().reduce(function (result, key) {
         result[key] = obj[key];
         return result;
     }, {});
 }
+
 function isNotEmpty(object){
    	for(var i in object){ return true;}
   	return false;
 }
+
 // in seconds
 function findTotalDuration(list){
     var total = 0;
@@ -44,17 +49,12 @@ function findTotalDuration(list){
     }
     return total;
 }
-function isMCQ(value){
-    if(value === 'mcq'){
-        return true;
-    }else if(value === 'objective'){
-        return false;
-    }
-}
+
 function toggleWarningModal(action, bodyText, okButtonText){
     $('#warningModalBody').html(bodyText);
     $('#warningModal').modal(action);
 }
+
 function changeProgressValues(object) {
     var count = [0 ,0, 0];
     var totalKeys = 0;

@@ -27,17 +27,17 @@
 				<div class="panel panel-info">
 			      <div class="panel-heading"><a ui-sref="app.view-quiz({ quizid : '{{ quiz.id }}'})">{{quiz.title | capitalize}}</a>
 			      		<div class="dropdown right">
-						  <a  ng-if='quiz.total_questions > 1' ng-click="markPublic(quiz.id)" >
-						  	<span ng-if='quiz.allow_public_access' id='mark{{quiz.id}}' style="color: green;" class="glyphicon glyphicon-user"></span>
-						  	<span ng-if='!quiz.allow_public_access' id='mark{{quiz.id}}' style="color: #cccccc;" class="glyphicon glyphicon-user"></span>
+						  <a ng-if='quiz.total_questions > 1' ng-click="markPublic(quiz.id)" >
+						  	<span ng-if='quiz.allow_public_access' id='mark{{quiz.id}}' title="Click to make the quiz private." class="glyphicon glyphicon-user green-text"></span>
+						  	<span ng-if='!quiz.allow_public_access' id='mark{{quiz.id}}' title="Click to make the quiz public." style="color: #cccccc;" class="glyphicon glyphicon-user"></span>
 						  </a>
 						  <span data-toggle="dropdown" class="glyphicon glyphicon-option-vertical pointer"></span>
 						  <ul class="dropdown-menu">
 						    <li>
 						    	<a ui-sref="app.view-quiz({quizid : '{{ quiz.id }}' })">View Question Stacks</a>
 						    </li>
-						    <li id="private_access-{{quiz.id}}">
-						    	<a href="javascript:void(0)" ng-click="quizAccessUsernameMail('updateQuizAccessToPrivate', quiz)">Private Access</a>
+						    <li ng-if="quiz.allow_public_access===false">
+						    	<a href="javascript:void(0)" ng-click="quizAccessUsernameMail('updateQuizAccessToPrivateInitiated', quiz)">Private Access</a>
 						    </li>
 						    <li>
 						    	<a href="javascript:void(0)" ng-click="putQuiz('updateQuizRequestInitiated', quiz)">Update details</a>
@@ -71,7 +71,7 @@
 						   </tbody>
 						</table>
 						<div class="row">
-						    <button type="button" class="btn btn-default" data-toggle="popover" data-placement="top" title="" data-content="{{testURL}}{{quiz.quiz_key}}"><span class="glyphicon glyphicon-link black-text bold-text"></span>&nbsp;&nbsp;Test Url</button>
+						    <button type="button" class="btn btn-default" data-toggle="popover" data-placement="top" title="" data-content="{{quiz.url}}"><span class="glyphicon glyphicon-link black-text bold-text"></span>&nbsp;&nbsp;Test Url</button>
 						</div>
 					</div>
 					<div class="row">
@@ -88,7 +88,6 @@
 		<h4><b>No quiz created so far.</b></h4>
 	</div>
 	<div class="col-md-12" ng-if="allQuiz.length>5" style='text-align:center;margin:1%;'>
-
 		  <button type="button" class='btn btn-primary' ng-disabled="curPage == 0"
 		 ng-click="curPage=curPage-1">PREV</button>
 		 <span>Page {{curPage + 1}} of {{ numberOfPages() }}</span>

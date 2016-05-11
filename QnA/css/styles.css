@@ -153,11 +153,16 @@ ul.sidemenu > li{
 .bold-text{
 	font-weight: bold;
 }
-.question-image:hover{
+.question-image{
 	/*transform: scale3d(2,2,2);*/
 	width: 80%;
 	height:80%;
 }
 .underline{
 	text-decoration: underline;
+}
+.comprehensionButton{
+	font-size: 24px;
+	color: black;
+	cursor: pointer;
 }

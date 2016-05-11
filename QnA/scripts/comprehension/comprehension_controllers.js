@@ -49,6 +49,7 @@ appmodule
     }])
     .controller('CreateComprehensionQuestionController', ['$scope','$controller', '$stateParams', 'ComprehensionFactory', 'Upload', 'ngProgressFactory', function($scope, $controller, $stateParams, ComprehensionFactory, Upload, ngProgressFactory)  {
         $controller('CookiesController', {$scope : $scope});
+        $scope.baseURLImage = baseURLImage;
 
         function upload(postUrl, data, figure){
             $scope.progressbar.start();
@@ -128,7 +129,7 @@ appmodule
         $controller('CookiesController', {$scope : $scope});
         $scope.curPage = 0;
         $scope.pageSize = 10;
-        $scope.baseURL = baseURL;
+        $scope.baseURLImage = baseURLImage;
 
         ComprehensionFactory.getComprehension($stateParams.comprehensionId).get().$promise.then(
             function(response){
