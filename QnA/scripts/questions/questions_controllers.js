@@ -100,9 +100,8 @@ appmodule
             function(response){
                 console.log(response)
             });
+            }
         }
-        }
-
 
         $scope.selectCategory = function(selectedCategoryId, selectedCategoryName){
             $scope.categoryNotSelected = false;
@@ -154,7 +153,7 @@ appmodule
         });
 
         $scope.createCategoryform = {category_name : "",user : $scope.user};
-        $scope.postCategory = function() { 
+        $scope.postCategory = function() {
             CategoryFactory.createCategory().save($scope.createCategoryform).$promise.then(
                 function(response){
                     $scope.isFormInvalid = false;
@@ -258,14 +257,19 @@ appmodule
             $scope.progressbar.start();
             $scope.progressbar.setHeight('6px');
             $scope.progressbar.setColor('blue');
+            
+            if(data['optioncontent']){
+                data['optioncontent'] = JSON.stringify(data['optioncontent']);    
+            }
+            var settings = $.extend({}, data, {figure: figure});
             Upload.upload({
                     url: baseURL+postUrl,
-                    data: { figure: figure, data: data },
+                    data: settings,
                     resumeChunkSize: '5MB',
                 }).then(function(response) {
-                    $scope.progressbar.complete(); 
-                    cleanQuestionForm();
+                    $scope.progressbar.complete();
                     alert('Question created succesfully!');
+                    cleanQuestionForm();
                 }, function (response) {
                     $scope.progressbar.complete();
                     alert("Problem in adding questions!");
@@ -289,6 +293,7 @@ appmodule
                 $scope.createMCQQuestionForm.content += " <<Answer>> ";
             }
             $scope.postMCQQuestion = function() {
+                console.log($scope.createMCQQuestionForm);
                 $scope.upload("question/mcq/create/", $scope.createMCQQuestionForm, $scope.figure);
             }
 
