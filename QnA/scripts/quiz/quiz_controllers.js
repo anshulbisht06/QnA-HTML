@@ -7,6 +7,19 @@ appmodule
 	        $scope.pageSize = 9;
 	        $scope.testURL = testURL;
 	        $controller('CookiesController', {$scope : $scope});
+	        QuizFactory.getAllQuiz($scope.user, "all").query(
+            function(response){
+                $scope.allQuiz = response;
+            },
+            function(response){
+                $scope.unableToGetAllQuiz = true;
+                $scope.errors = "Unable to get your quizzes.";
+            });
+	        $scope.numberOfPages = function(){
+	            if($scope.allQuiz){
+	                return Math.ceil($scope.allQuiz.length / $scope.pageSize);
+	            }
+	        };
 
 	        $scope.createQuizForm = {title:"", no_of_attempt:"1", passing_percent:"",
 	        	user:$scope.user, success_text:"", fail_text:"",user_picturing:false, start_notification_url:"", finish_notification_url:"", grade_notification_url:""};
@@ -37,7 +50,7 @@ appmodule
 	                    // headers: {'Authorization': 'JWT ' + $cookies.get('token')},
 	                    resumeChunkSize: '5MB',
 	                }).then(function(response) {
-	                    alert('Access set  succesfully!');
+	                    alert('Access set succesfully!');
 	                    window.location.reload();
 	                }, function (response) {
 	                    // $scope.error = true;
@@ -69,7 +82,9 @@ appmodule
 	                function(response){
 	                    $scope.errors = response.data;
 	                });
+	        	setTimeout(closeAlert, 5000);
 	        }
+
 
 	        $scope.deleteQuiz = function(action, quizId, quizTitle){
 	        	if(action==='deleteQuizRequestInitiated'){
@@ -80,23 +95,32 @@ appmodule
 	        	else if(action==='deleteQuizRequestAccepted'){
 	        		QuizFactory.deleteQuiz($scope.user, quizId).delete().$promise.then(
 		                function(response){
-		                    window.location.reload();                   
+		                	var index = findIndexOfObjectInsideList($scope.allQuiz, $scope.quizToBeDeletedID);
+		                	$scope.allQuiz.splice(index, 1);
+			        		$scope.alertType = "success";
+		                    $scope.alertMsg = "Your quiz named "+$scope.quizToBeDeletedTitle.toUpperCase()+" has been deleted.";
+		                    $scope.quizToBeDeletedID = null;
+			        		$scope.quizToBeDeletedTitle = null;
+			        		angular.element(document.querySelector('#quizDeleteModal')).modal('hide');
 		                },
 		                function(response) {
+		                	angular.element(document.querySelector('#quizDeleteModal')).modal('hide');
 		                    $scope.alertType = "danger";
 		                    $scope.alertMsg = "Unable to delete the quiz.";
 		                    alert(response.data.errors);
 		                });
+	        		setTimeout(closeAlert, 5000);
 	        	}
 	        	else if(action==='deleteQuizRequestCancelled'){
-	        		angular.element(document.querySelector('#quizDeleteModal')).modal('hide');
 	        		$scope.quizToBeDeletedID = null;
 	        		$scope.quizToBeDeletedTitle = null;
+	        		angular.element(document.querySelector('#quizDeleteModal')).modal('hide');
 	        	}else{
-	        		angular.element(document.querySelector('#quizDeleteModal')).modal('hide');
 	        		$scope.quizToBeDeletedID = null;
 	        		$scope.quizToBeDeletedTitle = null;
+	        		angular.element(document.querySelector('#quizDeleteModal')).modal('hide');
 	        	}
+
 	        }
 
 	        $scope.putQuiz = function(action, quiz){
@@ -111,8 +135,12 @@ appmodule
 	        	else if(action==='updateQuizRequestAccepted'){
 	        		QuizFactory.updateQuiz($scope.user, quiz.id).update($scope.updateQuizForm).$promise.then(
 	                function(response){
-	                    alert("Quiz "+quiz.title.toUpperCase()+" has been updated.");
-	                    window.location.reload();
+	                	var index = findIndexOfObjectInsideList($scope.allQuiz, $scope.quizToBeUpdated.id);
+	                	$scope.allQuiz[index] = response.updatedQuiz;
+		        		$scope.alertType = "success";
+	                    $scope.alertMsg = "Your quiz named "+$scope.quizToBeUpdated.title.toUpperCase()+" has been updated.";
+	                    angular.element(document.querySelector('#quizUpdateModal')).modal('hide');
+	        			$scope.quizToBeUpdated = null;
 	                },
 	                function(response) {
 	                    if(response.data.hasOwnProperty('non_field_errors')){
@@ -121,14 +149,13 @@ appmodule
 	                    	$scope.errors = response.data;
 	                    }
 	                }); 
+	                setTimeout(closeAlert, 5000);
 	        	}
 	        	else if(action==='updateQuizRequestCancelled'){
 	        		angular.element(document.querySelector('#quizUpdateModal')).modal('hide');
 	        		$scope.quizToBeUpdated = null;
-	        		$scope.quizToBeUpdated = null;
 	        	}else{
 	        		angular.element(document.querySelector('#quizUpdateModal')).modal('hide');
-	        		$scope.quizToBeUpdated = null;
 	        		$scope.quizToBeUpdated = null;
 	        	}
 	        }

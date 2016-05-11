@@ -1,0 +1,78 @@
+<div class="container-fluid">
+<div class="jumbotron">
+    <div class="row">
+    </div>
+    <div class="row">
+	    <div class="row">
+    		<div class="text-center row">
+    			<p class="black-text underline">{{comprehension.heading}}<span class="right label label-default">{{comprehension.sub_category}}</span></p>		
+    		</div>
+    		<div class="row">
+    			<div class="col-lg-1 col-md-1 col-sm-1">
+    			</div>
+    			<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12"> 
+    				<p style="font-size: 15px;">{{comprehension.content}}</p>
+    			</div>	
+    		</div>
+			<div class="row question-image" ng-if="comprehension.figure">
+				<img src="{{baseURL}}{{comprehension.figure}}" class="img-thumbnail" alt="Question Image is unavailable">
+			</div>
+	    </div><hr>    
+		<div class="row ">
+			<div class="col-lg-1 col-md-1 col-sm-1"></div>
+			<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+			<div class="row text-center black-text">
+				<p class="hidden-xs">List of all Comprehension Questions.</p>
+				<p class="visible-xs">List of all Comprehension Questions.</p>
+			</div>
+				<div class="row" ng-if="!errors">
+					<ul class="list-group">
+						<li class="list-group-item light-blue-border" ng-if="!errors" ng-mouseenter="hoverOnQuestion(cq.id)" ng-mouseleave="hoverOutQuestion(cq.id)" ng-repeat="cq in comprehensionQuestions | pagination: curPage * pageSize | limitTo: pageSize" id="CQ{{cq.id}}">
+						  		<p>
+							  	<div class="row">
+								  	<div class="col-lg-1 col-md-1 col-sm-1">
+								  	</div>
+								  	<div class="col-lg-11 col-md-11 col-sm-11">
+									  	<div class="row">
+								  			<h5 class="left">Q<small>{{$index + pageSize*curPage + 1}}</small>.&nbsp;&nbsp;{{ cq.content | insertBlank }}</h5>
+									  	</div>
+									  	<br>
+									  	<div class="row">
+									  	    <div class="btn-group" data-toggle="buttons">
+								  	    		<div class="row options" ng-repeat="option in cq.options">
+									                <label class="btn btn-default" ng-class="{'active':option.correct}">
+										                {{$index + 1}}
+									                </label>
+								                	{{ option.content }}
+								                </div>
+							                </div>
+									  	</div>
+									  	<div class="row text-left">
+									  		<div class="col-lg-6 col-md-6 col-sm-6">
+									  		</div>
+									  		<div class="col-lg-1 col-md-1 col-sm-1">
+									  			<h4><span class="label label-default">{{ cq.level }}</span></h4>
+									  		</div>
+									  		<div class="col-lg-5 col-md-5 col-sm-5 text-right" ng-if="isHoveredOver[cq.id]">
+									  			<ul class="list-inline">
+												  <li><a ui-sref="app.update-comprehension-question({ comprehensionQuestionId : '{{ cq.id }}' })" title="Edit the question"><span class="glyphicon glyphicon-pencil"></span></a></li>
+												  <li><a ui-sref="app.update-comprehension-answers({comprehensionQuestionId : '{{ cq.id }}' })" title="Edit the answers"><span class="glyphicon glyphicon-list"></span></a></li>	
+												  <li><a ng-click="deleteComprehensionQuestion(cq.id)"><span class="glyphicon glyphicon-remove"></span></a></li>
+												</ul>
+									  		</div>
+									  	</div>
+								  	</div>
+							  	</div>
+							  	</p>
+						  </li>
+					</ul>
+				</div>
+				<div class="row" ng-if="errors">
+					<p class="text-center red-text">{{errors}}</p>
+				</div>
+			</div>
+			<div class="col-lg-1 col-md-1 col-sm-1"></div>
+		</div>
+	</div>
+</div>
+</div>

@@ -3,8 +3,7 @@
 appmodule
 	.controller('CreateCategoryController', ['$scope','$state', '$controller', 'CategoryFactory', 'QuizFactory','$stateParams', function($scope, $state, $controller, CategoryFactory, QuizFactory, $stateParams) {
         $controller('CookiesController', {$scope : $scope});
-        if($scope.user){
-            QuizFactory.getAllQuiz($scope.user, "all").query(
+        QuizFactory.getAllQuiz($scope.user, "all").query(
             function(response){
                 $scope.allQuiz = response;
             },
@@ -12,12 +11,11 @@ appmodule
                 $scope.unableToGetAllQuiz = true;
                 $scope.errors = "Unable to get your quizzes.";
             });
-            $scope.numberOfPages = function(){
-                    if($scope.allQuiz){
-                        return Math.ceil($scope.allQuiz.length / $scope.pageSize);
-                    }
-                };
-        }
+        $scope.numberOfPages = function(){
+            if($scope.allQuiz){
+                return Math.ceil($scope.allQuiz.length / $scope.pageSize);
+            }
+        };
         $scope._id = $stateParams.obj ? $stateParams.obj.id.toString() : "";
         if($scope._id){
             $scope.isFormInvalid = true;

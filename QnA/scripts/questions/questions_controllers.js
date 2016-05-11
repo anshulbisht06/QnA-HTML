@@ -245,7 +245,6 @@ appmodule
 
     .controller('CreateQuestionController', ['$scope', '$controller', '$state', '$http', 'QuizFactory', 'CategoryFactory', 'SubCategoryFactory', 'QuestionsFactory', 'Upload', 'ngProgressFactory', function($scope, $controller, $state, $http, QuizFactory, CategoryFactory, SubCategoryFactory, QuestionsFactory, Upload, ngProgressFactory) {
         $controller('CookiesController', {$scope : $scope});
-        if($scope.user){
         SubCategoryFactory.getAllSubcategories($scope.user, 'all', true).query(
             function(response) {
                 $scope.subCategories = response;
@@ -254,22 +253,20 @@ appmodule
                 $scope.errors = response.data;
                 $scope.unableToGetAllSubCategories = true;
             });
-        }
+
         $scope.upload = function(postUrl, data, figure){
             $scope.progressbar.start();
             $scope.progressbar.setHeight('6px');
             $scope.progressbar.setColor('blue');
-            $scope.error = false;
             Upload.upload({
                     url: baseURL+postUrl,
                     data: { figure: figure, data: data },
                     resumeChunkSize: '5MB',
                 }).then(function(response) {
                     $scope.progressbar.complete(); 
+                    cleanQuestionForm();
                     alert('Question created succesfully!');
-                    window.location.reload();
                 }, function (response) {
-                    // $scope.error = true;
                     $scope.progressbar.complete();
                     alert("Problem in adding questions!");
                     $scope.errors = response.data;
@@ -284,7 +281,6 @@ appmodule
             $scope.isImageChanged = false;
             $scope.figure = undefined;
         }
-
 
         if($state.current.name === "app.create-mcq-question")
         {
@@ -323,6 +319,16 @@ appmodule
                     $scope.optionss = all.filter(function(el) { return el.optionid != op_id; });
                 }
             };
+
+            function cleanQuestionForm(){
+                $scope.createMCQQuestionForm['explanation'] = '';
+                $scope.createMCQQuestionForm['ideal_time'] = '';
+                $scope.createMCQQuestionForm['content'] = '';
+                $scope.createMCQQuestionForm['optioncontent'] = {};
+                $scope.createMCQQuestionForm['correctoption'] = '';
+                $scope.figure = undefined;
+                $scope.isImageChanged = false;
+            }
         }
         else if($state.current.name === "app.create-objective-question"){
             $scope.createObjectiveQuestionForm = {content:"",correct:"",explanation:"", level:"easy", sub_category:"", que_type:"objective"};
@@ -350,44 +356,71 @@ appmodule
 
         // Function for download xls file on any type of quetions .... ;)
         $scope.uploadFile = function(que_type){
-               var file = $scope.myFile;
-               if(file===undefined){
+            var file = $scope.myFile;
+            if(file===undefined){
                 $scope.noFileUploaded = true;
-            } else{
+            }else{
                 $scope.upload("question/"+que_type+"/bulkupload/", {}, file);                   
             }
-            };
+        };
+
+        function cleanQuestionForm(){
+            $scope.createObjectiveQuestionForm['explanation'] = '';
+            $scope.createObjectiveQuestionForm['ideal_time'] = '';
+            $scope.createObjectiveQuestionForm['content'] = '';
+            $scope.createObjectiveQuestionForm['correct'] = '';
+            $scope.figure = undefined;
+            $scope.isImageChanged = false;
+        }
 
     }])
 
     .controller('UpdateQuestionController', ['$scope', '$controller', '$state', '$stateParams', 'QuestionsFactory', 'Upload', 'ngProgressFactory', function($scope, $controller, $state, $stateParams, QuestionsFactory, Upload, ngProgressFactory) {
         $controller('CookiesController', {$scope : $scope});
         $scope.que_type = $stateParams.questionParams.split(':')[1];
-
         QuestionsFactory.getQuestion($scope.user, $stateParams.questionParams.split(':')[0]).get()
             .$promise.then(
                 function(response){
                     $scope.question = response.question;
-                    $scope.updateQuestionForm = {content : $scope.question.content, level : $scope.question.level, explanation : $scope.question.explanation, que_type : $scope.question.que_type, ideal_time: $scope.question.ideal_time };
+                    $scope.baseURLImage = baseURLImage;
+                    $scope.updateQuestionForm = {figure:response.figure, content : $scope.question.content, level : $scope.question.level, explanation : $scope.question.explanation, que_type : $scope.question.que_type, ideal_time: $scope.question.ideal_time };
                     if($scope.que_type==='objective')
                         $scope.updateQuestionForm.content = $scope.question.content.replace(/<>/g,'<<Answer>>');
+                    else if($scope.que_type==='comprehension')
+                        $scope.updateQuestionForm['heading'] = $scope.question.heading;
                 },
                 function(response) {
-                    $scope.unableToGetQuestion = response.data;
+                    $scope.unableToGetQuestion = response.data.errors;
                 }
             );
-        $scope.upload = function(postUrl, data){
+
+        $scope.changeImage = function(){
+            $scope.isImageChanged = true;
+        }
+        $scope.removeImage = function(){
+            $scope.isImageChanged = false;
+            $scope.updateQuestionForm.figure = undefined;
+        }
+
+        $scope.putQuestion = function() {
+            upload("quiz/question/"+$scope.user+"/"+$stateParams.questionParams.split(':')[0]+"/", $scope.updateQuestionForm);
+        }
+
+        function upload(postUrl, data){
             $scope.progressbar.start();
             $scope.progressbar.setHeight('6px');
             $scope.progressbar.setColor('red');
             Upload.upload({
                     url: baseURL+postUrl,
-                    method : 'PUT',
                     data: { data: data },
+                    resumeChunkSize: '5MB',
+                    method: 'PUT',
                 }).then(function(response) {
-                    $scope.progressbar.complete(); 
+                    $scope.progressbar.complete();
+                    $scope.isImageChanged = false;
+                    $scope.question.figure = response.data.figure;
+                    $scope.updateQuestionForm = {figure: undefined, heading: response.data.heading, content : response.data.content, level : response.data.level, explanation : response.data.explanation, ideal_time: response.data.ideal_time };
                     alert('Question updated succesfully!');
-                    window.location.reload();
                 }, function (response) {
                     $scope.progressbar.complete(); 
                     $scope.errors = response.data;
@@ -395,50 +428,52 @@ appmodule
                     $scope.progressbar.set(parseInt(100.0*event.loaded/event.total));
                 });
         }
-
-        $scope.putQuestion = function() {
-            $scope.upload("quiz/question/"+$scope.user+"/"+$stateParams.questionParams.split(':')[0]+"/", $scope.updateQuestionForm);
-        }
     }])
 
 
     .controller('UpdateAnswersController', ['$scope', '$controller', '$state', '$stateParams', 'QuestionsFactory', function($scope, $controller, $state, $stateParams, QuestionsFactory) {
         $controller('CookiesController', {$scope : $scope});
         $scope.que_type = $stateParams.questionParams.split(':')[1];
+
+        function modifyTheResult(){
+            if($scope.que_type==='mcq'){
+                actualAnswerID = "";
+                optionsContent = {};
+                for(var i=0;i<$scope.answers.options.length;i++){
+                    if($scope.answers.options[i].correct){
+                        actualAnswerID = $scope.answers.options[i].id;
+                    }
+                    optionsContent[$scope.answers.options[i].id] = $scope.answers.options[i].content;
+                }
+                $scope.updateAnswersForm = {correctOption : actualAnswerID.toString(), optionsContent : optionsContent};
+            }
+            else if($scope.que_type==='objective'){
+                $scope.updateAnswersForm = { correct: $scope.answers.correct, content: $scope.answers.content, sub_category: $scope.answers.sub_category };
+            }
+        }
+
         QuestionsFactory.getAnswers($scope.user, $stateParams.questionParams.split(':')[0], $stateParams.questionParams.split(':')[1]).get()
             .$promise.then(
                 function(response){
                     $scope.answers = response.answers;
-                    if($scope.que_type==='mcq'){
-                        actualAnswerID = "";
-                        optionsContent = {};
-                        for(var i=0;i<$scope.answers.options.length;i++){
-                            if($scope.answers.options[i].correct){
-                                actualAnswerID = $scope.answers.options[i].id;
-                            }
-                            optionsContent[$scope.answers.options[i].id] = $scope.answers.options[i].content;
-                        }
-                        $scope.updateAnswersForm = {correctOption : actualAnswerID.toString(), optionsContent : optionsContent};
-                    }
-                    else if($scope.que_type==='objective'){
-                        $scope.updateAnswersForm = { correct: $scope.answers.correct, content: $scope.answers.content, sub_category: $scope.answers.sub_category };
-                    }
+                    modifyTheResult();
                     // $scope.updateQuestionForm = {content : $scope.question.content, level : $scope.question.level, explanation : $scope.question.explanation };
                 },
                 function(response) {
-                    $scope.unableToGetAnswers = response.data;
+                    $scope.unableToGetAnswers = response.data.errors;
                 }
             );
         $scope.putAnswers = function() {
             QuestionsFactory.updateAnswers($scope.user, $stateParams.questionParams.split(':')[0], $stateParams.questionParams.split(':')[1]).update($scope.updateAnswersForm).$promise.then(
                 function(response){
+                    $scope.answers = response;
+                    modifyTheResult();
                     alert('Answer updated succesfully!');
-                    $state.go('app.questions');                     
                 },
                 function(response) {
                     $scope.alertType = "danger";
                     $scope.alertMsg = "Unable to update the answers. See below errors.";
-                    $scope.errors = response.data;
+                    $scope.errors = response.data.errors;
                 });
             setTimeout(closeAlert, 5000);
         }

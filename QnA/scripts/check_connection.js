@@ -2,7 +2,6 @@ var time = 10;
 var isTimerOn = false;
 // Call on Try Now button
 function ping_fn(call_count){
-
   if(isTimerOn){
     $.ajax({
       url : baseURL+"ping/",
