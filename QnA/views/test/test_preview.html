@@ -80,7 +80,7 @@
 					<br>
 					<br>
 					<div class="row question-image" ng-if="currentQuestion.figure">
-						<img src="{{baseURL}}{{currentQuestion.figure}}" class="img-thumbnail" alt="Question Image is unavailable">
+						<img ng-src="{{baseURL}}{{currentQuestion.figure}}" class="img-thumbnail" alt="Question Image is unavailable">
 					</div>
 				</div>
 				<div class="col-lg-6 col-md-6 col-sm-6">
@@ -104,7 +104,7 @@
 				</div>
 				<div class="row" style="margin: auto;">
 					<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" ng-if="currentQuestion.figure">
-						<img src="{{baseURL}}{{currentQuestion.figure}}" class="img-thumbnail" alt="Comprehension Image is unavailable">
+						<img ng-src="{{baseURL}}{{currentQuestion.figure}}" class="img-thumbnail" alt="Comprehension Image is unavailable">
 					</div>
 					<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
 						<p style="font-size: 15px;">{{currentQuestion.content}}</p>						
@@ -120,7 +120,7 @@
 						<span>{{currentComprehensionQuestion.content | insertBlank}}</span>
 						<br><br>
 						<div class="row question-image" ng-if="currentComprehensionQuestion.figure">
-							<img src="{{baseURL}}{{currentComprehensionQuestion.figure}}" class="img-thumbnail" alt="Comprehension Question Image is unavailable">
+							<img ng-src="{{baseURL}}{{currentComprehensionQuestion.figure}}" class="img-thumbnail" alt="Comprehension Question Image is unavailable">
 						</div>
 					</div>
 					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">

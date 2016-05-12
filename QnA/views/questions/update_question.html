@@ -17,7 +17,7 @@
 			<form role="form" name="questionUpdateForm" ng-submit="putQuestion()" enctype="multipart/form-data" novalidate>
 				<div class="form-group">
 					<div class="row" ng-if="question.figure">
-						<img src="{{baseURLImage}}{{ question.figure }}" class="img-thumbnail" alt="Figure unavailable" width="300" height="200">
+						<img ng-src="{{baseURLImage}}{{ question.figure }}" class="img-thumbnail" alt="Figure unavailable" width="300" height="200">
 					</div>
 				  	<label for="figure"><span ng-if="question.figure">Change this</span><span ng-if="!question.figure">Add a</span> figure</label>
 				  	<input type="file" name="figure" id="figure" ngf-select ng-model="updateQuestionForm.figure" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="5MB" ng-change="changeImage()" style="display: inline;">

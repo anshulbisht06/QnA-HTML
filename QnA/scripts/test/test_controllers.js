@@ -23,7 +23,7 @@ appmodule
                         $scope.answersModel[q.id]['comprehension_questions'] = [];
                         $scope.answersModel[q.id]['heading'] = q.heading;
                         for(var j=0;j<q.comprehension_questions.length;j++){
-                            $scope.answersModel[q.id]['comprehension_questions'][q.comprehension_questions[j][j+1].id] = { value:null };
+                            // $scope.answersModel[q.id]['comprehension_questions'][q.comprehension_questions[j][j+1].id] = { value:null };
                         }                        
                     }
                 }
