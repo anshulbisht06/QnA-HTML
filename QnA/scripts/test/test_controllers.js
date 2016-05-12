@@ -116,7 +116,7 @@ appmodule
                 }else{
                     $scope.isComprehension = true;
                     comprehensionQuestions = $scope.currentQuestion.comprehension_questions;
-                    $scope.comprehensionQuestionsLimit = comprehensionQuestions.length;
+                    $scope.comprehensionQuestionsLimit = comprehensionQuestions.length - 1;
                     $scope.changeComprehensionQuestion(0);
                 }
                 if($scope.progressValuesModel[$scope.currentQuestion.id].status === progressTypes[1]){
@@ -128,9 +128,9 @@ appmodule
         }
 
         $scope.changeComprehensionQuestion = function(comprehensionCount){
-            if(comprehensionCount>=0 && comprehensionCount<=comprehensionQuestions.length)
+            if(comprehensionCount>=0 && comprehensionCount<=$scope.comprehensionQuestionsLimit)
             {
-                $scope.currentComprehensionQuestionCount = comprehensionCount+1;
+                $scope.currentComprehensionQuestionCount = comprehensionCount;
                 $scope.currentComprehensionQuestion = comprehensionQuestions[comprehensionCount][comprehensionCount+1];
             }
         }
