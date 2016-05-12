@@ -1,20 +1,24 @@
 /* global $ */
 
 
-appmodule.run(function($rootScope,$timeout,ngProgressFactory){
+appmodule.run(function($rootScope, ngProgressFactory){
     $rootScope
     .$on('$stateChangeStart', 
         function(event, toState, toParams, fromState, fromParams){ 
             $rootScope.progressbar = ngProgressFactory.createInstance();
-            $rootScope.progressbar.start();
-            $rootScope.progressbar.setHeight('6px');
-            $rootScope.progressbar.setColor('#ffc34d');
+            $rootScope.changeProgressBar('6px', '#ffc34d');
     });
+
+    $rootScope.changeProgressBar = function(height, color){
+        $rootScope.progressbar.start();
+        $rootScope.progressbar.setHeight(height);
+        $rootScope.progressbar.setColor(color);
+    }
 
     $rootScope
     .$on('$stateChangeSuccess',
         function(event, toState, toParams, fromState, fromParams){
-            $timeout($rootScope.progressbar.complete(), 1000); 
+            $rootScope.progressbar.complete(); 
     });
     // $rootScope.$on('$viewContentLoading', 
     //     function(event, viewConfig){ 
@@ -69,13 +73,11 @@ appmodule
                 function(response){
                     $scope.isFormInvalid = false;
                     $scope.userRegisterForm.$setPristine();
-                    $scope.alertType = "success";
-                    $scope.alertMsg = "You are successfully registered. Please login.";
+                    showAlert('alert-success', 'Your are registered successfully.');
                     $state.go('app.login-user');
                 },
                 function(response) {
-                    $scope.alertType = "danger";
-                    $scope.alertMsg = "Unable to register. See below errors.";
+                    showAlert('alert-danger', 'Problem in registration. See below errors.'); 
                     $scope.isFormInvalid = true;
                     $scope.errors = response.data;
                 });
@@ -128,15 +130,11 @@ appmodule
                     $cookies.put('user', data.userID);
 
                     $scope.isFormInvalid = false;
-                    // $scope.alertType = "success";
-                    // $scope.alertMsg = "Successfully login.";
-                    // $route.reload();
                     $state.go('app.all-quiz');
                 })
                 .error(function (data, status, header, config) {
                     $scope.isFormInvalid = true;
-                    $scope.alertType = "danger";
-                    $scope.alertMsg = "Unable to login. See the errors below.";
+                    showAlert('alert-danger', 'Login error. See below errors.'); 
                     $scope.errors = data.errors? data.errors:'';
                     setTimeout(closeAlert, 5000);
                 });

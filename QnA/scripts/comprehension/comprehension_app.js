@@ -37,7 +37,7 @@ appmodule.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
                     }
                 })
             .state('app.update-comprehension-question', {
-                url:'comprehension/update/question/:comprehensionQuestionId',
+                url:'comprehension/update/question/:comprehensionId/:comprehensionQuestionId',
                 views :{
                     'content@': {
                         controller  : 'UpdateComprehensionQuestionController',

@@ -1,31 +1,27 @@
-
-<div class="panel panel-info">
-	
+<div class="panel panel-info">	
 	<div class="row sidemenurow" style="margin:auto;">		
 		<ul style="list-style-type: none;" class="sidemenu">
-				<li>
-				<button class="btn btn-primary" data-toggle="collapse" data-target="#demo"> Actions <span class="glyphicon glyphicon-menu-right"></span></button>
-					<div id="demo" class="collapse" style="margin-top: 10px;">
-						<button class="btn btn-info btn-sm" data-toggle="modal" style="margin-bottom: 10px;" data-target="#create_sub_cat">Add Sub-Cat</button>
-						<button class="btn btn-info btn-sm" style="margin-bottom: 10px;" data-toggle="modal" data-target="#create_cat">Add Category</button>
-			  		</div>
-			  	</li>
+			<li>
+			<button class="btn btn-primary" data-toggle="collapse" data-target="#demo"> Actions <span class="glyphicon glyphicon-menu-right"></span></button>
+				<div id="demo" class="collapse" style="margin-top: 10px;">
+					<button class="btn btn-info btn-sm" data-toggle="modal" style="margin-bottom: 10px;" data-target="#create_sub_cat">Add Sub-Cat</button>
+					<button class="btn btn-info btn-sm" style="margin-bottom: 10px;" data-toggle="modal" data-target="#create_cat">Add Category</button>
+		  		</div>
+		  	</li>
 		</ul>
-
 		<div style='max-height: 650px;;overflow-y: auto;'> 
 		<hr>	
 		<ul style="list-style-type: none;" class="sidemenu">
-				<li ng-repeat="cat in allCategories" >
-				<button class="btn" data-toggle="collapse" data-target="#demo{{cat.id}}"><span class="glyphicon glyphicon-menu-right"></span>
-					{{cat.category_name|capitalize}}
-				</button>
-					<div id="demo{{cat.id}}" class="collapse">
-						<p>Create SubCategory</p>
-						<a ng-click='categorySelected(cat.id)' class="btn btn-info btn-sm" data-toggle="modal" data-target="#create_sub_cat">Add Sub-Cat</a>
-			  		</div>
-				</li>
+			<li ng-repeat="cat in allCategories" >
+			<button class="btn" data-toggle="collapse" data-target="#demo{{cat.id}}"><span class="glyphicon glyphicon-menu-right"></span>
+				{{cat.category_name|capitalize}}
+			</button>
+				<div id="demo{{cat.id}}" class="collapse">
+					<p>Create SubCategory</p>
+					<a ng-click='categorySelected(cat.id)' class="btn btn-info btn-sm" data-toggle="modal" data-target="#create_sub_cat">Add Sub-Cat</a>
+		  		</div>
+			</li>
 		</ul>
-
 		<ul style="list-style-type: none;" class="sidemenu">
 			<li ng-repeat="sub_cat in allSubCategories">
 				<button class='btn' ng-click='SubCategoryQue(sub_cat.id)'>{{sub_cat.sub_category_name|capitalize}}</button>

@@ -6,10 +6,15 @@ $(document).click(function (event) {
     $('[data-toggle="popover"]').popover(); 
 });
 
+function showAlert(type, msg){
+    $('#notification').removeClass('alert-danger').removeClass('alert-success').removeClass('alert-info').removeClass('alert-warning').addClass(type).html(msg).show();
+    setTimeout(closeAlert, 5000);
+}
+
 function closeAlert(){
     $("#notification").fadeTo(0, 500).slideUp(500, function(){
-        $("#notification").alert('close');
-    });    
+        $("#notification").hide();
+    });
 }
 
 function makeEditable(element){

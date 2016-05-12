@@ -25,6 +25,9 @@
 				<p class="hidden-xs">List of all Comprehension Questions.</p>
 				<p class="visible-xs">List of all Comprehension Questions.</p>
 			</div>
+			<div class="row">
+				<div ng-include src="'views/alert_msg.html'"></div>
+			</div>
 				<div class="row" ng-if="!errors">
 					<ul class="list-group">
 						<li class="list-group-item light-blue-border" ng-if="!errors" ng-mouseenter="hoverOnQuestion(cq.id)" ng-mouseleave="hoverOutQuestion(cq.id)" ng-repeat="cq in comprehensionQuestions | pagination: curPage * pageSize | limitTo: pageSize" id="CQ{{cq.id}}">
@@ -55,7 +58,7 @@
 									  		</div>
 									  		<div class="col-lg-5 col-md-5 col-sm-5 text-right" ng-if="isHoveredOver[cq.id]">
 									  			<ul class="list-inline">
-												  <li><a ui-sref="app.update-comprehension-question({ comprehensionQuestionId : '{{ cq.id }}' })" title="Edit the question"><span class="glyphicon glyphicon-pencil"></span></a></li>
+												  <li><a ui-sref="app.update-comprehension-question({ comprehensionId : '{{comprehension.id}}', comprehensionQuestionId : '{{ cq.id }}' })" title="Edit the question"><span class="glyphicon glyphicon-pencil"></span></a></li>
 												  <li><a ui-sref="app.update-comprehension-answers({comprehensionQuestionId : '{{ cq.id }}' })" title="Edit the answers"><span class="glyphicon glyphicon-list"></span></a></li>	
 												  <li><a ng-click="deleteComprehensionQuestion(cq.id)"><span class="glyphicon glyphicon-remove"></span></a></li>
 												</ul>

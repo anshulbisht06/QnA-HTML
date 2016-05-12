@@ -12,17 +12,6 @@ appmodule
         $scope.createCategoryform = { category_name: "", user: $scope.user };
         $scope.createSubCategoryform = { sub_category_name : "", category : $scope.selectedCategoryId, user : $scope.user };
 
-        // QuestionsFactory.getAllQuestions($scope.user).query(
-        //     function(response) {
-        //         $scope.questions = response;
-        //         if($scope.questions){
-        //         $scope.questionsLevelInfo = $scope.questions.questions_level_info;
-        //         }
-        //     },
-        //     function(response) {
-        //         $scope.errors = response.data;
-        //     });  
-
         $scope.tab = 1;
         $scope.filterLevel = false;
         $scope.selectTab = function(setTab) {
@@ -157,44 +146,36 @@ appmodule
             CategoryFactory.createCategory().save($scope.createCategoryform).$promise.then(
                 function(response){
                     $scope.isFormInvalid = false;
-                    $scope.alertType = "success";
-                    $scope.alertMsg = "Your category named " + $scope.createCategoryform.category_name + " has been created. Now please create a sub-category of it.";
+                    showAlert('alert-success', "Your category named " + $scope.createCategoryform.category_name + " has been created. Now please create a sub-category of it.");
                     $scope.allCategories.push({ 'id':response.id, 'category_name':response.category_name });                        
-                    // $scope.$apply();
                     angular.element(document.querySelector('#createCategoryModal')).modal('hide');
                     $scope.createCategoryform = { category_name : "", user : $scope.user };
                 },
                 function(response) {
                     $scope.isFormInvalid = true;
-                    $scope.alertType = "danger";
-                    $scope.alertMsg = "Unable to create the category - " + $scope.createCategoryform.category_name;
+                    showAlert('alert-danger', "Unable to create the category - " + $scope.createCategoryform.category_name + ".");
                     alert(response.data);
                 });
-                setTimeout(closeAlert, 5000);
         }
 
         $scope.postSubCategory = function() {    
             var response = SubCategoryFactory.createSubCategory().save($scope.createSubCategoryform).$promise.then(
                 function(response){
-                    $scope.alertType = "success";
-                    $scope.alertMsg = "Your sub-category named " + $scope.createSubCategoryform.sub_category_name + " has been created.";
-                    $scope.allSubCategories.push({ 'id':response.id, 'sub_category_name':response.sub_category_name });                        
-                    // $scope.$apply();
+                    $scope.allSubCategories.push({ 'id':response.id, 'sub_category_name':response.sub_category_name }); 
+                    showAlert('alert-success', "Your sub-category named " + $scope.createSubCategoryform.sub_category_name + " has been created.");
                     angular.element(document.querySelector('#createSubCategoryModal')).modal('hide');
                     $scope.createSubCategoryform = { sub_category_name : "", category : $scope.selectedCategoryId, user : $scope.user };
                     // $state.go('app.questions');  
                 },
                 function(response) {
-                    $scope.alertType = "danger";
-                    $scope.alertMsg = "Unable to create the sub-category - " + $scope.createSubCategoryform.sub_category_name + ".";
+                    showAlert('alert-danger', "Unable to create the sub-category - " + $scope.createSubCategoryform.sub_category_name + ".");
                     if(response.data['non_field_errors']){
-                        alert("The sub-category already exists.");
+                        alert("This sub-category already exists.");
                     }else{
                         alert(response.data);
                     }
                     angular.element(document.querySelector('#createSubCategoryModal')).modal('hide');
                 });
-                setTimeout(closeAlert, 5000);
         }
 
         
@@ -253,26 +234,26 @@ appmodule
                 $scope.unableToGetAllSubCategories = true;
             });
 
-        $scope.upload = function(postUrl, data, figure){
-            $scope.progressbar.start();
-            $scope.progressbar.setHeight('6px');
-            $scope.progressbar.setColor('blue');
-            
+        function upload(postUrl, data, figure){
+            $scope.changeProgressBar('6px', 'blue');            
             if(data['optioncontent']){
                 data['optioncontent'] = JSON.stringify(data['optioncontent']);    
             }
-            var settings = $.extend({}, data, {figure: figure});
+            var finalData = $.extend({}, data, {figure: figure});
             Upload.upload({
                     url: baseURL+postUrl,
-                    data: settings,
+                    data: finalData,
                     resumeChunkSize: '5MB',
                 }).then(function(response) {
                     $scope.progressbar.complete();
-                    alert('Question created succesfully!');
+                    showAlert('alert-success', 'Your question has been created.');
                     cleanQuestionForm();
                 }, function (response) {
+                    if($scope.createMCQQuestionForm!=undefined){
+                        $scope.createMCQQuestionForm = {correctoption: undefined, content: $scope.createMCQQuestionForm.content, explanation: $scope.createMCQQuestionForm.explanation, level: $scope.createMCQQuestionForm.level, answer_order: $scope.createMCQQuestionForm.answer_order, sub_category: $scope.createMCQQuestionForm.sub_category, que_type:"mcq", ideal_time: $scope.createMCQQuestionForm.ideal_time};
+                    }
                     $scope.progressbar.complete();
-                    alert("Problem in adding questions!");
+                    showAlert('alert-danger', 'Problem in creating question. See below errors.');
                     $scope.errors = response.data;
                 }, function(event) {
                     $scope.progressbar.set(parseInt(100.0*event.loaded/event.total));
@@ -288,25 +269,22 @@ appmodule
 
         if($state.current.name === "app.create-mcq-question")
         {
-            $scope.createMCQQuestionForm = {content:"",explanation:"", level:"easy", answer_order:"random", sub_category:"", que_type:"mcq", ideal_time:""};
+            $scope.createMCQQuestionForm = {content:"",explanation:"", level:"easy", answer_order:"random", sub_category:"", que_type:"mcq", ideal_time:7};
             $scope.insertBlank = function(){
                 $scope.createMCQQuestionForm.content += " <<Answer>> ";
             }
             $scope.postMCQQuestion = function() {
-                console.log($scope.createMCQQuestionForm);
-                $scope.upload("question/mcq/create/", $scope.createMCQQuestionForm, $scope.figure);
+                upload("question/mcq/create/", $scope.createMCQQuestionForm, $scope.figure);
             }
 
             $scope.optionss = [
                 {
                     optionid : 1,
                     content : '',
-                    correct : true
                 },
                 {
                     optionid : 2,
                     content : '',
-                    correct : false
                 },
                 ];
             $scope.optionCount = 3;
@@ -314,20 +292,18 @@ appmodule
                 $scope.optionss.push({                 
                                     optionid : $scope.optionCount,
                                     content : '',
-                                    correct :  false
                                     });
                 $scope.optionCount = $scope.optionCount + 1;
             }
             $scope.removeOption = function(op_id){
                 if(op_id > 2){
-                    var all = $scope.optionss;
-                    $scope.optionss = all.filter(function(el) { return el.optionid != op_id; });
+                    $scope.optionss = $scope.optionss.filter(function(el) { return el.optionid != op_id; });
                 }
-            };
+            }
 
             function cleanQuestionForm(){
                 $scope.createMCQQuestionForm['explanation'] = '';
-                $scope.createMCQQuestionForm['ideal_time'] = '';
+                $scope.createMCQQuestionForm['ideal_time'] = 7;
                 $scope.createMCQQuestionForm['content'] = '';
                 $scope.createMCQQuestionForm['optioncontent'] = {};
                 $scope.createMCQQuestionForm['correctoption'] = '';
@@ -338,7 +314,7 @@ appmodule
         else if($state.current.name === "app.create-objective-question"){
             $scope.createObjectiveQuestionForm = {content:"",correct:"",explanation:"", level:"easy", sub_category:"", que_type:"objective"};
             $scope.postObjectiveQuestion = function() {
-                $scope.upload("question/objective/create/", $scope.createObjectiveQuestionForm, $scope.figure);
+                upload("question/objective/create/", $scope.createObjectiveQuestionForm, $scope.figure);
             }
             $scope.insertBlank = function(){
                 $scope.createObjectiveQuestionForm.content += " <<Answer>> ";
@@ -365,7 +341,7 @@ appmodule
             if(file===undefined){
                 $scope.noFileUploaded = true;
             }else{
-                $scope.upload("question/"+que_type+"/bulkupload/", {}, file);                   
+                upload("question/"+que_type+"/bulkupload/", {}, file);                   
             }
         };
 
@@ -412,9 +388,7 @@ appmodule
         }
 
         function upload(postUrl, data){
-            $scope.progressbar.start();
-            $scope.progressbar.setHeight('6px');
-            $scope.progressbar.setColor('red');
+            $scope.changeProgressBar('6px', 'green');
             Upload.upload({
                     url: baseURL+postUrl,
                     data: { data: data },
@@ -425,9 +399,10 @@ appmodule
                     $scope.isImageChanged = false;
                     $scope.question.figure = response.data.figure;
                     $scope.updateQuestionForm = {figure: undefined, heading: response.data.heading, content : response.data.content, level : response.data.level, explanation : response.data.explanation, ideal_time: response.data.ideal_time };
-                    alert('Question updated succesfully!');
+                    showAlert('alert-success', 'Your question has been updated.');
                 }, function (response) {
-                    $scope.progressbar.complete(); 
+                    $scope.progressbar.complete();
+                    showAlert('alert-danger', 'Problem in updating the question. See below errors.'); 
                     $scope.errors = response.data;
                 }, function(event) {
                     $scope.progressbar.set(parseInt(100.0*event.loaded/event.total));
@@ -462,7 +437,6 @@ appmodule
                 function(response){
                     $scope.answers = response.answers;
                     modifyTheResult();
-                    // $scope.updateQuestionForm = {content : $scope.question.content, level : $scope.question.level, explanation : $scope.question.explanation };
                 },
                 function(response) {
                     $scope.unableToGetAnswers = response.data.errors;
@@ -473,13 +447,11 @@ appmodule
                 function(response){
                     $scope.answers = response;
                     modifyTheResult();
-                    alert('Answer updated succesfully!');
+                    showAlert('alert-success', 'Your answers have been updated.');
                 },
                 function(response) {
-                    $scope.alertType = "danger";
-                    $scope.alertMsg = "Unable to update the answers. See below errors.";
+                    showAlert('alert-danger', 'Problem in updating the answers. See below errors.'); 
                     $scope.errors = response.data.errors;
                 });
-            setTimeout(closeAlert, 5000);
         }
     }]);

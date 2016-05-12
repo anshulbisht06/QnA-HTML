@@ -35,16 +35,13 @@ appmodule
         $scope.postSubCategory = function() {
             var response = SubCategoryFactory.createSubCategory().save($scope.createSubCategoryform).$promise.then(
                 function(response){
-                    $scope.alertType = "success";
-                    $scope.alertMsg = "Your sub-category named " + $scope.createSubCategoryform.sub_category_name + " has been created."; 
                     $scope.createSubCategoryform.sub_category_name = '';
-                    $state.go('app.questions');  
+                    $state.go('app.questions');
+                    showAlert('alert-success', "Your sub-category named " + $scope.createSubCategoryform.sub_category_name + " has been created.");
                 },
                 function(response) {
-                    $scope.alertType = "danger";
-                    $scope.alertMsg = "Unable to create the sub-category for " + $scope.createSubCategoryform.sub_category_name + ". See below error.";
+                    showAlert('alert-danger', "Unable to create the sub-category for " + $scope.createSubCategoryform.sub_category_name + ". See below error.");
                     $scope.errors = response.data;
                 });
-            setTimeout(closeAlert, 5000);
         }
     }]);

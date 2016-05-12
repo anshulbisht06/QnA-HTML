@@ -1,4 +1,4 @@
-/* global $ fd0f00d8 */
+/* global $ */
 
 appmodule
 	.controller('QuizController', ['$scope','$http', '$controller', '$state', 'QuestionsFactory','QuizFactory', 'CategoryFactory','Upload', function($scope, $http, $controller, $state, QuestionsFactory, QuizFactory, CategoryFactory, Upload) {
@@ -32,9 +32,7 @@ appmodule
 	        				user:$scope.user, success_text:"", fail_text:"",user_picturing:false, start_notification_url:"", finish_notification_url:"", grade_notification_url:""};
 	        				angular.element(document.querySelector('#quizCreateModal')).modal('hide');
 	                    $scope.allQuiz.push(response);
-	                    $scope.alertType = "success";
-                    	$scope.alertMsg = "Quiz "+response.title+" has been created.";
-                    	setTimeout(closeAlert, 5000);               
+                    	showAlert('alert-success', "Quiz "+response.title+" has been created.");
 	                },
 	                function(response) {
 	                    if(response.data.hasOwnProperty('non_field_errors')){
@@ -72,9 +70,7 @@ appmodule
 	                    }
 	                    var index = findIndexOfObjectInsideList($scope.allQuiz, response.id);
 	                    $scope.allQuiz[index].allow_public_access = response.allow_public_access;
-	                    $scope.alertType = "success";
-                    	$scope.alertMsg = "Your test "+response.title+" has been marked as "+mark+".";
-                    	setTimeout(closeAlert, 5000);
+                    	showAlert('alert-success', "Your test "+response.title+" has been marked as "+mark+".");
 	                },
 	                function(response){
 	                    $scope.errors = response.data;
@@ -93,19 +89,16 @@ appmodule
 		                function(response){
 		                	var index = findIndexOfObjectInsideList($scope.allQuiz, $scope.quizToBeDeletedID);
 		                	$scope.allQuiz.splice(index, 1);
-			        		$scope.alertType = "success";
-		                    $scope.alertMsg = "Your quiz named "+$scope.quizToBeDeletedTitle.toUpperCase()+" has been deleted.";
 		                    $scope.quizToBeDeletedID = null;
 			        		$scope.quizToBeDeletedTitle = null;
+			        		showAlert('alert-success', "Your quiz named "+$scope.quizToBeDeletedTitle.toUpperCase()+" has been deleted.");
 			        		angular.element(document.querySelector('#quizDeleteModal')).modal('hide');
 		                },
 		                function(response) {
 		                	angular.element(document.querySelector('#quizDeleteModal')).modal('hide');
-		                    $scope.alertType = "danger";
-		                    $scope.alertMsg = "Unable to delete the quiz.";
+                    		showAlert('alert-danger', "Unable to delete the quiz.");
 		                    alert(response.data.errors);
 		                });
-	        		setTimeout(closeAlert, 5000);
 	        	}
 	        	else if(action==='deleteQuizRequestCancelled'){
 	        		$scope.quizToBeDeletedID = null;
@@ -133,8 +126,7 @@ appmodule
 	                function(response){
 	                	var index = findIndexOfObjectInsideList($scope.allQuiz, $scope.quizToBeUpdated.id);
 	                	$scope.allQuiz[index] = response.updatedQuiz;
-		        		$scope.alertType = "success";
-	                    $scope.alertMsg = "Your quiz named "+$scope.quizToBeUpdated.title.toUpperCase()+" has been updated.";
+	                    showAlert('alert-success', "Your quiz named "+$scope.quizToBeUpdated.title.toUpperCase()+" has been updated.");
 	                    angular.element(document.querySelector('#quizUpdateModal')).modal('hide');
 	        			$scope.quizToBeUpdated = null;
 	                },
@@ -145,7 +137,6 @@ appmodule
 	                    	$scope.errors = response.data;
 	                    }
 	                }); 
-	                setTimeout(closeAlert, 5000);
 	        	}
 	        	else if(action==='updateQuizRequestCancelled'){
 	        		angular.element(document.querySelector('#quizUpdateModal')).modal('hide');

@@ -15,10 +15,7 @@ appmodule
             });
 
         function upload(postUrl, data, figure){
-            $scope.progressbar.start();
-            $scope.progressbar.setHeight('6px');
-            $scope.progressbar.setColor('green');
-            
+            $scope.changeProgressBar('6px', 'green');
             var settings = $.extend({}, data, {figure: figure});
             
             Upload.upload({
@@ -30,7 +27,7 @@ appmodule
                     $state.go('app.add-comprehension-question',{comprehensionId: response.data});
                 }, function (response) {
                     $scope.progressbar.complete();
-                    alert("Problem in adding questions!");
+                    showAlert('alert-danger', "Unable to create the question. See below error.");
                     $scope.errors = response.data;
                 }, function(event) {
                     $scope.progressbar.set(parseInt(100.0*event.loaded/event.total));
@@ -55,23 +52,23 @@ appmodule
         $scope.baseURLImage = baseURLImage;
         
         function upload(postUrl, data, figure){
-            $scope.progressbar.start();
-            $scope.progressbar.setHeight('6px');
-            $scope.progressbar.setColor('red');
-            
-            var settings = $.extend({}, data, {figure: figure});
-            
+            $scope.changeProgressBar('6px', 'red');
+            data['optioncontent'] = JSON.stringify(data['optioncontent']);    
+            var finalData = $.extend({}, data, {figure: figure});
             Upload.upload({
                     url: baseURL+postUrl,
-                    data: settings,
+                    data: finalData,
                     resumeChunkSize: '5MB',
                 }).then(function(response) {
                     cleanQuestionForm();
                     $scope.progressbar.complete();
-                    alert("Questions added");
+                    showAlert('alert-success', 'Your question has been created.');
                 }, function (response) {
                     $scope.progressbar.complete();
-                    alert("Problem in adding questions!");
+                    if($scope.createComprehensionQuestionForm!=undefined){
+                        $scope.createComprehensionQuestionForm = { comprehension:$scope.createComprehensionQuestionForm.comprehension, content:$scope.createComprehensionQuestionForm.content, explanation: $scope.createComprehensionQuestionForm.explanation, level: $scope.createComprehensionQuestionForm.level, answer_order:$scope.createComprehensionQuestionForm.answer_order, ideal_time: $scope.createComprehensionQuestionForm.ideal_time };
+                    }
+                    showAlert('alert-danger', "Unable to create the question. See below error.");
                     $scope.errors = response.data;
                 }, function(event) {
                     $scope.progressbar.set(parseInt(100.0*event.loaded/event.total));
@@ -86,7 +83,7 @@ appmodule
             }
         );
 
-        $scope.createComprehensionQuestionForm = { comprehension:$stateParams.comprehensionId, content:"",explanation:"", level:"easy", answer_order:"random", sub_category:"", que_type:"mcq", ideal_time:""};
+        $scope.createComprehensionQuestionForm = { comprehension:$stateParams.comprehensionId, content:"",explanation:"", level:"easy", answer_order:"random", ideal_time:7};
             $scope.insertBlank = function(){
                 $scope.createComprehensionQuestionForm.content += " <<Answer>> ";
             }
@@ -111,7 +108,6 @@ appmodule
                 $scope.optionss.push({                 
                                     optionid : $scope.optionCount,
                                     content : '',
-                                    correct :  false
                                     });
                 $scope.optionCount = $scope.optionCount + 1;
             }
@@ -120,14 +116,24 @@ appmodule
                     var all = $scope.optionss;
                     $scope.optionss = all.filter(function(el) { return el.optionid != op_id; });
                 }
-            };
+            }
+
+            $scope.changeImage = function(){
+                $scope.isImageChanged = true;
+            }
+            $scope.removeImage = function(){
+                $scope.isImageChanged = false;
+                $scope.figure = undefined;
+            }
 
             function cleanQuestionForm(){
                 $scope.createComprehensionQuestionForm['explanation'] = '';
-                $scope.createComprehensionQuestionForm['ideal_time'] = '';
+                $scope.createComprehensionQuestionForm['ideal_time'] = 7;
                 $scope.createComprehensionQuestionForm['content'] = '';
                 $scope.createComprehensionQuestionForm['optioncontent'] = {};
                 $scope.createComprehensionQuestionForm['correctoption'] = '';
+                $scope.figure = undefined;
+                $scope.isImageChanged = false;
             }
     }])
     .controller('ListComprehensionQuestionsController', ['$scope','$controller', '$stateParams', 'ComprehensionFactory', function($scope, $controller, $stateParams, ComprehensionFactory)  {
@@ -166,9 +172,10 @@ appmodule
                 function(response){
                     var index = findIndexOfObjectInsideList($scope.comprehensionQuestions, response.deletedComprehensionQuestionsId);
                     $scope.comprehensionQuestions.splice(index, 1);
-                    alert("Deletion done!");                 
+                    showAlert('alert-info', 'Deletion done.');
                 },
                 function(response) {
+                    showAlert('alert-danger', "Unable to delete the question. See below error.");
                     $scope.errors = response.data;
                 });
         }
@@ -181,14 +188,14 @@ appmodule
                 function(response){
                     $scope.figure = response.figure;
                     $scope.baseURLImage = baseURLImage;
-                    $scope.updateComprehensionQuestionForm = {figure: response.figure, content : response.content, level : response.level, explanation : response.explanation, ideal_time: response.ideal_time };
+                    $scope.updateComprehensionQuestionForm = { comprehension: $stateParams.comprehensionId, content : response.content, level : response.level, explanation : response.explanation, ideal_time: response.ideal_time };
                 },
                 function(response) {
                     $scope.unableToGetQuestion = response.data.errors;
                 }
             );
 
-         $scope.changeImage = function(){
+        $scope.changeImage = function(){
             $scope.isImageChanged = true;
         }
         $scope.removeImage = function(){
@@ -197,23 +204,22 @@ appmodule
         }
 
         function upload(postUrl, data){
-            $scope.progressbar.start();
-            $scope.progressbar.setHeight('6px');
-            $scope.progressbar.setColor('orange');
+            $scope.changeProgressBar('6px', 'orange');
             Upload.upload({
                     url: baseURL+postUrl,
-                    data: { data: data },
+                    data: data,
                     resumeChunkSize: '5MB',
                     method: 'PUT',
                 }).then(function(response) {
                     $scope.progressbar.complete();
                     $scope.isImageChanged = false;
                     $scope.figure = response.data.figure;
-                    $scope.updateComprehensionQuestionForm = {figure: undefined, content : response.data.content, level : response.data.level, explanation : response.data.explanation, ideal_time: response.data.ideal_time };
-                    alert("Questions updated");
+                    $scope.updateComprehensionQuestionForm = { comprehension: $stateParams.comprehensionId, figure: undefined, content : response.data.content, level : response.data.level, explanation : response.data.explanation, ideal_time: response.data.ideal_time };
+                    showAlert('alert-success', 'Your question has been updated.');
                 }, function (response) {
                     $scope.progressbar.complete();
-                    alert("Problem in updating question!");
+                    showAlert('alert-danger', "Unable to update the question. See below error.");
+                    $scope.updateComprehensionQuestionForm = { comprehension: $stateParams.comprehensionId, figure: $scope.updateComprehensionQuestionForm.figure, content : $scope.updateComprehensionQuestionForm.content, level : $scope.updateComprehensionQuestionForm.level, explanation : $scope.updateComprehensionQuestionForm.explanation, ideal_time: $scope.updateComprehensionQuestionForm.ideal_time };
                     $scope.errors = response.data;
                 }, function(event) {
                     $scope.progressbar.set(parseInt(100.0*event.loaded/event.total));
@@ -255,13 +261,11 @@ appmodule
                 function(response){
                     $scope.answers = response;
                     modifyTheResult();
-                    alert('Answer updated succesfully!');
+                    showAlert('alert-success', 'Your answers have been updated.');
                 },
                 function(response) {
-                    $scope.alertType = "danger";
-                    $scope.alertMsg = "Unable to update the answers. See below errors.";
+                    showAlert('alert-danger', "Unable to update the answers. See below error."); 
                     $scope.errors = response.data.errors;
                 });
-            setTimeout(closeAlert, 5000);
         }
     }]);

@@ -154,11 +154,8 @@ appmodule
                     window.location.reload();
                 },
                 function(response) {
-                    $scope.alertType = "danger";
-                    $scope.alertMsg = "Unable to update the quiz stack.";
                     alert(response.data.errors);
                 });
-                setTimeout(closeAlert, 5000);
             }
             $scope.removeFromStack = function(count){
                 QuizStackFactory.removeFromStack(count);
@@ -170,11 +167,8 @@ appmodule
                     window.location.reload();                   
                 },
                 function(response) {
-                    $scope.alertType = "danger";
-                    $scope.alertMsg = "Unable to delete the quiz stack. See below errors.";
                     alert(response.data.errors);
                 });
-                setTimeout(closeAlert, 5000);
             }
             
             // $scope.getUserDetails = function(){
@@ -239,7 +233,6 @@ appmodule
                     $scope.alertMsg = "Unable to save the selected questions.";
                     alert(response.data.errors);
                 });
-                setTimeout(closeAlert, 5000);
         }
 
     }]);
