@@ -1,7 +1,7 @@
 <div ng-include src="'views/modals/warning_modal.html'"></div>
 <div class="container" style="margin-top: -75px;" ng-show="dataPresent">
 	<div class="row">
-		<div class="alert alert-info">
+		<div class="alert alert-warning">
 		   	<div class="row">
 			   	<div class="col-lg-2 col-md-2 col-sm-2 text-center">
 			   		<strong>Time: <span class="black-text">{{ totalDuration | secondsToDateTime | date:'HH:mm:ss' }}</span></strong>
@@ -64,7 +64,7 @@
 			<div class="col-lg-4 col-md-4 col-sm-4 text-center">
 				<ul class="pagination pagination-sm">
 				   <li ng-if="sliceFactor>0"><a href="javascript:void(0)" ng-click="decreaseSlicing()">&laquo;</a></li>
-				   <li><a href="javascript:void(0)"><span id="previous">{{sliceFactor*15+1}}</span> of <span ng-if="sliceFactor<=slicingLimit-1" id="next">{{(sliceFactor+1)*15}}</span><span ng-if="sliceFactor+1>slicingLimit" id="next">{{total_questions.length}}</span></a></li>
+				   <li><a href="javascript:void(0)"><span>{{sliceFactor*15+1}}</span> of <span ng-if="sliceFactor<=slicingLimit-1">{{(sliceFactor+1)*15}}</span><span ng-if="sliceFactor+1>slicingLimit">{{total_questions.length}}</span></a></li>
 				   <li ng-if="sliceFactor+1<slicingLimit"><a href="javascript:void(0)" ng-click="increaseSlicing()">&raquo;</a></li>
 				</ul>
 				</div>
@@ -126,7 +126,7 @@
 					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 						<div class="row" ng-repeat="option in currentComprehensionQuestion.options">
 							<label>
-								<input type="radio" name="{{currentComprehensionQuestion.id}}" value="{{option.id}}">
+								<input type="radio" name="{{currentComprehensionQuestion.id}}" value="{{option.id}}" ng-model="comprehensionAnswersModel[currentComprehensionQuestion.id].value">
 								{{option.content}}
 							</label><br>
 						</div>

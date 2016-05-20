@@ -27,8 +27,8 @@
 			      <div class="panel-heading"><a ui-sref="app.view-quiz({ quizid : '{{ quiz.id }}'})">{{quiz.title | capitalize}}</a>
 			      		<div class="dropdown right">
 						  <a ng-if='quiz.total_questions > 1' ng-click="markPublic(quiz.id)" >
-						  	<span ng-if='quiz.allow_public_access' id='mark{{quiz.id}}' title="Click to make the quiz private." class="glyphicon glyphicon-user green-text"></span>
-						  	<span ng-if='!quiz.allow_public_access' id='mark{{quiz.id}}' title="Click to make the quiz public." style="color: #cccccc;" class="glyphicon glyphicon-user"></span>
+						  	<span ng-if='quiz.allow_public_access' title="Click to make the quiz private." class="glyphicon glyphicon-user green-text"></span>
+						  	<span ng-if='!quiz.allow_public_access' title="Click to make the quiz public." style="color: #cccccc;" class="glyphicon glyphicon-user"></span>
 						  </a>
 						  <span data-toggle="dropdown" class="glyphicon glyphicon-option-vertical pointer"></span>
 						  <ul class="dropdown-menu">

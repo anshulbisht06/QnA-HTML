@@ -1,9 +1,11 @@
+var qTypes = ['mcq', 'objective', 'comprehension'];
+var progressTypes = ['NA', 'NV', 'A'];
 $(document).click(function (event) {
     var navbar = $(".navbar-collapse");               
     if (navbar.hasClass("in") === true && !$(event.target).hasClass("navbar-toggle")) {      
         navbar.collapse('hide');
     }
-    $('[data-toggle="popover"]').popover(); 
+    $('[data-toggle="popover"]').popover();
 });
 
 function showAlert(type, msg){
@@ -23,15 +25,6 @@ function makeEditable(element){
 
 function makeUneditable(element){
 	element.readOnly = true;
-}
-// function insertBlank(selector) {
-// 	var element = document.querySelector(selector);
-// 	element.value += ' <<Answer>> ';
-// 	element.focus();
-// }
-
-function upload(file) {
-	console.log(file); 
 }
 
 function sortObject(obj) {

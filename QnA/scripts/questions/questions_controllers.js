@@ -79,16 +79,22 @@ appmodule
         $scope.loadQuestions = function(choice, id) { 
             $("#loader1").css('display', 'block');
             if(choice === 'subcategory'){
-            SubCategoryFactory.getQuestionUnderSubCategory($scope.user, id, false).query(
-            function(response){
-                $scope.questions = response;
-                $scope.questionsLevelInfo = $scope.questions.questions_level_info;
-                $scope.numberOfPages = Math.ceil(response.questions.length/$scope.pageSize);
-                $("#loader1").css('display', 'none');
-            },
-            function(response){
-                console.log(response)
-            });
+                $scope.questionsLevelInfo = [0, 0, 0, 0];
+                SubCategoryFactory.getQuestionUnderSubCategory($scope.user, id, false).query(
+                function(response){
+                    $scope.questions = response;
+                    for(var key in response.questions_type_info){
+                        $scope.questionsLevelInfo[0] += response.questions_type_info[key][0];
+                        $scope.questionsLevelInfo[1] += response.questions_type_info[key][1];
+                        $scope.questionsLevelInfo[2] += response.questions_type_info[key][2];
+                        $scope.questionsLevelInfo[3] += response.questions_type_info[key][3];
+                    }
+                    $scope.numberOfPages = Math.ceil(response.questions.length/$scope.pageSize);
+                    $("#loader1").css('display', 'none');
+                },
+                function(response){
+                    console.log(response)
+                });
             }
         }
 

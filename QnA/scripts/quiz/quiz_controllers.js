@@ -52,8 +52,10 @@ appmodule
 	                }).then(function(response) {
 	                	angular.element(document.querySelector('#quizAccessModal')).modal('hide');
 	                    alert('Access set succesfully!');
+	                    $('#uploadAccessXLS').val('');
 	                }, function (response) {
 	                    alert(response.data.errors);
+	                    $('#uploadAccessXLS').val('');
 	                }, function(event) {	
 	                });
         	}
@@ -152,8 +154,9 @@ appmodule
 	        		$scope.quizToBeUpdated = quiz;
 	        		angular.element(document.querySelector('#quizAccessModal')).modal('show');
 	        	}
-	        	else if(action==='updateQuizRequestCancelled'){
+	        	else if(action==='updateQuizAccessToPrivateInitiatedCancelled'){
 	        		$scope.quizToBeUpdated = null;
+	        		$('#uploadAccessXLS').val('');
 	        	}
 	        }
 
@@ -167,7 +170,7 @@ appmodule
 
         	$scope.uploadAccessXLSFile = function(quiz_id){
 	            var file = $scope.uploadAccessXLS;
-		        if(file===undefined){
+		        if(file===undefined || $('#uploadAccessXLS').val()===""){
 		            $scope.noFileUploaded = true;
 		        } else{
 		        	$scope.noFileUploaded = false;

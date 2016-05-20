@@ -49,19 +49,18 @@ appmodule
                 }
             }
         var data = {};
-        $scope.postLogout = function logout() {
-            $cookies.remove('token');
-            $cookies.remove('username');
-            $cookies.remove('user');  
+        $scope.postLogout = function logout() { 
           return $http.post(baseURL+'logout/', data, config)
             .success(function(data, status, headers, config) {
-                // $cookies.remove('token');
-                // $cookies.remove('username');
-                // $cookies.remove('user');
+                $cookies.remove('token');
+                $cookies.remove('username');
+                $cookies.remove('user');
                 $state.go('app.login-user');
           })
             .error(function logoutErrorFn(data, status, headers, config) {
-
+                $cookies.remove('token');
+                $cookies.remove('username');
+                $cookies.remove('user');
           })
         }
     }])

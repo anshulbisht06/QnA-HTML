@@ -30,7 +30,7 @@
 			</div>
 				<div class="row" ng-if="!errors">
 					<ul class="list-group">
-						<li class="list-group-item light-blue-border" ng-if="!errors" ng-mouseenter="hoverOnQuestion(cq.id)" ng-mouseleave="hoverOutQuestion(cq.id)" ng-repeat="cq in comprehensionQuestions | pagination: curPage * pageSize | limitTo: pageSize" id="CQ{{cq.id}}">
+						<li class="list-group-item light-blue-border" ng-if="!errors" ng-mouseenter="hoverOnQuestion(cq.id)" ng-mouseleave="hoverOutQuestion(cq.id)" ng-repeat="cq in comprehensionQuestions | pagination: curPage * pageSize | limitTo: pageSize">
 						  		<p>
 							  	<div class="row">
 								  	<div class="col-lg-1 col-md-1 col-sm-1">

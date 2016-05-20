@@ -39,7 +39,7 @@
 			</div>
 			<div class="row" ng-if="tab!=1">
 				<ul class="list-group">
-				  	<li class="list-group-item light-blue-border" ng-if="questions.questions" ng-mouseenter="hoverOnQuestion(question.id)" ng-mouseleave="hoverOutQuestion(question.id)" ng-repeat="question in questions.questions | filter:filterLevel:true | pagination: curPage * pageSize | limitTo: pageSize" id="Q{{question.id}}">
+				  	<li class="list-group-item light-blue-border" ng-if="questions.questions" ng-mouseenter="hoverOnQuestion(question.id)" ng-mouseleave="hoverOutQuestion(question.id)" ng-repeat="question in questions.questions | filter:filterLevel:true | pagination: curPage * pageSize | limitTo: pageSize">
 				  		<p>
 					  	<div class="row">
 						  	<div class="col-lg-1 col-md-1 col-sm-1">
@@ -98,7 +98,7 @@
 			</div>
 			<div class="row" ng-if="tab===1">
 				<ul class="list-group">
-					<li class="list-group-item light-blue-border" ng-if="questions.questions && tab===1" ng-mouseenter="hoverOnQuestion(question.id)" ng-mouseleave="hoverOutQuestion(question.id)" ng-repeat="question in questions.questions | pagination: curPage * pageSize | limitTo: pageSize" id="Q{{question.id}}">
+					<li class="list-group-item light-blue-border" ng-if="questions.questions && tab===1" ng-mouseenter="hoverOnQuestion(question.id)" ng-mouseleave="hoverOutQuestion(question.id)" ng-repeat="question in questions.questions | pagination: curPage * pageSize | limitTo: pageSize">
 					  		<p>
 						  	<div class="row">
 							  	<div class="col-lg-1 col-md-1 col-sm-1">
@@ -161,7 +161,7 @@
 			</div>
 		</div> 
 	</div>
-	<div id="renameModal" class="modal fade" role="dialog">
+	<!-- <div id="renameModal" class="modal fade" role="dialog">
 	  <div class="modal-dialog">
 	    <div class="modal-content">
 	      <div class="modal-header">
@@ -185,6 +185,6 @@
 	      </div>
 	    </div>
 	  </div>
-	</div>
+	</div> -->
 	</div>
 </div>

@@ -25,13 +25,13 @@
 							</div>
 		  				</div>
 		  				<div class="col-md-6">
-		  				<textarea cols="80" rows="3" name="optioncontent" id="optioncontent-{{option.id}}" class="form-control" placeholder="Content for option - {{$index}}" ng-model="updateAnswersForm.optionsContent[option.id]" required>{{ option.content }}</textarea>
+		  				<textarea cols="80" rows="3" name="optioncontent" class="form-control" placeholder="Content for option - {{$index}}" ng-model="updateAnswersForm.optionsContent[option.id]" required>{{ option.content }}</textarea>
 			    			<!-- <textarea cols="80" rows="3" name="optioncontent-{{option.optionid}}" id="optioncontent-{{option.optionid}}" class="form-control" ng-model="updateAnswersForm.optioncontent[option.optionid]" placeholder="Content for option - {{$index}}" required>{{ option.content }}</textarea><hr> -->
 		  				</div>
 				  	</div>
 				  	<div ng-if="que_type==='objective'">
 				  		<div class="form-group" ng-class="{'has-error': errors.correct || answersUpdateForm.correct.$touched && answersUpdateForm.correct.$error.required }">
-						  	<label for="content">Enter the correct answer</label>
+						  	<label for="correct">Enter the correct answer</label>
 					    	<textarea name="correct" id="correct" rows="4" class="form-control" ng-model="updateAnswersForm.correct"></textarea>
 					    	<span ng-if="errors.correct" class="help-block">{{ errors.correct[0] }}</span>
 					   		<span ng-if="answersUpdateForm.correct.$touched && answersUpdateForm.correct.$error.required" class="help-block">Correct answer is required.</span>

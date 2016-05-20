@@ -12,13 +12,13 @@
 		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 			<form class="col-md-12" ng-submit="postRegister()" name="userRegisterForm" novalidate>
 				<div class="form-group" ng-class="{'has-error': errors.first_name[0] || userRegisterForm.first_name.$touched && userRegisterForm.first_name.$error.required || userRegisterForm.first_name.$touched && userRegisterForm.first_name.$error.minlength }">
-			      <input type="text" class="form-control input-lg" name="first_name" id="first_name" ng-minlength="4"  ng-model="registerUserForm.first_name" placeholder="Name" required>
+			      <input type="text" class="form-control input-lg" name="first_name" ng-minlength="4"  ng-model="registerUserForm.first_name" placeholder="Name" required>
 			      <span ng-show="isFormInvalid" class="help-block">{{ errors.first_name[0] }}</span>
 			      <span ng-show="userRegisterForm.first_name.$touched && userRegisterForm.first_name.$error.required" class="help-block">Name is required.</span>
 			      <span ng-show="userRegisterForm.first_name.$touched && userRegisterForm.first_name.$error.minlength" class="help-block">Name must be least 4 characters long.</span>
 				</div><br>
 			    <div class="form-group" ng-class="{'has-error': userRegisterForm.username.$error.pattern || errors.username[0] || userRegisterForm.username.$touched && userRegisterForm.username.$error.required || userRegisterForm.username.$touched && userRegisterForm.username.$error.minlength }">
-			      	<input type="text" class="form-control input-lg" name="username" id="username" ng-model="registerUserForm.username" placeholder="Username" ng-minlength="4" ng-pattern="/^[a-zA-Z0-9.\-_]{4,30}$/" required>
+			      	<input type="text" class="form-control input-lg" name="username" ng-model="registerUserForm.username" placeholder="Username" ng-minlength="4" ng-pattern="/^[a-zA-Z0-9.\-_]{4,30}$/" required>
 			     	<span ng-show="isFormInvalid" class="help-block">{{ errors.username[0] }}</span>
 			     	<span ng-show="userRegisterForm.username.$error.pattern" class="help-block">Only _.- and alphanumeric characters are allowed (upto 30 characters long).</span>
 
@@ -26,13 +26,13 @@
 			    	<span ng-show="userRegisterForm.username.$touched && userRegisterForm.username.$error.minlength" class="help-block">Username must be least 4 characters long.</span>
 				</div><br>
 			    <div class="form-group" ng-class="{'has-error': errors.password[0] || userRegisterForm.password.$touched && userRegisterForm.password.$error.required || userRegisterForm.password.$touched && userRegisterForm.password.$error.minlength }">
-			        <input type="password" name="password" id="password" ng-model="registerUserForm.password" ng-minlength="8" class="form-control input-lg" placeholder="Password" required>
+			        <input type="password" name="password" ng-model="registerUserForm.password" ng-minlength="8" class="form-control input-lg" placeholder="Password" required>
 			        <span ng-show="isFormInvalid" class="help-block">{{ errors.password[0] }}</span>
 			   		<span ng-show="userRegisterForm.password.$touched && userRegisterForm.password.$error.required" class="help-block">Password is required.</span>
 			   		<span ng-show="userRegisterForm.password.$touched && userRegisterForm.password.$error.minlength" class="help-block">Password must be least 8 characters long.</span>
 			    </div><br>
 			    <div class="form-group" ng-class="{'has-error': errors.email[0] || userRegisterForm.email.$touched && userRegisterForm.email.$error.required }">
-			        <input type="email" name="email" id="email" ng-model="registerUserForm.email" class="form-control input-lg" placeholder="Email" required>
+			        <input type="email" name="email" ng-model="registerUserForm.email" class="form-control input-lg" placeholder="Email" required>
 			        <span ng-show="isFormInvalid" class="help-block">{{ errors.email[0] }}</span>
 			    	<span ng-show="userRegisterForm.email.$touched && userRegisterForm.email.$error.required" class="help-block">Email is required.</span>
 			    </div>

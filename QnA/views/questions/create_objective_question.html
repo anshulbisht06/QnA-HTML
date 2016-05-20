@@ -29,7 +29,7 @@
   				  </div>
 				  <br>
 				  <div class="form-group">
-				  	<input type="file" name="figure" id="figure" ngf-select ng-model="figure" ngf-pattern="'image/*'"
+				  	<input type="file" name="figure" ngf-select ng-model="figure" ngf-pattern="'image/*'"
 					    ngf-accept="'image/*'" ngf-max-size="5MB" ng-change="changeImage()" style="display: inline;">
 					<span class="glyphicon glyphicon-remove red-text" ng-if="isImageChanged" ng-click="removeImage()" style="cursor: pointer;"></span>
 				  </div><br>
@@ -47,7 +47,7 @@
 			   		<span ng-if="objectiveQuestionCreateForm.correct.$touched && objectiveQuestionCreateForm.correct.$error.required" class="help-block">Correct answer is required.</span>
 				  </div><br>
 				  <div class="form-group">
-				  	<label for="content">Enter the explanation of question</label>
+				  	<label for="explanation">Enter the explanation of question</label>
 			    	<textarea name="explanation" id="explanation" rows="4" class="form-control" ng-model="createObjectiveQuestionForm.explanation"></textarea>
 				  </div><br>
 				  <div class="form-group">
@@ -87,7 +87,7 @@
 				Step3: <p>Upload the XLS file and wait.</p>
 				 <div>
 				 	<div ng-class="{'has-error': noFileUploaded}">
-			         <input type="file" name="myFile" id="myFile" ngf-select ng-model="myFile" ngf-max-size="20MB">
+			         <input type="file" name="myFile" ngf-select ng-model="myFile" ngf-max-size="20MB">
 			         <span ng-if="noFileUploaded" class="red-text">No file has been uploaded.<br></span>
 			        </div><br>
 			         <button class="btn btn-lg glyphicon glyphicon-upload" ng-click="uploadFile('objective')">Upload</button>

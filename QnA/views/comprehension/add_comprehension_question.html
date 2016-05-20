@@ -45,7 +45,7 @@
 			   		<span ng-if="comprehensionQuestionCreateForm.content.$touched && comprehensionQuestionCreateForm.content.$error.required" class="help-block">Question content is required.</span>
 				  </div><br>
 				  <div class="form-group">
-				  	<label for="content">Enter the explanation of question</label>
+				  	<label for="explanation">Enter the explanation of question</label>
 			    	<textarea name="explanation" id="explanation" rows="4" class="form-control" ng-model="createComprehensionQuestionForm.explanation"></textarea>
 				  </div><br>
 				  <div class="form-group">
@@ -72,7 +72,7 @@
 				  					<input type="radio" name="correctoption" size="100" ng-model="createComprehensionQuestionForm.correctoption" value="{{option.optionid}}">
 				  				</div>
 				  				<div class="col-md-6">
-					    			<textarea cols="80" rows="3" name="optioncontent-{{option.optionid}}" id="optioncontent-{{option.optionid}}" class="form-control" ng-model="createComprehensionQuestionForm.optioncontent[option.optionid]" placeholder="Content for option - {{$index+1}}" required>{{ option.content }}</textarea><hr>
+					    			<textarea cols="80" rows="3" name="optioncontent-{{option.optionid}}" class="form-control" ng-model="createComprehensionQuestionForm.optioncontent[option.optionid]" placeholder="Content for option - {{$index+1}}" required>{{ option.content }}</textarea><hr>
 				  				</div>
 				  				<div class="col-md-3">
 				  					<h3><a href="javascript:void"><span class="glyphicon glyphicon-remove-sign" ng-if='option.optionid > 2' ng-click="removeOption(option.optionid)"></span></a></h3>
