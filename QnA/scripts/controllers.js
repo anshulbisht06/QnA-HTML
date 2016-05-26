@@ -1,7 +1,7 @@
 /* global $ */
 
 
-appmodule.run(function($rootScope, ngProgressFactory){
+appmodule.run(function($rootScope, ngProgressFactory, $cookies){
     $rootScope
     .$on('$stateChangeStart', 
         function(event, toState, toParams, fromState, fromParams){ 
@@ -28,10 +28,13 @@ appmodule.run(function($rootScope, ngProgressFactory){
 appmodule
     .controller('CookiesController', ['$scope', '$rootScope', '$cookies', '$state', function($scope, $rootScope, $cookies, $state) {
         try{
-            $rootScope.user = $cookies.get('user');
+            $rootScope._rest = $cookies.get('_rest');
             $rootScope.username = $cookies.get('username');
             $rootScope.token = $cookies.get('token');
-            if($rootScope.token === undefined){    
+            if($rootScope.token === undefined || $rootScope._rest === undefined || $rootScope.username === undefined){
+                $cookies.remove('token');
+                $cookies.remove('username');
+                $cookies.remove('_rest'); 
                 $state.go('app.login-user');
             }
         }catch(err){}
@@ -54,13 +57,13 @@ appmodule
             .success(function(data, status, headers, config) {
                 $cookies.remove('token');
                 $cookies.remove('username');
-                $cookies.remove('user');
+                $cookies.remove('_rest');
                 $state.go('app.login-user');
           })
             .error(function logoutErrorFn(data, status, headers, config) {
                 $cookies.remove('token');
                 $cookies.remove('username');
-                $cookies.remove('user');
+                $cookies.remove('_rest');
           })
         }
     }])
@@ -126,7 +129,7 @@ appmodule
 
                     $cookies.put('token', data.token);
                     $cookies.put('username', data.username);
-                    $cookies.put('user', data.userID);
+                    $cookies.put('_rest', data._rest);
 
                     $scope.isFormInvalid = false;
                     $state.go('app.all-quiz');

@@ -14,8 +14,8 @@ appmodule
             );
         };
 
-        this.getComprehension = function(comprehensionId){ 
-            return $resource(baseURL+"question/comprehension/get/"+comprehensionId+"/", null,
+        this.getComprehension = function(temp, comprehensionId){ 
+            return $resource(baseURL+"question/comprehension/get/"+comprehensionId+"/", { hash:temp[1], user:temp[0] },
                 {
                     query: {
                         method : 'GET',
@@ -26,8 +26,8 @@ appmodule
             );
         };
 
-        this.getComprehensionQuestions = function(comprehensionId){ 
-            return $resource(baseURL+"question/comprehension/get/questions/"+comprehensionId+"/", null,
+        this.getComprehensionQuestions = function(temp, comprehensionId){ 
+            return $resource(baseURL+"question/comprehension/get/questions/"+comprehensionId+"/", { hash:temp[1], user:temp[0] },
                 {
                     query: {
                         method : 'GET',
@@ -38,8 +38,8 @@ appmodule
             );
         };
 
-        this.deleteComprehensionQuestion = function(comprehensionQuestionId){
-            return $resource(baseURL+"question/comprehension/operations/"+comprehensionQuestionId+"/", null,
+        this.deleteComprehensionQuestion = function(temp, comprehensionQuestionId){
+            return $resource(baseURL+"question/comprehension/operations/"+comprehensionQuestionId+"/", { hash:temp[1], user:temp[0] },
                 {'delete':   
                     { method:'DELETE', 
                     } 
@@ -48,8 +48,8 @@ appmodule
             );
         };
 
-        this.getComprehensionQuestion = function(comprehensionQuestionId){ 
-            return $resource(baseURL+"question/comprehension/operations/"+comprehensionQuestionId+"/", null,
+        this.getComprehensionQuestion = function(temp, comprehensionQuestionId){ 
+            return $resource(baseURL+"question/comprehension/operations/"+comprehensionQuestionId+"/", { hash:temp[1], user:temp[0] },
                 {
                     query: {
                         method : 'GET',
@@ -60,8 +60,8 @@ appmodule
             );
         };
 
-        this.getComprehensionAnswers = function(comprehensionQuestionId){
-            return $resource(baseURL+"question/comprehension/answers/operations/"+comprehensionQuestionId+"/", null,
+        this.getComprehensionAnswers = function(temp, comprehensionQuestionId){
+            return $resource(baseURL+"question/comprehension/answers/operations/"+comprehensionQuestionId+"/", { hash:temp[1], user:temp[0] },
             {
                 get: {
                     method : 'GET',
@@ -72,8 +72,8 @@ appmodule
             );
         };
 
-        this.updateComprehensionAnswers = function(comprehensionQuestionId){
-            return $resource(baseURL+"question/comprehension/answers/operations/"+comprehensionQuestionId+"/", null,
+        this.updateComprehensionAnswers = function(temp, comprehensionQuestionId){
+            return $resource(baseURL+"question/comprehension/answers/operations/"+comprehensionQuestionId+"/", { hash:temp[1], user:temp[0] },
                 {'update':   
                     { method:'PUT'} 
                 },

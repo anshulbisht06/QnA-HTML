@@ -1,7 +1,7 @@
 appmodule.factory('APIInterceptor', [ '$cookies', '$q', '$interval', function($cookies, $q, $interval){
 	return {	
 		    request: function(config) {
-		    	if($cookies.get('token')){
+		    	if($cookies.get('token') && $cookies.get('_rest')){
 		    		config.headers.authorization = 'JWT '+$cookies.get('token');
 		    	}
 		    	else{

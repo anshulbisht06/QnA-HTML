@@ -15,8 +15,8 @@ appmodule
                 );
         };
 
-        this.getQuestion = function(userid, questionid){
-                return $resource(baseURL+"quiz/question/"+userid+"/"+questionid+"/", null,
+        this.getQuestion = function(temp, questionid){
+                return $resource(baseURL+"quiz/question/"+temp[0]+"/"+questionid+"/", { hash:temp[1] },
                 {
                     get: {
                     method : 'GET',
@@ -51,8 +51,8 @@ appmodule
                 );
         };
 
-        this.getQuestionUnderSubCategory = function(userId, subCategoryId, questionFormat){
-                return $resource(baseURL+"quiz/questions/get/"+userId+"/", { 'questionFormat': questionFormat, 'subCategoryId' : subCategoryId},
+        this.getQuestionUnderSubCategory = function(temp, subCategoryId, questionFormat){
+                return $resource(baseURL+"quiz/questions/get/"+temp[0]+"/", { questionFormat: questionFormat, subCategoryId : subCategoryId, hash: temp[1] },
                 {
                     query: {
                     method : 'GET',
@@ -85,8 +85,8 @@ appmodule
                     );
         }
 
-        this.deleteQuestion = function(userid, questionid){
-            return $resource(baseURL+"quiz/question/"+userid+"/"+questionid+"/", null,
+        this.deleteQuestion = function(temp, questionid){
+            return $resource(baseURL+"quiz/question/"+temp[0]+"/"+questionid+"/", { hash: temp[1] },
                     {'delete':   
                     { method:'DELETE', 
                      } 
@@ -95,8 +95,8 @@ appmodule
                     );
         };
 
-        this.getAnswers = function(userid, questionid, que_type){
-                return $resource(baseURL+"quiz/answers/"+userid+"/"+questionid+"/", null,
+        this.getAnswers = function(temp, questionid, que_type){
+                return $resource(baseURL+"quiz/answers/"+temp[0]+"/"+questionid+"/", { hash: temp[1] },
                 {
                     get: {
                     params : {'que_type': que_type},
@@ -108,8 +108,8 @@ appmodule
                 );
         };
 
-        this.updateAnswers = function(userid, questionid, que_type){
-            return $resource(baseURL+"quiz/answers/"+userid+"/"+questionid+"/", null,
+        this.updateAnswers = function(temp, questionid, que_type){
+            return $resource(baseURL+"quiz/answers/"+temp[0]+"/"+questionid+"/", { hash: temp[1] },
                     {'update':   
                     { method:'PUT', 
                      params : {'que_type': que_type}} 

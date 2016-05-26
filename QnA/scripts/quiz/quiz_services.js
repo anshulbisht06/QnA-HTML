@@ -9,8 +9,8 @@ appmodule
                     { stripTrailingSlashes: false }
                     );
         };
-        this.getAllQuiz = function(userid){
-            return $resource(baseURL+"quiz/get/"+userid+"/all/", null,
+        this.getAllQuiz = function(_rest){
+            return $resource(baseURL+"quiz/get/"+_rest[0]+"/all/", { hash: _rest[1] },
                     {
                         query: {
                         // headers: {'Authorization': 'JWT ' + token},
@@ -21,8 +21,8 @@ appmodule
                     { stripTrailingSlashes: false }
                     );
         }
-        this.getQuiz = function(userid, quizid){
-            return $resource(baseURL+"quiz/get/"+userid+"/"+quizid+"/", null,
+        this.getQuiz = function(_rest, quizid){
+            return $resource(baseURL+"quiz/get/"+_rest[0]+"/"+quizid+"/", { hash: _rest[1] },
                     {
                         get: {
                         // headers: {'Authorization': 'JWT ' + token},
@@ -41,16 +41,16 @@ appmodule
                     { stripTrailingSlashes: false }
                     );
         }
-        this.setQuizPublic = function(userid, quizid){
-            return $resource(baseURL+"quiz/mark/public/"+userid+"/"+quizid+"/", null,
+        this.setQuizPublic = function(temp, quizid){
+            return $resource(baseURL+"quiz/mark/public/"+temp[0]+"/"+quizid+"/", { hash: temp[1] },
                     {'update':   
                     { method:'PUT'}
                     },
                     { stripTrailingSlashes: false }
                     );
         }
-        this.deleteQuiz = function(userid, quizid){
-            return $resource(baseURL+"quiz/delete/"+userid+"/"+quizid+"/", null,
+        this.deleteQuiz = function(temp, quizid){
+            return $resource(baseURL+"quiz/delete/"+temp[0]+"/"+quizid+"/", { hash: temp[1] },
                     {'delete':   
                     { method:'DELETE'/*, headers: {'Authorization': 'JWT ' + token}*/} 
                     },

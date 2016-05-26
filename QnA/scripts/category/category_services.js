@@ -12,8 +12,8 @@ appmodule
                     );
         };
 
-        this.getAllCategories = function(userid, categoryid){
-        return $resource(baseURL+"quiz/category/get/"+userid+"/"+categoryid+"/", null,
+        this.getAllCategories = function(temp, categoryid){
+        return $resource(baseURL+"quiz/category/get/"+temp[0]+"/"+categoryid+"/", { hash: temp[1] },
         {
             query: {
             method : 'GET',

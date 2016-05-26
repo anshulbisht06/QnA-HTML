@@ -9,8 +9,10 @@ appmodule
             //     angular.element(document.querySelector('.modal-backdrop')).remove();
             //     $state.go(path);
             // };
+            try{
             var total_duration = 0;
-            SubCategoryFactory.getAllSubcategories($scope.user, 'all', true).query(
+            var temp = $scope._rest.split(',');
+            SubCategoryFactory.getAllSubcategories(temp, 'all', true).query(
             function(response) {
                 $scope.subCategories = response;
             },
@@ -18,7 +20,7 @@ appmodule
                 $scope.errors = response.data;
                 $scope.unableToGetAllSubCategories = true;
             });
-            QuizFactory.getQuiz($scope.user, $stateParams.quizid).get()
+        QuizFactory.getQuiz(temp, $stateParams.quizid).get()
             .$promise.then(
                 function(response){
                     $scope.quizName = response['title'];
@@ -59,7 +61,6 @@ appmodule
             $scope.selectedSubCategoryDropdown = "";
             $scope.modelForNoofQuestions = [];
             var selectNoQuestions = function(noOfQuestions, count){
-                console.log(noOfQuestions);
                 var result = '<select class="form-control" name="no_questions" id="no_questions'+count+'" ng-model="modelForNoofQuestions['+count+']"><option value="" disabled>Select here</option>';
                 for(var i=0;i<noOfQuestions;i++){
                     result += '<option value="'+(i+1)+'">'+(i+1)+'</option>';
@@ -103,7 +104,7 @@ appmodule
                 $scope.finalStack = [];
                 var questions_level_info = [0, 0, 0, 0];
                 var level = [];
-                QuestionsFactory.getQuestionUnderSubCategory($scope.user, subCategoryId, true).query(
+                QuestionsFactory.getQuestionUnderSubCategory($scope._rest, subCategoryId, true).query(
                     function(response) {
                         for(var key in response[0].questions_type_info){
                             questions_level_info[0] += response[0].questions_type_info[key][0];
@@ -230,49 +231,50 @@ appmodule
                 $window.data = data;
                 $window.open($state.href('app.test-preview', {parameter: data}), "Test Window", "width=1280,height=890,resizable=0");
             }
-        }])
-    .controller('SelectQuestionsController', ['$scope', '$state', '$controller', '$stateParams', 'QuizStackFactory', function($scope, $state, $controller, $stateParams, QuizStackFactory) {
-        $controller('CookiesController', {$scope : $scope});
-        $scope.curPage = 0;
-        $scope.pageSize = 10;
-        QuizStackFactory.getQuizStackSelectedQuestions($stateParams.quizstackid).get()
-            .$promise.then(
-                function(response){
-                    $scope.quizStack = response;
-                    $scope.selectedQuestions = [];
-                    $scope.limit = Math.ceil(response.questions.length/$scope.pageSize);
-                    for(var i=0;i<response.questions.length;i++){
-                        if(response.questions[i].is_selected)
-                            $scope.selectedQuestions.push(response.questions[i].id);
-                    }
-                },
-                function(response) {
-                    alert(response.data.errors);
-        });
-        $scope.selectQuestion = function(selectedQuestionId){
-            var index = $scope.selectedQuestions.indexOf(selectedQuestionId);
-            if(index === -1){
-                $scope.selectedQuestions.push(selectedQuestionId); 
-                // $('#checkBox'+selectedQuestionId).prop('checked', true);
-                $scope.quizStack.questions[$scope.selectedQuestions.indexOf(selectedQuestionId)].is_selected = true;
-            }else{
-                $scope.quizStack.questions[index].is_selected = false;
-                // $('#checkBox'+selectedQuestionId).prop('checked', false);
-                $scope.selectedQuestions.splice(index,1);
-            }
-        }
+            }catch(err){}
+        }]);
+    // .controller('SelectQuestionsController', ['$scope', '$state', '$controller', '$stateParams', 'QuizStackFactory', function($scope, $state, $controller, $stateParams, QuizStackFactory) {
+    //     $controller('CookiesController', {$scope : $scope});
+    //     $scope.curPage = 0;
+    //     $scope.pageSize = 10;
+    //     QuizStackFactory.getQuizStackSelectedQuestions($stateParams.quizstackid).get()
+    //         .$promise.then(
+    //             function(response){
+    //                 $scope.quizStack = response;
+    //                 $scope.selectedQuestions = [];
+    //                 $scope.limit = Math.ceil(response.questions.length/$scope.pageSize);
+    //                 for(var i=0;i<response.questions.length;i++){
+    //                     if(response.questions[i].is_selected)
+    //                         $scope.selectedQuestions.push(response.questions[i].id);
+    //                 }
+    //             },
+    //             function(response) {
+    //                 alert(response.data.errors);
+    //     });
+    //     $scope.selectQuestion = function(selectedQuestionId){
+    //         var index = $scope.selectedQuestions.indexOf(selectedQuestionId);
+    //         if(index === -1){
+    //             $scope.selectedQuestions.push(selectedQuestionId); 
+    //             // $('#checkBox'+selectedQuestionId).prop('checked', true);
+    //             $scope.quizStack.questions[$scope.selectedQuestions.indexOf(selectedQuestionId)].is_selected = true;
+    //         }else{
+    //             $scope.quizStack.questions[index].is_selected = false;
+    //             // $('#checkBox'+selectedQuestionId).prop('checked', false);
+    //             $scope.selectedQuestions.splice(index,1);
+    //         }
+    //     }
 
-        $scope.saveSelectedQuestions = function(){
-            QuizStackFactory.postSelectedQuestions($stateParams.quizstackid).save($scope.selectedQuestions).$promise.then(
-                function(response){
-                    alert('Selected Questions are added successfully!');
-                    $state.go('app.view-quiz', {quizid: response.quizId})
-                },
-                function(response) {
-                    $scope.alertType = "danger";
-                    $scope.alertMsg = "Unable to save the selected questions.";
-                    alert(response.data.errors);
-                });
-        }
+    //     $scope.saveSelectedQuestions = function(){
+    //         QuizStackFactory.postSelectedQuestions($stateParams.quizstackid).save($scope.selectedQuestions).$promise.then(
+    //             function(response){
+    //                 alert('Selected Questions are added successfully!');
+    //                 $state.go('app.view-quiz', {quizid: response.quizId})
+    //             },
+    //             function(response) {
+    //                 $scope.alertType = "danger";
+    //                 $scope.alertMsg = "Unable to save the selected questions.";
+    //                 alert(response.data.errors);
+    //             });
+    //     }
 
-    }]);
+    // }]);

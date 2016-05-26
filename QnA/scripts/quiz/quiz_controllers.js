@@ -7,7 +7,9 @@ appmodule
 	        $scope.pageSize = 9;
 	        $scope.testURL = testURL;
 	        $controller('CookiesController', {$scope : $scope});
-	        QuizFactory.getAllQuiz($scope.user, "all").query(
+	        try{
+	        var temp = $scope._rest.split(',');
+	        QuizFactory.getAllQuiz(temp, "all").query(
             function(response){
                 $scope.allQuiz = response;
             },
@@ -22,14 +24,13 @@ appmodule
 	        };
 
 	        $scope.createQuizForm = {title:"", no_of_attempt:"1", passing_percent:"",
-	        	user:$scope.user, success_text:"", fail_text:"",user_picturing:false, start_notification_url:"", finish_notification_url:"", grade_notification_url:""};
+	        	user:temp[0], hash:temp[1], success_text:"", fail_text:"",user_picturing:false, start_notification_url:"", finish_notification_url:"", grade_notification_url:""};
 	        
 	        $scope.postQuiz = function() {
-	            $scope.createQuizForm.user = $scope.user;
 	            QuizFactory.createQuiz().save($scope.createQuizForm).$promise.then(
 	                function(response){
 	                    $scope.createQuizForm = {title:"", no_of_attempt:"1", passing_percent:"",
-	        				user:$scope.user, success_text:"", fail_text:"",user_picturing:false, start_notification_url:"", finish_notification_url:"", grade_notification_url:""};
+	        				user:temp[0], success_text:"", fail_text:"",user_picturing:false, start_notification_url:"", finish_notification_url:"", grade_notification_url:""};
 	        				angular.element(document.querySelector('#quizCreateModal')).modal('hide');
 	                    $scope.allQuiz.push(response);
                     	showAlert('alert-success', "Quiz "+response.title+" has been created.");
@@ -43,10 +44,10 @@ appmodule
 	                });
 	        }
 
-	        function upload(postUrl, quiz_id, file_data){
+	        function upload(postUrl, quiz_id, file_data, temp){
 	            Upload.upload({
 	                    url: baseURL+postUrl,
-	                    data: { file_data:file_data,quiz_id: quiz_id },
+	                    data: { file_data:file_data,quiz_id: quiz_id, hash: temp[1], user: temp[0] },
 	                    // headers: {'Authorization': 'JWT ' + $cookies.get('token')},
 	                    resumeChunkSize: '5MB',
 	                }).then(function(response) {
@@ -61,7 +62,7 @@ appmodule
         	}
 
 	        $scope.markPublic = function (quizId) {
-	        	QuizFactory.setQuizPublic($scope.user, quizId).update({}).$promise.then(
+	        	QuizFactory.setQuizPublic(temp, quizId).update({}).$promise.then(
 	                function(response){
 	                    var mark = '';
 	                    if(response.allow_public_access){
@@ -87,14 +88,14 @@ appmodule
 	        		angular.element(document.querySelector('#quizDeleteModal')).modal('show');
 	        	}
 	        	else if(action==='deleteQuizRequestAccepted'){
-	        		QuizFactory.deleteQuiz($scope.user, quizId).delete().$promise.then(
+	        		QuizFactory.deleteQuiz(temp, quizId).delete().$promise.then(
 		                function(response){
 		                	var index = findIndexOfObjectInsideList($scope.allQuiz, $scope.quizToBeDeletedID);
 		                	$scope.allQuiz.splice(index, 1);
-		                    $scope.quizToBeDeletedID = null;
-			        		$scope.quizToBeDeletedTitle = null;
 			        		showAlert('alert-success', "Your quiz named "+$scope.quizToBeDeletedTitle.toUpperCase()+" has been deleted.");
 			        		angular.element(document.querySelector('#quizDeleteModal')).modal('hide');
+			        		$scope.quizToBeDeletedID = null;
+			        		$scope.quizToBeDeletedTitle = null;
 		                },
 		                function(response) {
 		                	angular.element(document.querySelector('#quizDeleteModal')).modal('hide');
@@ -117,14 +118,14 @@ appmodule
 	        $scope.putQuiz = function(action, quiz){
 	        	if(action==='updateQuizRequestInitiated'){
 	        		$scope.quizToBeUpdated = quiz;
-	        		$scope.updateQuizForm = { title:quiz.title, user: $scope.user, show_result_on_completion: quiz.show_result_on_completion,
+	        		$scope.updateQuizForm = { title:quiz.title, user: temp[0], show_result_on_completion: quiz.show_result_on_completion, hash: temp[1],
 	        			success_text:quiz.success_text, fail_text:quiz.fail_text, passing_percent:quiz.passing_percent,  allow_public_access:quiz.allow_public_access,
 	        			no_of_attempt:quiz.no_of_attempt.toString(), user_picturing:quiz.user_picturing, start_notification_url:quiz.start_notification_url,
 	        			finish_notification_url:quiz.finish_notification_url, grade_notification_url:quiz.grade_notification_url };
 	        		angular.element(document.querySelector('#quizUpdateModal')).modal('show');
 	        	}
 	        	else if(action==='updateQuizRequestAccepted'){
-	        		QuizFactory.updateQuiz($scope.user, quiz.id).update($scope.updateQuizForm).$promise.then(
+	        		QuizFactory.updateQuiz(temp[0], quiz.id).update($scope.updateQuizForm).$promise.then(
 	                function(response){
 	                	var index = findIndexOfObjectInsideList($scope.allQuiz, $scope.quizToBeUpdated.id);
 	                	$scope.allQuiz[index] = response.updatedQuiz;
@@ -174,13 +175,13 @@ appmodule
 		            $scope.noFileUploaded = true;
 		        } else{
 		        	$scope.noFileUploaded = false;
-		           	upload("quiz/access/upload/xls/", quiz_id, file);                   
+		           	upload("quiz/access/upload/xls/", quiz_id, file, temp);                   
 		        }
             };
 
 
 	        $scope.getCategories = function(quizid, quiztitle){
-	            CategoryFactory.getAllCategories($scope.user, parseInt(quizid)).query(
+	            CategoryFactory.getAllCategories(temp, parseInt(quizid)).query(
 	            function(response){
 	                $scope.allCategories = response;
 	                $scope.quiztitle = quiztitle;
@@ -190,4 +191,5 @@ appmodule
 	                $scope.unableToGetAllCategories = "Unable to get your categories.";
 	        });
 	        }
+	        }catch(err){}
 	    }]);

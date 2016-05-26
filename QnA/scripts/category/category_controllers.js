@@ -3,7 +3,7 @@
 appmodule
 	.controller('CreateCategoryController', ['$scope','$state', '$controller', 'CategoryFactory', 'QuizFactory','$stateParams', function($scope, $state, $controller, CategoryFactory, QuizFactory, $stateParams) {
         $controller('CookiesController', {$scope : $scope});
-        QuizFactory.getAllQuiz($scope.user, "all").query(
+        QuizFactory.getAllQuiz($scope._rest, "all").query(
             function(response){
                 $scope.allQuiz = response;
             },
@@ -21,9 +21,9 @@ appmodule
             $scope.isFormInvalid = true;
             $scope.isCategoryCreated = false;
             showAlert('alert-info', 'Please select or create a category first.');
-            $scope.createCategoryform = {category_name : "","user":$scope.user, quiz : $scope._id};
+            $scope.createCategoryform = {category_name : "","user":$scope._rest, quiz : $scope._id};
         }else{
-            $scope.createCategoryform = {category_name : "","user":$scope.user};
+            $scope.createCategoryform = {category_name : "","user":$scope._rest};
         }
 
         $scope.postCategory_ = function() { 

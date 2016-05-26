@@ -3,7 +3,7 @@ appmodule
 	.controller('CreateSubCategoryController', ['$scope','$state', '$controller', 'CategoryFactory', 'SubCategoryFactory','$stateParams', function($scope, $state, $controller, CategoryFactory, SubCategoryFactory, $stateParams) {
         $controller('CookiesController', {$scope : $scope});
 
-        CategoryFactory.getAllCategories($scope.user, "all").query(
+        CategoryFactory.getAllCategories($scope._rest, "all").query(
         function(response){
             $scope.allCategories = response;
         },
@@ -13,7 +13,7 @@ appmodule
         });
 
         
-        SubCategoryFactory.getAllSubcategories($scope.user, "all").query(
+        SubCategoryFactory.getAllSubcategories($scope._rest, "all").query(
         function(response){
             $scope.allSubCategories = response;
         },
@@ -24,7 +24,7 @@ appmodule
         
         $scope.categoryid = $stateParams.obj ? $stateParams.obj.categoryid.toString() : "";
         
-        $scope.createSubCategoryform = { sub_category_name : "", category : "", user : $scope.user };
+        $scope.createSubCategoryform = { sub_category_name : "", category : "", user : $scope._rest };
         
         if($scope.categoryid){
             $scope.alertType = "info";

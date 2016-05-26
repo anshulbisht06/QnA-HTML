@@ -4,13 +4,15 @@ appmodule
 	.controller('QuestionsController', ['$scope','$filter','$controller', '$state', '$http', 'QuestionsFactory','CategoryFactory', 'SubCategoryFactory', function($scope,$filter, $controller, $state, $http, QuestionsFactory, CategoryFactory, SubCategoryFactory)  {
         $controller('CookiesController', {$scope : $scope});
         $scope.categoryNotSelected = true;
+        try{
+        var temp = $scope._rest.split(',');
         
         $scope.curPage = 0;
         $scope.pageSize = 10;
 
         $scope.subCategoryNotSelected = true;
-        $scope.createCategoryform = { category_name: "", user: $scope.user };
-        $scope.createSubCategoryform = { sub_category_name : "", category : $scope.selectedCategoryId, user : $scope.user };
+        $scope.createCategoryform = { category_name: "", user: temp[0], hash: temp[1] };
+        $scope.createSubCategoryform = { sub_category_name : "", category : $scope.selectedCategoryId, user : temp[0], hash: temp[1] };
 
         $scope.tab = 1;
         $scope.filterLevel = false;
@@ -43,7 +45,7 @@ appmodule
             $scope.isHoveredOver[questionid] = false;
         }
         $scope.deleteQuestion = function(questionid){
-            QuestionsFactory.deleteQuestion($scope.user, questionid).delete().$promise.then(
+            QuestionsFactory.deleteQuestion(temp, questionid).delete().$promise.then(
                 function(response){
                     window.location.reload();                   
                 },
@@ -67,7 +69,7 @@ appmodule
             delete $scope.categorieslist;
         }
 
-        CategoryFactory.getAllCategories($scope.user, "all").query(
+        CategoryFactory.getAllCategories(temp, "all").query(
         function(response){
             $scope.allCategories = response;
         },
@@ -80,7 +82,7 @@ appmodule
             $("#loader1").css('display', 'block');
             if(choice === 'subcategory'){
                 $scope.questionsLevelInfo = [0, 0, 0, 0];
-                SubCategoryFactory.getQuestionUnderSubCategory($scope.user, id, false).query(
+                SubCategoryFactory.getQuestionUnderSubCategory(temp, id, false).query(
                 function(response){
                     $scope.questions = response;
                     for(var key in response.questions_type_info){
@@ -100,12 +102,12 @@ appmodule
 
         $scope.selectCategory = function(selectedCategoryId, selectedCategoryName){
             $scope.categoryNotSelected = false;
-            $scope.createSubCategoryform = { sub_category_name : "", category : selectedCategoryId, user : $scope.user };
+            $scope.createSubCategoryform = { sub_category_name : "", category : selectedCategoryId, user :temp[0], hash: temp[1] };
             $scope.selectedCategoryId = selectedCategoryId;
 
             $scope.mainSubcategories = $scope.allSubCategories;
             $scope.selectedCategoryName  = selectedCategoryName;
-            SubCategoryFactory.getAllSubcategories($scope.user, selectedCategoryId, false).query(
+            SubCategoryFactory.getAllSubcategories(temp, selectedCategoryId, false).query(
                 function(response){
                     $scope.allSubCategories = response;
                 },
@@ -120,25 +122,25 @@ appmodule
             delete $scope.selectedCategoryName;
             $scope.allSubCategories = $scope.mainSubcategories;
             delete $scope.mainSubcategories;
-            $scope.createSubCategoryform = { sub_category_name : "", category : "", user : $scope.user };
+            $scope.createSubCategoryform = { sub_category_name : "", category : "", user : temp[0], hash: temp[1] };
         }
 
-        $scope.filterQuiz = function(quizid){
-            // $scope.filterByQuiz = selectedQuiz;
-            QuestionsFactory.getQuestionUnderQuiz($scope.user, quizid).query(
-            function(response) {
-                $scope.allQuestions = response;
-                if($scope.allQuestions){
-                $scope.questionsLevelInfo = $scope.allQuestions[0].questions_level_info;
-                $scope.allQuestions.shift();
-                }
-            },
-            function(response) {
-                $scope.errors = response.data;
-            });
-        }
+        // $scope.filterQuiz = function(quizid){
+        //     // $scope.filterByQuiz = selectedQuiz;
+        //     QuestionsFactory.getQuestionUnderQuiz($scope._rest, quizid).query(
+        //     function(response) {
+        //         $scope.allQuestions = response;
+        //         if($scope.allQuestions){
+        //         $scope.questionsLevelInfo = $scope.allQuestions[0].questions_level_info;
+        //         $scope.allQuestions.shift();
+        //         }
+        //     },
+        //     function(response) {
+        //         $scope.errors = response.data;
+        //     });
+        // }
         
-        SubCategoryFactory.getAllSubcategories($scope.user, "all", false).query(
+        SubCategoryFactory.getAllSubcategories(temp, "all", false).query(
         function(response){
             $scope.allSubCategories = response;
         },
@@ -147,7 +149,6 @@ appmodule
             $scope.errors = "Unable to get your SubCategories.";
         });
 
-        $scope.createCategoryform = {category_name : "",user : $scope.user};
         $scope.postCategory = function() {
             CategoryFactory.createCategory().save($scope.createCategoryform).$promise.then(
                 function(response){
@@ -155,12 +156,12 @@ appmodule
                     showAlert('alert-success', "Your category named " + $scope.createCategoryform.category_name + " has been created. Now please create a sub-category of it.");
                     $scope.allCategories.push({ 'id':response.id, 'category_name':response.category_name });                        
                     angular.element(document.querySelector('#createCategoryModal')).modal('hide');
-                    $scope.createCategoryform = { category_name : "", user : $scope.user };
+                    $scope.createCategoryform = { category_name : "", user : temp[0], hash: temp[1] };
                 },
                 function(response) {
                     $scope.isFormInvalid = true;
                     showAlert('alert-danger', "Unable to create the category - " + $scope.createCategoryform.category_name + ".");
-                    alert(response.data);
+                    alert(response.data.errors);
                 });
         }
 
@@ -170,7 +171,7 @@ appmodule
                     $scope.allSubCategories.push({ 'id':response.id, 'sub_category_name':response.sub_category_name }); 
                     showAlert('alert-success', "Your sub-category named " + $scope.createSubCategoryform.sub_category_name + " has been created.");
                     angular.element(document.querySelector('#createSubCategoryModal')).modal('hide');
-                    $scope.createSubCategoryform = { sub_category_name : "", category : $scope.selectedCategoryId, user : $scope.user };
+                    $scope.createSubCategoryform = { sub_category_name : "", category : $scope.selectedCategoryId, user : temp[0], hash: temp[1] };
                     // $state.go('app.questions');  
                 },
                 function(response) {
@@ -185,58 +186,63 @@ appmodule
         }
 
         
-        $scope.filterCategory = function(quizid, categoryid){
-            // $scope.filterByCategory = selectedCategory;
-            QuestionsFactory.getQuestionUnderCategory($scope.user, quizid, categoryid).query(
-            function(response) {
-                $scope.allQuestions = response;
-                if($scope.allQuestions){
-                $scope.questionsLevelInfo = $scope.allQuestions[0].questions_level_info;
-                $scope.allQuestions.shift();
-                }
-            },
-            function(response) {
-                $scope.errors = response.data;
-            });
-        }
+        // $scope.filterCategory = function(quizid, categoryid){
+        //     // $scope.filterByCategory = selectedCategory;
+        //     QuestionsFactory.getQuestionUnderCategory($scope._rest, quizid, categoryid).query(
+        //     function(response) {
+        //         $scope.allQuestions = response;
+        //         if($scope.allQuestions){
+        //         $scope.questionsLevelInfo = $scope.allQuestions[0].questions_level_info;
+        //         $scope.allQuestions.shift();
+        //         }
+        //     },
+        //     function(response) {
+        //         $scope.errors = response.data;
+        //     });
+        // }
 
-        $scope.filterSubCategory = function(subcategoryid){
-            // $scope.filterBySubCategory = selectedSubCategory;
-            QuestionsFactory.getQuestionUnderSubCategory($scope.user, subcategoryid, false).query(
-            function(response) {
-                $scope.allQuestions = response;
-                if($scope.allQuestions){
-                $scope.questionsLevelInfo = $scope.allQuestions[0].questions_level_info;
-                $scope.allQuestions.shift();
-                }
-            },
-            function(response) {
-                $scope.errors = response.data;
-            });
-        }
-        $scope.renameField = function(fieldType, oldValue, newValue){
-            if(fieldType==='category'){
-                $('#fieldType').html('Category');
-                $('#oldValue').html(oldValue);
-                $scope.categoryRenameForm = { category_name: "", old_category_name : oldValue, quiz: $scope.selectedQuizId };
-                $('#renameModal').modal('toggle');
-            }
+        // $scope.filterSubCategory = function(subcategoryid){
+        //     // $scope.filterBySubCategory = selectedSubCategory;
+        //     QuestionsFactory.getQuestionUnderSubCategory($scope._rest, subcategoryid, false).query(
+        //     function(response) {
+        //         $scope.allQuestions = response;
+        //         if($scope.allQuestions){
+        //         $scope.questionsLevelInfo = $scope.allQuestions[0].questions_level_info;
+        //         $scope.allQuestions.shift();
+        //         }
+        //     },
+        //     function(response) {
+        //         $scope.errors = response.data;
+        //     });
+        // }
 
-        }
-        $scope.renameCategory = function(){
-            CategoryFactory.renameCategory().update($scope.categoryRenameForm);
-        } 
+        // $scope.renameField = function(fieldType, oldValue, newValue){
+        //     if(fieldType==='category'){
+        //         $('#fieldType').html('Category');
+        //         $('#oldValue').html(oldValue);
+        //         $scope.categoryRenameForm = { category_name: "", old_category_name : oldValue, quiz: $scope.selectedQuizId };
+        //         $('#renameModal').modal('toggle');
+        //     }
+
+        // }
+        // $scope.renameCategory = function(){
+        //     CategoryFactory.renameCategory().update($scope.categoryRenameForm);
+        // } 
+        }catch(err){}
     }])
 
 
     .controller('CreateQuestionController', ['$scope', '$controller', '$state', '$http', 'QuizFactory', 'CategoryFactory', 'SubCategoryFactory', 'QuestionsFactory', 'Upload', 'ngProgressFactory', function($scope, $controller, $state, $http, QuizFactory, CategoryFactory, SubCategoryFactory, QuestionsFactory, Upload, ngProgressFactory) {
         $controller('CookiesController', {$scope : $scope});
-        SubCategoryFactory.getAllSubcategories($scope.user, 'all', true).query(
+        try{
+        var temp = $scope._rest.split(',');
+
+        SubCategoryFactory.getAllSubcategories(temp, 'all', true).query(
             function(response) {
                 $scope.subCategories = response;
             },
             function(response) {
-                $scope.errors = response.data;
+                $scope.errors = response.data.errors;
                 $scope.unableToGetAllSubCategories = true;
             });
 
@@ -256,7 +262,7 @@ appmodule
                     cleanQuestionForm();
                 }, function (response) {
                     if($scope.createMCQQuestionForm!=undefined){
-                        $scope.createMCQQuestionForm = {correctoption: undefined, content: $scope.createMCQQuestionForm.content, explanation: $scope.createMCQQuestionForm.explanation, level: $scope.createMCQQuestionForm.level, answer_order: $scope.createMCQQuestionForm.answer_order, sub_category: $scope.createMCQQuestionForm.sub_category, que_type:"mcq", ideal_time: $scope.createMCQQuestionForm.ideal_time};
+                        $scope.createMCQQuestionForm = { correctoption: undefined, content: $scope.createMCQQuestionForm.content, explanation: $scope.createMCQQuestionForm.explanation, level: $scope.createMCQQuestionForm.level, answer_order: $scope.createMCQQuestionForm.answer_order, sub_category: $scope.createMCQQuestionForm.sub_category, que_type:"mcq", ideal_time: $scope.createMCQQuestionForm.ideal_time, user:$scope.createMCQQuestionForm.user, hash:$scope.createMCQQuestionForm.hash };
                     }
                     $scope.progressbar.complete();
                     showAlert('alert-danger', 'Problem in creating question. See below errors.');
@@ -275,7 +281,7 @@ appmodule
 
         if($state.current.name === "app.create-mcq-question")
         {
-            $scope.createMCQQuestionForm = {content:"",explanation:"", level:"easy", answer_order:"random", sub_category:"", que_type:"mcq", ideal_time:7};
+            $scope.createMCQQuestionForm = { user:temp[0], content:"", explanation:"", level:"easy", answer_order:"random", sub_category:"", que_type:"mcq", ideal_time:7, hash: temp[1]};
             $scope.insertBlank = function(){
                 $scope.createMCQQuestionForm.content += " <<Answer>> ";
             }
@@ -318,7 +324,7 @@ appmodule
             }
         }
         else if($state.current.name === "app.create-objective-question"){
-            $scope.createObjectiveQuestionForm = {content:"",correct:"",explanation:"", level:"easy", sub_category:"", que_type:"objective"};
+            $scope.createObjectiveQuestionForm = { user:temp[0], content:"", correct:"", explanation:"", level:"easy", sub_category:"", que_type:"objective", hash: temp[1] };
             $scope.postObjectiveQuestion = function() {
                 upload("question/objective/create/", $scope.createObjectiveQuestionForm, $scope.figure);
             }
@@ -332,12 +338,12 @@ appmodule
             if(sub_cat_info===undefined){
                 $scope.noSubCategoryPresent = true;
             }else{
-            $http.post(baseURL+"quiz/question/download/xls/", {que_type:que_type,
-                sub_cat_info:sub_cat_info}, { responseType: 'arraybuffer' })
-              .success(function(data) {
-                var file = new Blob([data], { type: 'application/xls' });
-                saveAs(file, sub_cat_info.split('>>')[1]+'_'+que_type+'.xls');
-            })
+                $http.post(baseURL+"quiz/question/download/xls/", {que_type:que_type,
+                    sub_cat_info:sub_cat_info}, { responseType: 'arraybuffer' })
+                  .success(function(data) {
+                    var file = new Blob([data], { type: 'application/xls' });
+                    saveAs(file, sub_cat_info.split('>>')[1]+'_'+que_type+'.xls');
+                })
             };
         }
 
@@ -347,7 +353,7 @@ appmodule
             if(file===undefined){
                 $scope.noFileUploaded = true;
             }else{
-                upload("question/"+que_type+"/bulkupload/", {}, file);                   
+                upload("question/"+que_type+"/bulkupload/", { hash: temp[1], user: temp[0] }, file);                   
             }
         };
 
@@ -359,18 +365,20 @@ appmodule
             $scope.figure = undefined;
             $scope.isImageChanged = false;
         }
-
+        }catch(err){}
     }])
 
     .controller('UpdateQuestionController', ['$scope', '$controller', '$state', '$stateParams', 'QuestionsFactory', 'Upload', 'ngProgressFactory', function($scope, $controller, $state, $stateParams, QuestionsFactory, Upload, ngProgressFactory) {
         $controller('CookiesController', {$scope : $scope});
+        try{
+        var temp = $scope._rest.split(',');
         $scope.que_type = $stateParams.questionParams.split(':')[1];
-        QuestionsFactory.getQuestion($scope.user, $stateParams.questionParams.split(':')[0]).get()
+        QuestionsFactory.getQuestion(temp, $stateParams.questionParams.split(':')[0]).get()
             .$promise.then(
                 function(response){
                     $scope.question = response.question;
                     $scope.baseURLImage = baseURLImage;
-                    $scope.updateQuestionForm = {figure:response.figure, content : $scope.question.content, level : $scope.question.level, explanation : $scope.question.explanation, que_type : $scope.question.que_type, ideal_time: $scope.question.ideal_time };
+                    $scope.updateQuestionForm = {hash:temp[1], figure:response.figure, content : $scope.question.content, level : $scope.question.level, explanation : $scope.question.explanation, que_type : $scope.question.que_type, ideal_time: $scope.question.ideal_time, sub_category: $scope.question.sub_category };
                     if($scope.que_type==='objective')
                         $scope.updateQuestionForm.content = $scope.question.content.replace(/<>/g,'<<Answer>>');
                     else if($scope.que_type==='comprehension')
@@ -390,21 +398,21 @@ appmodule
         }
 
         $scope.putQuestion = function() {
-            upload("quiz/question/"+$scope.user+"/"+$stateParams.questionParams.split(':')[0]+"/", $scope.updateQuestionForm);
+            upload("quiz/question/"+temp[0]+"/"+$stateParams.questionParams.split(':')[0]+"/", $scope.updateQuestionForm);
         }
 
         function upload(postUrl, data){
             $scope.changeProgressBar('6px', 'green');
             Upload.upload({
                     url: baseURL+postUrl,
-                    data: { data: data },
+                    data: data,
                     resumeChunkSize: '5MB',
                     method: 'PUT',
                 }).then(function(response) {
                     $scope.progressbar.complete();
                     $scope.isImageChanged = false;
                     $scope.question.figure = response.data.figure;
-                    $scope.updateQuestionForm = {figure: undefined, heading: response.data.heading, content : response.data.content, level : response.data.level, explanation : response.data.explanation, ideal_time: response.data.ideal_time };
+                    $scope.updateQuestionForm = {hash: temp[1], figure: undefined, heading: response.data.heading, content : response.data.content, level : response.data.level, explanation : response.data.explanation, ideal_time: response.data.ideal_time };
                     showAlert('alert-success', 'Your question has been updated.');
                 }, function (response) {
                     $scope.progressbar.complete();
@@ -414,13 +422,16 @@ appmodule
                     $scope.progressbar.set(parseInt(100.0*event.loaded/event.total));
                 });
         }
+        }catch(err){}
     }])
 
 
     .controller('UpdateAnswersController', ['$scope', '$controller', '$state', '$stateParams', 'QuestionsFactory', function($scope, $controller, $state, $stateParams, QuestionsFactory) {
         $controller('CookiesController', {$scope : $scope});
         $scope.que_type = $stateParams.questionParams.split(':')[1];
-
+        try{
+        var temp = $scope._rest.split(',');       
+        
         function modifyTheResult(){
             if($scope.que_type==='mcq'){
                 actualAnswerID = "";
@@ -434,11 +445,11 @@ appmodule
                 $scope.updateAnswersForm = {correctOption : actualAnswerID.toString(), optionsContent : optionsContent};
             }
             else if($scope.que_type==='objective'){
-                $scope.updateAnswersForm = { correct: $scope.answers.correct, content: $scope.answers.content, sub_category: $scope.answers.sub_category };
+                $scope.updateAnswersForm = { correct: $scope.answers.correct, content: $scope.answers.content, sub_category: $scope.answers.sub_category, sub_category_name: $scope.answers.sub_category_name };
             }
         }
 
-        QuestionsFactory.getAnswers($scope.user, $stateParams.questionParams.split(':')[0], $stateParams.questionParams.split(':')[1]).get()
+        QuestionsFactory.getAnswers(temp, $stateParams.questionParams.split(':')[0], $stateParams.questionParams.split(':')[1]).get()
             .$promise.then(
                 function(response){
                     $scope.answers = response.answers;
@@ -449,7 +460,7 @@ appmodule
                 }
             );
         $scope.putAnswers = function() {
-            QuestionsFactory.updateAnswers($scope.user, $stateParams.questionParams.split(':')[0], $stateParams.questionParams.split(':')[1]).update($scope.updateAnswersForm).$promise.then(
+            QuestionsFactory.updateAnswers(temp, $stateParams.questionParams.split(':')[0], $stateParams.questionParams.split(':')[1]).update($scope.updateAnswersForm).$promise.then(
                 function(response){
                     $scope.answers = response;
                     modifyTheResult();
@@ -460,4 +471,5 @@ appmodule
                     $scope.errors = response.data.errors;
                 });
         }
+        }catch(err){}
     }]);

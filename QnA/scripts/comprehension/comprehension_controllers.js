@@ -3,9 +3,11 @@
 appmodule
     .controller('CreateComprehensionController', ['$scope','$controller', '$state', 'ComprehensionFactory', 'SubCategoryFactory', 'Upload', 'ngProgressFactory', function($scope, $controller, $state, ComprehensionFactory, SubCategoryFactory, Upload, ngProgressFactory)  {
         $controller('CookiesController', {$scope : $scope});
-        $scope.createComprehensionForm = { content:"",explanation:"", heading:"", sub_category:"", ideal_time:"", level:"easy", que_type:"comprehension" };
+        try{
+        var temp = $scope._rest.split(',');
+        $scope.createComprehensionForm = { content:"",explanation:"", heading:"", sub_category:"", ideal_time:"", level:"easy", que_type:"comprehension", user:temp[0], hash:temp[1] };
 
-        SubCategoryFactory.getAllSubcategories($scope.user, 'all', true).query(
+        SubCategoryFactory.getAllSubcategories(temp, 'all', true).query(
             function(response) {
                 $scope.subCategories = response;
             },
@@ -46,10 +48,13 @@ appmodule
         $scope.postComprehension = function() {
             upload("question/comprehension/create/", $scope.createComprehensionForm, $scope.figure);
         }
+        }catch(err){}
     }])
     .controller('CreateComprehensionQuestionController', ['$scope','$controller', '$stateParams', 'ComprehensionFactory', 'Upload', 'ngProgressFactory', function($scope, $controller, $stateParams, ComprehensionFactory, Upload, ngProgressFactory)  {
         $controller('CookiesController', {$scope : $scope});
         $scope.baseURLImage = baseURLImage;
+        try{
+        var temp = $scope._rest.split(',');
         
         function upload(postUrl, data, figure){
             $scope.changeProgressBar('6px', 'red');
@@ -66,7 +71,7 @@ appmodule
                 }, function (response) {
                     $scope.progressbar.complete();
                     if($scope.createComprehensionQuestionForm!=undefined){
-                        $scope.createComprehensionQuestionForm = { comprehension:$scope.createComprehensionQuestionForm.comprehension, content:$scope.createComprehensionQuestionForm.content, explanation: $scope.createComprehensionQuestionForm.explanation, level: $scope.createComprehensionQuestionForm.level, answer_order:$scope.createComprehensionQuestionForm.answer_order, ideal_time: $scope.createComprehensionQuestionForm.ideal_time };
+                        $scope.createComprehensionQuestionForm = { user:$scope.createComprehensionQuestionForm.user, hash:$scope.createComprehensionQuestionForm.hash, comprehension:$scope.createComprehensionQuestionForm.comprehension, content:$scope.createComprehensionQuestionForm.content, explanation: $scope.createComprehensionQuestionForm.explanation, level: $scope.createComprehensionQuestionForm.level, answer_order:$scope.createComprehensionQuestionForm.answer_order, ideal_time: $scope.createComprehensionQuestionForm.ideal_time };
                     }
                     showAlert('alert-danger', "Unable to create the question. See below error.");
                     $scope.errors = response.data;
@@ -74,7 +79,7 @@ appmodule
                     $scope.progressbar.set(parseInt(100.0*event.loaded/event.total));
                 });
         }
-        ComprehensionFactory.getComprehension($stateParams.comprehensionId).get().$promise.then(
+        ComprehensionFactory.getComprehension(temp, $stateParams.comprehensionId).get().$promise.then(
             function(response){
                 $scope.comprehension = response;
             },
@@ -83,7 +88,7 @@ appmodule
             }
         );
 
-        $scope.createComprehensionQuestionForm = { comprehension:$stateParams.comprehensionId, content:"",explanation:"", level:"easy", answer_order:"random", ideal_time:7};
+        $scope.createComprehensionQuestionForm = { user:temp[0], hash:temp[1], comprehension:$stateParams.comprehensionId, content:"",explanation:"", level:"easy", answer_order:"random", ideal_time:7};
             $scope.insertBlank = function(){
                 $scope.createComprehensionQuestionForm.content += " <<Answer>> ";
             }
@@ -135,14 +140,17 @@ appmodule
                 $scope.figure = undefined;
                 $scope.isImageChanged = false;
             }
+            }catch(err){}
     }])
     .controller('ListComprehensionQuestionsController', ['$scope','$controller', '$stateParams', 'ComprehensionFactory', function($scope, $controller, $stateParams, ComprehensionFactory)  {
         $controller('CookiesController', {$scope : $scope});
+        try{
+        var temp = $scope._rest.split(',');
         $scope.curPage = 0;
         $scope.pageSize = 10;
         $scope.baseURLImage = baseURLImage;
 
-        ComprehensionFactory.getComprehension($stateParams.comprehensionId).get().$promise.then(
+        ComprehensionFactory.getComprehension(temp, $stateParams.comprehensionId).get().$promise.then(
             function(response){
                 $scope.comprehension = response;
             },
@@ -151,7 +159,7 @@ appmodule
             }
         );
         
-        ComprehensionFactory.getComprehensionQuestions($stateParams.comprehensionId).query(
+        ComprehensionFactory.getComprehensionQuestions(temp, $stateParams.comprehensionId).query(
         function(response){
             $scope.comprehensionQuestions = response.questions;
         },
@@ -168,7 +176,7 @@ appmodule
         }
 
         $scope.deleteComprehensionQuestion = function(comprehensionQuestionId){
-            ComprehensionFactory.deleteComprehensionQuestion(comprehensionQuestionId).delete().$promise.then(
+            ComprehensionFactory.deleteComprehensionQuestion(temp, comprehensionQuestionId).delete().$promise.then(
                 function(response){
                     var index = findIndexOfObjectInsideList($scope.comprehensionQuestions, response.deletedComprehensionQuestionsId);
                     $scope.comprehensionQuestions.splice(index, 1);
@@ -176,19 +184,22 @@ appmodule
                 },
                 function(response) {
                     showAlert('alert-danger', "Unable to delete the question. See below error.");
-                    $scope.errors = response.data;
+                    $scope.errors = response.data.errors;
                 });
         }
+        }catch(err){}
     }])
     .controller('UpdateComprehensionQuestionController', ['$scope','$controller', '$stateParams', 'ComprehensionFactory', 'Upload', 'ngProgressFactory', function($scope, $controller, $stateParams, ComprehensionFactory, Upload, ngProgressFactory)  {
         $controller('CookiesController', {$scope : $scope});
+        try{
+        var temp = $scope._rest.split(',');
 
-        ComprehensionFactory.getComprehensionQuestion($stateParams.comprehensionQuestionId).get()
+        ComprehensionFactory.getComprehensionQuestion(temp, $stateParams.comprehensionQuestionId).get()
             .$promise.then(
                 function(response){
                     $scope.figure = response.figure;
                     $scope.baseURLImage = baseURLImage;
-                    $scope.updateComprehensionQuestionForm = { comprehension: $stateParams.comprehensionId, content : response.content, level : response.level, explanation : response.explanation, ideal_time: response.ideal_time };
+                    $scope.updateComprehensionQuestionForm = { user:temp[0], hash:temp[1], comprehension: $stateParams.comprehensionId, content : response.content, level : response.level, explanation : response.explanation, ideal_time: response.ideal_time };
                 },
                 function(response) {
                     $scope.unableToGetQuestion = response.data.errors;
@@ -214,7 +225,7 @@ appmodule
                     $scope.progressbar.complete();
                     $scope.isImageChanged = false;
                     $scope.figure = response.data.figure;
-                    $scope.updateComprehensionQuestionForm = { comprehension: $stateParams.comprehensionId, figure: undefined, content : response.data.content, level : response.data.level, explanation : response.data.explanation, ideal_time: response.data.ideal_time };
+                    $scope.updateComprehensionQuestionForm = { user:temp[0], hash:temp[1], comprehension: $stateParams.comprehensionId, figure: undefined, content : response.data.content, level : response.data.level, explanation : response.data.explanation, ideal_time: response.data.ideal_time };
                     showAlert('alert-success', 'Your question has been updated.');
                 }, function (response) {
                     $scope.progressbar.complete();
@@ -229,9 +240,12 @@ appmodule
         $scope.putComprehensionQuestion = function() {
             upload("question/comprehension/operations/"+$stateParams.comprehensionQuestionId+"/", $scope.updateComprehensionQuestionForm);
         }
+        }catch(err){}
     }])
     .controller('UpdateComprehensionAnswersController', ['$scope','$controller', '$stateParams', 'ComprehensionFactory', function($scope, $controller, $stateParams, ComprehensionFactory)  {
         $controller('CookiesController', {$scope : $scope});
+        try{
+        var temp = $scope._rest.split(',');
 
         function modifyTheResult(){
             actualAnswerID = "";
@@ -245,7 +259,7 @@ appmodule
             $scope.updateComprehensionAnswersForm = {correctOption : actualAnswerID.toString(), optionsContent : optionsContent};
         }
 
-        ComprehensionFactory.getComprehensionAnswers($stateParams.comprehensionQuestionId).get()
+        ComprehensionFactory.getComprehensionAnswers(temp, $stateParams.comprehensionQuestionId).get()
             .$promise.then(
                 function(response){
                     $scope.answers = response;
@@ -257,7 +271,7 @@ appmodule
             );
 
         $scope.putComprehensionAnswers = function() {
-            ComprehensionFactory.updateComprehensionAnswers($stateParams.comprehensionQuestionId).update($scope.updateComprehensionAnswersForm).$promise.then(
+            ComprehensionFactory.updateComprehensionAnswers(temp, $stateParams.comprehensionQuestionId).update($scope.updateComprehensionAnswersForm).$promise.then(
                 function(response){
                     $scope.answers = response;
                     modifyTheResult();
@@ -268,4 +282,5 @@ appmodule
                     $scope.errors = response.data.errors;
                 });
         }
+        }catch(err){}
     }]);
