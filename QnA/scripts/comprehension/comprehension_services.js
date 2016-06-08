@@ -27,7 +27,6 @@ appmodule
         };
 
         this.getComprehensionQuestions = function(temp, comprehensionId){
-            console.log(temp, comprehensionId);
             return $resource(baseURL+"question/comprehension/get/questions/"+comprehensionId+"/", { hash:temp[1], user:temp[0] },
                 {
                     query: {
