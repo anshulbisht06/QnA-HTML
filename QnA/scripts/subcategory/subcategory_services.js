@@ -25,7 +25,7 @@ appmodule
 
         this.getQuestionUnderSubCategory = function(temp, subCategoryId, questionFormat){
             return $resource(baseURL+"quiz/questions/get/"+temp[0]+"/subcategory/"+subCategoryId+'/', 
-                { questionFormat: false, subCategoryId : subCategoryId, hash: temp[1] },
+                { questionFormat: questionFormat, subCategoryId : subCategoryId, hash: temp[1] },
             {
                 query: {
                 method : 'GET',

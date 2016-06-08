@@ -104,7 +104,7 @@ appmodule
                 $scope.finalStack = [];
                 var questions_level_info = [0, 0, 0, 0];
                 var level = [];
-                QuestionsFactory.getQuestionUnderSubCategory($scope._rest, subCategoryId, true).query(
+                QuestionsFactory.getQuestionUnderSubCategory($scope._rest, subCategoryId, false).query(
                     function(response) {
                         for(var key in response[0].questions_type_info){
                             questions_level_info[0] += response[0].questions_type_info[key][0];

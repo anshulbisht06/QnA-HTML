@@ -149,7 +149,6 @@ appmodule
         $scope.curPage = 0;
         $scope.pageSize = 10;
         $scope.baseURLImage = baseURLImage;
-
         ComprehensionFactory.getComprehension(temp, $stateParams.comprehensionId).get().$promise.then(
             function(response){
                 $scope.comprehension = response;

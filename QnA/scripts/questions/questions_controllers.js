@@ -82,7 +82,7 @@ appmodule
             $("#loader1").css('display', 'block');
             if(choice === 'subcategory'){
                 $scope.questionsLevelInfo = [0, 0, 0, 0];
-                SubCategoryFactory.getQuestionUnderSubCategory(temp, id, false).query(
+                SubCategoryFactory.getQuestionUnderSubCategory(temp, id, true).query(
                 function(response){
                     $scope.questions = response;
                     for(var key in response.questions_type_info){
