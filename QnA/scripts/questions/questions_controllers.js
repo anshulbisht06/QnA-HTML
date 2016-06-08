@@ -357,14 +357,14 @@ appmodule
             }
         };
 
-        function cleanQuestionForm(){
-            $scope.createObjectiveQuestionForm['explanation'] = '';
-            $scope.createObjectiveQuestionForm['ideal_time'] = '';
-            $scope.createObjectiveQuestionForm['content'] = '';
-            $scope.createObjectiveQuestionForm['correct'] = '';
-            $scope.figure = undefined;
-            $scope.isImageChanged = false;
-        }
+        // function cleanQuestionForm(){
+        //     $scope.createObjectiveQuestionForm['explanation'] = '';
+        //     $scope.createObjectiveQuestionForm['ideal_time'] = '';
+        //     $scope.createObjectiveQuestionForm['content'] = '';
+        //     $scope.createObjectiveQuestionForm['correct'] = '';
+        //     $scope.figure = undefined;
+        //     $scope.isImageChanged = false;
+        // }
         }catch(err){}
     }])
 
