@@ -8,36 +8,41 @@
     			<p class="black-text underline">{{comprehension.heading}}<span class="right label label-default">{{comprehension.sub_category}}</span></p>		
     		</div>
     		<div class="row">
+    		<br>
     			<div class="col-lg-1 col-md-1 col-sm-1">
     			</div>
-    			<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12"> 
-    				<p style="font-size: 15px;">{{comprehension.content}}</p>
+    			<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12" ng-class="{'hscroll-large': comprehension.content.length > 195}"> 
+    				<span class="light-maroon-text" katex-bind="comprehension.content" style="margin: auto;"></span>
     			</div>	
     		</div>
-			<div class="row question-image" ng-if="comprehension.figure">
+			<div class="row question-image text-center" ng-if="comprehension.figure">
 				<img ng-src="{{baseURLImage}}{{comprehension.figure}}" class="img-thumbnail" alt="Question Image is unavailable">
 			</div>
-	    </div><hr>    
+	    </div><hr>
 		<div class="row ">
 			<div class="col-lg-1 col-md-1 col-sm-1"></div>
 			<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
-			<div class="row text-center black-text">
+			<div class="row text-center black-text" ng-if="comprehensionQuestions.length != 0">
 				<p class="hidden-xs">List of all Comprehension Questions.</p>
 				<p class="visible-xs">List of all Comprehension Questions.</p>
+			</div>
+			<div class="row text-center black-text" ng-if="comprehensionQuestions.length === 0">
+				<p class="hidden-xs">No comprehension questions present.</p>
+				<p class="visible-xs">No comprehension questions present.</p>
 			</div>
 			<div class="row">
 				<div ng-include src="'views/alert_msg.html'"></div>
 			</div>
 				<div class="row" ng-if="!errors">
 					<ul class="list-group">
-						<li class="list-group-item light-blue-border" ng-if="!errors" ng-mouseenter="hoverOnQuestion(cq.id)" ng-mouseleave="hoverOutQuestion(cq.id)" ng-repeat="cq in comprehensionQuestions | pagination: curPage * pageSize | limitTo: pageSize">
+						<li class="list-group-item light-blue-border" ng-if="!errors && comprehensionQuestions.length!=0" ng-mouseenter="hoverOnQuestion(cq.id)" ng-mouseleave="hoverOutQuestion(cq.id)" ng-repeat="cq in comprehensionQuestions | pagination: curPage * pageSize | limitTo: pageSize">
 						  		<p>
 							  	<div class="row">
 								  	<div class="col-lg-1 col-md-1 col-sm-1">
 								  	</div>
 								  	<div class="col-lg-11 col-md-11 col-sm-11">
 									  	<div class="row">
-								  			<h5 class="left">Q<small>{{$index + pageSize*curPage + 1}}</small>.&nbsp;&nbsp;{{ cq.content | insertBlank }}</h5>
+								  			<h5 class="left">Q<small>{{$index + pageSize*curPage + 1}}</small>.&nbsp;&nbsp;<span katex-bind="cq.content"></span></h5>
 									  	</div>
 									  	<br>
 									  	<div class="row">
@@ -46,7 +51,7 @@
 									                <label class="btn btn-default" ng-class="{'active':option.correct}">
 										                {{$index + 1}}
 									                </label>
-								                	{{ option.content }}
+								                	<span katex-bind="option.content"></span>
 								                </div>
 							                </div>
 									  	</div>

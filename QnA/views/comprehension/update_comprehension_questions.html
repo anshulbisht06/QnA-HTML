@@ -24,15 +24,17 @@
 						<span class="glyphicon glyphicon-remove red-text" ng-if="isImageChanged" ng-click="removeImage()" style="cursor: pointer;"></span>
 					</div><br>
 				  <div class="form-group" ng-class="{'has-error': errors.content || comprehensionQuestionUpdateForm.content.$touched && comprehensionQuestionUpdateForm.content.$error.required }">
-				  	<div class="right"><button type="button" class="btn btn-md btn-danger" id="insertblankbutton" ng-click="insertBlank()">Insert Blank</button></div><br>
+			  	<div class="right"><button type="button" class="btn btn-md btn-danger" id="insertblankbutton" ng-click="insertBlank()">Insert Blank</button></div><br>
 				  	<label for="content">Enter the question content<span class="red-text">*</span></label>
 			    	<textarea name="content" id="content" rows="4" class="form-control" ng-model="updateComprehensionQuestionForm.content" required></textarea>
 			   		<span ng-if="errors.content" class="help-block">{{ errors.content[0] }}</span>
 			   		<span ng-if="comprehensionQuestionUpdateForm.content.$touched && comprehensionQuestionUpdateForm.content.$error.required" class="help-block">Question content is required.</span>
+			   		<span>Preview</span> <pre katex-bind="updateComprehensionQuestionForm.content"></pre>
 				  </div><br>
 				  <div class="form-group">
 				  	<label for="explanation">Enter the explanation of question</label>
 			    	<textarea name="explanation" id="explanation" rows="4" class="form-control" ng-model="updateComprehensionQuestionForm.explanation"></textarea>
+			    	<span>Preview</span> <pre katex-bind="updateComprehensionQuestionForm.explanation"></pre>
 				  </div><br>
 				  <div class="form-group">
 				  	<label for="level">Level of Question</label>

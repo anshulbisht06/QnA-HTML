@@ -7,12 +7,12 @@
     		<div class="text-center row">
     			<p class="black-text"><span class="underline">{{comprehension.heading}}</span><span class="label label-info right">{{comprehension.sub_category}}</span></p>	
     		</div>
-    		<div class="col-md-12">
+    		<div class="col-md-12"><br>
     			<div class="col-md-4 col-lg-3 col-sm-4 col-xs-12" ng-if="comprehension.figure">
 					<img ng-src="{{baseURLImage}}{{comprehension.figure}}" class="img-thumbnail" alt="Question Image is unavailable">
 				</div>
-    			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12"> 
-    				<i style="font-size: 18px;">{{comprehension.content}}</i>
+    			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12" ng-class="{'hscroll-large': comprehension.content.length > 195}"> 
+    				<span class="light-maroon-text" katex-bind="comprehension.content"></span>
     			</div>	
     		</div>
     	</div><hr>
@@ -43,10 +43,12 @@
 			    	<textarea name="content" id="content" rows="4" class="form-control" ng-model="createComprehensionQuestionForm.content" required></textarea>
 			   		<span ng-if="errors.content" class="help-block">{{ errors.content[0] }}</span>
 			   		<span ng-if="comprehensionQuestionCreateForm.content.$touched && comprehensionQuestionCreateForm.content.$error.required" class="help-block">Question content is required.</span>
+			   		<span>Preview</span> <pre katex-bind="createComprehensionQuestionForm.content"></pre>
 				  </div><br>
 				  <div class="form-group">
 				  	<label for="explanation">Enter the explanation of question</label>
 			    	<textarea name="explanation" id="explanation" rows="4" class="form-control" ng-model="createComprehensionQuestionForm.explanation"></textarea>
+			    	<span>Preview</span> <pre katex-bind="createComprehensionQuestionForm.explanation"></pre>
 				  </div><br>
 				  <div class="form-group">
 				  	<label for="level">Level of Question</label>
@@ -68,14 +70,17 @@
 				   		</div>
 				  		<div ng-repeat="option in optionss">
 				  			<div class="row">
-				  				<div class="col-md-2">
+				  				<div class="col-md-1">
 				  					<input type="radio" name="correctoption" size="100" ng-model="createComprehensionQuestionForm.correctoption" value="{{option.optionid}}">
 				  				</div>
-				  				<div class="col-md-6">
+				  				<div class="col-md-5">
 					    			<textarea cols="80" rows="3" name="optioncontent-{{option.optionid}}" class="form-control" ng-model="createComprehensionQuestionForm.optioncontent[option.optionid]" placeholder="Content for option - {{$index+1}}" required>{{ option.content }}</textarea><hr>
 				  				</div>
-				  				<div class="col-md-3">
-				  					<h3><a href="javascript:void"><span class="glyphicon glyphicon-remove-sign" ng-if='option.optionid > 2' ng-click="removeOption(option.optionid)"></span></a></h3>
+				  				<div class="col-md-5">
+				  					<span>Preview</span> <pre katex-bind="createComprehensionQuestionForm.optioncontent[option.optionid]"></pre>
+				  				</div>
+				  				<div class="col-md-1">
+				  					<h3><a href="javascript:void"><span class="glyphicon glyphicon-remove-sign" ng-if='option.optionid > 4' ng-click="removeOption(option.optionid)"></span></a></h3>
 				  				</div>
 				  			</div>
 					  </div>

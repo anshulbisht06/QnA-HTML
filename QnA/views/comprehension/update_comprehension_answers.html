@@ -3,16 +3,17 @@
 <div class="jumbotron">
     <div class="row">
     </div>
-    <div class="row">
+    <div class="row" ng-if="!unableToGetAnswers">
 	    <div class="row">
 			<h2 class="text-center hidden-xs">Update answers.</h2>
 			<h4 class="text-center visible-xs">Update answers.</h4>
+		</div><hr>
+		<div class="row" ng-class="{'hscroll-large': answers.content.length > 195}">
+			<h5>Q.&nbsp;<span katex-bind="answers.content"></span></h5>
 		</div>
-		<div class="row" ng-if="!unableToGetAnswers">
+		<div class="row">
 			<div class="col-lg-2 col-md-2 col-sm-2"></div>
 			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-				<hr>
-				<h4>Q.&nbsp;{{ answers.content | insertBlank }}</h4>
 				<hr>
 				<form role="form" name="comprehensionAnswersUpdateForm" ng-submit="putComprehensionAnswers()" novalidate>
 					<div class="form-group">
@@ -22,10 +23,13 @@
 								  <label><input value="{{ option.id }}" type="radio" ng-model="updateComprehensionAnswersForm.correctOption" name="correctoption"></label>
 								</div>
 			  				</div>
-			  				<div class="col-md-6">
+			  				<div class="col-md-5">
 				  				<textarea cols="80" rows="3" name="optioncontent" class="form-control" placeholder="Content for option - {{$index}}" ng-model="updateComprehensionAnswersForm.optionsContent[option.id]" required>{{ option.content }}</textarea>
 					    		<hr>
 			  				</div>
+			  				<div class="col-md-5">
+		  						<span>Preview</span> <pre katex-bind="updateComprehensionAnswersForm.optionsContent[option.id]"></pre>
+		  					</div>
 					  	</div>
 					</div>
 				  	<div class="form-group">
@@ -35,12 +39,12 @@
 				<div class="col-lg-2 col-md-2 col-sm-2"></div>
 			</div>
 		</div>
-		<div class="row text-center red-text" ng-if="unableToGetAnswers">
-			<h3>{{unableToGetAnswers}}</h3>
-		</div>
-		<div class="row text-center red-text" ng-if="errors">
-			<h3>{{errors}}</h3>
-		</div>
+	</div>
+	<div class="row text-center red-text" ng-if="unableToGetAnswers">
+		<h3>{{unableToGetAnswers}}</h3>
+	</div>
+	<div class="row text-center red-text" ng-if="errors">
+		<h3>{{errors}}</h3>
 	</div>
 </div>
 </div>

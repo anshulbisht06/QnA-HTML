@@ -116,20 +116,18 @@ appmodule
                 .success(function (data, status, headers, config) {
                     $scope.postDataResponse = data;
                     var expireDate = new Date();
-
+                    expireDate.setDate(expireDate.getDate() + 1);
                     if($scope.remember){
-                        expireDate.setDate(expireDate.getDate() + 1);
+                        expireDate.setDate(expireDate.getDate() + 6);
                     }
 
-                    options={
-                        path : '/',
-                        secure: true,
+                    var options={
                         expires: expireDate
                     };
 
-                    $cookies.put('token', data.token);
-                    $cookies.put('username', data.username);
-                    $cookies.put('_rest', data._rest);
+                    $cookies.put('token', data.token, options);
+                    $cookies.put('username', data.username, options);
+                    $cookies.put('_rest', data._rest, options);
 
                     $scope.isFormInvalid = false;
                     $state.go('app.all-quiz');

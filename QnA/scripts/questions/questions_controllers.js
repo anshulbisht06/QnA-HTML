@@ -298,8 +298,16 @@ appmodule
                     optionid : 2,
                     content : '',
                 },
+                {
+                    optionid : 3,
+                    content : '',
+                },
+                {
+                    optionid : 4,
+                    content : '',
+                },
                 ];
-            $scope.optionCount = 3;
+            $scope.optionCount = 5;
             $scope.addOptions = function(){
                 $scope.optionss.push({                 
                                     optionid : $scope.optionCount,
@@ -308,7 +316,7 @@ appmodule
                 $scope.optionCount = $scope.optionCount + 1;
             }
             $scope.removeOption = function(op_id){
-                if(op_id > 2){
+                if(op_id > 4){
                     $scope.optionss = $scope.optionss.filter(function(el) { return el.optionid != op_id; });
                 }
             }
@@ -395,6 +403,9 @@ appmodule
         $scope.removeImage = function(){
             $scope.isImageChanged = false;
             $scope.updateQuestionForm.figure = undefined;
+        }
+        $scope.insertBlank = function(){
+            $scope.updateQuestionForm.content += " <<Answer>> ";
         }
 
         $scope.putQuestion = function() {

@@ -100,15 +100,21 @@ appmodule
                 {
                     optionid : 1,
                     content : '',
-                    correct : true
                 },
                 {
                     optionid : 2,
                     content : '',
-                    correct : false
+                },
+                {
+                    optionid : 3,
+                    content : '',
+                },
+                {
+                    optionid : 4,
+                    content : '',
                 },
                 ];
-            $scope.optionCount = 3;
+            $scope.optionCount = 5;
             $scope.addOptions = function(){
                 $scope.optionss.push({                 
                                     optionid : $scope.optionCount,
@@ -117,7 +123,7 @@ appmodule
                 $scope.optionCount = $scope.optionCount + 1;
             }
             $scope.removeOption = function(op_id){
-                if(op_id > 2){
+                if(op_id > 4){
                     var all = $scope.optionss;
                     $scope.optionss = all.filter(function(el) { return el.optionid != op_id; });
                 }
@@ -205,6 +211,10 @@ appmodule
                 }
             );
 
+        $scope.insertBlank = function(){
+            $scope.updateComprehensionQuestionForm.content += " <<Answer>> ";
+        }
+        
         $scope.changeImage = function(){
             $scope.isImageChanged = true;
         }
@@ -247,8 +257,8 @@ appmodule
         var temp = $scope._rest.split(',');
 
         function modifyTheResult(){
-            actualAnswerID = "";
-            optionsContent = {};
+            var actualAnswerID = "";
+            var optionsContent = {};
             for(var i=0;i<$scope.answers.options.length;i++){
                 if($scope.answers.options[i].correct){
                     actualAnswerID = $scope.answers.options[i].id;
@@ -265,6 +275,7 @@ appmodule
                     modifyTheResult();                    
                 },
                 function(response) {
+                    console.log(response.data.errors);
                     $scope.unableToGetAnswers = response.data.errors;
                 }
             );

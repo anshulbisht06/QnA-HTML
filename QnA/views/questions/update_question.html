@@ -24,10 +24,12 @@
 					<span class="glyphicon glyphicon-remove red-text" ng-if="isImageChanged" ng-click="removeImage()" style="cursor: pointer;"></span>
 				</div><br>
 				  <div ng-if="que_type==='mcq'" class="form-group" ng-class="{'has-error': errors.content || questionUpdateForm.content.$touched && questionUpdateForm.content.$error.required }">
+				  	<div class="right"><button type="button" class="btn btn-md btn-danger" id="insertblankbutton" ng-click="insertBlank()">Insert Blank</button></div><br>
 				  	<label for="content">Enter the question content</label>
 			    	<textarea name="content" id="content" rows="4" class="form-control" ng-model="updateQuestionForm.content" required></textarea>
 			   		<span ng-if="errors.content" class="help-block">{{ errors.content[0] }}</span>
 			   		<span ng-if="questionUpdateForm.content.$touched && questionUpdateForm.content.$error.required" class="help-block">Question content is required.</span>
+			   		<span>Preview</span> <pre katex-bind="updateQuestionForm.content"></pre>
 				  </div>
 				  <div ng-if="que_type==='objective'" class="form-group" ng-class="{'has-error': errors.content[0] }">
 				  	<div class="form-group" ng-class="{'has-error': errors.content[0] || questionUpdateForm.content.$touched && questionUpdateForm.content.$error.required }">
@@ -43,6 +45,7 @@
 			    	<textarea name="content" id="content" rows="8" class="form-control" ng-model="updateQuestionForm.content" required></textarea>
 			   		<span ng-if="errors.content" class="help-block">{{ errors.content[0] }}</span>
 			   		<span ng-if="questionUpdateForm.content.$touched && questionUpdateForm.content.$error.required" class="help-block">Question content is required.</span>
+			   		<span>Preview</span> <pre katex-bind="updateQuestionForm.content"></pre>
 				  </div>
 				  <div ng-if="que_type==='comprehension'" class="form-group" ng-class="{'has-error': errors.heading || questionUpdateForm.heading.$touched && questionUpdateForm.heading.$error.required }">
 				  	<label for="heading">Enter the comprehension heading</label>
@@ -54,6 +57,7 @@
 				  <div class="form-group">
 				  	<label for="explanation">Enter the explanation of question</label>
 			    	<textarea name="explanation" id="explanation" rows="4" class="form-control" ng-model="updateQuestionForm.explanation"></textarea>
+			    	<span>Preview</span> <pre katex-bind="updateQuestionForm.explanation"></pre>
 				  </div><br>
 				  <div class="form-group">
 				  	<label for="level">Level of Question</label>

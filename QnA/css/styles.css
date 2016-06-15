@@ -95,6 +95,9 @@ ul.sidemenu > li{
     color:#000;
     border-radius:0;
 }
+.nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover{
+	border-radius: 0 !important;
+}
 .removefromstackbutton{
 	font-size: 20px;
 	color:red;
@@ -129,6 +132,9 @@ ul.sidemenu > li{
 }
 .blue-text{
 	color: blue;
+}
+.light-maroon-text{
+	color: #b46868;
 }
 .next-step-arrow{
 	position: relative;
@@ -165,4 +171,16 @@ ul.sidemenu > li{
 	font-size: 24px;
 	color: black;
 	cursor: pointer;
+}
+.borderless{
+	border: 0;
+}
+/*.katex { font-size: 1em !important; }*/
+.hscroll{
+	overflow-x: scroll;
+	width: 90%;
+}
+.hscroll-large{
+	overflow-x: scroll;
+	width: 95%;
 }

@@ -8,8 +8,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>QnA</title>
-    <!-- build:css styles/main.css  -->
+    <!-- build:js styles/thirdparty.css  -->
+    <link rel="stylesheet" href="css/katex.min.css">
     <link href="css/bootstrap.css" rel="stylesheet">
+    <!-- endbuild -->
+    <!-- build:css styles/main.css  -->
     <link href="css/styles.css" rel="stylesheet">
     <link rel="stylesheet" href="css/ngProgress.css">
     <!-- endbuild -->
@@ -19,7 +22,7 @@
   <div ui-view="header"></div>
 </header>
 <main>
-    <div id='connectionLostModal' style="text-align: center;display: none;">
+    <div id='connectionLostModal' class="text-center" style="display: none;">
         <p class="col-md-offset-3 col-md-6" style="background-color: #f9edbe;"> 
             Not connected. Connecting in <span id="time">10</span> seconds…<button onclick="ping_fn(0)">Try Now</button>
         </p> 
@@ -30,17 +33,40 @@
 <footer>
   <div ui-view="footer"></div>
 </footer>
-  <!-- build:js scripts/main.js  -->
-    <!-- <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script> -->
+    <script type="text/x-mathjax-config">
+   <!--  MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true,
+        },
+        "HTML-CSS": {
+          linebreaks: { automatic: true, width: "container" },
+          availableFonts: ["TeX"]        
+        },
+        MMLorHTML: {prefer: "HTML"}
+
+    });
+    MathJax.Hub.Register.StartupHook("HTML-CSS Jax Ready",function () {
+      var VARIANT = MathJax.OutputJax["HTML-CSS"].FONTDATA.VARIANT;
+      VARIANT["normal"].fonts.unshift("MathJax_SansSerif");
+      VARIANT["bold"].fonts.unshift("MathJax_SansSerif-bold");
+      VARIANT["italic"].fonts.unshift("MathJax_SansSerif-italic");
+      VARIANT["-tex-mathit"].fonts.unshift("MathJax_SansSerif-italic");
+    }); -->
+    </script>
+    <!-- build:js scripts/thirdparty.js  -->
     <script src="js/jquery.js"></script>
-    <script src="js/bootstrap.js"></script>  
-    <script src="scripts/check_connection.js"></script>    
-    <script src="js/angular.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/angular.js"></script> 
     <script src="js/angular-ui-router.js"></script>
     <script src="js/angular-resource.js"></script>
     <script src="js/angular-cookies.js"></script>
     <script src="js/angular-file-upload.js"></script>
     <script src="js/ngprogress.min.js"></script>
+    <script src="js/katex.min.js"></script>
+    <!-- endbuild -->
+    <!-- build:js scripts/main.js  -->
+    <script src="scripts/check_connection.js"></script>
     <script src="scripts/settings.js"></script>
     <script src="scripts/interceptors.js"></script>
     <script src="scripts/app.js"></script>

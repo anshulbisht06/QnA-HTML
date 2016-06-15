@@ -14,7 +14,7 @@
 				<hr>
 				<h4 class="left">Category : <span class="label label-default">{{ answers.category }}</span></h4>
 				<h4 class="right">SubCategory : <span class="label label-default">{{ answers.sub_category_name }}</span></h4><br><br><br><br>
-				<h4>Q.&nbsp;{{ answers.content | insertBlank }}</h4>
+				<h5>Q.&nbsp;<span katex-bind="answers.content"></span></h5>
 				<hr>
 			<form role="form" name="answersUpdateForm" ng-submit="putAnswers()" novalidate>
 				<div class="form-group">
@@ -24,9 +24,12 @@
 							  <label><input value="{{ option.id }}" type="radio" ng-model="updateAnswersForm.correctOption" name="correctoption"></label>
 							</div>
 		  				</div>
-		  				<div class="col-md-6">
-		  				<textarea cols="80" rows="3" name="optioncontent" class="form-control" placeholder="Content for option - {{$index}}" ng-model="updateAnswersForm.optionsContent[option.id]" required>{{ option.content }}</textarea>
+		  				<div class="col-md-5">
+		  					<textarea cols="80" rows="3" name="optioncontent" class="form-control" placeholder="Content for option - {{$index}}" ng-model="updateAnswersForm.optionsContent[option.id]" required>{{ option.content }}</textarea>
 			    			<!-- <textarea cols="80" rows="3" name="optioncontent-{{option.optionid}}" id="optioncontent-{{option.optionid}}" class="form-control" ng-model="updateAnswersForm.optioncontent[option.optionid]" placeholder="Content for option - {{$index}}" required>{{ option.content }}</textarea><hr> -->
+		  				</div>
+		  				<div class="col-md-5">
+		  					<span>Preview</span> <pre katex-bind="updateAnswersForm.optionsContent[option.id]"></pre>
 		  				</div>
 				  	</div>
 				  	<div ng-if="que_type==='objective'">
