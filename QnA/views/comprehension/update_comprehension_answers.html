@@ -1,5 +1,5 @@
 <div class="container-fluid">
-<div ng-include src="'views/alert_msg.html'"></div>
+<div ng-include=" 'views/alert_msg.html' "></div>
 <div class="jumbotron">
     <div class="row">
     </div>
@@ -9,7 +9,10 @@
 			<h4 class="text-center visible-xs">Update answers.</h4>
 		</div><hr>
 		<div class="row" ng-class="{'hscroll-large': answers.content.length > 195}">
-			<h5>Q.&nbsp;<span katex-bind="answers.content"></span></h5>
+			<h5>Q.&nbsp;
+				<!-- <span katex-bind="answers.content"></span> -->
+				<span ng-bind-html="answers.content | unsafe"></span>
+			</h5>
 		</div>
 		<div class="row">
 			<div class="col-lg-2 col-md-2 col-sm-2"></div>
@@ -28,7 +31,9 @@
 					    		<hr>
 			  				</div>
 			  				<div class="col-md-5">
-		  						<span>Preview</span> <pre katex-bind="updateComprehensionAnswersForm.optionsContent[option.id]"></pre>
+				   				<h5 class="italic">Preview</h5>
+				   				<!-- <span katex-bind="updateComprehensionAnswersForm.optionsContent[option.id]"></span> -->
+				   				<span ng-bind-html="updateComprehensionAnswersForm.optionsContent[option.id] | unsafe"></span>
 		  					</div>
 					  	</div>
 					</div>

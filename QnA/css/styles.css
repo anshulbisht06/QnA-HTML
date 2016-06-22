@@ -184,3 +184,9 @@ ul.sidemenu > li{
 	overflow-x: scroll;
 	width: 95%;
 }
+.italic{
+	font-style: italic;
+}
+.preview-text{
+	/*border: 2px solid blue;*/
+}

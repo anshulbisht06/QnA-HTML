@@ -262,7 +262,7 @@ appmodule
                     cleanQuestionForm();
                 }, function (response) {
                     if($scope.createMCQQuestionForm!=undefined){
-                        $scope.createMCQQuestionForm = { correctoption: undefined, content: $scope.createMCQQuestionForm.content, explanation: $scope.createMCQQuestionForm.explanation, level: $scope.createMCQQuestionForm.level, answer_order: $scope.createMCQQuestionForm.answer_order, sub_category: $scope.createMCQQuestionForm.sub_category, que_type:"mcq", ideal_time: $scope.createMCQQuestionForm.ideal_time, user:$scope.createMCQQuestionForm.user, hash:$scope.createMCQQuestionForm.hash };
+                        $scope.createMCQQuestionForm = { correctoption: undefined, content: $scope.createMCQQuestionForm.content, explanation: $scope.createMCQQuestionForm.explanation, level: $scope.createMCQQuestionForm.level, answer_order: $scope.createMCQQuestionForm.answer_order, sub_category: $scope.createMCQQuestionForm.sub_category, que_type:"mcq", ideal_time: $scope.createMCQQuestionForm.ideal_time, problem_type: $scope.createMCQQuestionForm.problem_type, user:$scope.createMCQQuestionForm.user, hash:$scope.createMCQQuestionForm.hash };
                     }
                     $scope.progressbar.complete();
                     showAlert('alert-danger', 'Problem in creating question. See below errors.');
@@ -281,9 +281,9 @@ appmodule
 
         if($state.current.name === "app.create-mcq-question")
         {
-            $scope.createMCQQuestionForm = { user:temp[0], content:"", explanation:"", level:"easy", answer_order:"random", sub_category:"", que_type:"mcq", ideal_time:7, hash: temp[1]};
+            $scope.createMCQQuestionForm = { user:temp[0], content:"", explanation:"", level:"easy", answer_order:"random", sub_category:"", que_type:"mcq", ideal_time:7, problem_type:"correct value" , hash: temp[1]};
             $scope.insertBlank = function(){
-                $scope.createMCQQuestionForm.content += " <<Answer>> ";
+                $scope.createMCQQuestionForm.content += " __________ ";
             }
             $scope.postMCQQuestion = function() {
                 upload("question/mcq/create/", $scope.createMCQQuestionForm, $scope.figure);
@@ -337,7 +337,7 @@ appmodule
                 upload("question/objective/create/", $scope.createObjectiveQuestionForm, $scope.figure);
             }
             $scope.insertBlank = function(){
-                $scope.createObjectiveQuestionForm.content += " <<Answer>> ";
+                $scope.createObjectiveQuestionForm.content += " __________ ";
             }
         }
 
@@ -386,9 +386,9 @@ appmodule
                 function(response){
                     $scope.question = response.question;
                     $scope.baseURLImage = baseURLImage;
-                    $scope.updateQuestionForm = {hash:temp[1], figure:response.figure, content : $scope.question.content, level : $scope.question.level, explanation : $scope.question.explanation, que_type : $scope.question.que_type, ideal_time: $scope.question.ideal_time, sub_category: $scope.question.sub_category };
+                    $scope.updateQuestionForm = {hash:temp[1], figure:response.figure, content : $scope.question.content, level : $scope.question.level, explanation : $scope.question.explanation, que_type : $scope.question.que_type, ideal_time: $scope.question.ideal_time, problem_type: $scope.question.problem_type, sub_category: $scope.question.sub_category };
                     if($scope.que_type==='objective')
-                        $scope.updateQuestionForm.content = $scope.question.content.replace(/<>/g,'<<Answer>>');
+                        $scope.updateQuestionForm.content = $scope.question.content.replace(/<>/g,'__________');
                     else if($scope.que_type==='comprehension')
                         $scope.updateQuestionForm['heading'] = $scope.question.heading;
                 },
@@ -405,7 +405,7 @@ appmodule
             $scope.updateQuestionForm.figure = undefined;
         }
         $scope.insertBlank = function(){
-            $scope.updateQuestionForm.content += " <<Answer>> ";
+            $scope.updateQuestionForm.content += " __________ ";
         }
 
         $scope.putQuestion = function() {
@@ -423,7 +423,7 @@ appmodule
                     $scope.progressbar.complete();
                     $scope.isImageChanged = false;
                     $scope.question.figure = response.data.figure;
-                    $scope.updateQuestionForm = {hash: temp[1], figure: undefined, heading: response.data.heading, content : response.data.content, level : response.data.level, explanation : response.data.explanation, ideal_time: response.data.ideal_time };
+                    $scope.updateQuestionForm = {hash: temp[1], figure: undefined, heading: response.data.heading, content : response.data.content, level : response.data.level, explanation : response.data.explanation, ideal_time: response.data.ideal_time, problem_type: response.data.problem_type };
                     showAlert('alert-success', 'Your question has been updated.');
                 }, function (response) {
                     $scope.progressbar.complete();

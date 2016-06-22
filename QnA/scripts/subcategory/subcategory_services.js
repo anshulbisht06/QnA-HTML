@@ -17,6 +17,7 @@ appmodule
                     query: {
                     method : 'GET',
                     isArray : true,
+                    // cache : true,
                     }
                 },
                 { stripTrailingSlashes: false }

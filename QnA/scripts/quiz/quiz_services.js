@@ -16,6 +16,7 @@ appmodule
                         // headers: {'Authorization': 'JWT ' + token},
                         method : 'GET',
                         isArray : true,
+                        // cache : true,
                         }
                     }                                                                                                                                                                                                                                                                                                                                                                                                             ,
                     { stripTrailingSlashes: false }
@@ -28,6 +29,7 @@ appmodule
                         // headers: {'Authorization': 'JWT ' + token},
                         method : 'GET',
                         isArray : false,
+                        // cache : true,
                         }
                     },
                     { stripTrailingSlashes: false }

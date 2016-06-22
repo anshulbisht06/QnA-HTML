@@ -1,5 +1,5 @@
 <div class="container-fluid">
-<div ng-include src="'views/alert_msg.html'"></div>
+<div ng-include=" 'views/alert_msg.html' "></div>
 <div class="jumbotron">
     <div class="row">
     </div>
@@ -29,12 +29,20 @@
 			    	<textarea name="content" id="content" rows="4" class="form-control" ng-model="updateComprehensionQuestionForm.content" required></textarea>
 			   		<span ng-if="errors.content" class="help-block">{{ errors.content[0] }}</span>
 			   		<span ng-if="comprehensionQuestionUpdateForm.content.$touched && comprehensionQuestionUpdateForm.content.$error.required" class="help-block">Question content is required.</span>
-			   		<span>Preview</span> <pre katex-bind="updateComprehensionQuestionForm.content"></pre>
+			   		<div class="form-group">
+		   				<h5 class="italic">Preview</h5>
+		   				<!-- <span katex-bind="updateComprehensionQuestionForm.content"></span> -->
+		   				<span ng-bind-html="updateComprehensionQuestionForm.content | unsafe"></span>
+		   			</div>
 				  </div><br>
 				  <div class="form-group">
 				  	<label for="explanation">Enter the explanation of question</label>
 			    	<textarea name="explanation" id="explanation" rows="4" class="form-control" ng-model="updateComprehensionQuestionForm.explanation"></textarea>
-			    	<span>Preview</span> <pre katex-bind="updateComprehensionQuestionForm.explanation"></pre>
+			    	<div class="form-group">
+		   				<h5 class="italic">Preview</h5>
+		   				<!-- <span katex-bind="updateComprehensionQuestionForm.explanation"></span> -->
+		   				<span ng-bind-html="updateComprehensionQuestionForm.explanation | unsafe"></span>
+		   			</div>
 				  </div><br>
 				  <div class="form-group">
 				  	<label for="level">Level of Question</label>
@@ -50,7 +58,7 @@
 				  	<span ng-if="errors.ideal_time" class="help-block">{{ errors.ideal_time[0] }}</span>
 				  </div><br>
 				  <br>
-				  <button type="submit" class="btn btn-primary btn-block" ng-disabled="comprehensionQuestionUpdateForm.$invalid">Create Question</button>
+				  <button type="submit" class="btn btn-primary btn-block" ng-disabled="comprehensionQuestionUpdateForm.$invalid">Update Question</button>
 				</form>
 			</div>
 		</div>

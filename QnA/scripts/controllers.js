@@ -1,7 +1,7 @@
 /* global $ */
 
-
-appmodule.run(function($rootScope, ngProgressFactory, $cookies){
+// This run() is called on every refresh.
+appmodule.run(function($rootScope, ngProgressFactory, $cookies, $templateCache){
     $rootScope
     .$on('$stateChangeStart', 
         function(event, toState, toParams, fromState, fromParams){ 
@@ -23,6 +23,7 @@ appmodule.run(function($rootScope, ngProgressFactory, $cookies){
     // $rootScope.$on('$viewContentLoading', 
     //     function(event, viewConfig){ 
     // });
+    $templateCache.put('views/alert_msg.html', '<div class="alert text-center bold-text" id="notification" style="display: none;"><p id="alertMsg"></strong></div>');
 });
 
 appmodule
@@ -36,7 +37,7 @@ appmodule
                 $cookies.remove('username');
                 $cookies.remove('_rest'); 
                 $state.go('app.login-user');
-            }
+        }
         }catch(err){}
     }])
 

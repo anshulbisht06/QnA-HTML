@@ -20,6 +20,7 @@ appmodule
                     query: {
                         method : 'GET',
                         isArray : true,
+                        // cache : true,
                     }
                 }                                                                                                                                                                                                                                                                                                                                                                                                             ,
                 { stripTrailingSlashes: false }
@@ -32,6 +33,7 @@ appmodule
                     query: {
                         method : 'GET',
                         isArray : false,
+                        // cache : true,
                     }
                 }                                                                                                                                                                                                                                                                                                                                                                                                             ,
                 { stripTrailingSlashes: false }
@@ -54,6 +56,7 @@ appmodule
                     query: {
                         method : 'GET',
                         isArray : true,
+                        // cache : true,
                     }
                 }                                                                                                                                                                                                                                                                                                                                                                                                             ,
                 { stripTrailingSlashes: false }
@@ -66,6 +69,7 @@ appmodule
                 get: {
                     method : 'GET',
                     isArray : false,
+                    // cache : true,
                 }
             },
             { stripTrailingSlashes: false }

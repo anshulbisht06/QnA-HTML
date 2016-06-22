@@ -20,8 +20,8 @@ appmodule.directive("katexBind", function() {
             $scope.$watch($attrs.katexBind, function(value) {
                 try{
                     if(value){
-                        if(value!=undefined && value.indexOf("<<Answer>>")!=-1){
-                            value.replace(/<<Answer>>/g, "____________");
+                        if(value!=undefined && value.indexOf("**")!=-1){
+                            value.replace(/\*\*/g, "<br>");
                         }
                         katex.render(value, $element[0]);
                     }

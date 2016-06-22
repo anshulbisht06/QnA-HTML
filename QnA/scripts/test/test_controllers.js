@@ -16,6 +16,7 @@ appmodule
             }else if(response){
                 $scope.total_questions = makeArray(response.questions.length);
                 var questions = response.questions;
+                console.log(questions);
                 for(var i=0;i<questions.length;i++){
                     var q = questions[i][i+1];
                     $scope.answersModel[q.id] = { value:null };
@@ -111,11 +112,13 @@ appmodule
                 $scope.currentQuestion = TestPreviewFactory.getAQuestion($scope.selectedSection, count);
                 if($scope.currentQuestion.que_type === qTypes[0]){
                     $scope.currentOptions = $scope.currentQuestion.options;
+                    $scope.instruction = setInstruction($scope.currentQuestion.problem_type);
                 }else if(($scope.currentQuestion.que_type === qTypes[1])){
                     $scope.currentOptions = [];
                 }else{
                     $scope.isComprehension = true;
                     comprehensionQuestions = $scope.currentQuestion.comprehension_questions;
+                    $scope.instruction = 'Read the given passage and answer the questions that follow:';
                     $scope.comprehensionQuestionsLimit = comprehensionQuestions.length - 1;
                     $scope.changeComprehensionQuestion(0);
                 }
@@ -141,6 +144,7 @@ appmodule
             }else{
                 if($scope.progressValuesModel[$scope.currentQuestion.id].status === progressTypes[0]){
                 $scope.progressValuesModel[$scope.currentQuestion.id].status = progressTypes[2];
+                console.log('ffff');
                 }
             }
         }
@@ -149,24 +153,22 @@ appmodule
            return $scope.answersModel;
          },                       
           function(newVal, oldVal) {
-            try{ 
-                if($scope.currentCount > 1 || ($scope.currentCount > 1 && $scope.currentQuestion.que_type === qTypes[0])){
-                    if($scope.progressValuesModel[$scope.currentQuestion.id].status === progressTypes[1]){
-                        $scope.progressValuesModel[$scope.currentQuestion.id].status = progressTypes[0];
+            if(newVal!=oldVal && $scope.currentQuestion.que_type === qTypes[0]){
+                try{ 
+                    if($scope.currentCount > 1 || ($scope.currentCount > 1)){
+                        if($scope.progressValuesModel[$scope.currentQuestion.id].status === progressTypes[1]){
+                            $scope.progressValuesModel[$scope.currentQuestion.id].status = progressTypes[0];
+                        }
+                        else if($scope.progressValuesModel[$scope.currentQuestion.id].status === progressTypes[0]){
+                            $scope.progressValuesModel[$scope.currentQuestion.id].status = progressTypes[2];
+                        }
+                    }else if($scope.currentCount === 1){
+                        markFirstQuestionVisited();
                     }
-                    else if($scope.progressValuesModel[$scope.currentQuestion.id].status === progressTypes[0]){
-                        $scope.progressValuesModel[$scope.currentQuestion.id].status = progressTypes[2];
-                    }
-                }else if($scope.currentCount === 1){
-                    // if($scope.currentQuestion.que_type === qTypes[1]){
-                    // }
-                    // else if($scope.currentQuestion.que_type === qTypes[0]){
-                    // }
-                    markFirstQuestionVisited();
-                }
-                $scope.progressValues = changeProgressValues($scope.progressValuesModel);
-                TestPreviewFactory.saveProgressValues($scope.selectedSection, $scope.progressValuesModel);
-            }catch(err){}
+                    $scope.progressValues = changeProgressValues($scope.progressValuesModel);
+                    // TestPreviewFactory.saveProgressValues($scope.selectedSection, $scope.progressValuesModel);
+                }catch(err){}
+            }
         }, true);
 
         // Watch for a change in comprehensionAnswersModel
@@ -175,7 +177,10 @@ appmodule
          },                       
           function(newVal, oldVal) {
             try{ 
-                console.log(newVal, oldVal);
+                if(newVal!=oldVal && $scope.currentQuestion.que_type === qTypes[2]){
+                    markFirstQuestionVisited();
+                    $scope.progressValues = changeProgressValues($scope.progressValuesModel);
+                }
             }catch(err){}
         }, true);
 

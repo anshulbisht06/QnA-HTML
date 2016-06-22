@@ -1,5 +1,5 @@
 <div class="container-fluid">
-<div ng-include src="'views/alert_msg.html'"></div>
+<div ng-include=" 'views/alert_msg.html' "></div>
 <div class="jumbotron">
     <div class="row">
     </div>
@@ -42,12 +42,20 @@
 			    	<textarea name="content" id="content" rows="10" class="form-control" ng-model="createComprehensionForm.content" required></textarea>
 			   		<span ng-if="errors.content" class="help-block">{{ errors.content[0] }}</span>
 			   		<span ng-if="comprehensionCreateForm.content.$touched && comprehensionCreateForm.content.$error.required" class="help-block">Comprehension content is required.</span>
-			   		<span>Preview</span> <pre katex-bind="createComprehensionForm.content"></pre>
+			   		<div class="form-group">
+		   				<h5 class="italic">Preview</h5>
+		   				<!-- <span katex-bind="createComprehensionForm.content"></span> -->
+		   				<span ng-bind-html="createComprehensionForm.content | unsafe"></span>
+		   			</div>
 				  </div><br>
 				  <div class="form-group">
 				  	<label for="explanation">Enter the explanation of question</label>
 			    	<textarea name="explanation" id="explanation" rows="4" class="form-control" ng-model="createComprehensionForm.explanation"></textarea>
-			    	<span>Preview</span> <pre katex-bind="createComprehensionForm.explanation"></pre>
+			    	<div class="form-group">
+		   				<h5 class="italic">Preview</h5>
+		   				<!-- <span katex-bind="createComprehensionForm.explanation"></span> -->
+		   				<span ng-bind-html="createComprehensionForm.explanation | unsafe"></span>
+		   			</div>
 				  </div><br>
 				  
 				  <!-- <div class="form-group">

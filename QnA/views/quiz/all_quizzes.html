@@ -6,7 +6,7 @@
 <!-- End Here ... -->
 
 <div class="container-fluid">
-<div ng-include src="'views/alert_msg.html'"></div>
+<div ng-include=" 'views/alert_msg.html' "></div>
 <div class="jumbotron">    
     <div class="row">
     	<div class="col-md-12">
@@ -22,7 +22,7 @@
 	<div class="row" ng-if="allQuiz.length!=0">
 		<div class="col-lg-2 col-md-2 col-sm-2"></div>
 		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-			<div class="col-lg-4 col-md-4 col-sm-4" ng-repeat='quiz in allQuiz | pagination: curPage * pageSize | limitTo: pageSize'>
+			<div class="col-lg-4 col-md-4 col-sm-4" ng-repeat='quiz in allQuiz| pagination: curPage * pageSize | limitTo: pageSize track by quiz.id '>
 				<div class="panel panel-info">
 			      <div class="panel-heading"><a ui-sref="app.view-quiz({ quizid : '{{ quiz.id }}'})">{{quiz.title | capitalize}}</a>
 			      		<div class="dropdown right">
@@ -70,7 +70,7 @@
 						   </tbody>
 						</table>
 						<div class="row">
-						    <button type="button" class="btn btn-default" data-toggle="popover" data-placement="top" title="" data-content="{{quiz.url}}"><span class="glyphicon glyphicon-link black-text bold-text"></span>&nbsp;&nbsp;Test Url</button>
+						    <button type="button" class="btn btn-default popover-button" data-toggle="popover" data-placement="top" title="" data-content="{{quiz.url}}" onclick="$(this).popover();"><span class="glyphicon glyphicon-link black-text bold-text"></span>&nbsp;&nbsp;Test Url</button>
 						</div>
 					</div>
 					<div class="row">

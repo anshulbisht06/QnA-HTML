@@ -1,5 +1,5 @@
 <div class="container-fluid">
-<div ng-include src="'views/alert_msg.html'"></div>
+<div ng-include=" 'views/alert_msg.html' "></div>
 <div class="jumbotron">
     <div class="row">
     </div>
@@ -14,7 +14,10 @@
 				<hr>
 				<h4 class="left">Category : <span class="label label-default">{{ answers.category }}</span></h4>
 				<h4 class="right">SubCategory : <span class="label label-default">{{ answers.sub_category_name }}</span></h4><br><br><br><br>
-				<h5>Q.&nbsp;<span katex-bind="answers.content"></span></h5>
+				<h5>Q.&nbsp;
+					<!-- <span katex-bind="answers.content"></span> -->
+					<span ng-bind-html="answers.content | unsafe"></span>
+				</h5>
 				<hr>
 			<form role="form" name="answersUpdateForm" ng-submit="putAnswers()" novalidate>
 				<div class="form-group">
@@ -29,7 +32,11 @@
 			    			<!-- <textarea cols="80" rows="3" name="optioncontent-{{option.optionid}}" id="optioncontent-{{option.optionid}}" class="form-control" ng-model="updateAnswersForm.optioncontent[option.optionid]" placeholder="Content for option - {{$index}}" required>{{ option.content }}</textarea><hr> -->
 		  				</div>
 		  				<div class="col-md-5">
-		  					<span>Preview</span> <pre katex-bind="updateAnswersForm.optionsContent[option.id]"></pre>
+			  				<div class="form-group">
+				   				<h5 class="italic">Preview</h5>
+				   				<!-- <span katex-bind="updateAnswersForm.optionsContent[option.id]"></span> -->
+		  						<span ng-bind-html="updateAnswersForm.optionsContent[option.id] | unsafe"></span>
+			   				</div>
 		  				</div>
 				  	</div>
 				  	<div ng-if="que_type==='objective'">

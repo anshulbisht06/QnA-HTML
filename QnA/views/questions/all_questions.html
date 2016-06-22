@@ -1,6 +1,7 @@
 <div class="container-fluid">
 	<div class="row">
-		<div ng-include src="'views/alert_msg.html'"></div>
+		<!-- <div ng-include src="'views/alert_msg.html'"></div> -->
+		<div ng-include=" 'views/alert_msg.html' "></div>
 		<div ng-include src="'views/modals/create_category.html'"></div>
 		<div ng-include src="'views/modals/create_subcategory_modal.html'"></div>
 	</div>
@@ -46,8 +47,12 @@
 							  	<div class="col-lg-1 col-md-1 col-sm-1">
 							  	</div>
 							  	<div class="col-lg-11 col-md-11 col-sm-11">
-								  	<div class="row" ng-class="{'hscroll': question.content.length > 195}">
-							  			<p class="left">Q<small>{{$index + pageSize*curPage + 1}}</small>.&nbsp;&nbsp;<span katex-bind="question.content"></span></p>
+								  	<!-- <div class="row" ng-class="{'hscroll': question.content.length > 195}"> -->
+								  	<div class="row">
+							  			<p class="left">Q<small>{{$index + pageSize*curPage + 1}}</small>.&nbsp;&nbsp;
+							  				<!-- <span katex-bind="question.content"></span> -->
+							  				<span ng-bind-html="question.content | unsafe"></span>
+							  			</p>
 								  	</div>
 								  	<br>
 								  	<div class="row">
@@ -56,7 +61,8 @@
 								                <label class="btn btn-default" ng-class="{'active':option.correct}">
 									                {{$index + 1}}
 								                </label>
-							                	<span katex-bind="option.content"></span>
+							                	<!-- <span katex-bind="option.content"></span> -->
+							                	<span ng-bind-html="option.content | unsafe"></span>
 							                </div>
 						                </div>
 								  	</div>
@@ -105,8 +111,12 @@
 								  	<div class="col-lg-1 col-md-1 col-sm-1">
 								  	</div>
 								  	<div class="col-lg-11 col-md-11 col-sm-11">
-									  	<div class="row" ng-class="{'hscroll': question.content.length > 195}">
-								  			<p class="left">Q<small>{{$index + pageSize*curPage + 1}}</small>.&nbsp;&nbsp;<span katex-bind="question.content"></span></p>
+									  	<!-- <div class="row" ng-class="{'hscroll': question.content.length > 195}"> -->
+									  	<div class="row">
+								  			<p class="left">Q<small>{{$index + pageSize*curPage + 1}}</small>.&nbsp;&nbsp;
+								  				<!-- <span katex-bind="question.content"></span> -->
+								  				<span ng-bind-html="question.content | unsafe"></span>
+								  			</p>
 									  	</div>
 									  	<br>
 									  	<div class="row" ng-if="question.que_type!='comprehension'">
@@ -115,7 +125,8 @@
 									                <label class="btn btn-default" ng-class="{'active':option.correct}">
 										                {{$index + 1}}
 									                </label>
-									                <span katex-bind="option.content"></span>
+									                <!-- <span katex-bind="option.content"></span> -->
+									                <span ng-bind-html="option.content | unsafe"></span>
 								                </div>
 							                </div>
 									  	</div>

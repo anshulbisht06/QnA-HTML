@@ -29,10 +29,18 @@ angular.module('QnA')
   .filter('insertBlank', function() {
       return function(input) {
         if(input!=undefined && input.indexOf("<<Answer>>")!=-1)
-    		return input.replace(/<<Answer>>/g, "____________");    	
+    		  return input.replace(/<<Answer>>/g, "____________"); 
         return input;
       }
   })
+
+  .filter('unsafe', [ '$sce', function($sce) {
+      return function(input) {
+        if(input!=undefined && input.indexOf("**")!=-1)
+          return $sce.trustAsHtml(input.replace(/\*\*/g, "<br>"));
+        return $sce.trustAsHtml(input);
+      }
+  }])
 
   .filter('secondsToDateTime', function() {
       return function(seconds) {

@@ -11,8 +11,10 @@
     		<br>
     			<div class="col-lg-1 col-md-1 col-sm-1">
     			</div>
-    			<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12" ng-class="{'hscroll-large': comprehension.content.length > 195}"> 
-    				<span class="light-maroon-text" katex-bind="comprehension.content" style="margin: auto;"></span>
+    			<!-- <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12" ng-class="{'hscroll-large': comprehension.content.length > 195}">  -->
+    			<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+    				<!-- <span class="light-maroon-text" katex-bind="comprehension.content" style="margin: auto;"></span> -->
+    				<span class="light-maroon-text" ng-bind-html="comprehension.content | unsafe" style="margin: auto;"></span>
     			</div>	
     		</div>
 			<div class="row question-image text-center" ng-if="comprehension.figure">
@@ -31,7 +33,7 @@
 				<p class="visible-xs">No comprehension questions present.</p>
 			</div>
 			<div class="row">
-				<div ng-include src="'views/alert_msg.html'"></div>
+				<div ng-include=" 'views/alert_msg.html' "></div>
 			</div>
 				<div class="row" ng-if="!errors">
 					<ul class="list-group">
@@ -42,7 +44,10 @@
 								  	</div>
 								  	<div class="col-lg-11 col-md-11 col-sm-11">
 									  	<div class="row">
-								  			<h5 class="left">Q<small>{{$index + pageSize*curPage + 1}}</small>.&nbsp;&nbsp;<span katex-bind="cq.content"></span></h5>
+								  			<h5 class="left">Q<small>{{$index + pageSize*curPage + 1}}</small>.&nbsp;&nbsp;
+								  				<!-- <span katex-bind="cq.content"></span> -->
+								  				<span ng-bind-html="cq.content | unsafe"></span>
+								  			</h5>
 									  	</div>
 									  	<br>
 									  	<div class="row">
@@ -51,7 +56,8 @@
 									                <label class="btn btn-default" ng-class="{'active':option.correct}">
 										                {{$index + 1}}
 									                </label>
-								                	<span katex-bind="option.content"></span>
+								                	<!-- <span katex-bind="option.content"></span> -->
+								                	<span ng-bind-html="option.content | unsafe"></span>
 								                </div>
 							                </div>
 									  	</div>

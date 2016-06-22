@@ -1,12 +1,12 @@
 var qTypes = ['mcq', 'objective', 'comprehension'];
 var progressTypes = ['NA', 'NV', 'A'];
-$(document).click(function (event) {
-    var navbar = $(".navbar-collapse");               
-    if (navbar.hasClass("in") === true && !$(event.target).hasClass("navbar-toggle")) {      
-        navbar.collapse('hide');
-    }
-    $('[data-toggle="popover"]').popover();
-});
+var navbar = $(".navbar-collapse");
+
+// $(document).click(function (event) {
+//     if (navbar.hasClass("in") === true && !$(event.target).hasClass("navbar-toggle")) {      
+//         navbar.collapse('hide');
+//     }
+// });
 
 function showAlert(type, msg){
     $('#notification').removeClass('alert-danger').removeClass('alert-success').removeClass('alert-info').removeClass('alert-warning').addClass(type).html(msg).show();
@@ -96,4 +96,35 @@ function findIndexOfObjectInsideList(list, quizId){
         }
     }
     return -1;
+}
+
+function setInstruction(problem_type){
+    var instruction = '';
+    switch(problem_type){
+        case 'correct value':
+            instruction = 'From among the given options, Select the correct choice.';
+            break;
+        case 'incorrect sentence':
+            instruction = 'From among the given sentences, Select the incorrect sentences and mark the correct choice.';
+            break; 
+        case 'coherent paragraph':
+            instruction = 'Read the given statements and arrange them into coherent paragraphs.';
+            break;
+        case 'meaning':
+            instruction = 'Identify the meanings of the given foreign words.';
+            break;
+        case 'antonym':
+            instruction = 'Identify the antonyms of the given words.';
+            break;
+        case 'conclusion':
+            instruction = 'Two statements are given followed by four conclusions. From the given options mark the conclusion/s that definitely follow.';
+            break;
+        case 'relationship':
+            instruction = 'Choose the option that depicts the same relationship as the mother pair.';
+            break;
+        case 'best option':
+            instruction = 'Read the following propositions and choose the best option that answers the questions asked.';
+            break;
+    }
+    return instruction;
 }

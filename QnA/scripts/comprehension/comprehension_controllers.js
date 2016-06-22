@@ -90,7 +90,7 @@ appmodule
 
         $scope.createComprehensionQuestionForm = { user:temp[0], hash:temp[1], comprehension:$stateParams.comprehensionId, content:"",explanation:"", level:"easy", answer_order:"random", ideal_time:7};
             $scope.insertBlank = function(){
-                $scope.createComprehensionQuestionForm.content += " <<Answer>> ";
+                $scope.createComprehensionQuestionForm.content += " __________ ";
             }
             $scope.postComprehensionQuestion = function() {
                 upload("question/comprehension/questions/create/", $scope.createComprehensionQuestionForm, $scope.figure);
@@ -212,7 +212,7 @@ appmodule
             );
 
         $scope.insertBlank = function(){
-            $scope.updateComprehensionQuestionForm.content += " <<Answer>> ";
+            $scope.updateComprehensionQuestionForm.content += " __________ ";
         }
         
         $scope.changeImage = function(){
