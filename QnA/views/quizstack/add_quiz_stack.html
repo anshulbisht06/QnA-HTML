@@ -14,7 +14,7 @@
 			        	<select class="form-control" name="subcategoryname" ng-model="selectedSubCategoryDropdown" 
 			        		ng-change="selectSubCategory(selectedSubCategoryDropdown)">
 			        		<option value="" disabled>Select sub-category here...</option>
-			        		<option ng-repeat="subcategory in subCategories" value="{{ subcategory.id }}" id="subcategory{{ subcategory.id }}">
+			        		<option ng-repeat="subcategory in subCategories" value="{{ subcategory.id }}">
 			        		{{subcategory.sub_category_name}}</option>
 			        	</select>
 		      	</div>

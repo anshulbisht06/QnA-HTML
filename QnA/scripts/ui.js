@@ -40,12 +40,14 @@ function isNotEmpty(object){
 }
 
 // in seconds
-function findTotalDuration(list){
-    var total = 0;
-    for(var i=0;i<list.length;i++){
-        total += parseInt(list[i]['duration']);
+function findTotalDurationAndSectionNames(object){
+    console.log(object);
+    var result = [ 0, {} ];
+    for(var key in object){
+        result[0] += parseInt(object[key]['duration']);
+        result[1][key] = object[key]['subcategory_name'].trim();
     }
-    return total;
+    return result;
 }
 
 function toggleWarningModal(action, bodyText, okButtonText){
@@ -68,6 +70,10 @@ function changeProgressValues(object) {
     }
     return [{ percentage: (count[0]*100)/totalKeys, count: count[0] }, { percentage: (count[1]*100)/totalKeys, count: count[1] }, { percentage: (count[2]*100)/totalKeys, count: count[2] }];
 };
+
+function arrangeSectionNames(object){
+    console.log(object);
+}
 
 // function shuffle(array) {
 //   var currentIndex = array.length, temporaryValue, randomIndex;

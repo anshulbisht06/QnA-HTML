@@ -16,7 +16,6 @@ appmodule
             }else if(response){
                 $scope.total_questions = makeArray(response.questions.length);
                 var questions = response.questions;
-                console.log(questions);
                 for(var i=0;i<questions.length;i++){
                     var q = questions[i][i+1];
                     $scope.answersModel[q.id] = { value:null };
@@ -54,15 +53,17 @@ appmodule
                 });
             }
         }
-        $scope.openWarningModal = function(action){
+        $scope.openWarningModal = function(action, counter){
             $scope.action = action;
             switch(action){
                 case "sectionChangeRequestInitiated":
                     toggleWarningModal('show', '<b>Do you really want to change the section?</b>', 'Yes I am sure.');
+                    $scope.counter = counter;
                     break;
                 case "sectionChangeRequestCancelled":
                     toggleWarningModal('hide', '', '');
                     $scope.selectedSection = $scope.currentSection;
+                    delete $scope.counter;
                     break;
                 case "submitTestRequestInitiated":
                     toggleWarningModal('show', '<b>Are you sure you want to submit the test?</b>', 'Yes I am sure.');
@@ -72,27 +73,40 @@ appmodule
                     break;
             }
         }
-        $scope.changeSection = function(currentSection){
+        $scope.changeSection = function(currentSection, counter){
             $scope.nextSection = $scope.selectedSection;
-            if($scope.sectionNames.indexOf($scope.selectedSection)<$scope.sectionNames.length){
+            var index = $scope.sectionNames.indexOf($scope.selectedSection);
+            if(index<$scope.sectionNames.length){
                 if($scope.currentSection === $scope.nextSection){
-                    $scope.selectedSection = $scope.sectionNames[$scope.sectionNames.indexOf($scope.selectedSection)+1];
+                    $scope.selectedSection = $scope.sectionNames[index+counter];
                 }else{
                     $scope.selectedSection = $scope.sectionNames[$scope.sectionNames.indexOf($scope.nextSection)];
                 }
                 // $scope.sectionNames.splice($scope.sectionNames.indexOf($scope.currentSection), 1);
-                $scope.addQuestions($scope.selectedSection);
-                if($scope.sectionNames.indexOf($scope.selectedSection)===$scope.sectionNames.length-1){
+                addQuestions($scope.selectedSection);
+                index = $scope.sectionNames.indexOf($scope.selectedSection);
+                if(index===$scope.sectionNames.length-1){
                     $scope.hideNextSectionButton = true;
+                }
+                else{
+                    $scope.hideNextSectionButton = false;
+                }
+                if(index===0){
+                    $scope.hidePreviousSectionButton = true;
+                }
+                else{
+                    $scope.hidePreviousSectionButton = false;
                 }
                 $scope.currentSection = $scope.selectedSection;                
             }
             else{
                 $scope.hideNextSectionButton = true;
             }
+            $scope.selectedSectionName = selectedSectionNames[$scope.selectedSection];
+            firstQuestionVisited = false;
         }
 
-        $scope.addQuestions = function(sectionName){
+        function addQuestions(sectionName){
             $scope.sliceFactor = 0;
             $scope.getQuestionsBasedOnSection(sectionName, $scope.quiz);
         }
@@ -125,7 +139,7 @@ appmodule
                 if($scope.progressValuesModel[$scope.currentQuestion.id].status === progressTypes[1]){
                     $scope.progressValuesModel[$scope.currentQuestion.id].status = progressTypes[0];
                     $scope.progressValues = changeProgressValues($scope.progressValuesModel);
-                    TestPreviewFactory.saveProgressValues($scope.selectedSection, $scope.progressValuesModel);
+                    // TestPreviewFactory.saveProgressValues($scope.selectedSection, $scope.progressValuesModel);
                 }
             }
         }
@@ -139,12 +153,17 @@ appmodule
         }
 
         function markFirstQuestionVisited(){
-            if(!firstQuestionVisited){
-                firstQuestionVisited = true;
-            }else{
+            if($scope.currentQuestion.que_type === qTypes[2]){
                 if($scope.progressValuesModel[$scope.currentQuestion.id].status === progressTypes[0]){
-                $scope.progressValuesModel[$scope.currentQuestion.id].status = progressTypes[2];
-                console.log('ffff');
+                    $scope.progressValuesModel[$scope.currentQuestion.id].status = progressTypes[2];
+                }
+            }else{
+                if(!firstQuestionVisited){
+                    firstQuestionVisited = true;
+                }else{
+                    if($scope.progressValuesModel[$scope.currentQuestion.id].status === progressTypes[0]){
+                        $scope.progressValuesModel[$scope.currentQuestion.id].status = progressTypes[2];
+                    }
                 }
             }
         }
@@ -155,7 +174,7 @@ appmodule
           function(newVal, oldVal) {
             if(newVal!=oldVal && $scope.currentQuestion.que_type === qTypes[0]){
                 try{ 
-                    if($scope.currentCount > 1 || ($scope.currentCount > 1)){
+                    if($scope.currentCount > 1){
                         if($scope.progressValuesModel[$scope.currentQuestion.id].status === progressTypes[1]){
                             $scope.progressValuesModel[$scope.currentQuestion.id].status = progressTypes[0];
                         }
@@ -201,13 +220,23 @@ appmodule
                 $scope.quiz = $window.opener.data['quiz'];
                 TestPreviewFactory.addQuizData($scope.quiz);
                 $scope.sectionNames = Object.keys($window.opener.data['details']).sort();
-                if($scope.sectionNames.length<=1){
-                    $scope.hideNextSectionButton = true;
-                }
                 $scope.selectedSection = $scope.sectionNames[0];
                 $scope.currentSection = $scope.selectedSection;
-                $scope.addQuestions($scope.selectedSection);
-                $scope.totalDuration = findTotalDuration($window.opener.data['quizStacks']);
+                if($scope.sectionNames.length<=1){
+                    $scope.hideNextSectionButton = true;
+                    $scope.hidePreviousSectionButton = true;
+                }else{
+                    if($scope.sectionNames.indexOf($scope.selectedSection)>0){
+                        $scope.hidePreviousSectionButton = false;
+                    }else{
+                        $scope.hidePreviousSectionButton = true;
+                    }
+                }
+                addQuestions($scope.selectedSection);
+                var result = findTotalDurationAndSectionNames($window.opener.data['details']);
+                $scope.totalDuration = result[0];
+                var selectedSectionNames = result[1];
+                $scope.selectedSectionName = selectedSectionNames[$scope.selectedSection];
                 $interval(function(){
                     $scope.totalDuration -= 1;
                     if($scope.totalDuration===0){
