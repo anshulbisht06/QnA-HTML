@@ -31,10 +31,12 @@
 			   		<span ng-show="userRegisterForm.password.$touched && userRegisterForm.password.$error.required" class="help-block">Password is required.</span>
 			   		<span ng-show="userRegisterForm.password.$touched && userRegisterForm.password.$error.minlength" class="help-block">Password must be least 8 characters long.</span>
 			    </div><br>
-			    <div class="form-group" ng-class="{'has-error': errors.email[0] || userRegisterForm.email.$touched && userRegisterForm.email.$error.required }">
+			    <div class="form-group" ng-class="{'has-error': errors.email[0] || userRegisterForm.email.$touched && userRegisterForm.email.$error.required || userRegisterForm.email.$error.email }">
 			        <input type="email" name="email" ng-model="registerUserForm.email" class="form-control input-lg" placeholder="Email" required>
 			        <span ng-show="isFormInvalid" class="help-block">{{ errors.email[0] }}</span>
 			    	<span ng-show="userRegisterForm.email.$touched && userRegisterForm.email.$error.required" class="help-block">Email is required.</span>
+			        <span ng-show="userRegisterForm.email.$error.email" class="help-block">Enter a proper email.</span>
+
 			    </div>
 			    <div class="form-group">
 			        <button type="submit" class="btn btn-primary btn-lg btn-block" ng-disabled ='userRegisterForm.$invalid'>Register</button>
