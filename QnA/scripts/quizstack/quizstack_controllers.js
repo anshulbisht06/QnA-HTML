@@ -54,7 +54,6 @@ appmodule
                         +'</tr>';
                     angular.element(document.querySelector('#existingQuestionsRow')).append($compile(html)($scope));
                     $scope.total_duration = total_duration;
-                    total_duration = 0;
                 }
                 // document.querySelector('#totalduration').value = total_duration;
             },
