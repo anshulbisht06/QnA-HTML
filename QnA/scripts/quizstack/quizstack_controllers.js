@@ -11,6 +11,7 @@ appmodule
             // };
             try{
             var total_duration = 0;
+            var sectionDetails = {};
             var temp = $scope._rest.split(',');
             SubCategoryFactory.getAllSubcategories(temp, 'all', true).query(
             function(response) {
@@ -32,13 +33,14 @@ appmodule
             );
             QuizStackFactory.getQuizStack($stateParams.quizid, 'all').query(
             function(response) {
-                $scope.existingStack = response;
-                total_duration = 0;
+                $scope.existingStack = response.data;
+                sectionDetails = response.section_data;
+                response = response.data;
                 for(i=0;i<response.length;i++){
                     total_duration += parseInt(response[i].duration);
                     html = '<tr id="oldstackrow'+i+'">'+
                             '<td style="width:130px;">'+response[i].section_name+'</td>'+
-                            '<td style="width:200px;">'+$('#subcategory'+response[i].subcategory).text().trim()+'</td>'+
+                            '<td style="width:200px;">'+sectionDetails[response[i].section_name].trim()+'</td>'+
                             '<td style="width:130px;">'+response[i].que_type+'</td>'+
                             '<td style="width:130px;">'+response[i].level+'</td>'+
                             '<td style="width:130px;">'+response[i].no_questions+'</td>'+
@@ -52,6 +54,7 @@ appmodule
                         +'</tr>';
                     angular.element(document.querySelector('#existingQuestionsRow')).append($compile(html)($scope));
                     $scope.total_duration = total_duration;
+                    total_duration = 0;
                 }
                 // document.querySelector('#totalduration').value = total_duration;
             },
@@ -222,7 +225,7 @@ appmodule
                 l = [];
                 for(var i=0;i<$scope.existingStack.length;i++){
                     if(l.indexOf($scope.existingStack[i].section_name)===-1){
-                        data['details'][$scope.existingStack[i].section_name] = { 'duration': 0, 'questions' : 0, 'subcategory_name': $('#subcategory'+$scope.existingStack[i].subcategory).text().trim() };
+                        data['details'][$scope.existingStack[i].section_name] = { 'duration': 0, 'questions' : 0, 'subcategory_name': sectionDetails[$scope.existingStack[i].section_name].trim() };
                         l.push($scope.existingStack[i].section_name);
                     }
                     data['details'][$scope.existingStack[i].section_name]['duration'] += parseInt($scope.existingStack[i].duration);
