@@ -38,7 +38,7 @@ appmodule
                     total_duration += parseInt(response[i].duration);
                     html = '<tr id="oldstackrow'+i+'">'+
                             '<td style="width:130px;">'+response[i].section_name+'</td>'+
-                            '<td style="width:200px;">'+response[i].subcategory+'</td>'+
+                            '<td style="width:200px;">'+$('#subcategory'+response[i].subcategory).text().trim()+'</td>'+
                             '<td style="width:130px;">'+response[i].que_type+'</td>'+
                             '<td style="width:130px;">'+response[i].level+'</td>'+
                             '<td style="width:130px;">'+response[i].no_questions+'</td>'+
@@ -222,7 +222,7 @@ appmodule
                 l = [];
                 for(var i=0;i<$scope.existingStack.length;i++){
                     if(l.indexOf($scope.existingStack[i].section_name)===-1){
-                        data['details'][$scope.existingStack[i].section_name] = { 'duration': 0, 'questions' : 0, 'subcategory_name': $scope.existingStack[i].subcategory };
+                        data['details'][$scope.existingStack[i].section_name] = { 'duration': 0, 'questions' : 0, 'subcategory_name': $('#subcategory'+$scope.existingStack[i].subcategory).text().trim() };
                         l.push($scope.existingStack[i].section_name);
                     }
                     data['details'][$scope.existingStack[i].section_name]['duration'] += parseInt($scope.existingStack[i].duration);
