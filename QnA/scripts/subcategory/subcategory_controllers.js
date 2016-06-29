@@ -43,5 +43,6 @@ appmodule
                     showAlert('alert-danger', "Unable to create the sub-category for " + $scope.createSubCategoryform.sub_category_name + ". See below error.");
                     $scope.errors = response.data;
                 });
+            angular.element(document.querySelector('#createSubCategoryModal')).modal('hide');
         }
     }]);

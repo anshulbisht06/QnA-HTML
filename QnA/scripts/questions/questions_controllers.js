@@ -162,6 +162,7 @@ appmodule
                     $scope.isFormInvalid = true;
                     showAlert('alert-danger', "Unable to create the category - " + $scope.createCategoryform.category_name + ".");
                     alert(response.data.errors);
+                    angular.element(document.querySelector('#createCategoryModal')).modal('hide');
                 });
         }
 
@@ -347,7 +348,7 @@ appmodule
                 $scope.noSubCategoryPresent = true;
             }else{
                 $http.post(baseURL+"quiz/question/download/xls/", {que_type:que_type,
-                    sub_cat_info:sub_cat_info}, { responseType: 'arraybuffer' })
+                    sub_cat_info:sub_cat_info, user: temp[0], hash: temp[1]}, { responseType: 'arraybuffer' })
                   .success(function(data) {
                     var file = new Blob([data], { type: 'application/xls' });
                     saveAs(file, sub_cat_info.split('>>')[1]+'_'+que_type+'.xls');

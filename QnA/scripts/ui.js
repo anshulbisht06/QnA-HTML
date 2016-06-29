@@ -1,7 +1,6 @@
 var qTypes = ['mcq', 'objective', 'comprehension'];
 var progressTypes = ['NA', 'NV', 'A'];
-var navbar = $(".navbar-collapse");
-
+// var navbar = $(".navbar-collapse");
 // $(document).click(function (event) {
 //     if (navbar.hasClass("in") === true && !$(event.target).hasClass("navbar-toggle")) {      
 //         navbar.collapse('hide');

@@ -5,7 +5,7 @@ appmodule
 	        // pagination
 	        $scope.curPage = 0;
 	        $scope.pageSize = 9;
-	        $scope.testURL = testURL;
+	        // $scope.testURL = testURL;
 	        $controller('CookiesController', {$scope : $scope});
 	        try{
 	        var temp = $scope._rest.split(',');
@@ -162,7 +162,7 @@ appmodule
 	        }
 
 	        $scope.downloadTestAccessXls = function(test_id){
-	            $http.post(baseURL+"quiz/access/download/xls/", {test_id:test_id}, { responseType: 'arraybuffer' })
+	            $http.post(baseURL+"quiz/access/download/xls/", { test_id: test_id, user: temp[0], hash: temp[1] }, { responseType: 'arraybuffer' })
 	              .success(function(data) {
 	                var file = new Blob([data], { type: 'application/xls' });
 	                saveAs(file, $scope.quizToBeUpdated.title+'_access.xls');
