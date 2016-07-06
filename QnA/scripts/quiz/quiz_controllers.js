@@ -29,7 +29,7 @@ appmodule
 	        $scope.postQuiz = function() {
 	            QuizFactory.createQuiz().save($scope.createQuizForm).$promise.then(
 	                function(response){
-	                    $scope.createQuizForm = {title:"", no_of_attempt:"1", passing_percent:"",
+	                    $scope.createQuizForm = {title:"", no_of_attempt:"1", passing_percent:"", hash:temp[1],
 	        				user:temp[0], success_text:"", fail_text:"",user_picturing:false, start_notification_url:"", finish_notification_url:"", grade_notification_url:""};
 	        				angular.element(document.querySelector('#quizCreateModal')).modal('hide');
 	                    $scope.allQuiz.push(response);
