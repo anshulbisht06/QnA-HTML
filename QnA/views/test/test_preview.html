@@ -75,7 +75,7 @@
 				<ul class="pagination pagination-sm">
 				   <li ng-if="sliceFactor>0"><a href="javascript:void(0)" ng-click="decreaseSlicing()">&laquo;</a></li>
 				   <li><a href="javascript:void(0)"><span>{{sliceFactor*15+1}}</span> of <span ng-if="sliceFactor<=slicingLimit-1">{{(sliceFactor+1)*15}}</span><span ng-if="sliceFactor+1>slicingLimit">{{total_questions.length}}</span></a></li>
-				   <li ng-if="sliceFactor+1<=slicingLimit"><a href="javascript:void(0)" ng-click="increaseSlicing()">&raquo;</a></li>
+				   <li ng-if="sliceFactor<=slicingLimit-1"><a href="javascript:void(0)" ng-click="increaseSlicing()">&raquo;</a></li>
 				</ul>
 				</div>
 			</div>
